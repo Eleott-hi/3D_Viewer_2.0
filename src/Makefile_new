@@ -1,0 +1,93 @@
+#################################################
+##              Makefile template              ##
+#################################################
+
+#     These special targets are called phony     #
+.PHONY: all build test gcov_report clean rebuild dvi install uninstall
+
+PROJECT := 3D_Viewer_2
+
+INSTALL_DIR := ../3D_Viewer
+BUILD_DIR := ../build
+TEST_DIR := ../build_tests
+LCOV_DIR := ../report
+DOCUMENT_DIR := ../Documentation
+TAR_DIR := ../SmartCalc_v2.0.tar.gz
+
+CLEAN := rm -rf
+
+ifeq ($(shell uname), Darwin)
+	LEAKS := leaks --atExit -- 
+else
+	LEAKS := valgrind  --leak-check=full --show-leak-kinds=all -s
+endif
+
+SOURCES := ./headers/*.h ./sources/*.cpp ./tests/*.cpp
+
+all: clean test run 
+
+clean:
+	clear
+	$(CLEAN) *.user
+	$(CLEAN) $(BUILD_DIR)* 
+	$(CLEAN) $(TEST_DIR)
+	$(CLEAN) $(LCOV_DIR)
+	$(CLEAN) $(DOCUMENT_DIR)
+	$(CLEAN) $(TAR_DIR)
+
+build: 
+	cmake -B $(BUILD_DIR)
+	cmake --build $(BUILD_DIR)
+
+test: 
+	cmake -S tests/ -B $(TEST_DIR)
+	cmake --build $(TEST_DIR)
+	$(TEST_DIR)/tests
+
+gcov_report: test
+	lcov -t "$(TEST_DIR)/tests" -o $(TEST_DIR)/tests.info -c -d $(TEST_DIR) 
+	lcov --remove $(TEST_DIR)/tests.info -o $(TEST_DIR)/test_filtered.info   '/usr/include/*'
+	genhtml -o $(LCOV_DIR) $(TEST_DIR)/test_filtered.info
+	open $(LCOV_DIR)/index.html
+
+run: build
+	$(BUILD_DIR)/SmartCalc_v2
+
+
+install: build
+	mkdir -p $(INSTALL_DIR)
+	cp $(BUILD_DIR)/SmartCalc_v2 $(INSTALL_DIR)/SmartCalc_v2
+
+uninstall: 
+	$(CLEAN) $(INSTALL_DIR)
+
+linter:
+	cp ../materials/linters/.clang-format ./.clang-format
+	clang-format -n $(SOURCES)
+	$(CLEAN) .clang-format
+
+formating:
+	cp ../materials/linters/.clang-format ./.clang-format
+	for i in $(SOURCES); do \
+		clang-format $$i > tmp.txt;\
+    	cat tmp.txt > $$i;\
+	done;
+	$(CLEAN) tmp.txt .clang-format
+
+leaks: test
+	$(LEAKS) $(TEST_DIR)/tests
+
+
+CPPCHECKFLAG := --language=c++ --std=c++17 --enable=all --suppress=missingInclude --inconclusive --force --suppress=*:dependencies/*
+
+cppcheck:
+	cppcheck $(CPPCHECKFLAG) $(SOURCES) 
+
+dist:
+	tar --exclude=".gitkeep" --exclude="tests" -zcvf $(TAR_DIR) .
+
+dvi:
+	makeinfo -o $(DOCUMENT_DIR) --html --no-warn --no-validate --force Documentation.texi
+	open $(DOCUMENT_DIR)/index.html
+
+.PHONY: clean all build test linter formating leaks cppcheck dist dvi
