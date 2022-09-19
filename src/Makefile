@@ -118,3 +118,8 @@ gcov_report: clean
 	lcov -t "gcov_report" -o $(GCOV_DIR)/gcov_report.info -c -d $(GCOV_DIR)
 	genhtml -o $(GCOV_DIR) $(GCOV_DIR)/gcov_report.info
 	open $(GCOV_DIR)/index.html
+
+pintoved:
+	g++ test.cpp -o main
+	./main
+	rm -rf main
