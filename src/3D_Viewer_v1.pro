@@ -12,7 +12,6 @@ DEFINES += GL_SILENCE_DEPRECATION
 win32: LIBS += -lopengl32
 
 SOURCES += \
-    file_parcer.c \
     glwidget.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -31,10 +30,10 @@ SOURCES += \
     shader.cpp
 
 HEADERS += \
-    file_parcer.h \
     glwidget.h \
     mainwindow.h \
     matrix_algebra/s21_matrix.h \
+    Mesh.h \
     shader.h 
 
 FORMS += \

@@ -1,12 +1,14 @@
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
-#include "shader.h"
 #include <QMouseEvent>
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
 #include <QSettings>
 #include <QTimer>
+
+#include "Mesh.h"
+#include "shader.h"
 
 extern "C" {
 #include "file_parcer.h"
@@ -14,7 +16,7 @@ extern "C" {
 }
 
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
-private:
+ private:
   bool perspective = 1, pointSmooth = 0, dashedLines = 0, axisLines = 0;
   bool ctrl = 0, show_vertex = 1;
   float xRot = 0, yRot = 0, zRot = 0;
@@ -26,13 +28,13 @@ private:
 
   float lineWidth = 1, pointSize = 1;
   float height = 0, width = 0;
-  Model_data modelData;
+  Mesh modelData;
   matrix_t matrixIdentity, matrixNormalized, matrixRotationCurrent,
       matrixRotationPrevios;
   QPoint mPos;
   Shader *shader;
 
-public:
+ public:
   GLWidget(QWidget *parent = nullptr);
   ~GLWidget();
   void setColor(bool background, float r, float g, float b);
@@ -56,11 +58,11 @@ public:
   void setdots(bool vertex) { show_vertex = vertex; }
   void remember_rotation_matrix();
   void setModelData(const char *filename);
-  unsigned getVertexCount() { return modelData.count_of_vertexes; }
-  unsigned getFacetCount() { return modelData.count_of_facets; }
+  unsigned getVertexCount() { return modelData.getVerteces().size() / 3 - 1; }
+  unsigned getFacetCount() { return modelData.getFacets().size(); }
   float **getRotationMatrix() { return matrixRotationPrevios.matrix; }
 
-protected:
+ protected:
   // QOpenGLWidget interface
   void initializeGL() override;
   void resizeGL(int w, int h) override;
@@ -71,7 +73,7 @@ protected:
   void mouseMoveEvent(QMouseEvent *event) override;
   void mouseReleaseEvent(QMouseEvent *event) override;
 
-private:
+ private:
   matrix_t setRotation(float x, float y, float z);
   matrix_t _setRotation(float angle, int x, int y, int z);
   matrix_t setTranslation(float d_x, float d_y, float d_z);
@@ -87,4 +89,4 @@ private:
   void drawModel();
 };
 
-#endif // GLWIDGET_H
+#endif  // GLWIDGET_H
