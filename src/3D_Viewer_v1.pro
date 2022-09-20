@@ -14,7 +14,6 @@ win32: LIBS += -lopengl32
 SOURCES += \
     file_parcer.c \
     glwidget.cpp \
-    indexbuffer.cpp \
     main.cpp \
     mainwindow.cpp \
     matrix_algebra/common.c \
@@ -29,17 +28,14 @@ SOURCES += \
     matrix_algebra/s21_sub_matrix.c \
     matrix_algebra/s21_sum_matrix.c \
     matrix_algebra/s21_transpose.c \
-    shader.cpp \
-    vertexbuffer.cpp
+    shader.cpp
 
 HEADERS += \
     file_parcer.h \
     glwidget.h \
-    indexbuffer.h \
     mainwindow.h \
     matrix_algebra/s21_matrix.h \
-    shader.h \
-    vertexbuffer.h
+    shader.h 
 
 FORMS += \
     mainwindow.ui
