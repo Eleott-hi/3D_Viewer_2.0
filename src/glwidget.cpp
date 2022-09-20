@@ -12,7 +12,7 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), modelData() {
 
 GLWidget::~GLWidget() {
   // Deleting auxiliary matrices & modelDataStruct
-//   remove_model_data(&modelData);
+  //   remove_model_data(&modelData);
   s21_remove_matrix(&matrixIdentity);
   s21_remove_matrix(&matrixNormalized);
   s21_remove_matrix(&matrixRotationCurrent);
@@ -21,7 +21,7 @@ GLWidget::~GLWidget() {
 
 void GLWidget::setModelData(const char *filename) {
   // Parsing .obj file
-  modelData.loadFromFile(filename);  
+  modelData.loadFromFile(filename);
   setNormalizedMatrix();
 }
 
@@ -53,25 +53,20 @@ void GLWidget::paintGL() {
 }
 
 void GLWidget::drawModel() {
-//   if (modelData.vertexes.matrix) {
   if (!modelData.isEmpty()) {
     shader->Bind();  // Binding shader program to set up our settings
     refreshSettings(true);
 
     glEnableClientState(GL_VERTEX_ARRAY);  // Permission to bind client vertex
                                            // array to graphics card memory
-    // glVertexPointer(3, GL_FLOAT, 0, modelData.vertexes.matrix[0]);  // Binding
     glVertexPointer(3, GL_FLOAT, 0, modelData.getVerteces().data());  // Binding
     if (show_vertex)
-    //   glDrawArrays(GL_POINTS, 1, modelData.count_of_vertexes);  // Draw dots
-      glDrawArrays(GL_POINTS, 1, modelData.getVerteces().size()/3);  // Draw dots
-    // for (unsigned i = 0; i < modelData.count_of_facets; ++i) {
+      glDrawArrays(GL_POINTS, 1,
+                   modelData.getVerteces().size() / 3);  // Draw dots
     for (unsigned i = 0; i < modelData.getFacets().size(); ++i) {
-      glDrawElements(
-        //   GL_LINE_LOOP, modelData.facets[i].numbers_of_vertexes_in_facets,
-        GL_LINE_LOOP, modelData.getFacets()[i].size(),
-        //   GL_UNSIGNED_INT, modelData.facets[i].vertexes);  // Draw lines
-        GL_UNSIGNED_INT, modelData.getFacets()[i].data());  // Draw lines
+      glDrawElements(GL_LINE_LOOP, modelData.getFacets()[i].size(),
+                     GL_UNSIGNED_INT,
+                     modelData.getFacets()[i].data());  // Draw lines
     }
 
     glDisableClientState(GL_VERTEX_ARRAY);  // Take back permission
@@ -343,19 +338,18 @@ matrix_t GLWidget::setScale(float x, float y, float z) {
 
 void GLWidget::setNormalizedMatrix() {
   float xCenterTrans =
-    //   (modelData.x_min + (modelData.x_max - modelData.x_min) / 2);
+      //   (modelData.x_min + (modelData.x_max - modelData.x_min) / 2);
       (modelData.getMinX() + (modelData.getMaxX() - modelData.getMinX()) / 2);
   float yCenterTrans =
-    //   (modelData.y_min + (modelData.y_max - modelData.y_min) / 2);
-            (modelData.getMinY() + (modelData.getMaxY() - modelData.getMinY()) / 2);
+      //   (modelData.y_min + (modelData.y_max - modelData.y_min) / 2);
+      (modelData.getMinY() + (modelData.getMaxY() - modelData.getMinY()) / 2);
   float zCenterTrans =
-    //   (modelData.z_min + (modelData.z_max - modelData.z_min) / 2);
-            (modelData.getMinZ() + (modelData.getMaxZ() - modelData.getMinZ()) / 2);
+      //   (modelData.z_min + (modelData.z_max - modelData.z_min) / 2);
+      (modelData.getMinZ() + (modelData.getMaxZ() - modelData.getMinZ()) / 2);
 
-//   float CenterScaleX = 2 / (modelData.x_max - modelData.x_min);
-//   float CenterScaleY = 2 / (modelData.y_max - modelData.y_min);
-//   float CenterScaleZ = 2 / (modelData.z_max - modelData.z_min);
-
+  //   float CenterScaleX = 2 / (modelData.x_max - modelData.x_min);
+  //   float CenterScaleY = 2 / (modelData.y_max - modelData.y_min);
+  //   float CenterScaleZ = 2 / (modelData.z_max - modelData.z_min);
 
   float CenterScaleX = 2 / (modelData.getMaxX() - modelData.getMinX());
   float CenterScaleY = 2 / (modelData.getMaxY() - modelData.getMinY());
