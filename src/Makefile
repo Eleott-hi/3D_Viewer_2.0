@@ -97,8 +97,8 @@ else
 endif
 	
 run: install
-# open $(INSTALL_DIR)
-	/Users/pintoved/3D_Viewer_1.0/3D_Viewer_v1.app/Contents/MacOS/3D_Viewer_v1
+	open $(INSTALL_DIR)
+# /Users/pintoved/3D_Viewer_1.0/3D_Viewer_v1.app/Contents/MacOS/3D_Viewer_v1
 	
 uninstall:
 	rm -rf $(BUILD_DIR)
