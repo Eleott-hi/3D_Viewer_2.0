@@ -97,7 +97,8 @@ else
 endif
 	
 run: install
-	open $(INSTALL_DIR)
+# open $(INSTALL_DIR)
+	/Users/pintoved/3D_Viewer_1.0/3D_Viewer_v1.app/Contents/MacOS/3D_Viewer_v1
 	
 uninstall:
 	rm -rf $(BUILD_DIR)
@@ -118,3 +119,8 @@ gcov_report: clean
 	lcov -t "gcov_report" -o $(GCOV_DIR)/gcov_report.info -c -d $(GCOV_DIR)
 	genhtml -o $(GCOV_DIR) $(GCOV_DIR)/gcov_report.info
 	open $(GCOV_DIR)/index.html
+
+pintoved:
+	g++ test.cpp -o main
+	./main
+	rm -rf main

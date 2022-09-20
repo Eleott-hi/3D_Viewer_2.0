@@ -1,7 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "glwidget.h"
+#include <qgifimage.h>
+
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QImageWriter>
@@ -9,7 +10,8 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QThread>
-#include <qgifimage.h>
+
+#include "glwidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,11 +22,11 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
-public:
+ public:
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 
-private slots:
+ private slots:
   void gif_timer();
   void on_ModelColor_clicked();
   void on_File_clicked();
@@ -57,18 +59,18 @@ private slots:
   void on_zRot_sliderReleased();
   void on_vertex_show_clicked();
 
-private:
+ private:
   Ui::MainWindow *ui;
   QColor backgroundColor, modelColor;
+  QGifImage *gifOut;
+  QTimer *gifTimer;
   double xRotStart = 0, yRotStart = 0, zRotStart = 0;
   double xRotEnd = 0, yRotEnd = 0, zRotEnd = 0;
   bool xRotPressed = false, yRotPressed = false, zRotPressed = false;
   bool gifStart = 0, vertex = 1;
   int gifTime = 0;
-  QGifImage *gifOut;
-  QTimer *gifTimer;
 
-private:
+ private:
   // QWidget interface
   void rememberSettings();
   void setUpSettings();
@@ -77,9 +79,9 @@ private:
   void save();
   void record();
 
-protected:
+ protected:
   void keyPressEvent(QKeyEvent *event) override;
   void keyReleaseEvent(QKeyEvent *event) override;
   void wheelEvent(QWheelEvent *event) override;
 };
-#endif // MAINWINDOW_H
+#endif  // MAINWINDOW_H
