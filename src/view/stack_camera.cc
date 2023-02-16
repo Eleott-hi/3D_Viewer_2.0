@@ -17,7 +17,7 @@ static QColor getLabelColor(QLabel *label) {
   return QColor("#" + style.section("#", -1));
 }
 
-} // namespace Utils
+}  // namespace Utils
 
 // ======================== CAMERA STACK SIGNALS ===========================
 void MainWindow::ConnectCameraSignals() {
@@ -69,8 +69,7 @@ void MainWindow::on_btn_AddObject_clicked() {
   //   controller_->addModel(filename.toStdString());}
 
   std::vector<std::string> models = {"resources/baseball_cap_1082k.obj"};
-  for (auto &i : models)
-    controller_->AddModel(i);
+  for (auto &i : models) controller_->AddModel(i);
 }
 
 void MainWindow::on_btn_perspective_toggled(bool value) {
@@ -108,19 +107,19 @@ void MainWindow::UpdateCameraInfo(int index, int value) {
   qDebug() << cameraInfo;
 
   controller_->UpdateCameraInfo(
-      {cameraInfo[0], cameraInfo[1], cameraInfo[2]}, // translation
-      {cameraInfo[3], cameraInfo[4], cameraInfo[5]}, // rotation
-      cameraInfo[6]                                  // zoom
+      {cameraInfo[0], cameraInfo[1], cameraInfo[2]},  // translation
+      {cameraInfo[3], cameraInfo[4], cameraInfo[5]},  // rotation
+      cameraInfo[6]                                   // zoom
   );
 }
 
 void MainWindow::on_btn_ResetCamera_clicked() {
   SetCameraPanel({0, 0, 0}, {0, -90, 0}, 1);
 
-  controller_->UpdateCameraInfo({0, 0, 0}, // translation
-                                {0, 0, 0}, // rotation
-                                1          // zoom
+  controller_->UpdateCameraInfo({0, 0, 0},  // translation
+                                {0, 0, 0},  // rotation
+                                1           // zoom
   );
 }
 
-} // namespace s21
+}  // namespace s21

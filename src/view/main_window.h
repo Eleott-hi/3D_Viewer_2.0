@@ -1,5 +1,4 @@
-#ifndef SRC_HEADERS_MAINWINDOW_H
-#define SRC_HEADERS_MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
 
@@ -16,7 +15,7 @@ namespace s21 {
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
-public:
+ public:
   MainWindow(Controller *c, QWidget *parent = nullptr);
   ~MainWindow();
 
@@ -25,7 +24,7 @@ public:
   void ConnectObjectSignals();
   void ConnectLightSignals();
 
-private slots:
+ private slots:
   // ========================= CAMERA STACK SLOTS ============================
   void SetStackCamera();
   void on_btn_ResetCamera_clicked();
@@ -105,11 +104,10 @@ private slots:
 
   void on_btn_DeleteObject_clicked();
 
-private:
+ private:
   Ui::MainWindow *ui_;
   Controller *controller_;
   CommonSettings &cSettings_ = CommonSettings::GetInstance();
   SignalHandler &signal_handler_ = SignalHandler::GetInstance();
 };
-} // namespace s21
-#endif // SRC_HEADERS_MAINWINDOW_H
+}  // namespace s21

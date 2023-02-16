@@ -5,7 +5,6 @@
 
 #include "core/Controller.h"
 #include "core/System.h"
-
 #include "technique_strategy.h"
 
 namespace s21 {

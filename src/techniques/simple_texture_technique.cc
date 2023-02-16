@@ -8,8 +8,8 @@ SimpleTextureTechnique::SimpleTextureTechnique() {
 }
 
 void SimpleTextureTechnique::init() {
-  GenVertexAndFragmentShader(shader_, "shaders/simple_texture_shader_v.c",
-                             "shaders/simple_texture_shader_f.c");
+  GenerateShaders("shaders/simple_texture_shader_v.c",
+                  "shaders/simple_texture_shader_f.c");
 }
 
 void SimpleTextureTechnique::setTexture(TextureComponent const &texture) {

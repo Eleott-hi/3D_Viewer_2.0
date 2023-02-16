@@ -1,5 +1,4 @@
-#ifndef SRC_HEADERS_COMMON_SETTING_H
-#define SRC_HEADERS_COMMON_SETTING_H
+#pragma once
 
 #include <QColor>
 #include <QMatrix4x4>
@@ -61,7 +60,7 @@ class CommonSettings : public QObject {
   QPoint mousePosition_;
   QPoint offset_;
   unsigned width_, height_;
-  
+
   CameraDirection direction_ = CameraDirection::NONE;
 
   bool ctrl = false;
@@ -70,5 +69,4 @@ class CommonSettings : public QObject {
 };
 
 }  // namespace s21
-
-#endif  // SRC_HEADERS_COMMON_SETTING_H
+#pragma once

@@ -14,15 +14,11 @@ class SimpleTextureTechnique : public ITechnique,
   ~SimpleTextureTechnique() {}
 
   virtual void init() override;
-  virtual void Enable() override { shader_.bind(); }
 
   virtual void setTexture(TextureComponent const &texture) override;
 
   virtual void setMVP(const QMatrix4x4 &proj, const QMatrix4x4 &view,
                       const QMatrix4x4 &model) override;
-
- private:
-  QOpenGLShaderProgram shader_;
 };
 
 }  // namespace s21

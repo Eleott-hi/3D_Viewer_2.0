@@ -2,8 +2,7 @@
 // ===         Copyright 2022 pintoved          ===
 // ================================================
 
-#ifndef SRC_HEADERS_TECHNIQUE_H
-#define SRC_HEADERS_TECHNIQUE_H
+#pragma once
 
 #include <QColor>
 #include <QMatrix4x4>
@@ -18,32 +17,33 @@ namespace s21 {
 
 class ITechnique {
  public:
-  static void GenVertexAndFragmentShader(QOpenGLShaderProgram &shader,
-                                         const QString &vertexFile,
-                                         const QString &fragmentFile) {
-    shader.addShaderFromSourceFile(QOpenGLShader::Vertex, vertexFile);
-    shader.addShaderFromSourceFile(QOpenGLShader::Fragment, fragmentFile);
-    shader.link();
-  }
-
   ITechnique() {}
   virtual ~ITechnique() {}
 
   virtual void init() = 0;
-  virtual void Enable() = 0;
+  virtual void Enable() { shader_.bind(); };
 
   // =================== Optional ===================
   virtual void setColor(const QColor &c) {}
-  virtual void setShininess(float shineness) {}
   virtual void SetObjectID(int ObjectID) {}
-  virtual void setTexture(TextureComponent const& texture) {}
+  virtual void setShininess(float shineness) {}
+  virtual void setTexture(TextureComponent const &texture) {}
   virtual void ApplyLightSettings(
       std::vector<TransformComponent> const &transforms,
       std::vector<LightSettingsComponent> const &settings) {}
-  virtual void setMVP(const QMatrix4x4 &proj, const QMatrix4x4 &view,
+  virtual void setMVP(const QMatrix4x4 &proj,  //
+                      const QMatrix4x4 &view,  //
                       const QMatrix4x4 &model) {}
+
+ protected:
+  QOpenGLShaderProgram shader_;
+
+  void GenerateShaders(const QString &vertex_file,
+                       const QString &fragment_file) {
+    shader_.addShaderFromSourceFile(QOpenGLShader::Vertex, vertex_file);
+    shader_.addShaderFromSourceFile(QOpenGLShader::Fragment, fragment_file);
+    shader_.link();
+  }
 };
 
 }  // namespace s21
-
-#endif  // SRC_HEADERS_TECHNIQUE_H

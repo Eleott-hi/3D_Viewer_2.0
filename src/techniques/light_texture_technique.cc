@@ -8,8 +8,8 @@ LightTextureTechnique::LightTextureTechnique() {
 }
 
 void LightTextureTechnique::init() {
-  GenVertexAndFragmentShader(shader_, "shaders/light_texture_shader_v.c",
-                             "shaders/light_texture_shader_f.c");
+  GenerateShaders("shaders/light_texture_shader_v.c",
+                  "shaders/light_texture_shader_f.c");
 }
 
 void LightTextureTechnique::Enable() { shader_.bind(); }
@@ -62,4 +62,3 @@ void LightTextureTechnique::setMVP(const QMatrix4x4 &proj,
 }
 
 }  // namespace s21
-

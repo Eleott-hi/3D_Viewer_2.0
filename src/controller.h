@@ -1,10 +1,12 @@
-#ifndef SRC_HEADERS_CONTROLLER_H
-#define SRC_HEADERS_CONTROLLER_H
+#pragma once
 
 #include "backend.h"
+
 namespace s21 {
+
 class Controller : public QObject {
   Q_OBJECT
+
  public:
   ~Controller() = default;
   Controller(const Controller &c) = delete;
@@ -15,14 +17,16 @@ class Controller : public QObject {
   void AddModel(const std::string &filename) { backend_->AddModel(filename); }
 
   void UpdateCameraInfo(const QVector3D &position,  //
-                        const QVector3D &rotation, float zoom) {
+                        const QVector3D &rotation,  //
+                        float zoom) {
     backend_->UpdateCameraInfo(position, rotation, zoom);
   }
 
   void SetPerspective(bool value) { backend_->SetPerspective(value); }
 
   void UpdateTransformInfo(const QVector3D &position,  //
-                           const QVector3D &rotation, float scale) {
+                           const QVector3D &rotation,  //
+                           float scale) {
     backend_->UpdateTransformInfo(position, rotation, scale);
   }
 
@@ -66,5 +70,3 @@ class Controller : public QObject {
   Backend *backend_;
 };
 }  // namespace s21
-
-#endif  // SRC_HEADERS_CONTROLLER_H

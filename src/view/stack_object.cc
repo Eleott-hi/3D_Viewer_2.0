@@ -24,7 +24,7 @@ static void setLabelColor(QLabel *label, QColor color) {
                        QString::number(color.rgb(), 16));
 }
 
-} // namespace Utils
+}  // namespace Utils
 
 // ======================== OBJECT STACK SIGNALS ===========================
 void MainWindow::ConnectObjectSignals() {
@@ -122,7 +122,6 @@ void MainWindow::SetTexturePanel(int index) {
 }
 
 void MainWindow::SetMaterialPanel(float shininess) {
-
   std::vector<QObject *> tmp = {ui_->Shininess};
   Utils::BlockSignal(tmp, true);
 
@@ -183,9 +182,9 @@ void MainWindow::UpdateTransformInfo(int index, int value) {
   transform.at(index) = static_cast<float>(value);
 
   controller_->UpdateTransformInfo(
-      {transform[0], transform[1], transform[2]}, // translation
-      {transform[3], transform[4], transform[5]}, // rotation
-      transform[6]                                // scale
+      {transform[0], transform[1], transform[2]},  // translation
+      {transform[3], transform[4], transform[5]},  // rotation
+      transform[6]                                 // scale
   );
 }
 
@@ -265,9 +264,9 @@ void MainWindow::on_btn_LoadTexture_clicked() {
 void MainWindow::on_btn_ResetObject_clicked() {
   SetTransformPanel({0, 0, 0}, {0, 0, 0}, 1);
 
-  controller_->UpdateTransformInfo({0, 0, 0}, // translation
-                                   {0, 0, 0}, // rotation
-                                   1          // scale
+  controller_->UpdateTransformInfo({0, 0, 0},  // translation
+                                   {0, 0, 0},  // rotation
+                                   1           // scale
   );
 }
 
@@ -275,10 +274,6 @@ void MainWindow::on_Shininess_valueChanged(int value) {
   controller_->UpdateMaterialInfo(static_cast<float>(value));
 }
 
+void MainWindow::on_btn_DeleteObject_clicked() { controller_->DeleteObject(); }
 
-void MainWindow::on_btn_DeleteObject_clicked()
-{
-    controller_->DeleteObject();
-}
-
-} // namespace s21
+}  // namespace s21

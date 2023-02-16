@@ -7,7 +7,6 @@
 
 #include "core/Controller.h"
 #include "core/System.h"
-
 #include "signal_handler.h"
 
 namespace s21 {

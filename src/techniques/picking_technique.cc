@@ -1,12 +1,9 @@
-
-
 #include "picking_technique.h"
 
 namespace s21 {
 
 void PickingTechnique::init() {
-  GenVertexAndFragmentShader(shader_, "shaders/picking_shader_v.c",
-                             "shaders/picking_shader_f.c");
+  GenerateShaders("shaders/picking_shader_v.c", "shaders/picking_shader_f.c");
 }
 
 void PickingTechnique::setMVP(const QMatrix4x4 &proj, const QMatrix4x4 &view,
@@ -19,4 +16,3 @@ void PickingTechnique::SetObjectID(int ObjectID) {
 }
 
 }  // namespace s21
-

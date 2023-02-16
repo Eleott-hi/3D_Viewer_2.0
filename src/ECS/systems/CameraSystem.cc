@@ -28,7 +28,6 @@ void CameraSystem::UpdateCameraInfo(TransformComponent const &transform) {
   }
 }
 
-
 void CameraSystem::Update(
     float deltaTime, const QPoint &offset,
     CameraDirection direction = CameraDirection::NONE) {  //

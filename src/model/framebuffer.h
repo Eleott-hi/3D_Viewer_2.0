@@ -1,8 +1,6 @@
 
 // Copyright 2022 pintoved
-
-#ifndef FRAMEBUFFER_H
-#define FRAMEBUFFER_H
+#pragma once
 
 #include <QOpenGLExtraFunctions>
 #include <vector>
@@ -14,7 +12,7 @@ namespace s21 {
 class Framebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
  public:
   Framebuffer() { initializeOpenGLFunctions(); }
-  
+
   ~Framebuffer() = default;
   Framebuffer(Framebuffer&&) = default;
   Framebuffer(const Framebuffer&) = default;
@@ -49,4 +47,3 @@ class Framebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
 };
 
 }  // namespace s21
-#endif  // FRAMEBUFFER_H

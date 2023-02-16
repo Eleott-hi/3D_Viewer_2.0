@@ -1,10 +1,12 @@
 #include "light_color_technique.h"
 
+#include <string>
+
 namespace s21 {
 
 void LightColorTechnique::init() {
-  GenVertexAndFragmentShader(shader_, "shaders/light_color_shader_v.c",
-                             "shaders/light_color_shader_f.c");
+  GenerateShaders("shaders/light_color_shader_v.c",
+                  "shaders/light_color_shader_f.c");
 }
 
 void LightColorTechnique::ApplyLightSettings(
@@ -47,4 +49,3 @@ void LightColorTechnique::setMVP(const QMatrix4x4 &proj, const QMatrix4x4 &view,
 }
 
 }  // namespace s21
-

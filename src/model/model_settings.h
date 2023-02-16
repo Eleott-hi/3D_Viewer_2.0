@@ -1,5 +1,4 @@
-#ifndef SRC_HEADERS_MODEL_SETTINGS_H
-#define SRC_HEADERS_MODEL_SETTINGS_H
+#pragma once
 
 #include <QColor>
 #include <QMatrix4x4>
@@ -30,8 +29,6 @@ class ModelSettings {
   ModelSettings(const ModelSettings &) = default;
   ModelSettings &operator=(ModelSettings &&) = default;
   ModelSettings &operator=(const ModelSettings &) = default;
-
-
 
   void AddVerticies(uint count) { vertices_ += count; }
   void AddIndices(uint count) { indices_ += count; }
@@ -97,5 +94,3 @@ class ModelSettings {
 };
 
 }  // namespace s21
-
-#endif  // SRC_HEADERS_MODEL_SETTINGS_H
