@@ -29,6 +29,7 @@ class ModelParser {
   s_Mesh processMesh(aiMesh *mesh, const aiScene *scene);
   std::vector<Vertex> loadVertices(aiMesh *mesh, const aiScene *scene);
   std::vector<uint32_t> LoadIndices(aiMesh *mesh, const aiScene *scene);
+
   // ==================== utils =====================
   void findMinMax(float x, float y, float z);
 };

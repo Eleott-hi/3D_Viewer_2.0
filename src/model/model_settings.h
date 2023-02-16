@@ -59,9 +59,9 @@ class ModelSettings {
            (normalize_ ? normalizeMatrix_ : QMatrix4x4());
   }
   QMatrix4x4 getAxisMatrix() { return translationMatrix() * rotationMatrix(); }
-  const QString &GetFilename() const { return filename_; }
-  const QVector3D &getPosition() const { return position_; }
   const QColor &getVertexColor() const { return vertexColor_; }
+  const QVector3D &getPosition() const { return position_; }
+  const QString &GetFilename() const { return filename_; }
   bool getPointForm() const { return pointSmooth_; }
   bool getLinesForm() const { return dashedLines_; }
   float getPointSize() const { return pointSize_; }

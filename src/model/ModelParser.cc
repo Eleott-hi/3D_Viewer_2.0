@@ -1,31 +1,10 @@
 #include "ModelParser.h"
 
+#include "Utils.h"
+
 namespace s21 {
 
 // =============================== UTILS ===============================
-namespace Utils {
-static QMatrix4x4 setNormalizeMatrix(const QVector3D &min,
-                                     const QVector3D &max) {
-  QVector3D CenterTranslate = {(min.x() + max.x()) / 2.0f,
-                               (min.y() + max.y()) / 2.0f,
-                               (min.z() + max.z()) / 2.0f};
-  std::vector<float> scales = {2.0f / (max.x() - min.x()),
-                               2.0f / (max.y() - min.y()),
-                               2.0f / (max.z() - min.z())};
-  QMatrix4x4 m;
-
-  m.scale(*(std::min_element(scales.begin(), scales.end())));
-  m.translate(-CenterTranslate);
-
-  return m;
-}
-
-template <typename Type>
-static void append(std::vector<Type> &to, std::vector<Type> &from) {
-  to.insert(to.end(), from.begin(), from.end());
-}
-
-}  // namespace Utils
 
 void ModelParser::findMinMax(float x, float y, float z) {
   minX_ = std::min(minX_, x);

@@ -1,5 +1,4 @@
-#ifndef MLP_SRC_MAIN_SIGNAL_HANDLER_H_
-#define MLP_SRC_MAIN_SIGNAL_HANDLER_H_
+#pragma once
 
 #include <QObject>
 
@@ -8,13 +7,13 @@ namespace s21 {
 class SignalHandler : public QObject {
   Q_OBJECT
 
-public:
+ public:
   static SignalHandler &GetInstance() {
     static SignalHandler instance;
     return instance;
   }
 
-signals:
+ signals:
   // ============================ CAMERA SIGNALS =============================
   void SetStackCamera();
   void SetObjectsCount(const QString &);
@@ -33,7 +32,7 @@ signals:
                           QVector3D const &constants);
   void SetAxisPanel(bool value);
 
-protected:
+ private:
   SignalHandler() = default;
   ~SignalHandler() = default;
   SignalHandler(SignalHandler &&) = delete;
@@ -42,6 +41,4 @@ protected:
   SignalHandler &operator=(const SignalHandler &) = delete;
 };
 
-} // namespace s21
-
-#endif // MLP_SRC_MAIN_SIGNAL_HANDLER_H_
+}  // namespace s21

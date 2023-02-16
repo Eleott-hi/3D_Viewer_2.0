@@ -14,15 +14,15 @@ class Controller : public QObject {
 
   void AddModel(const std::string &filename) { backend_->AddModel(filename); }
 
-  void UpdateCameraInfo(const QVector3D &position, const QVector3D &rotation,
-                        float zoom) {
+  void UpdateCameraInfo(const QVector3D &position,  //
+                        const QVector3D &rotation, float zoom) {
     backend_->UpdateCameraInfo(position, rotation, zoom);
   }
 
   void SetPerspective(bool value) { backend_->SetPerspective(value); }
 
-  void UpdateTransformInfo(const QVector3D &position, const QVector3D &rotation,
-                           float scale) {
+  void UpdateTransformInfo(const QVector3D &position,  //
+                           const QVector3D &rotation, float scale) {
     backend_->UpdateTransformInfo(position, rotation, scale);
   }
 
@@ -48,15 +48,14 @@ class Controller : public QObject {
 
   void MakeLightSource(bool value) { backend_->MakeLightSource(value); }
 
-  void UpdatePointLightInfo(QVector3D const &ambient, QVector3D const &diffuse,
-                            QVector3D const &specular,
+  void UpdatePointLightInfo(QVector3D const &ambient,   //
+                            QVector3D const &diffuse,   //
+                            QVector3D const &specular,  //
                             QVector3D const &constants) {
     backend_->UpdatePointLightInfo(ambient, diffuse, specular, constants);
   }
 
-  void DeleteObject() {  //
-    backend_->DeleteObject();
-  }
+  void DeleteObject() { backend_->DeleteObject(); }
 
   // =========================== Render =============================
   void Init() { backend_->Init(); }

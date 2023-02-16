@@ -15,7 +15,7 @@ set(EXCLUDE_DIRS tests ${CMAKE_SOURCE_DIR}/shared/assimp)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS ${QT_LIBS})
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS ${QT_LIBS})
 
-include_directories(shared view techniques sources headers ECS )
+include_directories(shared common view techniques model ECS)
 
 file(GLOB_RECURSE PROJECT_SOURCES *.cc *.h *.ui)
 add_subdirectory(${CMAKE_SOURCE_DIR}/shared/assimp)
@@ -58,6 +58,13 @@ add_custom_target(copy_resources ALL
     ${PROJECT_SOURCE_DIR}/others/resources
     ${PROJECT_BINARY_DIR}/resources
     COMMENT "Copying resources into binary directory"
+)
+
+add_custom_target(copy_shaders ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${PROJECT_SOURCE_DIR}/others/shaders
+    ${PROJECT_BINARY_DIR}/shaders
+    COMMENT "Copying shaders into binary directory"
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
