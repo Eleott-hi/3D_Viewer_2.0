@@ -68,27 +68,24 @@ class EntityManager {
   template <typename... ComponentTypes>
   std::vector<EntityID> GetEntities() {
     ComponentMask mask;
-    std::vector<EntityID> tmp;
-    tmp.reserve(entities_.size());
 
     ComponentID componentIDs[] = {GetComponentID<ComponentTypes>()...};
 
     for (int i = 0; i < sizeof...(ComponentTypes); i++)
       mask.set(componentIDs[i]);
 
-    tmp = GetEntities(mask);
-
-    return tmp;
+    return GetEntities(mask);
   }
 
   std::vector<EntityID> GetEntities(ComponentMask mask) {
-    std::vector<EntityID> tmp;
-    tmp.reserve(entities_.size());
+    std::vector<EntityID> entities;
+    entities.reserve(entities_.size());
 
-    for (auto& [entityID, componentMask] : entities_) {
-      if (mask == (mask & componentMask)) tmp.push_back(entityID);
-    }
-    return tmp;
+    for (auto& [entityID, componentMask] : entities_)
+      if (mask == (mask & componentMask))  //
+        entities.push_back(entityID);
+
+    return entities;
   }
 
   ComponentMask GetMask(EntityID id) {

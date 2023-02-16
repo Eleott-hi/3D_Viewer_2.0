@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Event.h"
+#include "core/Event.h"
 
 namespace s21 {
 class WindowResizeEvent : public Event {

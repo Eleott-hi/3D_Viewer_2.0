@@ -1,5 +1,7 @@
 #include "GlWidget.h"
 
+// #include <QPainter>
+
 namespace s21 {
 
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {

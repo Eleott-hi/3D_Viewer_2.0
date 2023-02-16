@@ -13,7 +13,8 @@ namespace s21 {
 
 class Framebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
  public:
-  Framebuffer();
+  Framebuffer() { initializeOpenGLFunctions(); }
+  
   ~Framebuffer() = default;
   Framebuffer(Framebuffer&&) = default;
   Framebuffer(const Framebuffer&) = default;

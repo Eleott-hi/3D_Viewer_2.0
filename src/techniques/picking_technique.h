@@ -14,21 +14,11 @@ class PickingTechnique : public ITechnique {
   PickingTechnique() { init(); }
   ~PickingTechnique() = default;
 
-  virtual void init() override {
-    GenVertexAndFragmentShader(shader_, "shaders/picking_shader_v.c",
-                               "shaders/picking_shader_f.c");
-  }
-
+  virtual void init() override;
   virtual void Enable() override { shader_.bind(); }
-
   virtual void setMVP(const QMatrix4x4 &proj, const QMatrix4x4 &view,
-                      const QMatrix4x4 &model) override {
-    shader_.setUniformValue("u_MVP", proj * view * model);
-  }
-
-  virtual void SetObjectID(int ObjectID) override {
-    shader_.setUniformValue("u_ObjectID", ObjectID);
-  }
+                      const QMatrix4x4 &model) override;
+  virtual void SetObjectID(int ObjectID) override;
 
  private:
   QOpenGLShaderProgram shader_;

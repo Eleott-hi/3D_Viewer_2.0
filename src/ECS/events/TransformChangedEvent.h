@@ -1,20 +1,19 @@
 #pragma once
 
-#include "Event.h"
-#include "Components.h"
-
+#include "components/Components.h"
+#include "core/Event.h"
 
 namespace s21 {
 class TransformChangedEvent : public Event {
  public:
-  TransformChangedEvent(){}
+  TransformChangedEvent() {}
   ~TransformChangedEvent() = default;
 
   EventType GetType() override { return EventType::WindowResize; }
 
-  TransformCompomemt GetTransform(){}
+  TransformCompomemt GetTransform() {}
 
  private:
- TransformCompomemt transform_;
+  TransformCompomemt transform_;
 };
 }  // namespace s21

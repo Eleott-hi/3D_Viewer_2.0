@@ -3,7 +3,6 @@
 
 #include <QMouseEvent>
 #include <QOpenGLWidget>
-// #include <QPainter>
 #include <QTimer>
 
 #include "controller.h"

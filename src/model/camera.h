@@ -31,8 +31,8 @@ class Camera {
   QMatrix4x4 viewMatrix_;
   // =========================== DEBUG DELETE ===========================
   QVector3D Position = {14.0843, 7.39728, -14.4024};
-  float Yaw = 120.4;
-  float Pitch = -13.6;
+
+  float Yaw = 120.4, Pitch = -13.6;
 
   //  float Yaw = -90.0, Pitch = 0.0;
   //  QVector3D Position = {0, 0, 3};

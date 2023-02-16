@@ -12,10 +12,6 @@ static void UnbindTexture() { BindTexture(0); }
 
 // =============================== UTILS ===============================
 
-Framebuffer::Framebuffer() {  //
-  initializeOpenGLFunctions();
-}
-
 void Framebuffer::Create(
     const std::initializer_list<AttachmentFormat> &formats) {
   color_formats_.clear();

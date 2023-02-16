@@ -13,7 +13,7 @@ void Backend::AddModel(const std::string &filename) {
   const auto &model = modelParser_->loadModel(filename);
 
   if (model.first) {
-    static int tmp = 0;
+    static int tmp = 0;  // Debug
 
     EntityID entity = scene_->NewEntity();
     scene_->AddComponent<MeshComponent>(entity, model.second);
