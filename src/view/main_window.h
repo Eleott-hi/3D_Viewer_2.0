@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QVector3D>
 
 #include "controller.h"
 #include "signal_handler.h"
@@ -40,8 +41,10 @@ class MainWindow : public QMainWindow {
   void SetLinePanel(bool show, bool dashed, int size, QColor color);
   void SetTexturePanel(int index);
   void SetMaterialPanel(float shininess);
-  void SetPointLightPanel(bool sourceLight, QVector3D const &ambient,
-                          QVector3D const &diffuse, QVector3D const &specular,
+  void SetPointLightPanel(bool sourceLight,           //
+                          QVector3D const &ambient,   //
+                          QVector3D const &diffuse,   //
+                          QVector3D const &specular,  //
                           QVector3D const &constants);
   void SetAxisPanel(bool value);
 

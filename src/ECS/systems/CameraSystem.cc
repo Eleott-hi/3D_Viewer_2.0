@@ -1,8 +1,10 @@
 #include "CameraSystem.h"
 
+#include "events/WindowResizeEvent.h"
+
 namespace s21 {
 
-void CameraSystem::Init(std::shared_ptr<Controller> const &scene) {
+void CameraSystem::Init(std::shared_ptr<ECS_Controller> const &scene) {
   scene_ = scene;
   scene_->AddEventListener(EventType::WindowResize,
                            BIND_EVENT_FN(OnWindowResize));
@@ -28,10 +30,9 @@ void CameraSystem::UpdateCameraInfo(TransformComponent const &transform) {
   }
 }
 
-void CameraSystem::Update(
-    float deltaTime, const QPoint &offset,
-    CameraDirection direction = CameraDirection::NONE) {  //
-
+void CameraSystem::Update(float deltaTime,       //
+                          const QPoint &offset,  //
+                          CameraDirection direction) {
   for (auto &entity : entities_) {
     auto &camera = scene_->GetComponent<CameraComponent>(entity);
     auto &transform = scene_->GetComponent<TransformComponent>(entity);
@@ -39,16 +40,16 @@ void CameraSystem::Update(
     camera.projectionMatrix = perspective_ ? perspectiveMatrix_ : orthoMatrix_;
 
     QVector3D front, right, up;
-    processMouseMovement(transform.rotation, offset);
+    ProcessMouseMovement(transform.rotation, offset);
     UpdateLookAtVectors(transform, front, right, up);
     UpdatePosition(transform.position, front, right, deltaTime, direction);
-    updateViewMatrix(camera, transform.position, front, up);
+    UpdateViewMatrix(camera, transform.position, front, up);
   }
 }
 
-void CameraSystem::processMouseMovement(QVector3D &Rotation,
+void CameraSystem::ProcessMouseMovement(QVector3D &Rotation,
                                         const QPoint &offset,
-                                        bool constrainPitch = true) {
+                                        bool constrainPitch) {
   // TODO (pintoved): Fish-Eye problem
   const float MouseSensitivity = 0.1;
 
@@ -103,7 +104,7 @@ void CameraSystem::UpdateLookAtVectors(const TransformComponent &transform,
   Up = QVector3D::crossProduct(Right, Front).normalized();
 }
 
-void CameraSystem::updateViewMatrix(CameraComponent &camera,
+void CameraSystem::UpdateViewMatrix(CameraComponent &camera,
                                     const QVector3D &Position,
                                     const QVector3D &Front,
                                     const QVector3D &Up) {

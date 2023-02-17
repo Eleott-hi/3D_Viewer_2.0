@@ -9,7 +9,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(QT_LIBS Widgets Core Gui OpenGL)
+set(QT_LIBS Widgets Core Gui OpenGL OpenGLWidgets)
 set(EXCLUDE_DIRS tests ${CMAKE_SOURCE_DIR}/shared/assimp)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS ${QT_LIBS})
@@ -44,6 +44,10 @@ foreach(i ${QT_LIBS})
 endforeach(i)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE assimp)
+
+IF(WIN32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE opengl32)
+ENDIF()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#include "Components.h"
+#include "components/Components.h"
 #include "TextureStorage.h"
 
 namespace s21 {

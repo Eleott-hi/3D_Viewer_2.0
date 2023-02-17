@@ -1,10 +1,8 @@
-#ifndef SRC_HEADERS_TECHNIQUE_STRATEGY_H
-#define SRC_HEADERS_TECHNIQUE_STRATEGY_H
+#include "technique_strategy.h"
 
 #include <memory>
 #include <vector>
 
-#include "Components.h"
 #include "light_color_technique.h"
 #include "light_texture_technique.h"
 #include "picking_technique.h"
@@ -54,5 +52,3 @@ void TechniqueStrategy::ApplyLightSettings(
 }
 
 }  // namespace s21
-
-#endif  // SRC_HEADERS_TECHNIQUE_STRATEGY_H

@@ -8,6 +8,8 @@
 #include <QMatrix4x4>
 #include <QOpenGLShaderProgram>
 #include <QVector3D>
+#include <vector>
+#include "components/Components.h"
 
 // #include "common_settings.h"
 // #include "light.h"

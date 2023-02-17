@@ -1,8 +1,9 @@
 
+
 #include <algorithm>
 
-#include "../others/ui_main_window.h"
 #include "main_window.h"
+#include "ui_main_window.h"
 
 namespace s21 {
 
@@ -12,6 +13,7 @@ static void BlockSignal(std::vector<QObject *> const &objects, bool block) {
                 [block](auto &object) { object->blockSignals(block); });
 }
 }  // namespace Utils
+
 // =========================================================================
 // ======================== OBJECT STACK SIGNALS ===========================
 // =========================================================================
@@ -30,7 +32,8 @@ void MainWindow::ConnectLightSignals() {
 // =========================================================================
 
 // ========================== Set Panels ==========================
-void MainWindow::SetPointLightPanel(bool sourceLight, QVector3D const &ambient,
+void MainWindow::SetPointLightPanel(bool sourceLight,  //
+                                    QVector3D const &ambient,
                                     QVector3D const &diffuse,
                                     QVector3D const &specular,
                                     QVector3D const &constants) {

@@ -1,4 +1,4 @@
-#include "GlWidget.h"
+#include "GL_Widget.h"
 
 // #include <QPainter>
 
@@ -28,7 +28,7 @@ void GLWidget::resizeGL(int w, int h) {
   controller_->resize(w, h);
 }
 
-void GLWidget::paintGL() override {
+void GLWidget::paintGL()  {
   controller_->render();
   // QString str = "Hello\nIt's me me me"; QPainter(this).drawText(QRect(1, 1,
   // 200, 100), 1, str);
@@ -41,7 +41,7 @@ void GLWidget::mousePressEvent(QMouseEvent *event) {
   }
 }
 
-void GLWidget::mouseMoveEvent(QMouseEvent *event) override {
+void GLWidget::mouseMoveEvent(QMouseEvent *event)  {
   const QPoint &mousePos = cSettings_.GetMousePosition();
   cSettings_.Offset(mousePos - event->pos());
   cSettings_.SetMousePosition(event->pos());

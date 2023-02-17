@@ -1,8 +1,8 @@
 #include <QColorDialog>
 #include <QFileDialog>
 
-#include "../others/ui_main_window.h"
 #include "main_window.h"
+#include "ui_main_window.h"
 
 namespace s21 {
 

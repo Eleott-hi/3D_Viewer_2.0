@@ -6,16 +6,16 @@
 #include "entity_manager.h"
 
 namespace s21 {
-class Controller {
+class ECS_Controller {
  public:
-  Controller() {
+  ECS_Controller() {
     componentManager = std::make_unique<ComponentManager>();
     entityManager = std::make_unique<EntityManager>();
     systemManager = std::make_unique<SystemManager>();
     eventManager = std::make_unique<EventManager>();
   }
 
-  ~Controller() = default;
+  ~ECS_Controller() = default;
 
   // ================== Entity methods ==================
   EntityID NewEntity() {  //
@@ -85,8 +85,8 @@ class Controller {
     eventManager->AddListener(type, listener);
   }
 
-  void Depatch(Event& event) {  //
-    eventManager->Depatch(event);
+  void Despatch(Event& event) {  //
+    eventManager->Despatch(event);
   }
 
  private:

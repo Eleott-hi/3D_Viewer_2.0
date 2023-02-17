@@ -3,7 +3,7 @@
 namespace s21 {
 
 void RenderPickedSystem::Init(
-    std::shared_ptr<Controller> const &scene,
+    std::shared_ptr<ECS_Controller> const &scene,
     std::shared_ptr<TechniqueStrategy> const &technique) {
   scene_ = scene;
   technique_ = technique;

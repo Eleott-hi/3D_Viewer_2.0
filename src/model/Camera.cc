@@ -1,16 +1,16 @@
 #include "Camera.h"
 
+namespace s21 {
+
 Camera::Camera() { UpdateCameraVectors(); }
 
-namespace s21 {
 void Camera::Reset() {
   Yaw = -90.0, Pitch = 0.0;
   Position = {0, 0, 3};
   UpdateCameraVectors();
 }
 
-void Camera::Move(float deltaTime,
-                  CameraDirection direction = CameraDirection::NONE) {
+void Camera::Move(float deltaTime, CameraDirection direction) {
   float velocity = speed * deltaTime;
   switch (direction) {
     case CameraDirection::FORWARD:
@@ -31,7 +31,7 @@ void Camera::Move(float deltaTime,
   updateViewMatrix();
 }
 
-void Camera::processMouseMovement(QPoint offset, bool constrainPitch = true) {
+void Camera::processMouseMovement(QPoint offset, bool constrainPitch) {
   // Fish eye problem
   Yaw += offset.x() * MouseSensitivity;
   Pitch -= offset.y() * MouseSensitivity;

@@ -18,7 +18,7 @@ class EventManager {
     listeners_[type].push_back(listener);
   }
 
-  void Depatch(Event &event) {
+  void Despatch(Event &event) {
     EventType type = event.GetType();
 
     for (auto &listener : listeners_[type]) listener(event);

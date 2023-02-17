@@ -1,6 +1,7 @@
 #include "backend.h"
 
-#include "Components.h"
+#include "components/Components.h"
+#include "events/WindowResizeEvent.h"
 #include "stb_image.h"
 
 namespace s21 {
@@ -108,7 +109,7 @@ void Backend::Init() {
   textureStorage_ = std::make_shared<TextureStorage>();
   modelParser_ = std::make_shared<ModelParser>(textureStorage_);
   technique_ = std::make_shared<TechniqueStrategy>();
-  scene_ = std::make_shared<Controller>();
+  scene_ = std::make_shared<ECS_Controller>();
 
   glEnable(GL_DEPTH_TEST);
   glLineStipple(4, 0xAAAA);
@@ -129,7 +130,7 @@ void Backend::Init() {
 
 void Backend::Resize(uint32_t width, uint32_t height) {
   WindowResizeEvent event(width, height);
-  scene_->Depatch(event);
+  scene_->Despatch(event);
 }
 
 void Backend::Render() {

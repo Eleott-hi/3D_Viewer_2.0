@@ -5,7 +5,8 @@
 #include <QOpenGLExtraFunctions>
 #include <functional>
 
-#include "core/Controller.h"
+#include "components/Components.h"
+#include "core/ECS_Controller.h"
 #include "core/System.h"
 #include "signal_handler.h"
 
@@ -15,7 +16,7 @@ class ObjectEditorSystem : public System, protected QOpenGLExtraFunctions {
  public:
   ~ObjectEditorSystem() = default;
   ObjectEditorSystem() { initializeOpenGLFunctions(); }
-  void Init(std::shared_ptr<Controller> const &scene) { scene_ = scene; }
+  void Init(std::shared_ptr<ECS_Controller> const &scene) { scene_ = scene; }
 
   void ObjectSelected();
   void UpdateTransformInfo(TransformComponent const &t);
@@ -30,7 +31,7 @@ class ObjectEditorSystem : public System, protected QOpenGLExtraFunctions {
   void DeleteObject();
 
  private:
-  std::shared_ptr<Controller> scene_;
+  std::shared_ptr<ECS_Controller> scene_;
   SignalHandler &signal_handler_ = SignalHandler::GetInstance();
 };
 }  // namespace s21

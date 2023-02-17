@@ -10,10 +10,7 @@ namespace s21 {
 class LightTextureTechnique : public ITechnique,
                               protected QOpenGLExtraFunctions {
  public:
-  LightTextureTechnique() {
-    initializeOpenGLFunctions();
-    init();
-  }
+  LightTextureTechnique();
 
   ~LightTextureTechnique() = default;
 

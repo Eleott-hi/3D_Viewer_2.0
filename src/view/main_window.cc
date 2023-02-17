@@ -1,6 +1,6 @@
 #include "main_window.h"
 
-#include "../others/ui_main_window.h"
+#include "ui_main_window.h"
 
 namespace s21 {
 MainWindow::MainWindow(Controller *c, QWidget *parent)

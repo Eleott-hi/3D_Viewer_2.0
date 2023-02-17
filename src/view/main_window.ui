@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>889</width>
-    <height>739</height>
+    <height>1179</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1362,7 +1362,7 @@
   <customwidget>
    <class>s21::GLWidget</class>
    <extends>QOpenGLWidget</extends>
-   <header>headers/gl_widget.h</header>
+   <header>GL_Widget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

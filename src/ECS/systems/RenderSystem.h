@@ -3,7 +3,7 @@
 
 #include <QOpenGLExtraFunctions>
 
-#include "core/Controller.h"
+#include "core/ECS_Controller.h"
 #include "core/System.h"
 #include "technique_strategy.h"
 
@@ -14,12 +14,12 @@ class RenderSystem : public System, protected QOpenGLExtraFunctions {
   RenderSystem() { initializeOpenGLFunctions(); }
   ~RenderSystem() = default;
 
-  void Init(std::shared_ptr<Controller> const &scene,
+  void Init(std::shared_ptr<ECS_Controller> const &scene,
             std::shared_ptr<TechniqueStrategy> const &technique);
   void Update(EntityID camera);
 
  private:
-  std::shared_ptr<Controller> scene_;
+  std::shared_ptr<ECS_Controller> scene_;
   std::shared_ptr<TechniqueStrategy> technique_;
 
   void UpdateLightData();

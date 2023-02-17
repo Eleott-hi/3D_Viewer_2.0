@@ -53,7 +53,8 @@ all: run
 
 run: build
 # ../build/Photolab.app/Contents/MacOS/Photolab
-	$(OPEN)$(APP)
+# $(OPEN)$(APP)
+	cd $(BUILD_DIR); $(OPEN)$(NAME)
 
 install: build
 	mkdir -p $(INSTALL_DIR)
@@ -97,4 +98,4 @@ cppcheck:
 #------------------------------------------------#
 
 .PHONY: all run install uninstall dvi dist build test clean linter linter-fix cppcheck
-.SILENT:
+# .SILENT:

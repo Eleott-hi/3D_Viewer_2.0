@@ -5,7 +5,7 @@
 #include <QSettings>
 #include <QVector3D>
 
-#include "CameraSystem.h"
+#include "systems/CameraSystem.h"
 
 namespace s21 {
 

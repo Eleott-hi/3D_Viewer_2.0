@@ -4,7 +4,7 @@
 #include <QOpenGLExtraFunctions>
 #include <map>
 
-#include "Components.h"
+#include "components/Components.h"
 
 namespace s21 {
 

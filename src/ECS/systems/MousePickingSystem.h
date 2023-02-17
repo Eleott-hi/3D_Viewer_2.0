@@ -3,8 +3,8 @@
 
 #include <QOpenGLExtraFunctions>
 
-#include "WindowResizeEvent.h"
-#include "core/Controller.h"
+#include "core/ECS_Controller.h"
+#include "core/Event.h"
 #include "core/System.h"
 #include "framebuffer.h"
 #include "technique_strategy.h"
@@ -16,14 +16,14 @@ class MousePickingSystem : public System, protected QOpenGLExtraFunctions {
   MousePickingSystem();
   ~MousePickingSystem() = default;
 
-  void Init(std::shared_ptr<Controller> const &scene,
+  void Init(std::shared_ptr<ECS_Controller> const &scene,
             std::shared_ptr<TechniqueStrategy> const &technique);
 
   void OnWindowResize(Event &event);
   bool Update(EntityID camera, const QPoint &pos);
 
  private:
-  std::shared_ptr<Controller> scene_;
+  std::shared_ptr<ECS_Controller> scene_;
   std::shared_ptr<TechniqueStrategy> technique_;
   std::unique_ptr<IFramebuffer> pickingFramebuffer_;
 

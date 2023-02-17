@@ -6,7 +6,7 @@
 #include "ModelParser.h"
 #include "TextureStorage.h"
 #include "common_settings.h"
-#include "core/Controller.h"
+#include "core/ECS_Controller.h"
 #include "signal_handler.h"
 #include "systems/CameraSystem.h"
 #include "systems/MousePickingSystem.h"
@@ -57,7 +57,7 @@ class Backend {
 
  private:
   EntityID camera_;
-  std::shared_ptr<Controller> scene_;
+  std::shared_ptr<ECS_Controller> scene_;
   std::shared_ptr<ModelParser> modelParser_;
   std::shared_ptr<TechniqueStrategy> technique_;
   std::shared_ptr<TextureStorage> textureStorage_;
