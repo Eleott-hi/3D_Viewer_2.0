@@ -2,15 +2,12 @@
 
 namespace s21 {
 
-// =============================== UTILS ===============================
 namespace Utils {
 static bool isDepth(Format f) { return (f == Format::DEPTH24_STENCIL8); }
 static void GenTexture(uint size, uint *id) { glGenTextures(size, id); }
 static void BindTexture(uint id) { glBindTexture(GL_TEXTURE_2D, id); }
 static void UnbindTexture() { BindTexture(0); }
 }  // namespace Utils
-
-// =============================== UTILS ===============================
 
 void Framebuffer::Create(
     const std::initializer_list<AttachmentFormat> &formats) {
@@ -36,9 +33,8 @@ void Framebuffer::Clear() {
 }
 
 void Framebuffer::Resize(uint width, uint height) {
-  float magicScale = 1.25;
-  width_ = width * magicScale;
-  height_ = height * magicScale;
+  width_ = width * magicScale_;
+  height_ = height * magicScale_;
   Invalidate();
 }
 
@@ -166,10 +162,9 @@ int Framebuffer::ReadPixel(uint x, uint y, int index) {
   glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
   glReadBuffer(GL_COLOR_ATTACHMENT0 + index);
 
-  float magicScale = 1.25;
   int objectID = 0;
 
-  glReadPixels(x * magicScale, height_ - y * magicScale, 1, 1, GL_RED_INTEGER,
+  glReadPixels(x * magicScale_, height_ - y * magicScale_, 1, 1, GL_RED_INTEGER,
                GL_INT, &objectID);
 
   glReadBuffer(GL_NONE);

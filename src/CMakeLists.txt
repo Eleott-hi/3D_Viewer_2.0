@@ -9,8 +9,14 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(QT_LIBS Widgets Core Gui OpenGL OpenGLWidgets)
-set(EXCLUDE_DIRS tests ${CMAKE_SOURCE_DIR}/shared/assimp)
+set(QT_LIBS
+    Widgets
+    OpenGL
+    OpenGLWidgets
+    Gui
+    Core
+)
+set(EXCLUDE_DIRS tests shared/assimp)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS ${QT_LIBS})
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS ${QT_LIBS})
@@ -18,7 +24,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS ${QT_LIBS})
 include_directories(shared common view techniques model ECS)
 
 file(GLOB_RECURSE PROJECT_SOURCES *.cc *.h *.ui)
-add_subdirectory(${CMAKE_SOURCE_DIR}/shared/assimp)
+add_subdirectory(shared/assimp)
 
 foreach(i ${EXCLUDE_DIRS})
     message("Excluding dir: " ${i})
