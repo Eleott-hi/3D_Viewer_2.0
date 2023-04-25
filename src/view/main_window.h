@@ -59,14 +59,12 @@ class MainWindow : public QMainWindow {
   void on_tg_LightSource_toggled(bool checked);
   void UpdatePointLightInfo();
 
-
-
   // Camera
   void SetCameraPanel(QVector3D position, QVector3D rotation, float zoom);
   void UpdateCameraInfo();
   void on_Shininess_valueChanged(int value);
 
-private:
+ private:
   Ui::MainWindow *ui_;
   Controller *controller_;
   CommonSettings &cSettings_ = CommonSettings::GetInstance();

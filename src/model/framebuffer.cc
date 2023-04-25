@@ -2,7 +2,6 @@
 
 namespace s21 {
 
-
 float magicScale_ = 1.25;
 
 namespace Utils {

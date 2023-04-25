@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "i_technique.h"
 
 namespace s21 {

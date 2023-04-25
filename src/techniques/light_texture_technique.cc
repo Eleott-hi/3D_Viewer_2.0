@@ -12,7 +12,6 @@ void LightTextureTechnique::init() {
                   "shaders/light_texture_shader_f.c");
 }
 
-
 void LightTextureTechnique::ApplyLightSettings(
     std::vector<TransformComponent> const &transforms,
     std::vector<LightSettingsComponent> const &settings) {

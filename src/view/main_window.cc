@@ -23,36 +23,34 @@ void MainWindow::ConnectSignals() {
 // =============================== KEYBORD ===============================
 void MainWindow::keyPressEvent(QKeyEvent *event) {
   switch (event->key()) {
-  case Qt::Key_Escape:
-    this->close();
-    break;
-  case Qt::Key_W:
-    cSettings_.MoveCamera(CameraDirection::FORWARD);
-    break;
-  case Qt::Key_S:
-    cSettings_.MoveCamera(CameraDirection::BACKWARD);
-    break;
-  case Qt::Key_D:
-    cSettings_.MoveCamera(CameraDirection::RIGHT);
-    break;
-  case Qt::Key_A:
-    cSettings_.MoveCamera(CameraDirection::LEFT);
-    break;
+    case Qt::Key_Escape:
+      this->close();
+      break;
+    case Qt::Key_W:
+      cSettings_.MoveCamera(CameraDirection::FORWARD);
+      break;
+    case Qt::Key_S:
+      cSettings_.MoveCamera(CameraDirection::BACKWARD);
+      break;
+    case Qt::Key_D:
+      cSettings_.MoveCamera(CameraDirection::RIGHT);
+      break;
+    case Qt::Key_A:
+      cSettings_.MoveCamera(CameraDirection::LEFT);
+      break;
 
-  default:
-    break;
+    default:
+      break;
   }
 }
 
 void MainWindow::on_actionOpen_file_triggered() {
-
   //   QString filename = QFileDialog::getOpenFileName(this, "Open File", "~/",
   //   "OBJ files (*.obj)");   if (!filename.isEmpty()) {
   //   controller_->addModel(filename.toStdString());}
 
   std::vector<std::string> models = {"resources/baseball_cap_1082k.obj"};
-  for (auto &i : models)
-    controller_->AddModel(i);
+  for (auto &i : models) controller_->AddModel(i);
 }
 
-} // namespace s21
+}  // namespace s21

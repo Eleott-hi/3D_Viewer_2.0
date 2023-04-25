@@ -24,8 +24,7 @@ static void setLabelColor(QLabel *label, QColor color) {
                        QString::number(color.rgb(), 16));
 }
 
-} // namespace Utils
-
+}  // namespace Utils
 
 void MainWindow::SetStackObject() { ui_->stackedWidget->setCurrentIndex(1); }
 
@@ -109,14 +108,13 @@ void MainWindow::SetAxisPanel(bool value) {
 }
 
 void MainWindow::UpdateTransformInfo() {
-
-  controller_->UpdateTransformInfo({ui_->xTrans_2->value(),  //
-                                    ui_->yTrans_2->value(),  //
-                                    ui_->zTrans_2->value()}, // translation
-                                   {ui_->xRot_2->value(),    //
-                                    ui_->yRot_2->value(),    //
-                                    ui_->zRot_2->value()},   // rotation
-                                   ui_->Scale_2->value()     // scale
+  controller_->UpdateTransformInfo({ui_->xTrans_2->value(),   //
+                                    ui_->yTrans_2->value(),   //
+                                    ui_->zTrans_2->value()},  // translation
+                                   {ui_->xRot_2->value(),     //
+                                    ui_->yRot_2->value(),     //
+                                    ui_->zRot_2->value()},    // rotation
+                                   ui_->Scale_2->value()      // scale
   );
 }
 
@@ -190,17 +188,15 @@ void MainWindow::on_btn_LoadTexture_clicked() {
 void MainWindow::on_btn_ResetObject_clicked() {
   SetTransformPanel({0, 0, 0}, {0, 0, 0}, 1);
 
-  controller_->UpdateTransformInfo({0, 0, 0}, // translation
-                                   {0, 0, 0}, // rotation
-                                   1          // scale
+  controller_->UpdateTransformInfo({0, 0, 0},  // translation
+                                   {0, 0, 0},  // rotation
+                                   1           // scale
   );
 }
 
 void MainWindow::on_Shininess_valueChanged(int value) {
   controller_->UpdateMaterialInfo(static_cast<float>(value));
 }
-
-
 
 void MainWindow::ConnectObjectSignals() {
   ui_->toggle_AxisLines->setAutoExclusive(false);
@@ -229,8 +225,8 @@ void MainWindow::ConnectObjectSignals() {
   connect(&signal_handler_, &SignalHandler::SetAxisPanel, this,
           &MainWindow::SetAxisPanel);
 
-
-  connect(ui_-> btn_DeleteObject, &QPushButton::clicked, controller_, &Controller:: DeleteObject);
+  connect(ui_->btn_DeleteObject, &QPushButton::clicked, controller_,
+          &Controller::DeleteObject);
 
   QVector<QSlider *> sliders = {ui_->xTrans_2, ui_->yTrans_2, ui_->zTrans_2,
                                 ui_->xRot_2,   ui_->yRot_2,   ui_->zRot_2,
@@ -241,4 +237,4 @@ void MainWindow::ConnectObjectSignals() {
             &MainWindow::UpdateTransformInfo);
 }
 
-} // namespace s21
+}  // namespace s21

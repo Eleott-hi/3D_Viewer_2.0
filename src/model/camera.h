@@ -4,7 +4,6 @@
 #include <QMatrix4x4>
 #include <QPoint>
 #include <QVector3D>
-#include <vector>
 
 namespace s21 {
 

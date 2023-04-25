@@ -12,6 +12,7 @@ void Camera::Reset() {
 
 void Camera::Move(float deltaTime, CameraDirection direction) {
   float velocity = speed * deltaTime;
+
   switch (direction) {
     case CameraDirection::FORWARD:
       Position += Front * velocity;
@@ -28,6 +29,7 @@ void Camera::Move(float deltaTime, CameraDirection direction) {
     default:
       break;
   }
+
   updateViewMatrix();
 }
 

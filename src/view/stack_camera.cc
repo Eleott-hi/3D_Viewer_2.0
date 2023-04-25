@@ -18,7 +18,7 @@ static QColor getLabelColor(QLabel *label) {
   return QColor("#" + style.section("#", -1));
 }
 
-} // namespace Utils
+}  // namespace Utils
 
 void MainWindow::SetStackCamera() { ui_->stackedWidget->setCurrentIndex(0); }
 
@@ -51,23 +51,22 @@ void MainWindow::on_btn_BackColor_clicked() {
 }
 
 void MainWindow::UpdateCameraInfo() {
-
-  controller_->UpdateCameraInfo(QVector3D(ui_->xTrans->value(),  //
-                                          ui_->yTrans->value(),  //
-                                          ui_->zTrans->value()), // translation
-                                QVector3D(ui_->xRot->value(),    //
-                                          ui_->yRot->value(),    //
-                                          0),                    // rotation
-                                ui_->CameraZoom->value()         // zoom
+  controller_->UpdateCameraInfo(QVector3D(ui_->xTrans->value(),   //
+                                          ui_->yTrans->value(),   //
+                                          ui_->zTrans->value()),  // translation
+                                QVector3D(ui_->xRot->value(),     //
+                                          ui_->yRot->value(),     //
+                                          0),                     // rotation
+                                ui_->CameraZoom->value()          // zoom
   );
 }
 
 void MainWindow::on_btn_ResetCamera_clicked() {
   SetCameraPanel({0, 0, 0}, {0, -90, 0}, 1);
 
-  controller_->UpdateCameraInfo({0, 0, 0}, // translation
-                                {0, 0, 0}, // rotation
-                                1          // zoom
+  controller_->UpdateCameraInfo({0, 0, 0},  // translation
+                                {0, 0, 0},  // rotation
+                                1           // zoom
   );
 }
 
@@ -94,4 +93,4 @@ void MainWindow::ConnectCameraSignals() {
             &MainWindow::UpdateCameraInfo);
 }
 
-} // namespace s21
+}  // namespace s21

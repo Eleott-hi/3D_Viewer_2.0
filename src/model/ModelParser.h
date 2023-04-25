@@ -8,8 +8,8 @@
 #include <string>
 #include <vector>
 
-#include "components/Components.h"
 #include "TextureStorage.h"
+#include "components/Components.h"
 
 namespace s21 {
 class ModelParser {

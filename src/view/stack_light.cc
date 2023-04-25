@@ -13,9 +13,9 @@ static void BlockSignal(std::vector<QObject *> const &objects, bool block) {
   std::for_each(objects.begin(), objects.end(),
                 [block](auto &object) { object->blockSignals(block); });
 }
-} // namespace Utils
+}  // namespace Utils
 
-void MainWindow::SetPointLightPanel(bool sourceLight, //
+void MainWindow::SetPointLightPanel(bool sourceLight,  //
                                     QVector3D const &ambient,
                                     QVector3D const &diffuse,
                                     QVector3D const &specular,
@@ -50,20 +50,19 @@ void MainWindow::on_tg_LightSource_toggled(bool value) {
 }
 
 void MainWindow::UpdatePointLightInfo() {
-
-  controller_->UpdatePointLightInfo({ui_->db_AmbientR->value(),    //
-                                     ui_->db_AmbientG->value(),    //
-                                     ui_->db_AmbientB->value()},   // ambient
-                                    {ui_->db_DiffuseR->value(),    //
-                                     ui_->db_DiffuseG->value(),    //
-                                     ui_->db_DiffuseB->value()},   // diffuse
-                                    {ui_->db_SpecularR->value(),   //
-                                     ui_->db_SpecularG->value(),   //
-                                     ui_->db_SpecularB->value()},  // specular
-                                    {ui_->db_ConstPoint->value(),  //
-                                     ui_->db_ConstLinear->value(), //
-                                     ui_->db_ConstQuadratic->value()}
-                                    // constants
+  controller_->UpdatePointLightInfo(
+      {ui_->db_AmbientR->value(),        //
+       ui_->db_AmbientG->value(),        //
+       ui_->db_AmbientB->value()},       // ambient
+      {ui_->db_DiffuseR->value(),        //
+       ui_->db_DiffuseG->value(),        //
+       ui_->db_DiffuseB->value()},       // diffuse
+      {ui_->db_SpecularR->value(),       //
+       ui_->db_SpecularG->value(),       //
+       ui_->db_SpecularB->value()},      // specular
+      {ui_->db_ConstPoint->value(),      //
+       ui_->db_ConstLinear->value(),     //
+       ui_->db_ConstQuadratic->value()}  // constants
   );
 }
 
@@ -84,4 +83,4 @@ void MainWindow::ConnectLightSignals() {
             &MainWindow::UpdatePointLightInfo);
 }
 
-} // namespace s21
+}  // namespace s21
