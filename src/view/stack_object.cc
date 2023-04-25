@@ -2,8 +2,8 @@
 #include <QFileDialog>
 #include <algorithm>
 
-#include "ui_main_window.h"
 #include "main_window.h"
+#include "ui_main_window.h"
 
 namespace s21 {
 
@@ -24,42 +24,11 @@ static void setLabelColor(QLabel *label, QColor color) {
                        QString::number(color.rgb(), 16));
 }
 
-}  // namespace Utils
+} // namespace Utils
 
-// ======================== OBJECT STACK SIGNALS ===========================
-void MainWindow::ConnectObjectSignals() {
-  ui_->toggle_AxisLines->setAutoExclusive(false);
-  ui_->SmoothPoints_2->setAutoExclusive(false);
-  ui_->DashedLines_2->setAutoExclusive(false);
-  ui_->ShowVertex->setAutoExclusive(false);
-  ui_->showLines->setAutoExclusive(false);
-  // ========================== Signals to back ==========================
-  connect(&signal_handler_, &SignalHandler::SetStackObject, this,
-          &MainWindow::SetStackObject);
-  connect(ui_->toggle_AxisLines, &QRadioButton::toggled, controller_,
-          &Controller::UpdateAxisInfo);
 
-  // ========================== Set Panels ==========================
-  connect(&signal_handler_, &SignalHandler::SetInfoPanel, this,
-          &MainWindow::SetInfoPanel);
-  connect(&signal_handler_, &SignalHandler::SetTransformPanel, this,
-          &MainWindow::SetTransformPanel);
-  connect(&signal_handler_, &SignalHandler::SetPointPanel, this,
-          &MainWindow::SetPointPanel);
-  connect(&signal_handler_, &SignalHandler::SetLinePanel, this,
-          &MainWindow::SetLinePanel);
-  connect(&signal_handler_, &SignalHandler::SetTexturePanel, this,
-          &MainWindow::SetTexturePanel);
-  connect(&signal_handler_, &SignalHandler::SetMaterialPanel, this,
-          &MainWindow::SetMaterialPanel);
-  connect(&signal_handler_, &SignalHandler::SetAxisPanel, this,
-          &MainWindow::SetAxisPanel);
-}
-
-// ========================= OBJECT STACK SLOTS ============================
 void MainWindow::SetStackObject() { ui_->stackedWidget->setCurrentIndex(1); }
 
-// ========================== Set Panels ==========================
 void MainWindow::SetInfoPanel(QString const &file, uint32_t vertices,
                               uint32_t indices) {
   ui_->lb_ObjectFilename->setText(file.section("/", -1));
@@ -139,56 +108,17 @@ void MainWindow::SetAxisPanel(bool value) {
   Utils::BlockSignal(tmp, false);
 }
 
-// ========================== Signals to back ==========================
+void MainWindow::UpdateTransformInfo() {
 
-// ============== Transform Info ==============
-void MainWindow::on_xTrans_2_valueChanged(int value) {
-  UpdateTransformInfo(0, value);
-}
-
-void MainWindow::on_yTrans_2_valueChanged(int value) {
-  UpdateTransformInfo(1, value);
-}
-
-void MainWindow::on_zTrans_2_valueChanged(int value) {
-  UpdateTransformInfo(2, value);
-}
-
-void MainWindow::on_xRot_2_valueChanged(int value) {
-  UpdateTransformInfo(3, value);
-}
-
-void MainWindow::on_yRot_2_valueChanged(int value) {
-  UpdateTransformInfo(4, value);
-}
-
-void MainWindow::on_zRot_2_valueChanged(int value) {
-  UpdateTransformInfo(5, value);
-}
-
-void MainWindow::on_Scale_2_valueChanged(int value) {
-  UpdateTransformInfo(6, value);
-}
-
-void MainWindow::UpdateTransformInfo(int index, int value) {
-  std::vector<float> transform = {static_cast<float>(ui_->xTrans_2->value()),
-                                  static_cast<float>(ui_->yTrans_2->value()),
-                                  static_cast<float>(ui_->zTrans_2->value()),
-                                  static_cast<float>(ui_->xRot_2->value()),
-                                  static_cast<float>(ui_->yRot_2->value()),
-                                  static_cast<float>(ui_->zRot_2->value()),
-                                  static_cast<float>(ui_->Scale_2->value())};
-
-  transform.at(index) = static_cast<float>(value);
-
-  controller_->UpdateTransformInfo(
-      {transform[0], transform[1], transform[2]},  // translation
-      {transform[3], transform[4], transform[5]},  // rotation
-      transform[6]                                 // scale
+  controller_->UpdateTransformInfo({ui_->xTrans_2->value(),  //
+                                    ui_->yTrans_2->value(),  //
+                                    ui_->zTrans_2->value()}, // translation
+                                   {ui_->xRot_2->value(),    //
+                                    ui_->yRot_2->value(),    //
+                                    ui_->zRot_2->value()},   // rotation
+                                   ui_->Scale_2->value()     // scale
   );
 }
-
-// ============== Point Info ==============
 
 void MainWindow::on_ShowVertex_toggled(bool value) {
   controller_->UpdatePointInfo(value, ui_->SmoothPoints_2->isChecked(),
@@ -218,7 +148,6 @@ void MainWindow::on_DotsColor_2_clicked() {
   }
 }
 
-// ============== Line Info ==============
 void MainWindow::on_showLines_toggled(bool value) {
   controller_->UpdateLineInfo(value, ui_->DashedLines_2->isChecked(),
                               ui_->LineWidth_2->value(),
@@ -247,8 +176,6 @@ void MainWindow::on_LinesColor_2_clicked() {
   }
 }
 
-// ================= Texture Technique ===================
-
 void MainWindow::on_cb_RenderTechnique_currentIndexChanged(int index) {
   controller_->UpdateTextureTechnique(index);
 }
@@ -260,13 +187,12 @@ void MainWindow::on_btn_LoadTexture_clicked() {
   }
 }
 
-// ============== Reset ==============
 void MainWindow::on_btn_ResetObject_clicked() {
   SetTransformPanel({0, 0, 0}, {0, 0, 0}, 1);
 
-  controller_->UpdateTransformInfo({0, 0, 0},  // translation
-                                   {0, 0, 0},  // rotation
-                                   1           // scale
+  controller_->UpdateTransformInfo({0, 0, 0}, // translation
+                                   {0, 0, 0}, // rotation
+                                   1          // scale
   );
 }
 
@@ -274,6 +200,45 @@ void MainWindow::on_Shininess_valueChanged(int value) {
   controller_->UpdateMaterialInfo(static_cast<float>(value));
 }
 
-void MainWindow::on_btn_DeleteObject_clicked() { controller_->DeleteObject(); }
 
-}  // namespace s21
+
+void MainWindow::ConnectObjectSignals() {
+  ui_->toggle_AxisLines->setAutoExclusive(false);
+  ui_->SmoothPoints_2->setAutoExclusive(false);
+  ui_->DashedLines_2->setAutoExclusive(false);
+  ui_->ShowVertex->setAutoExclusive(false);
+  ui_->showLines->setAutoExclusive(false);
+
+  connect(&signal_handler_, &SignalHandler::SetStackObject, this,
+          &MainWindow::SetStackObject);
+  connect(ui_->toggle_AxisLines, &QRadioButton::toggled, controller_,
+          &Controller::UpdateAxisInfo);
+
+  connect(&signal_handler_, &SignalHandler::SetInfoPanel, this,
+          &MainWindow::SetInfoPanel);
+  connect(&signal_handler_, &SignalHandler::SetTransformPanel, this,
+          &MainWindow::SetTransformPanel);
+  connect(&signal_handler_, &SignalHandler::SetPointPanel, this,
+          &MainWindow::SetPointPanel);
+  connect(&signal_handler_, &SignalHandler::SetLinePanel, this,
+          &MainWindow::SetLinePanel);
+  connect(&signal_handler_, &SignalHandler::SetTexturePanel, this,
+          &MainWindow::SetTexturePanel);
+  connect(&signal_handler_, &SignalHandler::SetMaterialPanel, this,
+          &MainWindow::SetMaterialPanel);
+  connect(&signal_handler_, &SignalHandler::SetAxisPanel, this,
+          &MainWindow::SetAxisPanel);
+
+
+  connect(ui_-> btn_DeleteObject, &QPushButton::clicked, controller_, &Controller:: DeleteObject);
+
+  QVector<QSlider *> sliders = {ui_->xTrans_2, ui_->yTrans_2, ui_->zTrans_2,
+                                ui_->xRot_2,   ui_->yRot_2,   ui_->zRot_2,
+                                ui_->Scale_2};
+
+  for (auto &slider : sliders)
+    connect(slider, &QSlider::valueChanged, this,
+            &MainWindow::UpdateTransformInfo);
+}
+
+} // namespace s21

@@ -15,7 +15,7 @@
 # cmake          build system executable
 
 NAME         := 3D_Viewer
-VERSION      := 1.0
+VERSION      := 2.0
 
 OS           := $(shell uname -s)
 FILES        := $(shell find . -regex '.*\(cc\|h\)' -not -path "*shared*")

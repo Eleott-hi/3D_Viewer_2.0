@@ -2,6 +2,9 @@
 
 namespace s21 {
 
+
+float magicScale_ = 1.25;
+
 namespace Utils {
 static bool isDepth(Format f) { return (f == Format::DEPTH24_STENCIL8); }
 static void GenTexture(uint size, uint *id) { glGenTextures(size, id); }

@@ -1,5 +1,6 @@
 
 
+#include <QVector>
 #include <algorithm>
 
 #include "main_window.h"
@@ -12,27 +13,9 @@ static void BlockSignal(std::vector<QObject *> const &objects, bool block) {
   std::for_each(objects.begin(), objects.end(),
                 [block](auto &object) { object->blockSignals(block); });
 }
-}  // namespace Utils
+} // namespace Utils
 
-// =========================================================================
-// ======================== OBJECT STACK SIGNALS ===========================
-// =========================================================================
-
-void MainWindow::ConnectLightSignals() {
-  ui_->tg_LightSource->setAutoExclusive(false);
-
-  // ========================== Signals to back ==========================
-
-  // ========================== Set Panels ==========================
-  connect(&signal_handler_, &SignalHandler::SetPointLightPanel, this,
-          &MainWindow::SetPointLightPanel);
-}
-// =========================================================================
-// ========================= OBJECT STACK SLOTS ============================
-// =========================================================================
-
-// ========================== Set Panels ==========================
-void MainWindow::SetPointLightPanel(bool sourceLight,  //
+void MainWindow::SetPointLightPanel(bool sourceLight, //
                                     QVector3D const &ambient,
                                     QVector3D const &diffuse,
                                     QVector3D const &specular,
@@ -62,76 +45,43 @@ void MainWindow::SetPointLightPanel(bool sourceLight,  //
   Utils::BlockSignal(tmp, false);
 }
 
-// ========================== Signals to back ==========================
-
-// ============== Light Info ==============
 void MainWindow::on_tg_LightSource_toggled(bool value) {
   controller_->MakeLightSource(value);
 }
 
-void MainWindow::on_db_AmbientR_valueChanged(double value) {
-  UpdatePointLightInfo(0, value);
-}
-void MainWindow::on_db_AmbientG_valueChanged(double value) {
-  UpdatePointLightInfo(1, value);
-}
-void MainWindow::on_db_AmbientB_valueChanged(double value) {
-  UpdatePointLightInfo(2, value);
-}
-void MainWindow::on_db_DiffuseR_valueChanged(double value) {
-  UpdatePointLightInfo(3, value);
-}
-void MainWindow::on_db_DiffuseG_valueChanged(double value) {
-  UpdatePointLightInfo(4, value);
-}
-void MainWindow::on_db_DiffuseB_valueChanged(double value) {
-  UpdatePointLightInfo(5, value);
-}
-void MainWindow::on_db_SpecularR_valueChanged(double value) {
-  UpdatePointLightInfo(6, value);
-}
-void MainWindow::on_db_SpecularG_valueChanged(double value) {
-  UpdatePointLightInfo(7, value);
-}
-void MainWindow::on_db_SpecularB_valueChanged(double value) {
-  UpdatePointLightInfo(8, value);
-}
+void MainWindow::UpdatePointLightInfo() {
 
-void MainWindow::on_db_ConstPoint_valueChanged(double value) {
-  UpdatePointLightInfo(9, value);
-}
-
-void MainWindow::on_db_ConstLinear_valueChanged(double value) {
-  UpdatePointLightInfo(10, value);
-}
-
-void MainWindow::on_db_ConstQuadratic_valueChanged(double value) {
-  UpdatePointLightInfo(11, value);
-}
-
-void MainWindow::UpdatePointLightInfo(int index, double value) {
-  std::vector<float> transform = {
-      static_cast<float>(ui_->db_AmbientR->value()),
-      static_cast<float>(ui_->db_AmbientG->value()),
-      static_cast<float>(ui_->db_AmbientB->value()),
-      static_cast<float>(ui_->db_DiffuseR->value()),
-      static_cast<float>(ui_->db_DiffuseG->value()),
-      static_cast<float>(ui_->db_DiffuseB->value()),
-      static_cast<float>(ui_->db_SpecularR->value()),
-      static_cast<float>(ui_->db_SpecularG->value()),
-      static_cast<float>(ui_->db_SpecularB->value()),
-      static_cast<float>(ui_->db_ConstPoint->value()),
-      static_cast<float>(ui_->db_ConstLinear->value()),
-      static_cast<float>(ui_->db_ConstQuadratic->value())};
-
-  transform.at(index) = static_cast<float>(value);
-
-  controller_->UpdatePointLightInfo(
-      {transform[0], transform[1], transform[2]},   // ambient
-      {transform[3], transform[4], transform[5]},   // diffuse
-      {transform[6], transform[7], transform[8]},   // specular
-      {transform[9], transform[10], transform[11]}  // constants
+  controller_->UpdatePointLightInfo({ui_->db_AmbientR->value(),    //
+                                     ui_->db_AmbientG->value(),    //
+                                     ui_->db_AmbientB->value()},   // ambient
+                                    {ui_->db_DiffuseR->value(),    //
+                                     ui_->db_DiffuseG->value(),    //
+                                     ui_->db_DiffuseB->value()},   // diffuse
+                                    {ui_->db_SpecularR->value(),   //
+                                     ui_->db_SpecularG->value(),   //
+                                     ui_->db_SpecularB->value()},  // specular
+                                    {ui_->db_ConstPoint->value(),  //
+                                     ui_->db_ConstLinear->value(), //
+                                     ui_->db_ConstQuadratic->value()}
+                                    // constants
   );
 }
 
-}  // namespace s21
+void MainWindow::ConnectLightSignals() {
+  ui_->tg_LightSource->setAutoExclusive(false);
+
+  connect(&signal_handler_, &SignalHandler::SetPointLightPanel, this,
+          &MainWindow::SetPointLightPanel);
+
+  QVector<QDoubleSpinBox *> spin_boxes = {
+      ui_->db_AmbientR,   ui_->db_AmbientG,    ui_->db_AmbientB,
+      ui_->db_DiffuseR,   ui_->db_DiffuseG,    ui_->db_DiffuseB,
+      ui_->db_SpecularR,  ui_->db_SpecularG,   ui_->db_SpecularB,
+      ui_->db_ConstPoint, ui_->db_ConstLinear, ui_->db_ConstQuadratic};
+
+  for (auto &spin_box : spin_boxes)
+    connect(spin_box, &QDoubleSpinBox::valueChanged, this,
+            &MainWindow::UpdatePointLightInfo);
+}
+
+} // namespace s21

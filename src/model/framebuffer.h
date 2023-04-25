@@ -38,7 +38,6 @@ class Framebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
 
  private:
   uint m_fbo = 0;
-  float magicScale_ = 1;
   uint m_Depth_Texture_ = 0;
   uint width_ = 500, height_ = 500;
   std::vector<uint> m_Color_Textures_;

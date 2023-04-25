@@ -70,6 +70,7 @@ s_Mesh ModelParser::processMesh(aiMesh *mesh, const aiScene *scene) {
 std::vector<Vertex> ModelParser::loadVertices(aiMesh *mesh,
                                               const aiScene *scene) {
   std::vector<Vertex> vertices;
+  vertices.reserve(mesh->mNumVertices);
 
   for (uint32_t i = 0; i < mesh->mNumVertices; i++) {
     Vertex vertex;
