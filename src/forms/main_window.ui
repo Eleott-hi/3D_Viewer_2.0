@@ -49,7 +49,7 @@
       </property>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="stack_Camera">
         <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">

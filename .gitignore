@@ -2,6 +2,7 @@ build*
 *.user
 .vscode
 logs
+*.py
 
 # Prerequisites
 *.d
