@@ -1,5 +1,6 @@
 build*
 *.user
+.vs
 .vscode
 logs
 *.py
