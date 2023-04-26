@@ -2,6 +2,7 @@
 #pragma once
 
 #include <QPoint>
+#include <QVector3D>
 
 #include "components/Components.h"
 #include "core/ECS_Controller.h"
@@ -25,28 +26,22 @@ class CameraSystem : public System {
               CameraDirection direction = CameraDirection::NONE);
 
  private:
+  bool perspective_ = true;
+  QVector3D front_, right_, up_;
   std::shared_ptr<ECS_Controller> scene_;
   QMatrix4x4 perspectiveMatrix_, orthoMatrix_;
-  bool perspective_ = true;
 
   void ProcessMouseMovement(QVector3D &Rotation,   //
                             const QPoint &offset,  //
                             bool constrainPitch = true);
 
-  void UpdatePosition(QVector3D &Position,     //
-                      const QVector3D &Front,  //
-                      const QVector3D &Right,  //
-                      float deltaTime,         //
+  void UpdatePosition(QVector3D &Position,  //
+                      float deltaTime,      //
                       CameraDirection direction);
 
-  void UpdateLookAtVectors(const TransformComponent &transform,
-                           QVector3D &Front,  //
-                           QVector3D &Right,  //
-                           QVector3D &Up);
+  void UpdateLookAtVectors(QVector3D const &rotation);
 
-  void UpdateViewMatrix(CameraComponent &camera,    //
-                        const QVector3D &Position,  //
-                        const QVector3D &Front,     //
-                        const QVector3D &Up);
+  void UpdateViewMatrix(CameraComponent &camera,  //
+                        const QVector3D &Position);
 };
 }  // namespace s21

@@ -16,19 +16,19 @@ void LightTextureTechnique::ApplyLightSettings(
     std::vector<TransformComponent> const &transforms,
     std::vector<LightSettingsComponent> const &settings) {
   shader_.setUniformValue("u_pointLightsCount", (int)transforms.size());
+
   for (size_t i = 0; i < transforms.size(); i++) {
     auto const &position = transforms.at(i).position;
-    auto const &[ambient, diffuse, specular, constant, linear, quadratic] =
-        settings.at(i);
+    auto const &[ambient, diffuse, specular, constants] = settings.at(i);
 
-    std::string u_pointLights = "u_pointLights[" + std::to_string(i) + "].";
+    std::string pointLights = "u_pointLights[" + std::to_string(i) + "].";
 
-    shader_.setUniformValue((u_pointLights + "position").c_str(), position);
-    shader_.setUniformValue((u_pointLights + "ambient").c_str(), ambient);
-    shader_.setUniformValue((u_pointLights + "diffuse").c_str(), diffuse);
-    shader_.setUniformValue((u_pointLights + "specular").c_str(), specular);
-    shader_.setUniformValue((u_pointLights + "constant").c_str(), constant);
-    shader_.setUniformValue((u_pointLights + "linear").c_str(), linear);
+    shader_.setUniformValue((pointLights + "position").c_str(), position);
+    shader_.setUniformValue((pointLights + "ambient").c_str(), ambient);
+    shader_.setUniformValue((pointLights + "diffuse").c_str(), diffuse);
+    shader_.setUniformValue((pointLights + "specular").c_str(), specular);
+    shader_.setUniformValue((pointLights + "constant").c_str(), constants.x());
+    shader_.setUniformValue((pointLights + "linear").c_str(), constants.y());
   }
 }
 
@@ -38,6 +38,7 @@ void LightTextureTechnique::setShininess(float shininess) {
 
 void LightTextureTechnique::setTexture(TextureComponent const &texture) {
   auto const &[diffuse, specular, normal, height] = texture;
+
   glActiveTexture(GL_TEXTURE0 + 0);
   shader_.setUniformValue("u_material.diffuse", 0);
   glBindTexture(GL_TEXTURE_2D, diffuse);

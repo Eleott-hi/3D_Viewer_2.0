@@ -91,10 +91,7 @@ struct LightSettingsComponent {
   QVector3D ambient;
   QVector3D diffuse;
   QVector3D specular;
-
-  float constant;
-  float linear;
-  float quadratic;
+  QVector3D constants;
 };
 
 struct MaterialComponent {

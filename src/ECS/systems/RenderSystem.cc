@@ -81,12 +81,12 @@ void RenderSystem::UpdateLightData() {
   transforms.reserve(pointLights.size());
   settings.reserve(pointLights.size());
 
-  std::for_each(pointLights.begin(), pointLights.end(), [&](auto &light) {
-    auto const &transform = scene_->GetComponent<TransformComponent>(light);
-    auto const &setting = scene_->GetComponent<LightSettingsComponent>(light);
+  for (auto const &entity : pointLights) {
+    auto const &transform = scene_->GetComponent<TransformComponent>(entity);
+    auto const &setting = scene_->GetComponent<LightSettingsComponent>(entity);
     transforms.push_back(transform);
     settings.push_back(setting);
-  });
+  }
 
   if (pointLights.size() == 0) {
     transforms.push_back({});
@@ -136,6 +136,9 @@ void RenderSystem::DrawObject(MeshComponent &model, GLenum form) {
 void RenderSystem::bufferize(s_Mesh &mesh) {
   auto &[VAO, vertices, indices] = mesh;
   uint32_t VBO = 0, EBO = 0;
+
+  qDebug()<<"Bufferize: "<<VAO<<" "<<vertices.size()<<" "<<indices.size();
+
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
   glGenBuffers(1, &EBO);
@@ -147,7 +150,7 @@ void RenderSystem::bufferize(s_Mesh &mesh) {
                vertices.data(), GL_STATIC_DRAW);
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned) * indices.size(),
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * indices.size(),
                indices.data(), GL_STATIC_DRAW);
 
   // vertex Positions

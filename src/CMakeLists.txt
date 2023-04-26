@@ -32,32 +32,41 @@ set(EXCLUDE_DIRS tests)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS ${QT_LIBS})
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS ${QT_LIBS})
 
-include_directories(shared common controller view techniques model ECS)
+include_directories(
+    ECS
+    view
+    model
+    common
+    shared
+    controller
+    techniques
+    ViewModels
+)
 
 file(GLOB_RECURSE PROJECT_SOURCES *.cc *.h *.ui)
 
 include(FetchContent)
 FetchContent_Declare(
-  assimp
-  URL https://github.com/assimp/assimp/archive/master.zip
+    assimp
+    URL https://github.com/assimp/assimp/archive/master.zip
 )
 
 FetchContent_GetProperties(assimp)
 
 if(NOT assimp_POPULATED)
-  FetchContent_Populate(assimp)
-  set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
-  set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-  set(ASSIMP_NO_EXPORT ON CACHE BOOL "")
-  set(ASSIMP_INSTALL_PDB OFF CACHE BOOL "")
-  set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF CACHE BOOL "")
-  set(ASSIMP_BUILD_OBJ_IMPORTER ON CACHE BOOL "")
-  add_subdirectory(${assimp_SOURCE_DIR} ${assimp_BINARY_DIR})
+    FetchContent_Populate(assimp)
+    set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
+    set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(ASSIMP_NO_EXPORT ON CACHE BOOL "")
+    set(ASSIMP_INSTALL_PDB OFF CACHE BOOL "")
+    set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF CACHE BOOL "")
+    set(ASSIMP_BUILD_OBJ_IMPORTER ON CACHE BOOL "")
+    add_subdirectory(${assimp_SOURCE_DIR} ${assimp_BINARY_DIR})
 
-  if(WIN32)
-    set(ASSIMP_OPT_BUILD_PACKAGES ON CACHE BOOL "" FORCE)
-    set(ASSIMP_BUILD_ZLIB ON CACHE BOOL "" FORCE)
-  endif()
+    if(WIN32)
+        set(ASSIMP_OPT_BUILD_PACKAGES ON CACHE BOOL "" FORCE)
+        set(ASSIMP_BUILD_ZLIB ON CACHE BOOL "" FORCE)
+    endif()
 endif()
 
 foreach(i ${EXCLUDE_DIRS})

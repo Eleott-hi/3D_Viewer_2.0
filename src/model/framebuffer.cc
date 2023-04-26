@@ -2,18 +2,27 @@
 
 namespace s21 {
 
-float magicScale_ = 1.25;
+#ifdef __WIN32__
+const float magicScale_ = 1.25;
+#elif __APPLE__
+const float magicScale_ = 2;
+#else
+const float magicScale_ = 1;
+#endif
 
 namespace Utils {
+
 static bool isDepth(Format f) { return (f == Format::DEPTH24_STENCIL8); }
 static void GenTexture(uint size, uint *id) { glGenTextures(size, id); }
 static void BindTexture(uint id) { glBindTexture(GL_TEXTURE_2D, id); }
 static void UnbindTexture() { BindTexture(0); }
+
 }  // namespace Utils
 
 void Framebuffer::Create(
     const std::initializer_list<AttachmentFormat> &formats) {
   color_formats_.clear();
+
   for (auto &format : formats) {
     if (Utils::isDepth(format.format_)) {
       depth_format_ = format;
@@ -21,13 +30,16 @@ void Framebuffer::Create(
       color_formats_.push_back(format);
     }
   }
+
   Invalidate();
 }
 
 void Framebuffer::Clear() {
   if (m_fbo) glDeleteFramebuffers(1, &m_fbo);
+
   if (!m_Color_Textures_.empty())
     glDeleteTextures(m_Color_Textures_.size(), m_Color_Textures_.data());
+
   if (m_Depth_Texture_) glDeleteTextures(1, &m_Depth_Texture_);
 
   m_Color_Textures_.clear();
@@ -70,8 +82,9 @@ void Framebuffer::Invalidate() {
 
   // Verify that the FBO is correct
   Q_ASSERT_X(
-      glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE,
-      "Framebuffer::Init()", "Framebuffer incomplete");
+      glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE,  //
+      "Framebuffer::Init()",                                                //
+      "Framebuffer incomplete");
 
   if (!m_Color_Textures_.empty()) {
 #define ARRAY_SIZE(x) ((sizeof(x)) / (sizeof(x[0])))
@@ -79,7 +92,8 @@ void Framebuffer::Invalidate() {
     GLenum buf[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
     int n = ARRAY_SIZE(buf);
 
-    Q_ASSERT_X(m_Color_Textures_.size() <= n, "Framebuffer::Invalidate()",
+    Q_ASSERT_X(m_Color_Textures_.size() <= n,  //
+               "Framebuffer::Invalidate()",    //
                "not supported quantity of attachments");
 
     glDrawBuffers(n, buf);
@@ -134,7 +148,8 @@ void Framebuffer::AttachColorTexture(uint index, uint id, GLenum internalFormat,
 void Framebuffer::SwitchDepthTexture() {
   switch (depth_format_.format_) {
     case Format::DEPTH24_STENCIL8:
-      AttachDepthTexture(m_Depth_Texture_, GL_DEPTH24_STENCIL8,
+      AttachDepthTexture(m_Depth_Texture_,     //
+                         GL_DEPTH24_STENCIL8,  //
                          GL_DEPTH_STENCIL_ATTACHMENT);
       break;
     default:
@@ -158,7 +173,8 @@ void Framebuffer::AttachDepthTexture(uint id, GLenum format,
 
 // =============================== READ BUFFER ===============================
 int Framebuffer::ReadPixel(uint x, uint y, int index) {
-  Q_ASSERT_X(index <= m_Color_Textures_.size(), "Framebuffer::ReadPixel()",
+  Q_ASSERT_X(index <= m_Color_Textures_.size(),  //
+             "Framebuffer::ReadPixel()",         //
              "Index is out of bounds");
 
   glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);

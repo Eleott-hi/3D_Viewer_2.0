@@ -16,26 +16,26 @@ class Controller : public QObject {
 
   void AddModel(const std::string &filename) { backend_->AddModel(filename); }
 
-  void UpdateCameraInfo(const QVector3D &position,  //
-                        const QVector3D &rotation,  //
-                        float zoom) {
-    backend_->UpdateCameraInfo(position, rotation, zoom);
+  void UpdateCameraInfo(QVector3D const &position,  //
+                        QVector3D const &rotation,  //
+                        float const &zoom) {
+    backend_->UpdateCameraInfo({position, rotation, zoom});
   }
 
   void SetPerspective(bool value) { backend_->SetPerspective(value); }
 
-  void UpdateTransformInfo(const QVector3D &position,  //
-                           const QVector3D &rotation,  //
-                           float scale) {
-    backend_->UpdateTransformInfo(position, rotation, scale);
+  void UpdateTransformInfo(QVector3D const &position,  //
+                           QVector3D const &rotation,  //
+                           float const &scale) {
+    backend_->UpdateTransformInfo({position, rotation, scale});
   }
 
   void UpdatePointInfo(bool show, bool smooth, int size, QColor const &color) {
-    backend_->UpdatePointInfo(show, smooth, size, color);
+    backend_->UpdatePointInfo({show, smooth, size, color});
   }
 
   void UpdateLineInfo(bool show, bool dashed, int size, QColor const &color) {
-    backend_->UpdateLineInfo(show, dashed, size, color);
+    backend_->UpdateLineInfo({show, dashed, size, color});
   }
 
   void UpdateAxisInfo(bool value) { backend_->UpdateAxisInfo(value); }
@@ -56,7 +56,7 @@ class Controller : public QObject {
                             QVector3D const &diffuse,   //
                             QVector3D const &specular,  //
                             QVector3D const &constants) {
-    backend_->UpdatePointLightInfo(ambient, diffuse, specular, constants);
+    backend_->UpdatePointLightInfo({ambient, diffuse, specular, constants});
   }
 
   void DeleteObject() { backend_->DeleteObject(); }

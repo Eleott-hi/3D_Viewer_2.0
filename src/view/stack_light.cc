@@ -26,6 +26,7 @@ void MainWindow::SetPointLightPanel(bool sourceLight,  //
       ui_->db_DiffuseG,    ui_->db_DiffuseB,      ui_->db_SpecularR,
       ui_->db_SpecularG,   ui_->db_SpecularB,     ui_->db_ConstPoint,
       ui_->db_ConstLinear, ui_->db_ConstQuadratic};
+
   Utils::BlockSignal(tmp, true);
 
   ui_->tg_LightSource->setChecked(sourceLight);

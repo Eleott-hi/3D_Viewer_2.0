@@ -5,7 +5,16 @@
 #include "main_window.h"
 
 int main(int argc, char *argv[]) {
-  QApplication a(argc, argv);
+  QApplication app(argc, argv);
+
+  QSurfaceFormat format;
+  format.setVersion(4, 1);
+  format.setProfile(QSurfaceFormat::CoreProfile);
+  format.setRenderableType(QSurfaceFormat::OpenGL);
+  format.setDepthBufferSize(24);
+  format.setStencilBufferSize(8);
+  format.setSamples(16);
+  QSurfaceFormat::setDefaultFormat(format);
 
   s21::Backend model;
   s21::Controller controller(&model);
@@ -13,5 +22,5 @@ int main(int argc, char *argv[]) {
 
   window.show();
 
-  return a.exec();
+  return app.exec();
 }

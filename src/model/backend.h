@@ -27,17 +27,13 @@ class Backend {
   // ============================ OBJECTS =============================
   void AddLight();
   void AddModel(std::string const &filename);
-  void UpdateCameraInfo(const QVector3D &position, const QVector3D &rotation,
-                        float zoom);
+  void UpdateCameraInfo(TransformComponent const &component);
 
   void SetPerspective(bool value);
 
-  void UpdateTransformInfo(QVector3D const &position, QVector3D const &rotation,
-                           float scale);
-  void UpdatePointInfo(bool show, bool smooth, uint32_t size,
-                       QColor const &color);
-  void UpdateLineInfo(bool show, bool dashed, uint32_t size,
-                      QColor const &color);
+  void UpdateTransformInfo(TransformComponent const &component);
+  void UpdatePointInfo(PointSettingsComponent const &component);
+  void UpdateLineInfo(LineSettingsComponent const &component);
   void UpdateAxisInfo(bool value);
   void UpdateTextureTechnique(int index);
   void LoadTexture(std::string const &filename);
@@ -46,9 +42,7 @@ class Backend {
 
   // ========================= Light Settings =========================
   void MakeLightSource(bool value);
-  void UpdatePointLightInfo(QVector3D const &ambient, QVector3D const &diffuse,
-                            QVector3D const &specular,
-                            QVector3D const &constants);
+  void UpdatePointLightInfo(LightSettingsComponent const &component);
 
   // ==============+========== OpenGL SURFACE =========================
   void Init();

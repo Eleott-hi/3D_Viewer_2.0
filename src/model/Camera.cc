@@ -5,26 +5,27 @@ namespace s21 {
 Camera::Camera() { UpdateCameraVectors(); }
 
 void Camera::Reset() {
-  Yaw = -90.0, Pitch = 0.0;
-  Position = {0, 0, 3};
+  yaw_ = -90.0;
+  pitch_ = 0.0;
+  position_ = {0, 0, 3};
   UpdateCameraVectors();
 }
 
-void Camera::Move(float deltaTime, CameraDirection direction) {
-  float velocity = speed * deltaTime;
+void Camera::ProcessKeyboard(float deltaTime, CameraDirection direction) {
+  float velocity = speed_ * deltaTime;
 
   switch (direction) {
     case CameraDirection::FORWARD:
-      Position += Front * velocity;
+      position_ += front_ * velocity;
       break;
     case CameraDirection::BACKWARD:
-      Position -= Front * velocity;
+      position_ -= front_ * velocity;
       break;
     case CameraDirection::LEFT:
-      Position -= Right * velocity;
+      position_ -= right_ * velocity;
       break;
     case CameraDirection::RIGHT:
-      Position += Right * velocity;
+      position_ += right_ * velocity;
       break;
     default:
       break;
@@ -33,39 +34,38 @@ void Camera::Move(float deltaTime, CameraDirection direction) {
   updateViewMatrix();
 }
 
-void Camera::processMouseMovement(QPoint offset, bool constrainPitch) {
+void Camera::ProcessMouseMovement(QPoint offset, bool constrainPitch) {
   // Fish eye problem
-  Yaw += offset.x() * MouseSensitivity;
-  Pitch -= offset.y() * MouseSensitivity;
-  if (constrainPitch) {
-    if (Pitch > 89.0f) Pitch = 89.0f;
-    if (Pitch < -89.0f) Pitch = -89.0f;
-  }
+  yaw_ += offset.x() * mouse_sensitivity_;
+  pitch_ -= offset.y() * mouse_sensitivity_;
+
+  if (constrainPitch) pitch_ = qBound(-89.0, pitch_, 89.0);
+
   UpdateCameraVectors();
 }
 
-void Camera::processMouseScroll(float yoffset) {
-  Zoom -= (float)yoffset;
-  if (Zoom < 1.0f) Zoom = 1.0f;
-  if (Zoom > 45.0f) Zoom = 45.0f;
+void Camera::ProcessMouseScroll(float yoffset) {
+  zoom_ = qBound(1.0, zoom_ - yoffset, 45.0);
 }
 
 void Camera::UpdateCameraVectors() {
-  Front =
-      QVector3D(
-          cos(qDegreesToRadians(Yaw)) * cos(qDegreesToRadians(Pitch)),  // 0
-          sin(qDegreesToRadians(Pitch)),                                // 0
-          sin(qDegreesToRadians(Yaw)) * cos(qDegreesToRadians(Pitch)))  // -1
-          .normalized();
-  Right = QVector3D::crossProduct(Front, WorldUp).normalized();
-  Up = QVector3D::crossProduct(Right, Front).normalized();
+  float yaw = qDegreesToRadians(yaw_);
+  float pitch = qDegreesToRadians(pitch_);
+
+  front_.setX(cos(yaw) * cos(pitch));
+  front_.setY(sin(pitch));
+  front_.setZ(sin(yaw) * cos(pitch));
+  front_.normalize();
+
+  right_ = QVector3D::normal(front_, world_up_);
+  up_ = QVector3D::normal(right_, front_);
 
   updateViewMatrix();
 }
 
 void Camera::updateViewMatrix() {
   QMatrix4x4 tmp;
-  tmp.lookAt(Position, Position + Front, Up);
+  tmp.lookAt(position_, position_ + front_, up_);
   viewMatrix_ = std::move(tmp);
 }
 

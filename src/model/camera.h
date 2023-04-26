@@ -18,34 +18,24 @@ class Camera {
   Camera &operator=(Camera &&) = default;
   Camera &operator=(const Camera &) = default;
 
-  const QVector3D &getPosition() const { return Position; }
-  const QVector3D &getFront() const { return Front; }
-  const QMatrix4x4 &getViewMatrix() const { return viewMatrix_; }
+  const QVector3D &GetFront() const { return front_; }
+  const QVector3D &GetPosition() const { return position_; }
+  const QMatrix4x4 &GetViewMatrix() const { return viewMatrix_; }
+
   void Reset();
-  void Move(float deltaTime, CameraDirection direction = CameraDirection::NONE);
-  void processMouseMovement(QPoint offset, bool constrainPitch = true);
-  void processMouseScroll(float yoffset);
+  void ProcessMouseScroll(float yoffset);
+  void ProcessMouseMovement(QPoint offset, bool constrainPitch = true);
+  void ProcessKeyboard(float deltaTime,
+                       CameraDirection direction = CameraDirection::NONE);
 
  private:
   QMatrix4x4 viewMatrix_;
-  // =========================== DEBUG DELETE ===========================
-  QVector3D Position = {14.0843, 7.39728, -14.4024};
+  QVector3D position_ = {14.0843, 7.39728, -14.4024};
+  QVector3D world_up_ = {0, 1, 0};
+  QVector3D front_, up_, right_;
 
-  float Yaw = 120.4, Pitch = -13.6;
-
-  //  float Yaw = -90.0, Pitch = 0.0;
-  //  QVector3D Position = {0, 0, 3};
-  // =========================== DEBUG DELETE ===========================
-
-  // //  camera Attributes
-  QVector3D  // Position = {0, 0, 3},
-      WorldUp = {0, 1, 0},
-      Front, Up, Right;
-
-  float speed = 0.1, MouseSensitivity = 0.1, Zoom = 45.0;
-
-  //   //  euler Angles
-  //  float Yaw = -90.0, Pitch = 0.0;
+  float yaw_ = 120.4, pitch_ = -13.6;
+  float speed_ = 0.1, mouse_sensitivity_ = 0.1, zoom_ = 45.0;
 
   void UpdateCameraVectors();
   void updateViewMatrix();
@@ -53,3 +43,8 @@ class Camera {
 }  // namespace s21
 
 #endif  // SRC_HEADERS_CAMERA_H
+        // //  camera Attributes
+        // QVector3D  // Position = {0, 0, 3},
+
+//   //  euler Angles
+//  float Yaw = -90.0, Pitch = 0.0;

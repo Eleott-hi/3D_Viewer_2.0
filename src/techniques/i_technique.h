@@ -11,15 +11,12 @@
 #include <vector>
 
 #include "components/Components.h"
-
-// #include "common_settings.h"
-// #include "light.h"
 #include "model_settings.h"
 
 namespace s21 {
 
 class ITechnique {
- public:
+public:
   ITechnique() {}
   virtual ~ITechnique() {}
 
@@ -31,22 +28,32 @@ class ITechnique {
   virtual void SetObjectID(int ObjectID) {}
   virtual void setShininess(float shineness) {}
   virtual void setTexture(TextureComponent const &texture) {}
-  virtual void ApplyLightSettings(
-      std::vector<TransformComponent> const &transforms,
-      std::vector<LightSettingsComponent> const &settings) {}
-  virtual void setMVP(const QMatrix4x4 &proj,  //
-                      const QMatrix4x4 &view,  //
+  virtual void
+  ApplyLightSettings(std::vector<TransformComponent> const &transforms,
+                     std::vector<LightSettingsComponent> const &settings) {}
+  virtual void setMVP(const QMatrix4x4 &proj, //
+                      const QMatrix4x4 &view, //
                       const QMatrix4x4 &model) {}
 
- protected:
+protected:
   QOpenGLShaderProgram shader_;
 
   void GenerateShaders(const QString &vertex_file,
                        const QString &fragment_file) {
-    shader_.addShaderFromSourceFile(QOpenGLShader::Vertex, vertex_file);
-    shader_.addShaderFromSourceFile(QOpenGLShader::Fragment, fragment_file);
-    shader_.link();
+    bool ok;
+    ok = shader_.addShaderFromSourceFile(QOpenGLShader::Vertex, vertex_file);
+    Q_ASSERT_X(ok, "ITechnique::GenerateShaders",
+               "Failed to compile vertex shader");
+
+    ok =
+        shader_.addShaderFromSourceFile(QOpenGLShader::Fragment, fragment_file);
+    Q_ASSERT_X(ok, "ITechnique::GenerateShaders",
+               "Failed to compile fragment shader");
+
+    ok = shader_.link();
+    Q_ASSERT_X(ok, "ITechnique::GenerateShaders",
+               "Failed to link shader program");
   }
 };
 
-}  // namespace s21
+} // namespace s21

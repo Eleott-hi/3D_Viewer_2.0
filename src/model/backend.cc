@@ -12,10 +12,9 @@ void Backend::AddLight() {}
 
 void Backend::AddModel(const std::string &filename) {
   const auto &model = modelParser_->loadModel(filename);
+  static int tmp = 0;  // Debug
 
   if (model.first) {
-    static int tmp = 0;  // Debug
-
     EntityID entity = scene_->NewEntity();
     scene_->AddComponent<MeshComponent>(entity, model.second);
     scene_->AddComponent<TextureComponent>(entity);
@@ -23,8 +22,7 @@ void Backend::AddModel(const std::string &filename) {
     scene_->AddComponent<TechniqueComponent>(entity);
     scene_->AddComponent<TransformComponent>(entity);
     scene_->AddComponent<LineSettingsComponent>(
-        entity                                                    //
-        ,                                                         // Debug
+        entity,
         (tmp++ == 0)                                              // Debug
             ? LineSettingsComponent{false, false, 1, Qt::yellow}  // Debug
             : LineSettingsComponent{}                             // Debug
@@ -34,13 +32,11 @@ void Backend::AddModel(const std::string &filename) {
   }
 
   uint32_t count = scene_->GetEntities<MeshComponent>().size();
-
   emit signal_handler_.SetObjectsCount(QString::number(count));
 }
 
-void Backend::UpdateCameraInfo(const QVector3D &position,
-                               const QVector3D &rotation, float zoom) {
-  cameraSystem_->UpdateCameraInfo({position, rotation, zoom});
+void Backend::UpdateCameraInfo(TransformComponent const &component) {
+  cameraSystem_->UpdateCameraInfo(component);
 }
 
 void Backend::SetPerspective(bool value) {
@@ -49,19 +45,16 @@ void Backend::SetPerspective(bool value) {
 
 // ======================= Object Update ============================
 
-void Backend::UpdateTransformInfo(const QVector3D &position,
-                                  const QVector3D &rotation, float scale) {
-  objectEditorSystem_->UpdateTransformInfo({position, rotation, scale});
+void Backend::UpdateTransformInfo(TransformComponent const &component) {
+  objectEditorSystem_->UpdateTransformInfo(component);
 }
 
-void Backend::UpdatePointInfo(bool show, bool smooth, uint32_t size,
-                              QColor const &color) {
-  objectEditorSystem_->UpdatePointInfo({show, smooth, size, color});
+void Backend::UpdatePointInfo(PointSettingsComponent const &component) {
+  objectEditorSystem_->UpdatePointInfo(component);
 }
 
-void Backend::UpdateLineInfo(bool show, bool dashed, uint32_t size,
-                             QColor const &color) {
-  objectEditorSystem_->UpdateLineInfo({show, dashed, size, color});
+void Backend::UpdateLineInfo(LineSettingsComponent const &component) {
+  objectEditorSystem_->UpdateLineInfo(component);
 }
 
 void Backend::UpdateAxisInfo(bool value) {
@@ -74,9 +67,9 @@ void Backend::UpdateTextureTechnique(int index) {
 
 void Backend::LoadTexture(std::string const &filename) {
   auto textureID = textureStorage_->LoadTexture(filename);
-  if (textureID) {
+
+  if (textureID)
     objectEditorSystem_->UpdateTextureInfo(textureID, TextureType::DIFFUSE);
-  }
 }
 
 void Backend::UpdateMaterialInfo(float value) {  //
@@ -87,13 +80,8 @@ void Backend::MakeLightSource(bool value) {
   objectEditorSystem_->MakeLightSource(value);
 }
 
-void Backend::UpdatePointLightInfo(QVector3D const &ambient,
-                                   QVector3D const &diffuse,
-                                   QVector3D const &specular,
-                                   QVector3D const &constants) {
-  objectEditorSystem_->UpdatePointLightInfo({ambient, diffuse, specular,
-                                             constants.x(), constants.y(),
-                                             constants.z()});
+void Backend::UpdatePointLightInfo(LightSettingsComponent const &component) {
+  objectEditorSystem_->UpdatePointLightInfo(component);
 }
 
 void Backend::DeleteObject() {
@@ -138,8 +126,6 @@ void Backend::Render() {
   Draw();
 }
 
-// ==============+============= PRIVATE ==============+=============
-
 void Backend::Update() {
   cameraSystem_->Update(1, cSettings_.Offset(), cSettings_.MoveCamera());
   cSettings_.Offset(QPoint{0, 0});
@@ -183,7 +169,6 @@ void Backend::RegisterComponents() {
 }
 
 void Backend::RegisterSystems() {
-  // ========================= Camera System =========================
   cameraSystem_ = scene_->RegisterSystem<CameraSystem>();
   {
     ComponentMask mask;
@@ -193,7 +178,6 @@ void Backend::RegisterSystems() {
     cameraSystem_->Init(scene_);
   }
 
-  //   =================== Edit Picked Object System ====================
   objectEditorSystem_ = scene_->RegisterSystem<ObjectEditorSystem>();
   {
     ComponentMask mask;
@@ -202,7 +186,6 @@ void Backend::RegisterSystems() {
     objectEditorSystem_->Init(scene_);
   }
 
-  // ========================= Picking System =========================
   mousePickingSystem_ = scene_->RegisterSystem<MousePickingSystem>();
   {
     ComponentMask mask;
@@ -212,7 +195,6 @@ void Backend::RegisterSystems() {
     mousePickingSystem_->Init(scene_, technique_);
   }
 
-  // ========================= Render System =========================
   renderSystem_ = scene_->RegisterSystem<RenderSystem>();
   {
     ComponentMask mask;
@@ -222,7 +204,6 @@ void Backend::RegisterSystems() {
     renderSystem_->Init(scene_, technique_);
   }
 
-  // ===================== Render Picked System ======================
   renderPickedSystem_ = scene_->RegisterSystem<RenderPickedSystem>();
   {
     ComponentMask mask;

@@ -1,5 +1,7 @@
 #include "main_window.h"
 
+#include <QFileDialog>
+
 #include "ui_main_window.h"
 
 namespace s21 {
@@ -7,6 +9,15 @@ MainWindow::MainWindow(Controller *c, QWidget *parent)
     : QMainWindow(parent), ui_(new Ui::MainWindow), controller_(c) {
   ui_->setupUi(this);
   ui_->openGLWidget->SetController(c);
+
+  static CameraViewModel camera_view_model;
+
+  static auto sub = camera_view_model.BindablePosition().subscribe(
+      [this] { qDebug() << "Subscribed func"; });
+
+  connect(ui_->xTrans, &QSlider::valueChanged, [this](int value) {
+    camera_view_model.SetPosition(QVector3D(value, 0, 0));
+  });
 
   ConnectSignals();
   ConnectCameraSignals();
@@ -23,9 +34,6 @@ void MainWindow::ConnectSignals() {
 // =============================== KEYBORD ===============================
 void MainWindow::keyPressEvent(QKeyEvent *event) {
   switch (event->key()) {
-    case Qt::Key_Escape:
-      this->close();
-      break;
     case Qt::Key_W:
       cSettings_.MoveCamera(CameraDirection::FORWARD);
       break;
@@ -45,12 +53,15 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 }
 
 void MainWindow::on_actionOpen_file_triggered() {
-  //   QString filename = QFileDialog::getOpenFileName(this, "Open File", "~/",
-  //   "OBJ files (*.obj)");   if (!filename.isEmpty()) {
-  //   controller_->addModel(filename.toStdString());}
+  QString filename = QFileDialog::getOpenFileName(this, "Open File", "~/",
+                                                  "OBJ files (*.obj)");
+  if (!filename.isEmpty()) {
+    controller_->AddModel(filename.toStdString());
+  }
 
-  std::vector<std::string> models = {"resources/baseball_cap_1082k.obj"};
-  for (auto &i : models) controller_->AddModel(i);
+  //  std::vector<std::string> models = {"resources/baseball_cap_1082k.obj"};
+  //  for (auto &i : models)
+  //    controller_->AddModel(i);
 }
 
 }  // namespace s21

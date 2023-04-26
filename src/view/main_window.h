@@ -3,6 +3,7 @@
 #include <QMainWindow>
 #include <QVector3D>
 
+#include "CameraViewModel.h"
 #include "controller.h"
 #include "signal_handler.h"
 

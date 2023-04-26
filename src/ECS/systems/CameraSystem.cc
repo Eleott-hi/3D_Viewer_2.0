@@ -1,5 +1,6 @@
 #include "CameraSystem.h"
 
+#include "Utils.h"
 #include "events/WindowResizeEvent.h"
 
 namespace s21 {
@@ -22,11 +23,10 @@ void CameraSystem::OnWindowResize(Event &event) {
   perspectiveMatrix_ = std::move(m);
 }
 
-void CameraSystem::UpdateCameraInfo(TransformComponent const &transform) {
+void CameraSystem::UpdateCameraInfo(TransformComponent const &component) {
   for (auto &entity : entities_) {
-    qDebug() << "HERE";
-    auto &cameraTransform = scene_->GetComponent<TransformComponent>(entity);
-    cameraTransform = transform;
+    auto &transform = scene_->GetComponent<TransformComponent>(entity);
+    transform = component;
   }
 }
 
@@ -39,77 +39,68 @@ void CameraSystem::Update(float deltaTime,       //
 
     camera.projectionMatrix = perspective_ ? perspectiveMatrix_ : orthoMatrix_;
 
-    QVector3D front, right, up;
     ProcessMouseMovement(transform.rotation, offset);
-    UpdateLookAtVectors(transform, front, right, up);
-    UpdatePosition(transform.position, front, right, deltaTime, direction);
-    UpdateViewMatrix(camera, transform.position, front, up);
+    UpdateLookAtVectors(transform.rotation);
+    UpdatePosition(transform.position, deltaTime, direction);
+    UpdateViewMatrix(camera, transform.position);
   }
 }
 
-void CameraSystem::ProcessMouseMovement(QVector3D &Rotation,
-                                        const QPoint &offset,
+void CameraSystem::ProcessMouseMovement(QVector3D &rotation,
+                                        QPoint const &offset,
                                         bool constrainPitch) {
   // TODO (pintoved): Fish-Eye problem
   const float MouseSensitivity = 0.1;
 
-  float Pitch = Rotation.x();
-  float Yaw = Rotation.y();
-  Yaw += offset.x() * MouseSensitivity;
-  Pitch -= offset.y() * MouseSensitivity;
-  if (constrainPitch) {
-    if (Pitch > 89.0f) Pitch = 89.0f;
-    if (Pitch < -89.0f) Pitch = -89.0f;
-  }
-  Rotation = {Pitch, Yaw, 0};
+  float Yaw = rotation.y() + offset.x() * MouseSensitivity;
+  float Pitch = rotation.x() - offset.y() * MouseSensitivity;
+
+  if (constrainPitch) Pitch = qBound(-89.0f, Pitch, 89.0f);
+
+  Utils::SetVector(rotation, Pitch, Yaw, 0);
 }
 
-void CameraSystem::UpdatePosition(QVector3D &Position, const QVector3D &Front,
-                                  const QVector3D &Right, float deltaTime,
+void CameraSystem::UpdatePosition(QVector3D &position,  //
+                                  float deltaTime,      //
                                   CameraDirection direction) {
   const float speed = 0.1;
   float velocity = speed * deltaTime;
   switch (direction) {
     case CameraDirection::FORWARD:
-      Position += Front * velocity;
+      position += front_ * velocity;
       break;
     case CameraDirection::BACKWARD:
-      Position -= Front * velocity;
+      position -= front_ * velocity;
       break;
     case CameraDirection::LEFT:
-      Position -= Right * velocity;
+      position -= right_ * velocity;
       break;
     case CameraDirection::RIGHT:
-      Position += Right * velocity;
+      position += right_ * velocity;
       break;
     default:
       break;
   }
 }
 
-void CameraSystem::UpdateLookAtVectors(const TransformComponent &transform,
-                                       QVector3D &Front, QVector3D &Right,
-                                       QVector3D &Up) {
+void CameraSystem::UpdateLookAtVectors(QVector3D const &rotation) {
   QVector3D WorldUp = {0, 1, 0};
-  float Pitch = transform.rotation.x();
-  float Yaw = transform.rotation.y();
+  float pitch = qDegreesToRadians(rotation.x());
+  float yaw = qDegreesToRadians(rotation.y());
 
-  Front =
-      QVector3D(
-          cos(qDegreesToRadians(Yaw)) * cos(qDegreesToRadians(Pitch)),  // 0
-          sin(qDegreesToRadians(Pitch)),                                // 0
-          sin(qDegreesToRadians(Yaw)) * cos(qDegreesToRadians(Pitch)))  // -1
-          .normalized();
-  Right = QVector3D::crossProduct(Front, WorldUp).normalized();
-  Up = QVector3D::crossProduct(Right, Front).normalized();
+  Utils::SetVector(front_, cos(yaw) * cos(pitch),  //
+                   sin(pitch),                     //
+                   sin(yaw) * cos(pitch));
+  front_.normalize();
+
+  right_ = QVector3D::normal(front_, WorldUp);
+  up_ = QVector3D::normal(right_, front_);
 }
 
 void CameraSystem::UpdateViewMatrix(CameraComponent &camera,
-                                    const QVector3D &Position,
-                                    const QVector3D &Front,
-                                    const QVector3D &Up) {
+                                    const QVector3D &position) {
   QMatrix4x4 tmp;
-  tmp.lookAt(Position, Position + Front, Up);
+  tmp.lookAt(position, position + front_, up_);
   camera.viewMatrix = std::move(tmp);
 }
 

@@ -51,12 +51,11 @@ void ObjectEditorSystem::ObjectSelected() {
     {
       bool sourceLight =
           scene_->EntityHasComponent<PointLightComponent>(entity);
-      auto const &[ambient, diffuse, specular, constant, linear, quadrratic] =
+      auto const &[ambient, diffuse, specular, constants] =
           scene_->GetComponent<LightSettingsComponent>(entity);
 
       emit signal_handler_.SetPointLightPanel(sourceLight, ambient, diffuse,
-                                              specular,
-                                              {constant, linear, quadrratic});
+                                              specular, constants);
     }
 
     //  Set Ui Axis Panel
@@ -136,10 +135,10 @@ void ObjectEditorSystem::MakeLightSource(bool light) {
 }
 
 void ObjectEditorSystem::UpdatePointLightInfo(
-    LightSettingsComponent const &settings) {
+    LightSettingsComponent const &componemt) {
   for (auto &entity : entities_) {
     auto &lightSettings = scene_->GetComponent<LightSettingsComponent>(entity);
-    lightSettings = settings;
+    lightSettings = componemt;
   }
 }
 
