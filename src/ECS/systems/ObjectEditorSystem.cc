@@ -6,7 +6,7 @@ void ObjectEditorSystem::ObjectSelected() {
   for (auto &entity : entities_) {
     //  Set Ui Info Panel
     {
-      auto &[filename, meshes] = scene_->GetComponent<MeshComponent>(entity);
+      auto &[filename, meshes] = scene_->GetComponent<ModelComponent>(entity);
       uint32_t vertices = 0, indices = 0;
       for (auto &mesh : meshes) {
         vertices += mesh.vertices_.size(), indices += mesh.indices_.size();
@@ -49,10 +49,9 @@ void ObjectEditorSystem::ObjectSelected() {
 
     //  Set Ui PointLight Panel
     {
-      bool sourceLight =
-          scene_->EntityHasComponent<PointLightComponent>(entity);
+      bool sourceLight = scene_->EntityHasComponent<PointLightTag>(entity);
       auto const &[ambient, diffuse, specular, constants] =
-          scene_->GetComponent<LightSettingsComponent>(entity);
+          scene_->GetComponent<LightComponent>(entity);
 
       emit signal_handler_.SetPointLightPanel(sourceLight, ambient, diffuse,
                                               specular, constants);
@@ -60,7 +59,7 @@ void ObjectEditorSystem::ObjectSelected() {
 
     //  Set Ui Axis Panel
     {
-      bool axis = scene_->EntityHasComponent<AxisComponent>(entity);
+      bool axis = scene_->EntityHasComponent<AxisTag>(entity);
       signal_handler_.SetAxisPanel(axis);
     }
   }
@@ -90,8 +89,8 @@ void ObjectEditorSystem::UpdateLineInfo(LineSettingsComponent const &settings) {
 
 void ObjectEditorSystem::UpdateAxisInfo(bool axis) {
   for (auto &entity : entities_) {
-    axis ? scene_->AddComponent<AxisComponent>(entity)
-         : scene_->RemoveComponent<AxisComponent>(entity);
+    axis ? scene_->AddComponent<AxisTag>(entity)
+         : scene_->RemoveComponent<AxisTag>(entity);
   }
 }
 
@@ -129,15 +128,14 @@ void ObjectEditorSystem::UpdateTextureInfo(uint32_t textureID,
 
 void ObjectEditorSystem::MakeLightSource(bool light) {
   for (auto &entity : entities_) {
-    light ? scene_->AddComponent<PointLightComponent>(entity)
-          : scene_->RemoveComponent<PointLightComponent>(entity);
+    light ? scene_->AddComponent<PointLightTag>(entity)
+          : scene_->RemoveComponent<PointLightTag>(entity);
   }
 }
 
-void ObjectEditorSystem::UpdatePointLightInfo(
-    LightSettingsComponent const &componemt) {
+void ObjectEditorSystem::UpdatePointLightInfo(LightComponent const &componemt) {
   for (auto &entity : entities_) {
-    auto &lightSettings = scene_->GetComponent<LightSettingsComponent>(entity);
+    auto &lightSettings = scene_->GetComponent<LightComponent>(entity);
     lightSettings = componemt;
   }
 }

@@ -18,9 +18,9 @@ class LightTextureTechnique : public ITechnique,
 
   virtual void ApplyLightSettings(
       std::vector<TransformComponent> const &transforms,
-      std::vector<LightSettingsComponent> const &settings) override;
+      std::vector<LightComponent> const &settings) override;
 
-  virtual void setShininess(float shininess) override;
+  virtual void setMaterial(MaterialComponent const &material) override;
 
   virtual void setTexture(TextureComponent const &texture) override;
 

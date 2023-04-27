@@ -23,7 +23,7 @@ class RenderPickedSystem : public System, protected QOpenGLExtraFunctions {
   std::shared_ptr<ECS_Controller> scene_;
   std::shared_ptr<TechniqueStrategy> technique_;
 
-  void DrawObject(MeshComponent &model);
-  void Bufferize(s_Mesh &mesh);
+  void DrawObject(ModelComponent &model);
+  void Bufferize(Mesh &mesh);
 };
 }  // namespace s21

@@ -27,8 +27,8 @@ void TechniqueStrategy::Enable(TechniqueType type) {
 
 void TechniqueStrategy::setColor(const QColor &c) { technique_->setColor(c); }
 
-void TechniqueStrategy::setShininess(float shineness) {
-  technique_->setShininess(shineness);
+void TechniqueStrategy::setMaterial(MaterialComponent const &material) {
+  technique_->setMaterial(material);
 }
 
 void TechniqueStrategy::setMVP(const QMatrix4x4 &proj,  //
@@ -47,7 +47,7 @@ void TechniqueStrategy::SetObjectID(int ObjectID) {
 
 void TechniqueStrategy::ApplyLightSettings(
     std::vector<TransformComponent> const &transforms,
-    std::vector<LightSettingsComponent> const &settings) {
+    std::vector<LightComponent> const &settings) {
   technique_->ApplyLightSettings(transforms, settings);
 }
 

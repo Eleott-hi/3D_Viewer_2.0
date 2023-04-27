@@ -13,11 +13,11 @@ class LightColorTechnique : public ITechnique {
 
   virtual void ApplyLightSettings(
       std::vector<TransformComponent> const &transforms,
-      std::vector<LightSettingsComponent> const &settings) override;
+      std::vector<LightComponent> const &settings) override;
 
   virtual void setColor(const QColor &c) override;
 
-  virtual void setShininess(float shininess) override;
+  virtual void setMaterial(MaterialComponent const &material) override;
 
   virtual void setMVP(const QMatrix4x4 &proj,  //
                       const QMatrix4x4 &view,  //

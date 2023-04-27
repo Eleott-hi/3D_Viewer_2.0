@@ -28,34 +28,31 @@ struct PointLight {
 
 uniform vec4 u_Color;
 uniform vec3 u_viewPos;
-uniform PointLight u_pointLights[100];
+
+uniform DirLight u_dirLights[20];
+uniform PointLight u_pointLights[20];
+
+uniform int u_dirLightsCount;
 uniform int u_pointLightsCount;
+
 uniform Material u_material;
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 CalcDirectLight(DirLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
-
-
-
 void main() {
   vec3 norm = normalize(Normal);
   vec3 viewDir = normalize(u_viewPos - FragPos);
   vec3 light;
-
-  DirLight dirLight;
-  dirLight.direction  = vec3(0.0f, 1.0f, 0.0f);
-  dirLight.ambient    = vec3(0.50f);
-  dirLight.diffuse    = vec3(0.50f);
-  dirLight.specular   = vec3(0.50f);
   
 
-  light += CalcDirectLight(dirLight, norm, FragPos, viewDir);
+  for (int i = 0; i < u_dirLightsCount; i++) {
+    light += CalcDirectLight(u_dirLights[i], norm, FragPos, viewDir);
+  }
 
   for (int i = 0; i < u_pointLightsCount; i++) {
     light += CalcPointLight(u_pointLights[i], norm, FragPos, viewDir);
   }
-
 
   FragColor = vec4(light, 1.0f);
 }
@@ -71,6 +68,8 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
   
   float attenuation = light.constant + light.linear * distance;
 
+  if (attenuation == 0.0) return vec3(0.0);
+
   vec3 ambient  = light.ambient           * u_Color.xyz;
   vec3 diffuse  = light.diffuse   * diff  * u_Color.xyz;
   vec3 specular = light.specular  * spec  * u_Color.xyz;
@@ -80,6 +79,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
   specular  /= attenuation;
 
   return (ambient + diffuse + specular);
+   
 }
 
 

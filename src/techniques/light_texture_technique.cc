@@ -14,7 +14,7 @@ void LightTextureTechnique::init() {
 
 void LightTextureTechnique::ApplyLightSettings(
     std::vector<TransformComponent> const &transforms,
-    std::vector<LightSettingsComponent> const &settings) {
+    std::vector<LightComponent> const &settings) {
   shader_.setUniformValue("u_pointLightsCount", (int)transforms.size());
 
   for (size_t i = 0; i < transforms.size(); i++) {
@@ -32,8 +32,8 @@ void LightTextureTechnique::ApplyLightSettings(
   }
 }
 
-void LightTextureTechnique::setShininess(float shininess) {
-  shader_.setUniformValue("u_material.shininess", shininess);
+void LightTextureTechnique::setMaterial(MaterialComponent const &material) {
+  shader_.setUniformValue("u_material.shininess", material.shininess);
 }
 
 void LightTextureTechnique::setTexture(TextureComponent const &texture) {

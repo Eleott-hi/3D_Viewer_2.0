@@ -50,7 +50,7 @@ endif
 all: run
 
 run: build
-	$(OPEN)$(BUILD_DIR)/$(APP)
+	cd $(BUILD_DIR); $(OPEN)$(APP)
 
 install: build
 	mkdir -p $(INSTALL_DIR)

@@ -42,7 +42,7 @@ class Backend {
 
   // ========================= Light Settings =========================
   void MakeLightSource(bool value);
-  void UpdatePointLightInfo(LightSettingsComponent const &component);
+  void UpdatePointLightInfo(LightComponent const &component);
 
   // ==============+========== OpenGL SURFACE =========================
   void Init();

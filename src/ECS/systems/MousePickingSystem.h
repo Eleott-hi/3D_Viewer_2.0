@@ -27,7 +27,7 @@ class MousePickingSystem : public System, protected QOpenGLExtraFunctions {
   std::shared_ptr<TechniqueStrategy> technique_;
   std::unique_ptr<IFramebuffer> pickingFramebuffer_;
 
-  void DrawObject(MeshComponent &model);
-  void bufferize(s_Mesh &mesh);
+  void DrawObject(ModelComponent &model);
+  void bufferize(Mesh &mesh);
 };
 }  // namespace s21

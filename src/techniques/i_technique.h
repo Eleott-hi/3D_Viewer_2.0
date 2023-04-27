@@ -16,7 +16,7 @@
 namespace s21 {
 
 class ITechnique {
-public:
+ public:
   ITechnique() {}
   virtual ~ITechnique() {}
 
@@ -26,16 +26,16 @@ public:
   // =================== Optional ===================
   virtual void setColor(const QColor &c) {}
   virtual void SetObjectID(int ObjectID) {}
-  virtual void setShininess(float shineness) {}
+  virtual void setMaterial(MaterialComponent const &material) {}
   virtual void setTexture(TextureComponent const &texture) {}
-  virtual void
-  ApplyLightSettings(std::vector<TransformComponent> const &transforms,
-                     std::vector<LightSettingsComponent> const &settings) {}
-  virtual void setMVP(const QMatrix4x4 &proj, //
-                      const QMatrix4x4 &view, //
+  virtual void ApplyLightSettings(
+      std::vector<TransformComponent> const &transforms,
+      std::vector<LightComponent> const &settings) {}
+  virtual void setMVP(const QMatrix4x4 &proj,  //
+                      const QMatrix4x4 &view,  //
                       const QMatrix4x4 &model) {}
 
-protected:
+ protected:
   QOpenGLShaderProgram shader_;
 
   void GenerateShaders(const QString &vertex_file,
@@ -56,4 +56,4 @@ protected:
   }
 };
 
-} // namespace s21
+}  // namespace s21

@@ -15,14 +15,14 @@ class TechniqueStrategy {
 
   void Enable(TechniqueType type);
   void setColor(const QColor &c);
-  void setShininess(float shineness);
+  void setMaterial(MaterialComponent const &material);
   void setMVP(const QMatrix4x4 &proj,  //
               const QMatrix4x4 &view,  //
               const QMatrix4x4 &model);
   void setTexture(TextureComponent const &texture);
   void SetObjectID(int ObjectID);
   void ApplyLightSettings(std::vector<TransformComponent> const &transforms,
-                          std::vector<LightSettingsComponent> const &settings);
+                          std::vector<LightComponent> const &settings);
   ITechnique *getTechnique() { return technique_; }
 
  private:

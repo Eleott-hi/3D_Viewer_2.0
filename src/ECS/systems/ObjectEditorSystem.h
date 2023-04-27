@@ -26,7 +26,7 @@ class ObjectEditorSystem : public System, protected QOpenGLExtraFunctions {
   void UpdateTextureTechnique(TechniqueType type);
   void UpdateTextureInfo(uint32_t textureID, TextureType type);
   void MakeLightSource(bool light);
-  void UpdatePointLightInfo(LightSettingsComponent const &settings);
+  void UpdatePointLightInfo(LightComponent const &settings);
   void UpdateMaterialInfo(MaterialComponent const &value);
   void DeleteObject();
 

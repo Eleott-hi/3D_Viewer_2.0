@@ -35,7 +35,7 @@ bool MousePickingSystem::Update(EntityID camera, const QPoint &pos) {
 
   for (auto &entity : entities_) {
     auto const &transform = scene_->GetComponent<TransformComponent>(entity);
-    auto &model = scene_->GetComponent<MeshComponent>(entity);
+    auto &model = scene_->GetComponent<ModelComponent>(entity);
 
     QMatrix4x4 modelMatrix = transform.GetModelMatrix();
 
@@ -49,58 +49,26 @@ bool MousePickingSystem::Update(EntityID camera, const QPoint &pos) {
 
   int objectID = pickingFramebuffer_->ReadPixel(pos.x(), pos.y());
 
-  auto pickedEntities = scene_->GetEntities<PickingComponent>();
+  auto pickedEntities = scene_->GetEntities<PickingTag>();
 
   for (auto &entity : pickedEntities)
-    scene_->RemoveComponent<PickingComponent>(entity);
+    scene_->RemoveComponent<PickingTag>(entity);
 
-  if (objectID >= 0) scene_->AddComponent<PickingComponent>(objectID);
+  if (objectID >= 0) scene_->AddComponent<PickingTag>(objectID);
 
   qDebug() << objectID;
 
   return objectID >= 0;
 }
 
-void MousePickingSystem::DrawObject(MeshComponent &model) {
+void MousePickingSystem::DrawObject(ModelComponent &model) {
   for (auto &mesh : model.meshes_) {
-    if (!mesh.VAO) bufferize(mesh);
+    if (!mesh.VAO) mesh.bufferize(this);
 
     glBindVertexArray(mesh.VAO);
     glDrawElements(GL_TRIANGLES, mesh.indices_.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
   }
-}
-
-void MousePickingSystem::bufferize(s_Mesh &mesh) {
-  auto &[VAO, vertices, indices] = mesh;
-  uint32_t VBO = 0, EBO = 0;
-  glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &VBO);
-  glGenBuffers(1, &EBO);
-
-  glBindVertexArray(VAO);
-
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(),
-               vertices.data(), GL_STATIC_DRAW);
-
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned) * indices.size(),
-               indices.data(), GL_STATIC_DRAW);
-
-  // vertex Positions
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-                        (void *)offsetof(Vertex, Position));
-  // vertex normals
-  glEnableVertexAttribArray(1);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-                        (void *)offsetof(Vertex, Normal));
-  // vertex texture coords
-  glEnableVertexAttribArray(2);
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-                        (void *)offsetof(Vertex, TexCoords));
-  glBindVertexArray(0);
 }
 
 }  // namespace s21

@@ -11,12 +11,13 @@ namespace s21 {
 void Backend::AddLight() {}
 
 void Backend::AddModel(const std::string &filename) {
-  const auto &model = modelParser_->loadModel(filename);
+  auto model = modelParser_->loadModel(filename);
   static int tmp = 0;  // Debug
 
   if (model.first) {
     EntityID entity = scene_->NewEntity();
-    scene_->AddComponent<MeshComponent>(entity, model.second);
+    scene_->AddComponent<ModelComponent>(entity, std::move(model.second));
+    scene_->AddComponent<LightComponent>(entity);
     scene_->AddComponent<TextureComponent>(entity);
     scene_->AddComponent<MaterialComponent>(entity);
     scene_->AddComponent<TechniqueComponent>(entity);
@@ -28,10 +29,9 @@ void Backend::AddModel(const std::string &filename) {
             : LineSettingsComponent{}                             // Debug
     );
     scene_->AddComponent<PointSettingsComponent>(entity);
-    scene_->AddComponent<LightSettingsComponent>(entity);
   }
 
-  uint32_t count = scene_->GetEntities<MeshComponent>().size();
+  uint32_t count = scene_->GetEntities<ModelComponent>().size();
   emit signal_handler_.SetObjectsCount(QString::number(count));
 }
 
@@ -80,14 +80,14 @@ void Backend::MakeLightSource(bool value) {
   objectEditorSystem_->MakeLightSource(value);
 }
 
-void Backend::UpdatePointLightInfo(LightSettingsComponent const &component) {
+void Backend::UpdatePointLightInfo(LightComponent const &component) {
   objectEditorSystem_->UpdatePointLightInfo(component);
 }
 
 void Backend::DeleteObject() {
   objectEditorSystem_->DeleteObject();
 
-  uint32_t count = scene_->GetEntities<MeshComponent>().size();
+  uint32_t count = scene_->GetEntities<ModelComponent>().size();
   emit signal_handler_.SetObjectsCount(QString::number(count));
   emit signal_handler_.SetStackCamera();
 }
@@ -154,18 +154,20 @@ void Backend::Clear() {
 }
 
 void Backend::RegisterComponents() {
-  scene_->RegisterComponent<MeshComponent>();
-  scene_->RegisterComponent<AxisComponent>();
+  scene_->RegisterComponent<AxisTag>();
+  scene_->RegisterComponent<PickingTag>();
+  scene_->RegisterComponent<DirLightTag>();
+  scene_->RegisterComponent<SpotLightTag>();
+  scene_->RegisterComponent<PointLightTag>();
+  scene_->RegisterComponent<ModelComponent>();
+  scene_->RegisterComponent<LightComponent>();
   scene_->RegisterComponent<CameraComponent>();
   scene_->RegisterComponent<TextureComponent>();
-  scene_->RegisterComponent<PickingComponent>();
   scene_->RegisterComponent<MaterialComponent>();
   scene_->RegisterComponent<TechniqueComponent>();
   scene_->RegisterComponent<TransformComponent>();
-  scene_->RegisterComponent<PointLightComponent>();
   scene_->RegisterComponent<LineSettingsComponent>();
   scene_->RegisterComponent<PointSettingsComponent>();
-  scene_->RegisterComponent<LightSettingsComponent>();
 }
 
 void Backend::RegisterSystems() {
@@ -181,7 +183,7 @@ void Backend::RegisterSystems() {
   objectEditorSystem_ = scene_->RegisterSystem<ObjectEditorSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<PickingComponent>());
+    mask.set(GetComponentID<PickingTag>());
     scene_->ChangeSystemMask<ObjectEditorSystem>(mask);
     objectEditorSystem_->Init(scene_);
   }
@@ -189,7 +191,7 @@ void Backend::RegisterSystems() {
   mousePickingSystem_ = scene_->RegisterSystem<MousePickingSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<MeshComponent>());
+    mask.set(GetComponentID<ModelComponent>());
     mask.set(GetComponentID<TransformComponent>());
     scene_->ChangeSystemMask<MousePickingSystem>(mask);
     mousePickingSystem_->Init(scene_, technique_);
@@ -198,7 +200,7 @@ void Backend::RegisterSystems() {
   renderSystem_ = scene_->RegisterSystem<RenderSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<MeshComponent>());
+    mask.set(GetComponentID<ModelComponent>());
     mask.set(GetComponentID<TransformComponent>());
     scene_->ChangeSystemMask<RenderSystem>(mask);
     renderSystem_->Init(scene_, technique_);
@@ -207,7 +209,7 @@ void Backend::RegisterSystems() {
   renderPickedSystem_ = scene_->RegisterSystem<RenderPickedSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<PickingComponent>());
+    mask.set(GetComponentID<PickingTag>());
     scene_->ChangeSystemMask<RenderPickedSystem>(mask);
     renderPickedSystem_->Init(scene_, technique_);
   }

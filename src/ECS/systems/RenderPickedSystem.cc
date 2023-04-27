@@ -16,7 +16,7 @@ void RenderPickedSystem::Update(EntityID camera) {
 
   for (auto &entity : entities_) {
     auto &transform = scene_->GetComponent<TransformComponent>(entity);
-    auto &model = scene_->GetComponent<MeshComponent>(entity);
+    auto &model = scene_->GetComponent<ModelComponent>(entity);
 
     QMatrix4x4 modelMatrix = transform.GetModelMatrix();
 
@@ -53,46 +53,14 @@ void RenderPickedSystem::Update(EntityID camera) {
   }
 }
 
-void RenderPickedSystem::DrawObject(MeshComponent &model) {
+void RenderPickedSystem::DrawObject(ModelComponent &model) {
   for (auto &mesh : model.meshes_) {
-    if (!mesh.VAO) Bufferize(mesh);
+    if (!mesh.VAO) mesh.bufferize(this);
 
     glBindVertexArray(mesh.VAO);
     glDrawElements(GL_TRIANGLES, mesh.indices_.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
   }
-}
-
-void RenderPickedSystem::Bufferize(s_Mesh &mesh) {
-  // auto &[VAO, vertices, indices] = mesh;
-  // uint32_t VBO = 0, EBO = 0;
-  // glGenVertexArrays(1, &VAO);
-  // glGenBuffers(1, &VBO);
-  // glGenBuffers(1, &EBO);
-
-  // glBindVertexArray(VAO);
-
-  // glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  // glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(),
-  //              vertices.data(), GL_STATIC_DRAW);
-
-  // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-  // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned) * indices.size(),
-  //              indices.data(), GL_STATIC_DRAW);
-
-  // // vertex Positions
-  // glEnableVertexAttribArray(0);
-  // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-  //                       (void *)offsetof(Vertex, Position));
-  // // vertex normals
-  // glEnableVertexAttribArray(1);
-  // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-  //                       (void *)offsetof(Vertex, Normal));
-  // // vertex texture coords
-  // glEnableVertexAttribArray(2);
-  // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-  //                       (void *)offsetof(Vertex, TexCoords));
-  // glBindVertexArray(0);
 }
 
 }  // namespace s21

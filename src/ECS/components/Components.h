@@ -2,15 +2,67 @@
 
 #include <QColor>
 #include <QMatrix4x4>
+#include <QOpenGLExtraFunctions>
 #include <QVector3D>
 #include <memory>
 #include <vector>
 
-// =============== Components ===================
+struct Vertex {
+  QVector3D Position;
+  QVector3D Normal;
+  QVector2D TexCoords;
+};
 
-struct TransformComponent {
+struct Mesh {
+  uint32_t VAO = 0;
+  std::vector<Vertex> vertices_;
+  std::vector<uint32_t> indices_;
+
+  void bufferize(QOpenGLExtraFunctions *f) {
+    uint32_t VBO = 0, EBO = 0;
+
+    f->glGenVertexArrays(1, &VAO);
+    f->glGenBuffers(1, &VBO);
+    f->glGenBuffers(1, &EBO);
+
+    f->glBindVertexArray(VAO);
+
+    f->glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    f->glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices_.size(),
+                    vertices_.data(), GL_STATIC_DRAW);
+
+    f->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    f->glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * indices_.size(),
+                    indices_.data(), GL_STATIC_DRAW);
+
+    f->glEnableVertexAttribArray(0);
+    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                             (void *)offsetof(Vertex, Position));
+    f->glEnableVertexAttribArray(1);
+    f->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                             (void *)offsetof(Vertex, Normal));
+
+    f->glEnableVertexAttribArray(2);
+    f->glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                             (void *)offsetof(Vertex, TexCoords));
+    f->glBindVertexArray(0);
+  }
+};
+
+struct ModelComponent {
+  std::string filename_;
+  std::vector<Mesh> meshes_;
+};
+
+struct PositionComponent {
   QVector3D position;
+};
+
+struct RotationComponent {
   QVector3D rotation;
+};
+
+struct TransformComponent : public PositionComponent, public RotationComponent {
   float scale = 1;
 
   QMatrix4x4 normalizeMatrix_;
@@ -30,23 +82,6 @@ struct TransformComponent {
 
     return m_translate * m_scale * m_rotate * m_start;
   }
-};
-
-struct Vertex {
-  QVector3D Position;
-  QVector3D Normal;
-  QVector2D TexCoords;
-};
-
-struct s_Mesh {
-  uint32_t VAO = 0;
-  std::vector<Vertex> vertices_;
-  std::vector<uint32_t> indices_;
-};
-
-struct MeshComponent {
-  std::string filename_;
-  std::vector<s_Mesh> meshes_;
 };
 
 struct CameraComponent {
@@ -87,7 +122,7 @@ enum class TextureType {  //
   HEIGHT
 };
 
-struct LightSettingsComponent {
+struct LightComponent {
   QVector3D ambient;
   QVector3D diffuse;
   QVector3D specular;
@@ -106,7 +141,9 @@ struct TextureComponent {
 };
 
 // =============== Tags ===================
-struct GeometryComponent {};
-struct AxisComponent {};
-struct PointLightComponent {};
-struct PickingComponent {};
+struct AxisTag {};
+struct GeometryTag {};
+struct PickingTag {};
+struct DirLightTag {};
+struct SpotLightTag {};
+struct PointLightTag : public PositionComponent, LightComponent {};

@@ -14,19 +14,18 @@ void RenderSystem::Update(EntityID camera) {
   auto const &[proj, view] = scene_->GetComponent<CameraComponent>(camera);
 
   for (auto &entity : entities_) {
-    auto &model = scene_->GetComponent<MeshComponent>(entity);
+    auto &model = scene_->GetComponent<ModelComponent>(entity);
     auto const &transform = scene_->GetComponent<TransformComponent>(entity);
     auto const &lineSettings =
         scene_->GetComponent<LineSettingsComponent>(entity);
     auto const &pointSettings =
         scene_->GetComponent<PointSettingsComponent>(entity);
-    auto const &[shininess] = scene_->GetComponent<MaterialComponent>(entity);
+    auto const &material = scene_->GetComponent<MaterialComponent>(entity);
 
     UpdateGeometrySettings(pointSettings, lineSettings);
 
     QMatrix4x4 modelMatrix = transform.GetModelMatrix();
 
-    // ============================ Draw Points ============================
     if (pointSettings.show) {
       technique_->Enable(TechniqueType::SIMPLE_COLOR);
       technique_->setMVP(proj, view, modelMatrix);
@@ -35,7 +34,6 @@ void RenderSystem::Update(EntityID camera) {
       DrawObject(model, GL_POINTS);
     }
 
-    // ============================ Draw Object ============================
     auto &[tecniqueStrategy] = scene_->GetComponent<TechniqueComponent>(entity);
     auto &texture = scene_->GetComponent<TextureComponent>(entity);
 
@@ -53,12 +51,12 @@ void RenderSystem::Update(EntityID camera) {
 
       case TechniqueType::LIGHT_COLOR:
         technique_->setColor(lineSettings.color);
-        technique_->setShininess(shininess);
+        technique_->setMaterial(material);
         break;
 
       case TechniqueType::LIGHT_TEXTURE:
         technique_->setTexture(texture);
-        technique_->setShininess(shininess);
+        technique_->setMaterial(material);
         break;
 
       default:
@@ -73,31 +71,31 @@ void RenderSystem::Update(EntityID camera) {
 }
 
 void RenderSystem::UpdateLightData() {
-  auto pointLights = scene_->GetEntities<PointLightComponent>();
+  static std::vector<TransformComponent> transforms;
+  static std::vector<LightComponent> lights;
 
-  std::vector<TransformComponent> transforms;
-  std::vector<LightSettingsComponent> settings;
+  auto pointLights = scene_->GetEntities<PointLightTag>();
+
+  transforms.clear();
+  lights.clear();
 
   transforms.reserve(pointLights.size());
-  settings.reserve(pointLights.size());
+  lights.reserve(pointLights.size());
 
   for (auto const &entity : pointLights) {
     auto const &transform = scene_->GetComponent<TransformComponent>(entity);
-    auto const &setting = scene_->GetComponent<LightSettingsComponent>(entity);
+    auto const &light = scene_->GetComponent<LightComponent>(entity);
     transforms.push_back(transform);
-    settings.push_back(setting);
+    lights.push_back(light);
   }
 
-  if (pointLights.size() == 0) {
-    transforms.push_back({});
-    settings.push_back({});
-  }
+  if (pointLights.size() == 0) transforms.push_back({}), lights.push_back({});
 
   technique_->Enable(TechniqueType::LIGHT_COLOR);
-  technique_->ApplyLightSettings(transforms, settings);
+  technique_->ApplyLightSettings(transforms, lights);
 
   technique_->Enable(TechniqueType::LIGHT_TEXTURE);
-  technique_->ApplyLightSettings(transforms, settings);
+  technique_->ApplyLightSettings(transforms, lights);
 }
 
 void RenderSystem::UpdateGeometrySettings(
@@ -123,49 +121,14 @@ void RenderSystem::NormalizeOpenGLSettings() {
   glLineWidth(1);
 }
 
-void RenderSystem::DrawObject(MeshComponent &model, GLenum form) {
+void RenderSystem::DrawObject(ModelComponent &model, GLenum form) {
   for (auto &mesh : model.meshes_) {
-    if (!mesh.VAO) bufferize(mesh);
+    if (!mesh.VAO) mesh.bufferize(this);
 
     glBindVertexArray(mesh.VAO);
     glDrawElements(form, mesh.indices_.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
   }
-}
-
-void RenderSystem::bufferize(s_Mesh &mesh) {
-  auto &[VAO, vertices, indices] = mesh;
-  uint32_t VBO = 0, EBO = 0;
-
-  qDebug()<<"Bufferize: "<<VAO<<" "<<vertices.size()<<" "<<indices.size();
-
-  glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &VBO);
-  glGenBuffers(1, &EBO);
-
-  glBindVertexArray(VAO);
-
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(),
-               vertices.data(), GL_STATIC_DRAW);
-
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * indices.size(),
-               indices.data(), GL_STATIC_DRAW);
-
-  // vertex Positions
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-                        (void *)offsetof(Vertex, Position));
-  // vertex normals
-  glEnableVertexAttribArray(1);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-                        (void *)offsetof(Vertex, Normal));
-  // vertex texture coords
-  glEnableVertexAttribArray(2);
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-                        (void *)offsetof(Vertex, TexCoords));
-  glBindVertexArray(0);
 }
 
 }  // namespace s21

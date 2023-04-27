@@ -16,7 +16,7 @@ void ModelParser::findMinMax(float x, float y, float z) {
 }
 // =============================== UTILS ===============================
 
-std::pair<bool, MeshComponent> ModelParser::loadModel(
+std::pair<bool, ModelComponent> ModelParser::loadModel(
     std::string const &filename) {
   for (auto model : loadedMeshes)
     if (model.filename_ == filename) return {true, model};
@@ -40,7 +40,7 @@ bool ModelParser::ParseModelFile(std::string const &filename) {
     return false;
   }
 
-  loadedMeshes.push_back({filename, std::vector<s_Mesh>{}});
+  loadedMeshes.push_back({filename, std::vector<Mesh>{}});
 
   minX_ = minY_ = minZ_ = std::numeric_limits<float>::infinity();
   maxX_ = maxY_ = maxZ_ = -std::numeric_limits<float>::infinity();
@@ -62,7 +62,7 @@ void ModelParser::processNode(aiNode *node, const aiScene *scene) {
     processNode(node->mChildren[i], scene);
 }
 
-s_Mesh ModelParser::processMesh(aiMesh *mesh, const aiScene *scene) {
+Mesh ModelParser::processMesh(aiMesh *mesh, const aiScene *scene) {
   return {0, loadVertices(mesh, scene), LoadIndices(mesh, scene)};
 }
 

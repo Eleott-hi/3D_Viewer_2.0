@@ -27,7 +27,7 @@ class RenderSystem : public System, protected QOpenGLExtraFunctions {
                               LineSettingsComponent const &lineSettings);
   void NormalizeOpenGLSettings();
 
-  void DrawObject(MeshComponent &model, GLenum form = GL_TRIANGLES);
-  void bufferize(s_Mesh &mesh);
+  void DrawObject(ModelComponent &model, GLenum form = GL_TRIANGLES);
+  void bufferize(Mesh &mesh);
 };
 }  // namespace s21
