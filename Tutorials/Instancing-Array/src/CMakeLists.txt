@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(Instancing-Array VERSION 1.1 LANGUAGES CXX)
+project(SphereTexture VERSION 1.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -65,24 +65,25 @@ FetchContent_Declare(
 FetchContent_GetProperties(assimp)
 
 if(NOT assimp_POPULATED)
-FetchContent_Populate(assimp)
-set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(ASSIMP_NO_EXPORT ON CACHE BOOL "")
-set(ASSIMP_INSTALL_PDB OFF CACHE BOOL "")
-set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF CACHE BOOL "")
-set(ASSIMP_BUILD_OBJ_IMPORTER ON CACHE BOOL "")
-add_subdirectory(${assimp_SOURCE_DIR} ${assimp_BINARY_DIR})
+    FetchContent_Populate(assimp)
+    set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
+    set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(ASSIMP_NO_EXPORT ON CACHE BOOL "")
+    set(ASSIMP_INSTALL_PDB OFF CACHE BOOL "")
+    set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF CACHE BOOL "")
+    set(ASSIMP_BUILD_OBJ_IMPORTER ON CACHE BOOL "")
+    add_subdirectory(${assimp_SOURCE_DIR} ${assimp_BINARY_DIR})
 
-if(WIN32)
-set(ASSIMP_OPT_BUILD_PACKAGES ON CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_ZLIB ON CACHE BOOL "" FORCE)
+    if(WIN32)
+        set(ASSIMP_OPT_BUILD_PACKAGES ON CACHE BOOL "" FORCE)
+        set(ASSIMP_BUILD_ZLIB ON CACHE BOOL "" FORCE)
+    endif()
 endif()
-endif()
+
 include_directories(
-    headers
-    shared
+    ../../
 )
+
 file(GLOB_RECURSE PROJECT_SOURCES *.cc *.cpp *.h *.ui)
 set(EXCLUDE_DIRS dependencies)
 
@@ -96,7 +97,6 @@ target_link_libraries(${PROJECT_NAME}
     glfw
     glm
     glad
-
     assimp
 )
 

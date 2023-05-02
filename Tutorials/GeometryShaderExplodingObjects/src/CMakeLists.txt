@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(GeometryShaderExplodingObjects VERSION 1.1 LANGUAGES CXX)
+project(SphereTexture VERSION 1.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -9,11 +9,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include(FetchContent)
 
 FetchContent_Declare(
-        glfw
-        GIT_REPOSITORY https://github.com/glfw/glfw
+    glfw
+    GIT_REPOSITORY https://github.com/glfw/glfw
 )
 
 FetchContent_GetProperties(glfw)
+
 if(NOT glfw_POPULATED)
     FetchContent_Populate(glfw)
 
@@ -26,26 +27,28 @@ if(NOT glfw_POPULATED)
 endif()
 
 FetchContent_Declare(
-	glm
-	GIT_REPOSITORY https://github.com/g-truc/glm.git
-	GIT_TAG		   0.9.9.2
+    glm
+    GIT_REPOSITORY https://github.com/g-truc/glm.git
+    GIT_TAG 0.9.9.2
 )
 
 FetchContent_GetProperties(glm)
+
 if(NOT glm_POPULATED)
-	FetchContent_Populate(glm)
-	set(GLM_TEST_ENABLE OFF CACHE BOOL "" FORCE)
-	add_subdirectory(${glm_SOURCE_DIR} ${glm_BINARY_DIR})
+    FetchContent_Populate(glm)
+    set(GLM_TEST_ENABLE OFF CACHE BOOL "" FORCE)
+    add_subdirectory(${glm_SOURCE_DIR} ${glm_BINARY_DIR})
 endif()
+
 message(STATUS "${Green} GLM Should Be Downloaded ${ColourReset}")
 
 FetchContent_Declare(
-        glad
-        GIT_REPOSITORY https://github.com/Dav1dde/glad.git
+    glad
+    GIT_REPOSITORY https://github.com/Dav1dde/glad.git
 )
 
-
 FetchContent_GetProperties(glad)
+
 if(NOT glad_POPULATED)
     FetchContent_Populate(glad)
     set(GLAD_PROFILE "core" CACHE STRING "OpenGL profile")
@@ -53,7 +56,6 @@ if(NOT glad_POPULATED)
     set(GLAD_GENERATOR "c" CACHE STRING "Language to generate the binding for")
     add_subdirectory(${glad_SOURCE_DIR} ${glad_BINARY_DIR})
 endif()
-
 
 FetchContent_Declare(
     assimp
@@ -79,10 +81,8 @@ if(NOT assimp_POPULATED)
 endif()
 
 include_directories(
-    headers
-    shared
+    ../../
 )
-
 
 file(GLOB_RECURSE PROJECT_SOURCES *.cc *.cpp *.h *.ui)
 set(EXCLUDE_DIRS dependencies)
@@ -92,9 +92,13 @@ foreach(i ${EXCLUDE_DIRS})
     list(FILTER PROJECT_SOURCES EXCLUDE REGEX ".*${i}.*")
 endforeach()
 
-
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
-target_link_libraries(${PROJECT_NAME} glfw glm glad assimp)
+target_link_libraries(${PROJECT_NAME}
+    glfw
+    glm
+    glad
+    assimp
+)
 
 add_custom_target(copy_shaders ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory
