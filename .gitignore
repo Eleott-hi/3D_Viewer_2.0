@@ -4,6 +4,7 @@ build*
 .vscode
 logs
 *.py
+.DS_Store
 
 # Prerequisites
 *.d
