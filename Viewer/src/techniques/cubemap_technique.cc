@@ -10,6 +10,7 @@ void CubemapTechnique::init() {
 }
 
 void CubemapTechnique::setTextureID(uint32_t id) {
+  qDebug() << "CubemapTechnique::setTextureID" << id;
   shader_.setUniformValue("skybox", id);
 }
 
@@ -22,6 +23,9 @@ void CubemapTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
   view(0, 3) = 0;
   view(1, 3) = 0;
   view(2, 3) = 0;
+  view(3, 3) = 1;
+
+  qDebug() << view;
 
   shader_.setUniformValue("view", view);
 }

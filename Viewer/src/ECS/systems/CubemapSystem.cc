@@ -43,7 +43,9 @@ void CubemapSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
   technique_ = technique;
 
   std::string dir =
-      "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/skybox";
+      // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/skybox"
+      "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
+      "textures/skybox";
 
   std::vector<std::string> faces{dir + "/right.jpg", dir + "/left.jpg",
                                  dir + "/top.jpg",   dir + "/bottom.jpg",
@@ -52,6 +54,7 @@ void CubemapSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
 }
 
 void CubemapSystem::Update() {
+  if (cubemapTexture_ == 0) return;
   //  skyboxShader.use();
   //  skyboxShader.setInt("skybox", 0);
 
@@ -61,22 +64,21 @@ void CubemapSystem::Update() {
   // for (auto entity : entities_) {
   // draw skybox as last
 
-  auto [proj, view] = Utils::GetProjectionAndView(scene_);
-
   technique_->Enable(TechniqueType::CUBEMAP);
+  auto [proj, view] = Utils::GetProjectionAndView(scene_);
 
   //  skyboxShader.use();
   // remove translation from the view matrix
   //  view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
 
   technique_->setMVP(proj, view, {});
-
   technique_->setTextureId(0);
 
   // skybox cube
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture_);
   // }
+  RenderCube();
   glDepthFunc(GL_LESS);  // set depth function back to default
 }
 
@@ -110,6 +112,8 @@ void CubemapSystem::RenderCube() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
                           (void *)0);
   }
+
+  qDebug() << skyboxVAO;
 
   glBindVertexArray(skyboxVAO);
   glDrawArrays(GL_TRIANGLES, 0, 36);
