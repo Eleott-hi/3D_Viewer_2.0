@@ -5,8 +5,8 @@
 namespace s21 {
 
 void LightColorTechnique::init() {
-  GenerateShaders("shaders/light_color_shader_v.c",
-                  "shaders/light_color_shader_f.c");
+  GenerateShaders(":/shaders/light_color_shader_v.c",
+                  ":/shaders/light_color_shader_f.c");
 }
 
 void SetLightComponent(QOpenGLShaderProgram &shader, Light *light, int index) {

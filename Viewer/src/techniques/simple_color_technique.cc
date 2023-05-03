@@ -5,8 +5,8 @@
 namespace s21 {
 
 void SimpleColorTechnique::init() {
-  GenerateShaders("shaders/simple_color_shader_v.c",
-                  "shaders/simple_color_shader_f.c");
+  GenerateShaders(":/shaders/simple_color_shader_v.c",
+                  ":/shaders/simple_color_shader_f.c");
 }
 
 void SimpleColorTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,

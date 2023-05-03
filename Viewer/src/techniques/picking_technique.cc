@@ -3,7 +3,8 @@
 namespace s21 {
 
 void PickingTechnique::init() {
-  GenerateShaders("shaders/picking_shader_v.c", "shaders/picking_shader_f.c");
+  GenerateShaders(":/shaders/picking_shader_v.c", 
+                  ":/shaders/picking_shader_f.c");
 }
 
 void PickingTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
