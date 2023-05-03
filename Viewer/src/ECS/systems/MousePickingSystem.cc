@@ -33,13 +33,10 @@ void MousePickingSystem::OnMouseDoubleClicked(Event &e) {
 
 void MousePickingSystem::Update() {
   static QPoint imposible_pos = QPoint(-1, -1);
-
   if (clicked_pos_ == imposible_pos) return;
 
   auto [proj, view] = Utils::GetProjectionAndView(scene_);
-
   technique_->Enable(TechniqueType::MOUSE_PICKING);
-
   framebuffer_->Bind();
   PrepareFramebuffer();
 

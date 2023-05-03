@@ -96,7 +96,7 @@ endif()
 
 
 
-file(GLOB_RECURSE SHADERS_FILES shaders/*.c)
+file(GLOB_RECURSE SHADERS_FILES shaders/*.fs shaders/*.vs)
 
 foreach(i ${SHADERS_FILES})
     message("Shader file: " ${i})

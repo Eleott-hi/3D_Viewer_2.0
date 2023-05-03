@@ -16,8 +16,8 @@ void GLWidget::initializeGL() {
 
   backend_->AddModel(
       // "C:/Users/lapte/Desktop/new_viewer/src/others/resources/cube.obj"
-      "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/cube.obj"
-      );
+      "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
+      "cube.obj");
 }
 
 void GLWidget::resizeGL(int w, int h) { backend_->WindowResize(w, h); }
@@ -29,14 +29,21 @@ void GLWidget::mousePressEvent(QMouseEvent *event) {
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event) {
+  // if (event->button() == Qt::LeftButton) {
   backend_->MouseMoved(last_pos_ - event->pos());
   last_pos_ = event->pos();
+  // }
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event) {}
 
 void GLWidget::mouseDoubleClickEvent(QMouseEvent *event) {
   backend_->MouseDoubleClicked(event->pos());
+}
+
+void GLWidget::wheelEvent(QWheelEvent *event) {
+  auto numDegrees = event->angleDelta();
+  backend_->MouseScrolled(numDegrees.y() / 80.0);
 }
 
 }  // namespace s21

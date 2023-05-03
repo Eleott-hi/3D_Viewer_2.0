@@ -44,7 +44,7 @@ void RenderPickedSystem::Update() {
 
     // Draw outline to stencil buffer
     modelMatrix.scale(1.02);
-    technique_->setColor(Qt::white);
+    technique_->setMaterial({Qt::white, 0});
     technique_->setMVP(proj, view, modelMatrix);
     DrawObject(model);
 

@@ -1,8 +1,10 @@
 
 #pragma once
 
+#include <QKeyEvent>
 #include <QPoint>
 #include <QVector3D>
+#include <unordered_map>
 
 #include "Components.h"
 #include "core/ECS_Controller.h"
@@ -11,19 +13,16 @@
 
 namespace s21 {
 
-class ProjectionSystem : public System {
+class CubmapeSystem : public System, protected QOpenGLExtraFunctions {
  public:
-  ProjectionSystem() = default;
-  ~ProjectionSystem() = default;
+  CubmapeSystem() = default;
+  ~CubmapeSystem() = default;
 
-  void Init(ECS_Controller *scene);
   void Update();
+  void Init(ECS_Controller *scene);
 
  private:
-  QMatrix4x4 ortho_, perspective_;
   ECS_Controller *scene_ = nullptr;
-
-  void OnWindowResize(Event &event);
-  void OnMouseScroll(Event &e);
+  TechniqueStrategy *technique_ = nullptr;
 };
 }  // namespace s21

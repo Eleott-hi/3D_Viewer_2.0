@@ -35,10 +35,12 @@ class ITechnique : public QOpenGLShaderProgram {
       QVector<std::tuple<Light *, BaseLightType *, Attenuation *>> lights) {}
   virtual void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) {}
 
+  virtual void setTextureID(uint32_t id) {}
+
   template <typename Type>
-  void setCustomValue(const char* name, Type value) {
-    qDebug()<<"HERE";
-   shader_.setUniformValue(name, value);
+  void setCustomValue(const char *name, Type value) {
+    qDebug() << "HERE";
+    shader_.setUniformValue(name, value);
   }
 
  protected:

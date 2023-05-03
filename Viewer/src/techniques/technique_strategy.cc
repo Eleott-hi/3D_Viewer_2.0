@@ -8,16 +8,19 @@
 #include "picking_technique.h"
 #include "simple_color_technique.h"
 // #include "simple_texture_technique.h"
+#include "quad_technique.h"
 
 namespace s21 {
 
 TechniqueStrategy::TechniqueStrategy(TechniqueType type)
     : techniques_{
           std::make_shared<SimpleColorTechnique>(),
-                          //  std::make_shared<SimpleTextureTechnique>(),
+          //  std::make_shared<SimpleTextureTechnique>(),
           std::make_shared<LightColorTechnique>(),
           //                  std::make_shared<LightTextureTechnique>(),
-          std::make_shared<PickingTechnique>()} {
+          std::make_shared<PickingTechnique>(),
+          std::make_shared<QuadTechnique>(),
+      } {
   technique_ = techniques_.at((int)type).get();
 }
 
@@ -38,9 +41,9 @@ void TechniqueStrategy::setMVP(QMatrix4x4 proj,  //
   technique_->setMVP(proj, view, model);
 }
 
-// void TechniqueStrategy::setTexture(TextureComponent const &texture) {
-//   technique_->setTexture(texture);
-// }
+void TechniqueStrategy::setTextureId(uint32_t id) {
+  technique_->setTextureID(id);
+}
 
 void TechniqueStrategy::SetObjectID(int ObjectID) {
   technique_->SetObjectID(ObjectID);

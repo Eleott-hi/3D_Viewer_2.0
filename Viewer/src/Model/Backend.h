@@ -12,9 +12,9 @@
 #include "systems/LightSystem.h"
 #include "systems/MousePickingSystem.h"
 #include "systems/ProjectionSystem.h"
+#include "systems/Render2DSystem.h"
 #include "systems/RenderPickedSystem.h"
 #include "systems/RenderSystem.h"
-#include "systems/Render2DSystem.h"
 #include "technique_strategy.h"
 
 namespace s21 {
@@ -36,15 +36,16 @@ class Backend
   void AddModel(QString path);
 
   void MouseMoved(QPoint offset);
+  void MouseScrolled(float scroll);
   void MouseDoubleClicked(QPoint pos);
-  void WindowResize(int width, int height);
   void KeyPressed(QKeyEvent *key_event);
   void KeyReleased(QKeyEvent *key_event);
+  void WindowResize(int width, int height);
 
  private:
   Parser parser_;
   ECS_Controller scene_;
-  std::shared_ptr<Render2DSystem>   render2DSystem_;
+  std::shared_ptr<Render2DSystem> render2DSystem_;
   std::shared_ptr<LightSystem> lightSystem_;
   std::shared_ptr<CameraSystem> cameraSystem_;
   std::shared_ptr<RenderSystem> renderSystem_;
