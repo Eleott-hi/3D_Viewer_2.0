@@ -9,6 +9,7 @@
 #include "Parser.h"
 #include "core/ECS_Controller.h"
 #include "systems/CameraSystem.h"
+#include "systems/CubemapSystem.h"
 #include "systems/LightSystem.h"
 #include "systems/MousePickingSystem.h"
 #include "systems/ProjectionSystem.h"
@@ -45,14 +46,16 @@ class Backend
  private:
   Parser parser_;
   ECS_Controller scene_;
-  std::shared_ptr<Render2DSystem> render2DSystem_;
+  std::shared_ptr<TechniqueStrategy> technique_;
+
   std::shared_ptr<LightSystem> lightSystem_;
   std::shared_ptr<CameraSystem> cameraSystem_;
   std::shared_ptr<RenderSystem> renderSystem_;
+  std::shared_ptr<CubemapSystem> cubemapSystem_;
+  std::shared_ptr<Render2DSystem> render2DSystem_;
   std::shared_ptr<ProjectionSystem> projectionSystem_;
   std::shared_ptr<MousePickingSystem> mousePickingSystem_;
   std::shared_ptr<RenderPickedSystem> renderPickedSystem_;
-  std::shared_ptr<TechniqueStrategy> technique_;
 
   void RegisterComponents();
   void RegisterSystems();

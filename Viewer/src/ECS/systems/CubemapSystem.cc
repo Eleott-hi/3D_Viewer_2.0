@@ -1,21 +1,24 @@
 
-#include "CubmapSystem.h"
+#include "CubemapSystem.h"
+
+#include "Utils.h"
+#include "stb_image.h"
 
 namespace s21 {
 
-unsigned int loadCubemap(vector<std::string> faces) {
-  unsigned int textureID;
+uint32_t CubemapSystem::loadCubemap(std::vector<std::string> faces) {
+  uint32_t textureID = 0;
 
   glGenTextures(1, &textureID);
   glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 
   int width, height, nrChannels;
-  for (unsigned int i = 0; i < faces.size(); i++) {
+  for (uint32_t i = 0; i < faces.size(); i++) {
     unsigned char *data =
         stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
 
     if (!data) {
-      qDebug() << "Cubemap texture failed to load at path:" << faces[i];
+      qDebug() << "Cubemap texture failed to load at path:" << faces[i].c_str();
       continue;
     }
 
@@ -33,49 +36,54 @@ unsigned int loadCubemap(vector<std::string> faces) {
   return textureID;
 }
 
-CubmapeSystem::CubmapeSystem() { initializeOpenGLFunctions(); }
+CubemapSystem::CubemapSystem() { initializeOpenGLFunctions(); }
 
-void CubmapSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
+void CubemapSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
   scene_ = scene;
   technique_ = technique;
 
-  vector<std::string> faces{"resources/textures/skybox/right.jpg",
-                            "resources/textures/skybox/left.jpg",
-                            "resources/textures/skybox/top.jpg",
-                            "resources/textures/skybox/bottom.jpg",
-                            "resources/textures/skybox/front.jpg",
-                            "resources/textures/skybox/back.jpg"};
-  unsigned int cubemapTexture = loadCubemap(faces);
+  std::string dir =
+      "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/skybox";
+
+  std::vector<std::string> faces{dir + "/right.jpg", dir + "/left.jpg",
+                                 dir + "/top.jpg",   dir + "/bottom.jpg",
+                                 dir + "/front.jpg", dir + "/back.jpg"};
+  cubemapTexture_ = loadCubemap(faces);
 }
 
-void CubmapSystem::Update() {
-  skyboxShader.use();
-  skyboxShader.setInt("skybox", 0);
+void CubemapSystem::Update() {
+  //  skyboxShader.use();
+  //  skyboxShader.setInt("skybox", 0);
 
   glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when
                            // values are equal to depth buffer's content
 
-  for (auto entity : entities_) {
-    // draw skybox as last
-    skyboxShader.use();
-    view = glm::mat4(glm::mat3(
-        camera.GetViewMatrix()));  // remove translation from the view matrix
-    skyboxShader.setMat4("view", view);
-    skyboxShader.setMat4("projection", projection);
-    // skybox cube
-    glBindVertexArray(skyboxVAO);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    glBindVertexArray(0);
-  }
+  // for (auto entity : entities_) {
+  // draw skybox as last
+
+  auto [proj, view] = Utils::GetProjectionAndView(scene_);
+
+  technique_->Enable(TechniqueType::CUBEMAP);
+
+  //  skyboxShader.use();
+  // remove translation from the view matrix
+  //  view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
+
+  technique_->setMVP(proj, view, {});
+
+  technique_->setTextureId(0);
+
+  // skybox cube
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture_);
+  // }
   glDepthFunc(GL_LESS);  // set depth function back to default
 }
 
-void CubmapSystem::RenderCube() {
+void CubemapSystem::RenderCube() {
   static uint32_t skyboxVAO = 0;
 
-  if (quadVAO == 0) {
+  if (skyboxVAO == 0) {
     float skyboxVertices[] = {
         // positions
         -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,
@@ -103,8 +111,8 @@ void CubmapSystem::RenderCube() {
                           (void *)0);
   }
 
-  glBindVertexArray(quadVAO);
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  glBindVertexArray(skyboxVAO);
+  glDrawArrays(GL_TRIANGLES, 0, 36);
   glBindVertexArray(0);
 }
 

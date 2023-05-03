@@ -1,7 +1,5 @@
 #include "quad_technique.h"
 
-#include <QDir>
-
 namespace s21 {
 
 void QuadTechnique::init() {

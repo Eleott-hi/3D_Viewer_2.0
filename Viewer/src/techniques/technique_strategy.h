@@ -14,6 +14,7 @@ enum class TechniqueType {
   // LIGHT_TEXTURE,
   MOUSE_PICKING,
   QUAD,
+  CUBEMAP,
 };
 
 class TechniqueStrategy {

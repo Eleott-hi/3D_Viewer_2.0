@@ -115,7 +115,9 @@ void Backend::Draw() {
   {
     renderSystem_->Update();
     renderPickedSystem_->Update();
+    cubemapSystem_->Update();
   }
+
   render2DSystem_->Update();
 }
 
@@ -202,6 +204,14 @@ void Backend::RegisterSystems() {
     mask.set(GetComponentID<Light>());
     scene_.ChangeSystemMask<LightSystem>(mask);
     lightSystem_->Init(&scene_, technique_.get());
+  }
+
+  cubemapSystem_ = scene_.RegisterSystem<CubemapSystem>();
+  {
+    ComponentMask mask;
+    // mask.set(GetComponentID<Light>());
+    // scene_.ChangeSystemMask<CubemapSystem>(mask);
+    cubemapSystem_->Init(&scene_, technique_.get());
   }
 }
 

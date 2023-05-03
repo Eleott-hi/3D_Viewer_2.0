@@ -33,7 +33,6 @@ void Mesh::bufferize(QOpenGLExtraFunctions *f) {
 
   index_count = indices.size();
   vertex_count = vertices.size();
-
 }
 
 QMatrix4x4 Transform::GetModelMatrix() const {
