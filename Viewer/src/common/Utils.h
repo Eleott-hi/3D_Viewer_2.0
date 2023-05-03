@@ -20,4 +20,6 @@ static EntityID GetCameraID(ECS_Controller* scene);
 static EntityID GetProjectionID(ECS_Controller* scene);
 std::tuple<QMatrix4x4, QMatrix4x4> GetProjectionAndView(ECS_Controller* scene);
 
+EntityID GetQuad(ECS_Controller* scene);
+
 }  // namespace s21::Utils

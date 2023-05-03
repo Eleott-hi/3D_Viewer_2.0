@@ -21,6 +21,8 @@ struct Mesh {
   quint32 VAO = 0;
   QVector<Vertex> vertices;
   QVector<uint32_t> indices;
+  int vertex_count = 0;
+  int index_count = 0;
 
   void bufferize(QOpenGLExtraFunctions *f);
 };
@@ -112,6 +114,7 @@ struct Texture {
 };
 
 struct Quad {};
+struct Cubemap {};
 
 struct PickingTag {};
 

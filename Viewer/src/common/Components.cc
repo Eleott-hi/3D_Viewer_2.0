@@ -30,6 +30,9 @@ void Mesh::bufferize(QOpenGLExtraFunctions *f) {
   f->glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                            (void *)offsetof(Vertex, tex_coords));
   f->glBindVertexArray(0);
+
+  index_count = indices.size();
+  vertex_count = vertices.size();
 }
 
 QMatrix4x4 Transform::GetModelMatrix() const {

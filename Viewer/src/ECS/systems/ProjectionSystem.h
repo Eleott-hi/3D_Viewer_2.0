@@ -24,5 +24,6 @@ class ProjectionSystem : public System {
   ECS_Controller *scene_ = nullptr;
 
   void OnWindowResize(Event &event);
+  void OnMouseScroll(Event &e);
 };
 }  // namespace s21

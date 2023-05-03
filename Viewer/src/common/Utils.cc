@@ -47,4 +47,10 @@ void SetVector(QVector3D& vec, float const& x, float const& y, float const& z) {
   vec.setZ(z);
 }
 
+EntityID GetQuad(ECS_Controller* scene) {
+  static EntityID quad = scene->GetEntities<Quad>()[0];
+
+  return quad;
+}
+
 }  // namespace s21::Utils

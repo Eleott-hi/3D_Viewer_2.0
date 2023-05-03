@@ -37,9 +37,11 @@ class CameraSystem : public System {
   void UpdateLookAtVectors(Camera &camera);
 
   void ProcessKeyPressed(Camera &camera, QKeyEvent *key_event);
+  void ProcessMouseScroll(Camera &camera, float scroll);
 
   void OnMouseMoved(Event &e);
   void OnKeyPressed(Event &e);
   void OnKeyReleased(Event &e);
+  // void OnMouseScroll(Event &e);
 };
 }  // namespace s21

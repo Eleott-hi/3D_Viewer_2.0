@@ -77,6 +77,9 @@ foreach(i ${PROJECT_SOURCES})
     message("Project file: " ${i})
 endforeach()
 
+
+
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
 else()
@@ -86,6 +89,26 @@ else()
         add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
     endif()
 endif()
+
+if(QT_VERSION_MAJOR EQUAL 6)
+    qt_finalize_executable(${PROJECT_NAME})
+endif()
+
+
+
+file(GLOB_RECURSE SHADERS_FILES shaders/*.fs shaders/*.vs)
+
+foreach(i ${SHADERS_FILES})
+    message("Shader file: " ${i})
+endforeach()
+
+
+qt_add_resources(${PROJECT_NAME}  "shader"
+  PREFIX "/shaders/"
+  BASE "${CMAKE_SOURCE_DIR}/shaders"
+  FILES ${SHADERS_FILES}
+)
+
 
 foreach(i ${QT_LIBS})
     target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::${i})
@@ -105,20 +128,22 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-add_custom_target(copy_resources ALL
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${PROJECT_SOURCE_DIR}/others/resources
-    ${PROJECT_BINARY_DIR}/resources
-    COMMENT "Copying resources into binary directory"
-)
 
-add_custom_target(copy_shaders ALL
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${PROJECT_SOURCE_DIR}/others/shaders
-    ${PROJECT_BINARY_DIR}/shaders
-    COMMENT "Copying shaders into binary directory"
-)
 
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(${PROJECT_NAME})
-endif()
+
+
+
+# add_custom_target(copy_resources ALL
+#     COMMAND ${CMAKE_COMMAND} -E copy_directory
+#     ${PROJECT_SOURCE_DIR}/others/resources
+#     ${PROJECT_BINARY_DIR}/resources
+#     COMMENT "Copying resources into binary directory"
+# )
+
+# add_custom_target(copy_shaders ALL
+#     COMMAND ${CMAKE_COMMAND} -E copy_directory
+#     ${PROJECT_SOURCE_DIR}/others/shaders
+#     ${PROJECT_BINARY_DIR}/shaders
+#     COMMENT "Copying shaders into binary directory"
+# )
+

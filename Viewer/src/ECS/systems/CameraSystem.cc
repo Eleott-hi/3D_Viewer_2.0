@@ -4,6 +4,7 @@
 #include "events/KeyPressedEvent.h"
 #include "events/KeyReleasedEvent.h"
 #include "events/MouseMovedEvent.h"
+#include "events/MouseScrolledEvent.h"
 
 namespace s21 {
 
@@ -13,6 +14,8 @@ void CameraSystem::Init(ECS_Controller *scene) {
   scene_->AddEventListener(EventType::KeyPressed, BIND_EVENT_FN(OnKeyPressed));
   scene_->AddEventListener(EventType::KeyReleased,
                            BIND_EVENT_FN(OnKeyReleased));
+  // scene_->AddEventListener(EventType::MouseScrolled,
+  //                          BIND_EVENT_FN(OnMouseScroll));
 }
 
 void CameraSystem::OnMouseMoved(Event &e) {
@@ -28,12 +31,6 @@ void CameraSystem::OnKeyPressed(Event &e) {
   auto &event = static_cast<KeyPressedEvent &>(e);
 
   keys_pressed_[event.Key()->key()] = true;
-
-  // for (auto &entity : entities_) {
-  //   auto &camera = scene_->GetComponent<Camera>(entity);
-  //   ProcessKeyPressed(camera, event.Key());
-  //   UpdateLookAtVectors(camera);
-  // }
 }
 
 void CameraSystem::OnKeyReleased(Event &e) {
@@ -41,6 +38,16 @@ void CameraSystem::OnKeyReleased(Event &e) {
 
   keys_pressed_[event.Key()->key()] = false;
 }
+
+// void CameraSystem::OnMouseScroll(Event &e) {
+//   auto &event = static_cast<MouseScrolledEvent &>(e);
+
+//   for (auto &entity : entities_) {
+//     auto &camera = scene_->GetComponent<Camera>(entity);
+//     ProcessMouseScroll(camera, event.Scroll());
+//     UpdateLookAtVectors(camera);
+//   }
+// }
 
 void CameraSystem::UpdateCameraInfo(Camera const &component) {
   for (auto &entity : entities_) {
@@ -53,8 +60,6 @@ void CameraSystem::UpdateCameraInfo(Camera const &component) {
 void CameraSystem::Update() {
   for (auto &entity : entities_) {
     auto &camera = scene_->GetComponent<Camera>(entity);
-
-    //    UpdateLookAtVectors(camera);
     ProcessKeyPressed(camera, nullptr);
   }
 }
@@ -76,24 +81,15 @@ void CameraSystem::ProcessKeyPressed(Camera &camera, QKeyEvent *key_event) {
 
   if (keys_pressed_[Qt::Key_W]) camera.position += camera.front * velocity;
   if (keys_pressed_[Qt::Key_S]) camera.position -= camera.front * velocity;
-  if (keys_pressed_[Qt::Key_A]) camera.position -= camera.right * velocity;
   if (keys_pressed_[Qt::Key_D]) camera.position += camera.right * velocity;
+  if (keys_pressed_[Qt::Key_A]) camera.position -= camera.right * velocity;
+  if (keys_pressed_[Qt::Key_R]) camera.position += camera.up * velocity;
+  if (keys_pressed_[Qt::Key_F]) camera.position -= camera.up * velocity;
+}
 
-  // switch (key_event->key()) {
-  //   case Qt::Key_W:
-  //     break;
-  //   case Qt::Key_S:
-  //     camera.position -= camera.front * velocity;
-  //     break;
-  //   case Qt::Key_A:
-  //     camera.position -= camera.right * velocity;
-  //     break;
-  //   case Qt::Key_D:
-  //     camera.position += camera.right * velocity;
-  //     break;
-  //   default:
-  //     break;
-  // }
+void CameraSystem::ProcessMouseScroll(Camera &camera, float scroll) {
+  camera.zoom = qBound(1.0, camera.zoom - scroll, 45.0);
+  qDebug() << camera.zoom;
 }
 
 void CameraSystem::UpdateLookAtVectors(Camera &camera) {

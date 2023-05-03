@@ -22,5 +22,6 @@ class Render2DSystem : public System, protected QOpenGLExtraFunctions {
   TechniqueStrategy *technique_;
 
   void renderQuad();
+  void PrepareFramebuffer();
 };
 }  // namespace s21

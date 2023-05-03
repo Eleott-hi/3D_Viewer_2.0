@@ -4,6 +4,7 @@
 #include "events/KeyReleasedEvent.h"
 #include "events/MouseDoubleClickedEvent.h"
 #include "events/MouseMovedEvent.h"
+#include "events/MouseScrolledEvent.h"
 #include "events/WindowResizeEvent.h"
 
 namespace s21 {
@@ -11,7 +12,6 @@ namespace s21 {
 void Backend::Init() {
   technique_ = std::make_shared<TechniqueStrategy>();
 
-  glEnable(GL_DEPTH_TEST);
   glLineStipple(4, 0xAAAA);
 
   RegisterComponents();
@@ -55,6 +55,12 @@ void Backend::KeyPressed(QKeyEvent* key_event) {
 void Backend::KeyReleased(QKeyEvent* key_event) {
   qDebug() << "KeyReleasedEvent" << key_event;
   KeyReleasedEvent event(key_event);
+  scene_.Despatch(event);
+}
+
+void Backend::MouseScrolled(float scroll) {
+  qDebug() << "MouseScrolledEvent" << scroll;
+  MouseScrolledEvent event(scroll);
   scene_.Despatch(event);
 }
 
@@ -106,9 +112,13 @@ void Backend::Update() {
 }
 
 void Backend::Draw() {
-  Clear();
-  renderSystem_->Update();
-  renderPickedSystem_->Update();
+  {
+    renderSystem_->Update();
+    renderPickedSystem_->Update();
+    cubemapSystem_->Update();
+  }
+
+  render2DSystem_->Update();
 }
 
 void Backend::Clear() {
@@ -122,6 +132,7 @@ void Backend::RegisterComponents() {
   scene_.RegisterComponent<Model>();
   scene_.RegisterComponent<Light>();
   scene_.RegisterComponent<Camera>();
+  scene_.RegisterComponent<Cubemap>();
   scene_.RegisterComponent<Texture>();
   scene_.RegisterComponent<Material>();
   scene_.RegisterComponent<Transform>();
@@ -168,7 +179,7 @@ void Backend::RegisterSystems() {
     renderSystem_->Init(&scene_, technique_.get());
   }
 
-   render2DSystem_ = scene_.RegisterSystem<Render2DSystem>();
+  render2DSystem_ = scene_.RegisterSystem<Render2DSystem>();
   {
     ComponentMask mask;
     mask.set(GetComponentID<Quad>());
@@ -193,6 +204,14 @@ void Backend::RegisterSystems() {
     mask.set(GetComponentID<Light>());
     scene_.ChangeSystemMask<LightSystem>(mask);
     lightSystem_->Init(&scene_, technique_.get());
+  }
+
+  cubemapSystem_ = scene_.RegisterSystem<CubemapSystem>();
+  {
+    ComponentMask mask;
+    // mask.set(GetComponentID<Light>());
+    // scene_.ChangeSystemMask<CubemapSystem>(mask);
+    cubemapSystem_->Init(&scene_, technique_.get());
   }
 }
 

@@ -26,11 +26,12 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     return;
   }
 
+  if (event->key() == Qt::Key_Escape) this->close();
+
   backend_->KeyPressed(event);
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
-  // qDebug() << "keyRealiseEvent" << event;
   if (event->isAutoRepeat()) {
     event->ignore();
     return;

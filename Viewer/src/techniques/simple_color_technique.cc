@@ -5,8 +5,8 @@
 namespace s21 {
 
 void SimpleColorTechnique::init() {
-  GenerateShaders("shaders/simple_color_shader_v.c",
-                  "shaders/simple_color_shader_f.c");
+  GenerateShaders(":/shaders/simple_color_shader.vs",
+                  ":/shaders/simple_color_shader.fs");
 }
 
 void SimpleColorTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
@@ -14,8 +14,12 @@ void SimpleColorTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
   shader_.setUniformValue("u_MVP", proj * view * model);
 }
 
-void SimpleColorTechnique::setColor(QColor c) {
-  shader_.setUniformValue("u_Color", c);
+// void SimpleColorTechnique::setColor(QColor c) {
+//   shader_.setUniformValue("u_Color", c);
+// }
+
+void SimpleColorTechnique::setMaterial(Material const& material) {
+  shader_.setUniformValue("u_Color", material.color);
 }
 
 }  // namespace s21

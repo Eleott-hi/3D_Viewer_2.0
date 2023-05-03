@@ -10,25 +10,32 @@ void Render2DSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
 }
 
 void Render2DSystem::Update() {
-  // glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  // glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-  // glClear(GL_COLOR_BUFFER_BIT);
-  // glDisable(GL_DEPTH_TEST);
+  static EntityID qaud = Utils::GetQuad(scene_);
+  static auto [quadID] = scene_->GetComponent<Texture>(qaud);
 
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  PrepareFramebuffer();
 
+  technique_->Enable(TechniqueType::QUAD);
+  technique_->setTextureId(0);
 
-  // technique_->Enable(TechniqueType::SIMPLE_TEXTURE);
-
-  // glActiveTexture(GL_TEXTURE0);
-  // glBindTexture(GL_TEXTURE_2D, gPosition);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, quadID);
 
   // for (auto entity : entities_) {
-  //   renderQuad();
+  renderQuad();
   // }
+}
+
+void Render2DSystem::PrepareFramebuffer() {
+  glDisable(GL_DEPTH_TEST);
+  glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void Render2DSystem::renderQuad() {
   static uint32_t quadVAO = 0;
+
   if (quadVAO == 0) {
     float quadVertices[] = {
         // positions       // texture Coords
@@ -38,7 +45,6 @@ void Render2DSystem::renderQuad() {
         1.0f,  -1.0f, 0.0f, 1.0f, 0.0f,  //
     };
 
-    // setup plane VAO
     uint32_t quadVBO;
     glGenVertexArrays(1, &quadVAO);
     glGenBuffers(1, &quadVBO);
