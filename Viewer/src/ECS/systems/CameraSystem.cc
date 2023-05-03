@@ -76,8 +76,10 @@ void CameraSystem::ProcessKeyPressed(Camera &camera, QKeyEvent *key_event) {
 
   if (keys_pressed_[Qt::Key_W]) camera.position += camera.front * velocity;
   if (keys_pressed_[Qt::Key_S]) camera.position -= camera.front * velocity;
-  if (keys_pressed_[Qt::Key_A]) camera.position -= camera.right * velocity;
   if (keys_pressed_[Qt::Key_D]) camera.position += camera.right * velocity;
+  if (keys_pressed_[Qt::Key_A]) camera.position -= camera.right * velocity;
+  if (keys_pressed_[Qt::Key_R]) camera.position += camera.up * velocity;
+  if (keys_pressed_[Qt::Key_F]) camera.position -= camera.up * velocity;
 
   // switch (key_event->key()) {
   //   case Qt::Key_W:
