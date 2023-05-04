@@ -17,6 +17,8 @@ uint32_t CubemapSystem::loadCubemap(std::vector<std::string> faces) {
     unsigned char *data =
         stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
 
+    qDebug() << "Image" << width << height;
+
     if (!data) {
       qDebug() << "Cubemap texture failed to load at path:" << faces[i].c_str();
       continue;
@@ -32,6 +34,8 @@ uint32_t CubemapSystem::loadCubemap(std::vector<std::string> faces) {
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+  qDebug() << "Cubemap texture loaded" << textureID;
 
   return textureID;
 }
@@ -51,35 +55,22 @@ void CubemapSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
                                  dir + "/top.jpg",   dir + "/bottom.jpg",
                                  dir + "/front.jpg", dir + "/back.jpg"};
   cubemapTexture_ = loadCubemap(faces);
+
+  qDebug() << "cubemapTexture_" << cubemapTexture_;
 }
 
 void CubemapSystem::Update() {
-  if (cubemapTexture_ == 0) return;
-  //  skyboxShader.use();
-  //  skyboxShader.setInt("skybox", 0);
-
-  glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when
-                           // values are equal to depth buffer's content
-
-  // for (auto entity : entities_) {
-  // draw skybox as last
+  glDepthFunc(GL_LEQUAL);
 
   technique_->Enable(TechniqueType::CUBEMAP);
-  auto [proj, view] = Utils::GetProjectionAndView(scene_);
-
-  //  skyboxShader.use();
-  // remove translation from the view matrix
-  //  view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
-
   technique_->setMVP(proj, view, {});
   technique_->setTextureId(0);
 
-  // skybox cube
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture_);
-  // }
   RenderCube();
-  glDepthFunc(GL_LESS);  // set depth function back to default
+
+  glDepthFunc(GL_LESS);
 }
 
 void CubemapSystem::RenderCube() {

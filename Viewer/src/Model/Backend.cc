@@ -75,22 +75,9 @@ void Backend::AddModel(QString path) {
   if (model) {
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<Model>(entity, std::move(model.value()));
-    // scene_->AddComponent<LightComponent>(entity);
-    // scene_->AddComponent<TextureComponent>(entity);
     scene_.AddComponent<Material>(entity);
-    // scene_->AddComponent<TechniqueComponent>(entity);
     scene_.AddComponent<Transform>(entity);
-    // scene_->AddComponent<LineSettingsComponent>(
-    // entity,
-    // (tmp++ == 0)                                              // Debug
-    // ? LineSettingsComponent{false, false, 1, Qt::yellow}  // Debug
-    // : LineSettingsComponent{}                             // Debug
-    // );
-    // scene_->AddComponent<PointSettingsComponent>(entity);
   }
-
-  //  uint32_t count = scene_->GetEntities<Model>().size();
-  //  emit signal_handler_.SetObjectsCount(QString::number(count));
 }
 
 void Backend::Update() {
@@ -98,17 +85,6 @@ void Backend::Update() {
   cameraSystem_->Update();
   projectionSystem_->Update();
   lightSystem_->Update();
-
-  // cSettings_.MoveCamera(CameraDirection::NONE);
-
-  // if (cSettings_.MousePicking()) {
-  //   cSettings_.MousePicking(false);
-  //   const QPoint &mousePosition = cSettings_.GetMousePosition();
-  //   mousePickingSystem_->Update(camera_, mousePosition)
-  //       ? emit signal_handler_.SetStackObject()
-  //       : emit signal_handler_.SetStackCamera();
-  //   objectEditorSystem_->ObjectSelected();
-  // }
 }
 
 void Backend::Draw() {
@@ -209,8 +185,6 @@ void Backend::RegisterSystems() {
   cubemapSystem_ = scene_.RegisterSystem<CubemapSystem>();
   {
     ComponentMask mask;
-    // mask.set(GetComponentID<Light>());
-    // scene_.ChangeSystemMask<CubemapSystem>(mask);
     cubemapSystem_->Init(&scene_, technique_.get());
   }
 }
