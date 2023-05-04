@@ -34,4 +34,5 @@ class Parser {
   // ==================== utils =====================
   void findMinMax(float x, float y, float z);
 };
+
 }  // namespace s21

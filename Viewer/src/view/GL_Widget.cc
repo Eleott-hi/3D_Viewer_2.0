@@ -17,7 +17,9 @@ void GLWidget::initializeGL() {
   backend_->AddModel(
       // "C:/Users/lapte/Desktop/new_viewer/src/others/resources/cube.obj"
       "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
-      "cube.obj");
+      "cube.obj"
+
+  );
 }
 
 void GLWidget::resizeGL(int w, int h) { backend_->WindowResize(w, h); }
