@@ -34,7 +34,7 @@ void Backend::Render() {
 }
 
 void Backend::AddModel(QString path) {
-  auto model = parser_.loadModel(path);
+  auto [model, normalMap] = parser_.loadModel(path);
 
   if (model) {
     EntityID entity = scene_.NewEntity();
@@ -42,6 +42,10 @@ void Backend::AddModel(QString path) {
     scene_.AddComponent<Material>(entity);
     scene_.AddComponent<Transform>(entity);
   }
+
+  // if (normalMap) {
+  //   EntityID entity = scene_.NewEntity();
+  //  }
 }
 
 void Backend::Update() {

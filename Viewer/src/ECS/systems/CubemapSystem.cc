@@ -17,8 +17,6 @@ uint32_t CubemapSystem::loadCubemap(std::vector<std::string> faces) {
     unsigned char *data =
         stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
 
-    qDebug() << "Image" << width << height;
-
     if (!data) {
       qDebug() << "Cubemap texture failed to load at path:" << faces[i].c_str();
       continue;
@@ -35,8 +33,6 @@ uint32_t CubemapSystem::loadCubemap(std::vector<std::string> faces) {
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-  qDebug() << "Cubemap texture loaded" << textureID;
-
   return textureID;
 }
 
@@ -47,16 +43,15 @@ void CubemapSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
   technique_ = technique;
 
   std::string dir =
-      // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/skybox"
-      "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
-      "textures/skybox";
+      "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/skybox"
+      // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
+      // "textures/skybox"//
+      ;
 
   std::vector<std::string> faces{dir + "/right.jpg", dir + "/left.jpg",
                                  dir + "/top.jpg",   dir + "/bottom.jpg",
                                  dir + "/front.jpg", dir + "/back.jpg"};
   cubemapTexture_ = loadCubemap(faces);
-
-  qDebug() << "cubemapTexture_" << cubemapTexture_;
 }
 
 void CubemapSystem::Update() {
@@ -70,6 +65,7 @@ void CubemapSystem::Update() {
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture_);
+
   RenderCube();
 
   glDepthFunc(GL_LESS);
@@ -105,8 +101,6 @@ void CubemapSystem::RenderCube() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
                           (void *)0);
   }
-
-  qDebug() << skyboxVAO;
 
   glBindVertexArray(skyboxVAO);
   glDrawArrays(GL_TRIANGLES, 0, 36);
