@@ -62,6 +62,8 @@ void CubemapSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
 void CubemapSystem::Update() {
   glDepthFunc(GL_LEQUAL);
 
+  auto const &[proj, view] = Utils::GetProjectionAndView(scene_);
+
   technique_->Enable(TechniqueType::CUBEMAP);
   technique_->setMVP(proj, view, {});
   technique_->setTextureId(0);

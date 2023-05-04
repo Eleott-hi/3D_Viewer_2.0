@@ -29,7 +29,7 @@ bool Parser::ParseModelFile(QString filename) {
   Assimp::Importer importer;
 
   uint32_t flags = aiProcess_Triangulate | aiProcess_GenSmoothNormals |
-               aiProcess_FlipUVs | aiProcess_CalcTangentSpace;
+                   aiProcess_FlipUVs | aiProcess_CalcTangentSpace;
 
   const aiScene *scene = importer.ReadFile(filename.toStdString(), flags);
 
