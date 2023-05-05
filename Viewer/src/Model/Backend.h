@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <memory>
+#include <QOpenGLWidget>
 
 #include "Components.h"
 #include "Parser.h"
@@ -20,19 +21,19 @@
 
 namespace s21 {
 
-class Backend
+class Backend : QOpenGLExtraFunctions
 //        :private QObject
 {
   //  Q_OBJECT
  public:
-  Backend() = default;
+  Backend( ) =default;
   ~Backend() = default;
   Backend(Backend &&) = delete;
   Backend(Backend const &) = delete;
   Backend &operator=(Backend &&) = delete;
   Backend &operator=(Backend const &) = delete;
 
-  void Init();
+  void Init( QOpenGLWidget * widget);
   void Render();
   void AddModel(QString path);
 
@@ -47,6 +48,7 @@ class Backend
   Parser parser_;
   ECS_Controller scene_;
   std::shared_ptr<TechniqueStrategy> technique_;
+  QOpenGLWidget *opengl_widget_ = nullptr;
 
   std::shared_ptr<LightSystem> lightSystem_;
   std::shared_ptr<CameraSystem> cameraSystem_;

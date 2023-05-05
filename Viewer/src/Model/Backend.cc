@@ -9,7 +9,11 @@
 
 namespace s21 {
 
-void Backend::Init() {
+void Backend::Init( QOpenGLWidget * widget ) {
+  
+    initializeOpenGLFunctions();
+    
+  opengl_widget_ = widget;
   technique_ = std::make_shared<TechniqueStrategy>();
 
   glLineStipple(4, 0xAAAA);
@@ -34,9 +38,17 @@ void Backend::Render() {
 }
 
 void Backend::AddModel(QString path) {
+
+  opengl_widget_->makeCurrent();
   auto [model, normalMap] = parser_.loadModel(path);
 
   if (model) {
+
+    for( auto &mesh : model->meshes ) 
+    if (!mesh.VAO) {
+      qDebug()<<"HERE";
+      mesh.bufferize(this);}
+
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<Model>(entity, std::move(model.value()));
     scene_.AddComponent<Material>(entity);
@@ -46,6 +58,8 @@ void Backend::AddModel(QString path) {
   // if (normalMap) {
   //   EntityID entity = scene_.NewEntity();
   //  }
+
+  opengl_widget_->doneCurrent();
 }
 
 void Backend::Update() {
