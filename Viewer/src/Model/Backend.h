@@ -2,9 +2,9 @@
 #define SRC_HEADERS_BACKEND_H
 
 #include <QObject>
+#include <QOpenGLWidget>
 #include <QString>
 #include <memory>
-#include <QOpenGLWidget>
 
 #include "Components.h"
 #include "Parser.h"
@@ -21,19 +21,16 @@
 
 namespace s21 {
 
-class Backend : QOpenGLExtraFunctions
-//        :private QObject
-{
-  //  Q_OBJECT
+class Backend : QOpenGLExtraFunctions {
  public:
-  Backend( ) =default;
+  Backend() = default;
   ~Backend() = default;
   Backend(Backend &&) = delete;
   Backend(Backend const &) = delete;
   Backend &operator=(Backend &&) = delete;
   Backend &operator=(Backend const &) = delete;
 
-  void Init( QOpenGLWidget * widget);
+  void Init(QOpenGLWidget *widget);
   void Render();
   void AddModel(QString path);
 

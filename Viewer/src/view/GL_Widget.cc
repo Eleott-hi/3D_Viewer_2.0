@@ -9,7 +9,7 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 }
 
 void GLWidget::initializeGL() {
-  backend_->Init( this);
+  backend_->Init(this);
 
   int fps = 100;
   timer_.start(1000 / fps);
