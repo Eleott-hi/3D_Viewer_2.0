@@ -9,7 +9,7 @@ namespace s21 {
 
 enum class TechniqueType {
   SIMPLE_COLOR = 0,
-  // SIMPLE_TEXTURE,
+  SIMPLE_TEXTURE,
   LIGHT_COLOR,
   // LIGHT_TEXTURE,
   MOUSE_PICKING,

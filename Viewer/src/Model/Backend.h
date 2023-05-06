@@ -8,6 +8,7 @@
 
 #include "Components.h"
 #include "Parser.h"
+#include "TextureStorage.h"
 #include "core/ECS_Controller.h"
 #include "systems/CameraSystem.h"
 #include "systems/CubemapSystem.h"
@@ -33,6 +34,7 @@ class Backend : QOpenGLExtraFunctions {
   void Init(QOpenGLWidget *widget);
   void Render();
   void AddModel(QString path);
+  void LoadTexture(QString filename);
 
   void MouseMoved(QPoint offset);
   void MouseScrolled(float scroll);
@@ -42,10 +44,11 @@ class Backend : QOpenGLExtraFunctions {
   void WindowResize(int width, int height);
 
  private:
-  Parser parser_;
   ECS_Controller scene_;
-  std::shared_ptr<TechniqueStrategy> technique_;
   QOpenGLWidget *opengl_widget_ = nullptr;
+  std::shared_ptr<Parser> parser_;
+  std::shared_ptr<TextureStorage> texture_storage_;
+  std::shared_ptr<TechniqueStrategy> technique_;
 
   std::shared_ptr<LightSystem> lightSystem_;
   std::shared_ptr<CameraSystem> cameraSystem_;

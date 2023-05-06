@@ -84,13 +84,6 @@ struct Attenuation {
   float quadratic = 0.1;
 };
 
-// struct Texture {
-//   uint32_t diffuse;
-//   uint32_t specular;
-//   uint32_t normal;
-//   uint32_t height;
-// };
-
 struct Camera {
   QVector3D position;
   QVector3D front = {0, 0, -1};
@@ -110,7 +103,7 @@ struct Projection {
 };
 
 struct Texture {
-  uint32_t id;
+  uint32_t id = 0;
 };
 
 struct Quad {};

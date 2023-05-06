@@ -31,13 +31,18 @@ void RenderSystem::Update() {
   framebuffer_->Bind();
   PrepareFramebuffer();
 
-  technique_->Enable(TechniqueType::LIGHT_COLOR);
+  technique_->Enable(TechniqueType::SIMPLE_TEXTURE);
   auto [proj, view] = Utils::GetProjectionAndView(scene_);
 
   for (auto entity : entities_) {
     auto &model = scene_->GetComponent<Model>(entity);
     auto &transform = scene_->GetComponent<Transform>(entity);
     auto &material = scene_->GetComponent<Material>(entity);
+    auto &texture = scene_->GetComponent<Texture>(entity);
+
+    technique_->setTextureId(0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture.id);
 
     technique_->setMVP(proj, view, transform.GetModelMatrix());
     technique_->setMaterial(material);

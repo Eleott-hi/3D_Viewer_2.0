@@ -7,7 +7,7 @@ namespace s21 {
 class SimpleColorTechnique : public ITechnique {
  public:
   SimpleColorTechnique() { init(); }
-  ~SimpleColorTechnique() {}
+  ~SimpleColorTechnique() = default;
 
   virtual void init() override;
 

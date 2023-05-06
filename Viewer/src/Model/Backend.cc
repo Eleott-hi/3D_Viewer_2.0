@@ -14,6 +14,8 @@ void Backend::Init(QOpenGLWidget* widget) {
 
   opengl_widget_ = widget;
   technique_ = std::make_shared<TechniqueStrategy>();
+  texture_storage_ = std::make_shared<TextureStorage>();
+  parser_ = std::make_shared<Parser>(texture_storage_.get());
 
   glLineStipple(4, 0xAAAA);
 
@@ -38,14 +40,11 @@ void Backend::Render() {
 
 void Backend::AddModel(QString path) {
   opengl_widget_->makeCurrent();
-  auto [model, normalMap] = parser_.loadModel(path);
+  auto [model, normalMap] = parser_->loadModel(path);
 
   if (model) {
     for (auto& mesh : model->meshes)
-      if (!mesh.VAO) {
-        qDebug() << "HERE";
-        mesh.bufferize(this);
-      }
+      if (!mesh.VAO) mesh.bufferize(this);
 
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<Model>(entity, std::move(model.value()));
@@ -53,9 +52,16 @@ void Backend::AddModel(QString path) {
     scene_.AddComponent<Transform>(entity);
   }
 
-  // if (normalMap) {
-  //   EntityID entity = scene_.NewEntity();
-  //  }
+  opengl_widget_->doneCurrent();
+}
+
+void Backend::LoadTexture(QString filename) {
+  opengl_widget_->makeCurrent();
+
+  auto texture = texture_storage_->loadTexture(filename.toStdString());
+
+  EntityID cube = scene_.GetEntities<Model>()[0];
+  scene_.AddComponent<Texture>(cube, texture);
 
   opengl_widget_->doneCurrent();
 }
@@ -71,7 +77,7 @@ void Backend::Draw() {
   {
     renderSystem_->Update();
     renderPickedSystem_->Update();
-    cubemapSystem_->Update();
+    // cubemapSystem_->Update();
   }
 
   render2DSystem_->Update();

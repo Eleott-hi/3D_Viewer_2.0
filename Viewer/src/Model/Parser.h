@@ -11,6 +11,7 @@
 
 // #include "TextureStorage.h"
 #include "Components.h"
+#include "TextureStorage.h"
 
 namespace s21 {
 
@@ -21,11 +22,13 @@ struct ParsingData {
 
 class Parser {
  public:
+  Parser(TextureStorage *textureStorage) : textureStorage_(textureStorage) {}
   ~Parser() = default;
   ParsingData loadModel(QString filename);
 
  private:
   ParsingData data_;
+  TextureStorage *textureStorage_ = nullptr;
 
   void processNode(aiNode *node, const aiScene *scene);
   Mesh processMesh(aiMesh *mesh, const aiScene *scene);

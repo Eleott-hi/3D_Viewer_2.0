@@ -15,10 +15,17 @@ void GLWidget::initializeGL() {
   timer_.start(1000 / fps);
 
   backend_->AddModel(
-      // "C:/Users/lapte/Desktop/new_viewer/src/others/resources/cube.obj"
-      "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
-      "cube.obj"
+      "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Viewer/src/others/"
+      "resources/cube.obj"
+      // "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
+      // "cube.obj"
+  );
 
+  backend_->LoadTexture(
+      "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Viewer/src/others/"
+      "resources/awesomeface.png"  //
+      // "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
+      // "awesomeface.png"
   );
 }
 

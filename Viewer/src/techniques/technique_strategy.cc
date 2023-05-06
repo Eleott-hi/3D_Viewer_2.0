@@ -5,17 +5,17 @@
 
 #include "light_color_technique.h"
 // #include "light_texture_technique.h"
-#include "picking_technique.h"
-#include "simple_color_technique.h"
-// #include "simple_texture_technique.h"
 #include "cubemap_technique.h"
+#include "picking_technique.h"
 #include "quad_technique.h"
+#include "simple_color_technique.h"
+#include "simple_texture_technique.h"
 
 namespace s21 {
 
 TechniqueStrategy::TechniqueStrategy(TechniqueType type)
     : techniques_{std::make_shared<SimpleColorTechnique>(),
-                  //  std::make_shared<SimpleTextureTechnique>(),
+                  std::make_shared<SimpleTextureTechnique>(),
                   std::make_shared<LightColorTechnique>(),
                   //                  std::make_shared<LightTextureTechnique>(),
                   std::make_shared<PickingTechnique>(),
