@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 
+#include "StencilOutlineTechnique.h"
 #include "cubemap_technique.h"
 #include "light_color_technique.h"
 #include "light_texture_normalmap_technique.h"
@@ -11,7 +12,6 @@
 #include "quad_technique.h"
 #include "simple_color_technique.h"
 #include "simple_texture_technique.h"
-#include "StencilOutlineTechnique.h"
 
 namespace s21 {
 

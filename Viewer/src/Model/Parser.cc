@@ -52,18 +52,18 @@ QVector<Vertex> Parser::loadVertices(aiMesh *mesh, const aiScene *scene) {
     }
 
     if (mesh->mTextureCoords[0]) {
-        {
-            auto const &[x, y, z] = mesh->mTextureCoords[0][i];
-            vertex.tex_coords = {x, y};
-        }
-        {
-            auto const &[x, y, z] = mesh->mTangents[i];
-            vertex.tangent = {x, y, z};
-        }
-        {
-            auto const &[x, y, z] = mesh->mBitangents[i];
-            vertex.bitangent = {x, y, z};
-        }
+      {
+        auto const &[x, y, z] = mesh->mTextureCoords[0][i];
+        vertex.tex_coords = {x, y};
+      }
+      {
+        auto const &[x, y, z] = mesh->mTangents[i];
+        vertex.tangent = {x, y, z};
+      }
+      {
+        auto const &[x, y, z] = mesh->mBitangents[i];
+        vertex.bitangent = {x, y, z};
+      }
     }
 
     auto const &[x, y, z] = mesh->mVertices[i];

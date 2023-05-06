@@ -35,7 +35,8 @@ void Backend::Init(QOpenGLWidget* widget) {
 
 void Backend::AddModel(QString path) {
   opengl_widget_->makeCurrent();
-  auto [model, diffuse_map, normal_map] = parser_->loadModel(path.toStdString());
+  auto [model, diffuse_map, normal_map] =
+      parser_->loadModel(path.toStdString());
 
   if (!model) return;
 
