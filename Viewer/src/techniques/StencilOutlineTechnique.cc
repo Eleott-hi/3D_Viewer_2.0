@@ -1,7 +1,5 @@
 #include "StencilOutlineTechnique.h"
 
-#include <QDir>
-
 namespace s21 {
 
 void StencilOutlineTechnique::init() {
@@ -10,8 +8,8 @@ void StencilOutlineTechnique::init() {
 
 void StencilOutlineTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
                                      QMatrix4x4 model) {
-  shader_.setUniformValue("proj" , proj);
-  shader_.setUniformValue("view" , view);
+  shader_.setUniformValue("proj", proj);
+  shader_.setUniformValue("view", view);
   shader_.setUniformValue("model", model);
 }
 
