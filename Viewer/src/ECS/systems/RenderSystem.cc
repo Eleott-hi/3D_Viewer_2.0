@@ -17,7 +17,7 @@ void RenderSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
   EntityID texture = scene_->NewEntity();
   auto textureID = framebuffer_->getTextureID();
   scene_->AddComponent<Quad>(texture);
-  scene_->AddComponent<Texture>(texture, {textureID});
+  scene_->AddComponent<Texture>(texture, {textureID, "quad"});
   scene_->AddEventListener(EventType::WindowResize,
                            BIND_EVENT_FN(OnWindowResize));
 }
@@ -31,19 +31,16 @@ void RenderSystem::Update() {
   framebuffer_->Bind();
   PrepareFramebuffer();
 
-  technique_->Enable(TechniqueType::SIMPLE_TEXTURE);
+  technique_->Enable(TechniqueType::NORMALMAP);
   auto [proj, view] = Utils::GetProjectionAndView(scene_);
 
   for (auto entity : entities_) {
     auto &model = scene_->GetComponent<Model>(entity);
-    auto &transform = scene_->GetComponent<Transform>(entity);
+    // auto &texture = scene_->GetComponent<Texture>(entity);
     auto &material = scene_->GetComponent<Material>(entity);
-    auto &texture = scene_->GetComponent<Texture>(entity);
+    auto &transform = scene_->GetComponent<Transform>(entity);
 
-    technique_->setTextureId(0);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture.id);
-
+    technique_->Clear();
     technique_->setMVP(proj, view, transform.GetModelMatrix());
     technique_->setMaterial(material);
 
@@ -55,7 +52,7 @@ void RenderSystem::Update() {
 
 void RenderSystem::PrepareFramebuffer() {
   glClearColor(0.5, 0, 0, 1);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
 
   // glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -63,8 +60,6 @@ void RenderSystem::PrepareFramebuffer() {
 
 void RenderSystem::DrawObject(Model &model, GLenum form) {
   for (auto &mesh : model.meshes) {
-    if (!mesh.VAO) mesh.bufferize(this);
-
     glBindVertexArray(mesh.VAO);
     glDrawElements(form, mesh.indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);

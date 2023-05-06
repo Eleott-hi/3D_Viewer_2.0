@@ -9,8 +9,8 @@ class QuadTechnique : public ITechnique {
   QuadTechnique() { init(); }
   ~QuadTechnique() {}
 
-  virtual void init() override;
-  virtual void setTextureID(uint32_t id) override;
+  void init() final;
+  void setTexture(Texture const &texture) final;
 };
 
 }  // namespace s21

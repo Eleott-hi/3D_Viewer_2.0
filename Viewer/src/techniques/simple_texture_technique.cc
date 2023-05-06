@@ -7,11 +7,19 @@ void SimpleTextureTechnique::init() {
                   ":/shaders/simple_texture_shader.fs");
 }
 
-void SimpleTextureTechnique::setTextureID(uint32_t id) {
-  // glActiveTexture(GL_TEXTURE0 + 0);
+void SimpleTextureTechnique::setTexture(Texture const &texture) {
+  auto const &[id, type] = texture;
+  shader_.setUniformValue(type.c_str(), 0);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, id);
+}
 
-  shader_.setUniformValue("diffuse", id);
-  // glBindTexture(GL_TEXTURE_2D, texture.diffuse);
+void SimpleTextureTechnique::setMaterial(Material const &material) {
+  auto const &[color, diffuse, normal, shininess] = material;
+
+  setTexture({diffuse, "diffuse"});
+
+  shader_.setUniformValue("u_material.shininess", shininess);
 }
 
 void SimpleTextureTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,

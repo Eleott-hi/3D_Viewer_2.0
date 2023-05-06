@@ -63,7 +63,6 @@ class Backend : QOpenGLExtraFunctions {
   void RegisterSystems();
   void Draw();
   void Update();
-  void Clear();
 };
 
 }  // namespace s21

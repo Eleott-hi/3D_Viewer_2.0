@@ -4,14 +4,14 @@
 
 namespace s21 {
 
-ParsingData Parser::loadModel(QString filename) {
+ParsingData Parser::loadModel(std::string const &filename) {
   Assimp::Importer importer;
 
   uint32_t flags = aiProcess_Triangulate |       //
                    aiProcess_GenSmoothNormals |  //
                    aiProcess_FlipUVs |           //
                    aiProcess_CalcTangentSpace;
-  const aiScene *scene = importer.ReadFile(filename.toStdString(), flags);
+  const aiScene *scene = importer.ReadFile(filename, flags);
 
   if (!scene ||                                     //
       scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||  //
@@ -20,14 +20,14 @@ ParsingData Parser::loadModel(QString filename) {
     return {};
   }
 
+  directory_ = filename.substr(0, filename.find_last_of('/'));
+
   data_.model = {filename, QVector<Mesh>{}};
   processNode(scene->mRootNode, scene);
   return data_;
 }
 
 void Parser::processNode(aiNode *node, const aiScene *scene) {
-  // auto &model = data_.back();
-
   for (quint32 i = 0; i < node->mNumMeshes; i++)
     data_.model->meshes << processMesh(scene->mMeshes[node->mMeshes[i]], scene);
 
@@ -52,14 +52,44 @@ QVector<Vertex> Parser::loadVertices(aiMesh *mesh, const aiScene *scene) {
     }
 
     if (mesh->mTextureCoords[0]) {
-      auto const &[x, y, z] = mesh->mTextureCoords[0][i];
-      vertex.tex_coords = {x, y};
+        {
+            auto const &[x, y, z] = mesh->mTextureCoords[0][i];
+            vertex.tex_coords = {x, y};
+        }
+        {
+            auto const &[x, y, z] = mesh->mTangents[i];
+            vertex.tangent = {x, y, z};
+        }
+        {
+            auto const &[x, y, z] = mesh->mBitangents[i];
+            vertex.bitangent = {x, y, z};
+        }
     }
 
     auto const &[x, y, z] = mesh->mVertices[i];
     vertex.position = {x, y, z};
 
     vertices << vertex;
+  }
+
+  aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
+
+  for (uint32_t i = 0; i < material->GetTextureCount(aiTextureType_DIFFUSE);
+       i++) {
+    aiString str;
+    material->GetTexture(aiTextureType_DIFFUSE, i, &str);
+
+    std::string const &filename = directory_ + "/" + str.C_Str();
+    data_.diffuseMap = {textureStorage_->loadTexture(filename), "diffuseNap"};
+  }
+
+  for (uint32_t i = 0; i < material->GetTextureCount(aiTextureType_HEIGHT);
+       i++) {
+    aiString str;
+    material->GetTexture(aiTextureType_HEIGHT, i, &str);
+
+    std::string const &filename = directory_ + "/" + str.C_Str();
+    data_.normalMap = {textureStorage_->loadTexture(filename), "normalMap"};
   }
 
   return vertices;

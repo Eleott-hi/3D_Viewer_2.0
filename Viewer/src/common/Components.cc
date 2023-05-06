@@ -22,6 +22,7 @@ void Mesh::bufferize(QOpenGLExtraFunctions *f) {
   f->glEnableVertexAttribArray(0);
   f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                            (void *)offsetof(Vertex, position));
+
   f->glEnableVertexAttribArray(1);
   f->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                            (void *)offsetof(Vertex, normal));
@@ -29,6 +30,14 @@ void Mesh::bufferize(QOpenGLExtraFunctions *f) {
   f->glEnableVertexAttribArray(2);
   f->glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                            (void *)offsetof(Vertex, tex_coords));
+
+  f->glEnableVertexAttribArray(3);
+  f->glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                           (void *)offsetof(Vertex, tangent));
+
+  f->glEnableVertexAttribArray(4);
+  f->glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                           (void *)offsetof(Vertex, bitangent));
   f->glBindVertexArray(0);
 
   index_count = indices.size();

@@ -16,17 +16,17 @@ void GLWidget::initializeGL() {
 
   backend_->AddModel(
       "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Viewer/src/others/"
-      "resources/cube.obj"
+      "resources/backpack/backpack.obj"
       // "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
       // "cube.obj"
   );
 
-  backend_->LoadTexture(
-      "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Viewer/src/others/"
-      "resources/awesomeface.png"  //
-      // "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
-      // "awesomeface.png"
-  );
+  // backend_->LoadTexture(
+  //     "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Viewer/src/others/"
+  //     "resources/backpack/diffuse.jpg"  //
+  //     // "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
+  //     // "awesomeface.png"
+  // );
 }
 
 void GLWidget::resizeGL(int w, int h) { backend_->WindowResize(w, h); }

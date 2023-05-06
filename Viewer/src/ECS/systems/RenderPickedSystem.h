@@ -21,6 +21,6 @@ class RenderPickedSystem : public System, protected QOpenGLExtraFunctions {
   ECS_Controller *scene_;
   TechniqueStrategy *technique_;
 
-  void DrawObject(Model &model);
+  void DrawObject(Model const &model);
 };
 }  // namespace s21

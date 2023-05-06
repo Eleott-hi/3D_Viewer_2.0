@@ -51,7 +51,8 @@ void CubemapSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
   std::vector<std::string> faces{dir + "/right.jpg", dir + "/left.jpg",
                                  dir + "/top.jpg",   dir + "/bottom.jpg",
                                  dir + "/front.jpg", dir + "/back.jpg"};
-  cubemapTexture_ = loadCubemap(faces);
+
+  cubemapTexture_ = {loadCubemap(faces), "cubemap"};
 }
 
 void CubemapSystem::Update() {
@@ -61,10 +62,7 @@ void CubemapSystem::Update() {
 
   technique_->Enable(TechniqueType::CUBEMAP);
   technique_->setMVP(proj, view, {});
-  technique_->setTextureId(0);
-
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture_);
+  technique_->setTexture(cubemapTexture_);
 
   RenderCube();
 

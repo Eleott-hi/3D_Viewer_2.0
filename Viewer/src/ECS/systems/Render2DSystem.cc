@@ -11,20 +11,15 @@ void Render2DSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
 
 void Render2DSystem::Update() {
   static EntityID qaud = Utils::GetQuad(scene_);
-  static auto [quadID] = scene_->GetComponent<Texture>(qaud);
+  static auto texture = scene_->GetComponent<Texture>(qaud);
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   PrepareFramebuffer();
 
   technique_->Enable(TechniqueType::QUAD);
-  technique_->setTextureId(0);
+  technique_->setTexture(texture);
 
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, quadID);
-
-  // for (auto entity : entities_) {
   renderQuad();
-  // }
 }
 
 void Render2DSystem::PrepareFramebuffer() {

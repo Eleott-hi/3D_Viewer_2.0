@@ -13,13 +13,11 @@ void RenderPickedSystem::Init(ECS_Controller *scene,
 void RenderPickedSystem::Update() {
   auto [proj, view] = Utils::GetProjectionAndView(scene_);
 
-  technique_->Enable(TechniqueType::SIMPLE_COLOR);
-
   for (auto &entity : entities_) {
-    auto &transform = scene_->GetComponent<Transform>(entity);
-    auto &model = scene_->GetComponent<Model>(entity);
+    auto const &transform = scene_->GetComponent<Transform>(entity);
+    auto const &model = scene_->GetComponent<Model>(entity);
 
-    QMatrix4x4 modelMatrix = transform.GetModelMatrix();
+    auto const &modelMatrix = transform.GetModelMatrix();
 
     // ========================== STENCIL BUFFER ==========================
     glEnable(GL_STENCIL_TEST);  // Enable stancil buffer
@@ -34,6 +32,7 @@ void RenderPickedSystem::Update() {
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 
     // Draw model to stencil buffer
+    technique_->Enable(TechniqueType::SIMPLE_COLOR);
     technique_->setMVP(proj, view, modelMatrix);
     DrawObject(model);
 
@@ -43,8 +42,7 @@ void RenderPickedSystem::Update() {
     glStencilMask(0x00);                  // Disable writing to stencil buffer
 
     // Draw outline to stencil buffer
-    modelMatrix.scale(1.02);
-    technique_->setMaterial({Qt::white, 0});
+    technique_->Enable(TechniqueType::STENCIL_OUTLINE);
     technique_->setMVP(proj, view, modelMatrix);
     DrawObject(model);
 
@@ -54,10 +52,8 @@ void RenderPickedSystem::Update() {
   }
 }
 
-void RenderPickedSystem::DrawObject(Model &model) {
-  for (auto &mesh : model.meshes) {
-    if (!mesh.VAO) mesh.bufferize(this);
-
+void RenderPickedSystem::DrawObject(Model const &model) {
+  for (auto const &mesh : model.meshes) {
     glBindVertexArray(mesh.VAO);
     glDrawElements(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);

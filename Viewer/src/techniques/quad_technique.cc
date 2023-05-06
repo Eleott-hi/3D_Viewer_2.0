@@ -6,8 +6,11 @@ void QuadTechnique::init() {
   GenerateShaders(":/shaders/quad.vs", ":/shaders/quad.fs");
 }
 
-void QuadTechnique::setTextureID(uint32_t id) {
-  shader_.setUniformValue("screenTexture", id);
+void QuadTechnique::setTexture(Texture const &texture) {
+  auto const &[id, type] = texture;
+  shader_.setUniformValue("screenTexture", 0);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, id);
 }
 
 }  // namespace s21

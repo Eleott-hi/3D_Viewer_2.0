@@ -5,16 +5,20 @@
 namespace s21 {
 
 TextureStorage::TextureStorage() {
-  stbi_set_flip_vertically_on_load(true);
+  // stbi_set_flip_vertically_on_load(true);
   initializeOpenGLFunctions();
 }
 
-Texture TextureStorage::loadTexture(std::string const& filename) {
-  if (textures_[filename].id) return textures_[filename];
+uint32_t TextureStorage::loadTexture(std::string const& filename) {
+  if (textures_[filename]) return textures_[filename];
 
   int width, height, nrComponents;
+  stbi_set_flip_vertically_on_load(true);
+
   unsigned char* data =
       stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+
+  stbi_set_flip_vertically_on_load(false);
 
   if (!data) {
     qDebug() << "Texture failed to load at path: " << filename.c_str();
@@ -29,11 +33,11 @@ Texture TextureStorage::loadTexture(std::string const& filename) {
   else if (nrComponents == 4)
     format = GL_RGBA;
 
-  Texture texture;
+  uint32_t texture;
   // uint32_t id = 0;
-  glGenTextures(1, &texture.id);
+  glGenTextures(1, &texture);
 
-  glBindTexture(GL_TEXTURE_2D, texture.id);
+  glBindTexture(GL_TEXTURE_2D, texture);
   glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format,
                GL_UNSIGNED_BYTE, data);
   glGenerateMipmap(GL_TEXTURE_2D);

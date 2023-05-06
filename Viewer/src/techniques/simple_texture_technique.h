@@ -10,10 +10,10 @@ class SimpleTextureTechnique : public ITechnique {
   SimpleTextureTechnique() { init(); }
   ~SimpleTextureTechnique() = default;
 
-  virtual void init() override;
-  virtual void setTextureID(uint32_t id) override;
-  virtual void setMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                      QMatrix4x4 model) override;
+  void init() final;
+  void setTexture(Texture const &texture) final;
+  void setMaterial(Material const &material) final;
+  void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
 };
 
 }  // namespace s21

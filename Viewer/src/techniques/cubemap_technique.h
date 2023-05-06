@@ -10,7 +10,7 @@ class CubemapTechnique : public ITechnique {
   ~CubemapTechnique() {}
 
   virtual void init() override;
-  virtual void setTextureID(uint32_t id) override;
+  void setTexture(Texture const &texture) override;
   virtual void setMVP(QMatrix4x4 proj, QMatrix4x4 view,
                       QMatrix4x4 model) override;
 };

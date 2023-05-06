@@ -33,37 +33,37 @@ void Backend::Init(QOpenGLWidget* widget) {
   scene_.AddComponent<DirectionalLight>(light);
 }
 
-void Backend::Render() {
-  Update();
-  Draw();
-}
-
 void Backend::AddModel(QString path) {
   opengl_widget_->makeCurrent();
-  auto [model, normalMap] = parser_->loadModel(path);
+  auto [model, diffuse_map, normal_map] = parser_->loadModel(path.toStdString());
 
-  if (model) {
-    for (auto& mesh : model->meshes)
-      if (!mesh.VAO) mesh.bufferize(this);
+  if (!model) return;
 
-    EntityID entity = scene_.NewEntity();
-    scene_.AddComponent<Model>(entity, std::move(model.value()));
-    scene_.AddComponent<Material>(entity);
-    scene_.AddComponent<Transform>(entity);
-  }
+  for (auto& mesh : model->meshes)
+    if (!mesh.VAO) mesh.bufferize(this);
+
+  Material material;
+
+  if (diffuse_map) material.diffuse = diffuse_map->id;
+  if (normal_map) material.normal = normal_map->id;
+
+  EntityID entity = scene_.NewEntity();
+  scene_.AddComponent<Model>(entity, std::move(model.value()));
+  scene_.AddComponent<Material>(entity, material);
+  scene_.AddComponent<Transform>(entity);
 
   opengl_widget_->doneCurrent();
 }
 
 void Backend::LoadTexture(QString filename) {
   opengl_widget_->makeCurrent();
-
-  auto texture = texture_storage_->loadTexture(filename.toStdString());
-
-  EntityID cube = scene_.GetEntities<Model>()[0];
-  scene_.AddComponent<Texture>(cube, texture);
-
+  auto id = texture_storage_->loadTexture(filename.toStdString());
   opengl_widget_->doneCurrent();
+}
+
+void Backend::Render() {
+  Update();
+  Draw();
 }
 
 void Backend::Update() {
@@ -76,17 +76,11 @@ void Backend::Update() {
 void Backend::Draw() {
   {
     renderSystem_->Update();
+    cubemapSystem_->Update();
     renderPickedSystem_->Update();
-    // cubemapSystem_->Update();
   }
 
   render2DSystem_->Update();
-}
-
-void Backend::Clear() {
-  auto const& c = QColor{0, 0, 0};
-  glClearColor(c.redF(), c.greenF(), c.blueF(), c.alphaF());
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Backend::RegisterComponents() {

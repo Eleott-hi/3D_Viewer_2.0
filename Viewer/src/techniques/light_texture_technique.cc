@@ -1,14 +1,11 @@
-#include "light_color_technique.h"
-
-#include <string>
+#include "light_texture_technique.h"
 
 namespace s21 {
-
-void LightColorTechnique::init() {
-  GenerateShaders(":/shaders/light_color_shader.vs",
-                  ":/shaders/light_color_shader.fs");
+void LightTextureTechnique::init() {
+  GenerateShaders(":/shaders/light_texture_shader.vs",
+                  ":/shaders/light_texture_shader.fs");
 }
-
+namespace {
 void SetLightComponent(QOpenGLShaderProgram &shader, Light *light, int index) {
   auto const &[ambient, diffuse, specular] = *light;
   std::string s = "u_lights[" + std::to_string(index) + "].";
@@ -60,8 +57,9 @@ void SetDirLight(QOpenGLShaderProgram &shader, DirectionalLight *light,
 
   shader.setUniformValue((s + ".direction").c_str(), direction);
 }
+}  // namespace
 
-void LightColorTechnique::setLight(
+void LightTextureTechnique::setLight(
     QVector<std::tuple<Light *, BaseLightType *, Attenuation *>> lights) {
   int dirLightsCount = 0, pointLightsCount = 0,  //
       spotLightsCount = 0, attenuationCount = 0;
@@ -108,17 +106,25 @@ void LightColorTechnique::setLight(
   shader_.setUniformValue("u_spotLightCount", spotLightsCount);
 }
 
-void LightColorTechnique::setColor(QColor c) {
-  // shader_.setUniformValue("u_Color", c);
+void LightTextureTechnique::setTexture(Texture const &texture) {
+  auto const &[id, type] = texture;
+  shader_.setUniformValue(type.c_str(), index_);
+  glActiveTexture(GL_TEXTURE0 + index_);
+  glBindTexture(GL_TEXTURE_2D, id);
+
+  index_++;
 }
 
-void LightColorTechnique::setMaterial(Material const &material) {
-  shader_.setUniformValue("u_Color", material.color);
+void LightTextureTechnique::setMaterial(Material const &material) {
+  auto const &[color, diffuse, normal, shininess] = material;
+
+  setTexture({diffuse, "u_material.diffuse"});
+  // setTexture({normal, "normalMap"});
   shader_.setUniformValue("u_material.shininess", material.shininess);
 }
 
-void LightColorTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                                 QMatrix4x4 model) {
+void LightTextureTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
+                                   QMatrix4x4 model) {
   shader_.setUniformValue("u_Model", model);
   shader_.setUniformValue("u_View", view);
   shader_.setUniformValue("u_Projection", proj);

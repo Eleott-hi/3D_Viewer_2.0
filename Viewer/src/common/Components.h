@@ -15,6 +15,8 @@ struct Vertex {
   QVector3D position;
   QVector3D normal;
   QVector2D tex_coords;
+  QVector3D tangent;
+  QVector3D bitangent;
 };
 
 struct Mesh {
@@ -28,7 +30,7 @@ struct Mesh {
 };
 
 struct Model {
-  QString filename = "";
+  std::string filename = "";
   QVector<Mesh> meshes;
 };
 
@@ -42,6 +44,10 @@ struct Transform {
 
 struct Material {
   QColor color = QColor::fromRgbF(0, 1, 0);
+
+  uint32_t diffuse = 0;
+  uint32_t normal = 0;
+
   float shininess = 32;
 };
 
@@ -104,6 +110,7 @@ struct Projection {
 
 struct Texture {
   uint32_t id = 0;
+  std::string type;
 };
 
 struct Quad {};

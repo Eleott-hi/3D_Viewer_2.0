@@ -6,6 +6,7 @@
 
 #include <QColor>
 #include <QMatrix4x4>
+#include <QOpenGLExtraFunctions>
 #include <QOpenGLShaderProgram>
 #include <QVariant>
 #include <QVector3D>
@@ -16,30 +17,28 @@
 
 namespace s21 {
 
-class ITechnique : public QOpenGLShaderProgram {
+class ITechnique : public QOpenGLShaderProgram,
+                   protected QOpenGLExtraFunctions {
  public:
-  ITechnique() {}
+  ITechnique() { initializeOpenGLFunctions(); }
   virtual ~ITechnique() {}
 
   virtual void init() = 0;
   virtual void Enable() { shader_.bind(); };
 
   // =================== Optional ===================
+  virtual void Clear() {}
   virtual void setColor(QColor c) {}
   virtual void SetObjectID(int ObjectID) {}
-
-  // virtual void setTexture(Texture id) override;
+  virtual void setTexture(Texture const &texture) {}
   virtual void setMaterial(Material const &material) {}
-  //  virtual void setTexture(Texture const &texture) {}
   virtual void setLight(
       QVector<std::tuple<Light *, BaseLightType *, Attenuation *>> lights) {}
   virtual void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) {}
 
-  virtual void setTextureID(uint32_t id) {}
-
   template <typename Type>
   void setCustomValue(const char *name, Type value) {
-    qDebug() << "HERE";
+    qDebug() << "setCustomValue";
     shader_.setUniformValue(name, value);
   }
 

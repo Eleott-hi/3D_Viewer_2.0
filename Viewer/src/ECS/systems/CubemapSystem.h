@@ -22,7 +22,7 @@ class CubemapSystem : public System, protected QOpenGLExtraFunctions {
  private:
   ECS_Controller *scene_ = nullptr;
   TechniqueStrategy *technique_ = nullptr;
-  unsigned int cubemapTexture_ = 0;
+  Texture cubemapTexture_;
 
   uint32_t loadCubemap(std::vector<std::string> faces);
   void RenderCube();

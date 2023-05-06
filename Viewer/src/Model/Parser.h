@@ -17,6 +17,7 @@ namespace s21 {
 
 struct ParsingData {
   std::optional<Model> model = std::nullopt;
+  std::optional<Texture> diffuseMap = std::nullopt;
   std::optional<Texture> normalMap = std::nullopt;
 };
 
@@ -24,10 +25,11 @@ class Parser {
  public:
   Parser(TextureStorage *textureStorage) : textureStorage_(textureStorage) {}
   ~Parser() = default;
-  ParsingData loadModel(QString filename);
+  ParsingData loadModel(std::string const &filename);
 
  private:
   ParsingData data_;
+  std::string directory_;
   TextureStorage *textureStorage_ = nullptr;
 
   void processNode(aiNode *node, const aiScene *scene);

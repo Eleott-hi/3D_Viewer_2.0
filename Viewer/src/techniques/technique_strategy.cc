@@ -3,29 +3,33 @@
 #include <memory>
 #include <vector>
 
-#include "light_color_technique.h"
-// #include "light_texture_technique.h"
 #include "cubemap_technique.h"
+#include "light_color_technique.h"
+#include "light_texture_normalmap_technique.h"
+#include "light_texture_technique.h"
 #include "picking_technique.h"
 #include "quad_technique.h"
 #include "simple_color_technique.h"
 #include "simple_texture_technique.h"
+#include "StencilOutlineTechnique.h"
 
 namespace s21 {
 
-TechniqueStrategy::TechniqueStrategy(TechniqueType type)
-    : techniques_{std::make_shared<SimpleColorTechnique>(),
-                  std::make_shared<SimpleTextureTechnique>(),
-                  std::make_shared<LightColorTechnique>(),
-                  //                  std::make_shared<LightTextureTechnique>(),
-                  std::make_shared<PickingTechnique>(),
-                  std::make_shared<QuadTechnique>(),
-                  std::make_shared<CubemapTechnique>()} {
-  technique_ = techniques_.at((int)type).get();
-}
+TechniqueStrategy::TechniqueStrategy() noexcept
+    : techniques_{
+          std::make_shared<SimpleColorTechnique>(),
+          std::make_shared<SimpleTextureTechnique>(),
+          std::make_shared<LightColorTechnique>(),
+          std::make_shared<LightTextureTechnique>(),
+          std::make_shared<PickingTechnique>(),
+          std::make_shared<QuadTechnique>(),
+          std::make_shared<CubemapTechnique>(),
+          std::make_shared<NormalMapTechnique>(),
+          std::make_shared<StencilOutlineTechnique>(),
+      } {}
 
 void TechniqueStrategy::Enable(TechniqueType type) {
-  technique_ = techniques_.at((int)type).get();
+  technique_ = techniques_.at((int)type);
   technique_->Enable();
 }
 
@@ -35,14 +39,13 @@ void TechniqueStrategy::setMaterial(Material const &material) {
   technique_->setMaterial(material);
 }
 
-void TechniqueStrategy::setMVP(QMatrix4x4 proj,  //
-                               QMatrix4x4 view,  //
+void TechniqueStrategy::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
                                QMatrix4x4 model) {
   technique_->setMVP(proj, view, model);
 }
 
-void TechniqueStrategy::setTextureId(uint32_t id) {
-  technique_->setTextureID(id);
+void TechniqueStrategy::setTexture(Texture const &texture) {
+  technique_->setTexture(texture);
 }
 
 void TechniqueStrategy::SetObjectID(int ObjectID) {

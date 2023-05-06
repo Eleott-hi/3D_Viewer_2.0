@@ -38,11 +38,14 @@ void LightSystem::Update() {
     lights.emplace_back(light, type, attenuation);
   }
 
-  technique_->Enable(TechniqueType::LIGHT_COLOR);
-  technique_->setLight(lights);
+  static QVector<TechniqueType> types = {TechniqueType::LIGHT_COLOR,
+                                         TechniqueType::LIGHT_TEXTURE,
+                                         TechniqueType::NORMALMAP};
 
-  // technique_->Enable(TechniqueType::LIGHT_TEXTURE);
-  // technique_->ApplyLightSettings(transforms, lights);
+  for (auto type : types) {
+    technique_->Enable(type);
+    technique_->setLight(lights);
+  }
 }
 
 }  // namespace s21
