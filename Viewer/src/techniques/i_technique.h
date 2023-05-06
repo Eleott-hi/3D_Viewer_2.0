@@ -8,12 +8,10 @@
 #include <QMatrix4x4>
 #include <QOpenGLExtraFunctions>
 #include <QOpenGLShaderProgram>
-#include <QVariant>
 #include <QVector3D>
-#include <vector>
+#include <QVector>
 
 #include "Components.h"
-// #include "model_settings.h"
 
 namespace s21 {
 
