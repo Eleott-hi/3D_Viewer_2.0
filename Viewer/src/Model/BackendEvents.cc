@@ -7,6 +7,7 @@
 #include "events/WindowResizeEvent.h"
 
 namespace s21 {
+
 void Backend::WindowResize(int w, int h) {
   qDebug() << "WindowResizeEvent:" << w << h;
   WindowResizeEvent event(w, h);

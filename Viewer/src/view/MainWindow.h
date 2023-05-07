@@ -24,12 +24,14 @@ class MainWindow : public QMainWindow {
   void on_actionOpen_file_triggered();
 
  private:
-  Ui::MainWindow *ui_;
   Backend *backend_;
+  Ui::MainWindow *ui_;
 
  protected:
   virtual void keyPressEvent(QKeyEvent *event) override;
   virtual void keyReleaseEvent(QKeyEvent *event) override;
+
+  void ConnectSignals();
 };
 
 }  // namespace s21

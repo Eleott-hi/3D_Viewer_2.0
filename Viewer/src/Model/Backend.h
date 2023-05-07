@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QOpenGLWidget>
 #include <QString>
+#include <functional>
 #include <memory>
 
 #include "Components.h"
@@ -12,6 +13,7 @@
 #include "core/ECS_Controller.h"
 #include "systems/CameraSystem.h"
 #include "systems/CubemapSystem.h"
+#include "systems/EditPickedSystem.h"
 #include "systems/LightSystem.h"
 #include "systems/MousePickingSystem.h"
 #include "systems/ProjectionSystem.h"
@@ -43,18 +45,41 @@ class Backend : QOpenGLExtraFunctions {
   void KeyReleased(QKeyEvent *key_event);
   void WindowResize(int width, int height);
 
+  template <typename Type>
+  void UpdateComponent(Type const &component) {
+    editPickedSystem_->UpdateComponent(component);
+  }
+
+  template <typename Type>
+  Type *GetComponent() {
+    return editPickedSystem_->GetComponent<Type>();
+  }
+
+  template <typename Type>
+  void ChangeComponent(std::function<void(Type &)> update) {
+    auto component = editPickedSystem_->GetComponent<Type>();
+
+    if (component) {
+      Q_ASSERT(update);
+      update(*component);
+    }
+
+    opengl_widget_->update();
+  }
+
  private:
   ECS_Controller scene_;
-  QOpenGLWidget *opengl_widget_ = nullptr;
   std::shared_ptr<Parser> parser_;
-  std::shared_ptr<TextureStorage> texture_storage_;
+  QOpenGLWidget *opengl_widget_ = nullptr;
   std::shared_ptr<TechniqueStrategy> technique_;
+  std::shared_ptr<TextureStorage> texture_storage_;
 
   std::shared_ptr<LightSystem> lightSystem_;
   std::shared_ptr<CameraSystem> cameraSystem_;
   std::shared_ptr<RenderSystem> renderSystem_;
   std::shared_ptr<CubemapSystem> cubemapSystem_;
   std::shared_ptr<Render2DSystem> render2DSystem_;
+  std::shared_ptr<EditPickedSystem> editPickedSystem_;
   std::shared_ptr<ProjectionSystem> projectionSystem_;
   std::shared_ptr<MousePickingSystem> mousePickingSystem_;
   std::shared_ptr<RenderPickedSystem> renderPickedSystem_;

@@ -134,10 +134,10 @@
                    </sizepolicy>
                   </property>
                   <property name="minimum">
-                   <number>-100</number>
+                   <number>-1000</number>
                   </property>
                   <property name="maximum">
-                   <number>100</number>
+                   <number>1000</number>
                   </property>
                   <property name="value">
                    <number>0</number>
@@ -176,10 +176,10 @@
                    </sizepolicy>
                   </property>
                   <property name="minimum">
-                   <number>-100</number>
+                   <number>-1000</number>
                   </property>
                   <property name="maximum">
-                   <number>100</number>
+                   <number>1000</number>
                   </property>
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -215,10 +215,10 @@
                    </sizepolicy>
                   </property>
                   <property name="minimum">
-                   <number>-100</number>
+                   <number>-1000</number>
                   </property>
                   <property name="maximum">
-                   <number>100</number>
+                   <number>1000</number>
                   </property>
                   <property name="value">
                    <number>-6</number>
@@ -1554,7 +1554,7 @@
      <x>0</x>
      <y>0</y>
      <width>920</width>
-     <height>25</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
@@ -1618,82 +1618,18 @@
  <resources/>
  <connections>
   <connection>
-   <sender>xTrans</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>xTransDoubleBox</receiver>
-   <slot>setValue(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>320</x>
-     <y>164</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>175</x>
-     <y>170</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>xTransDoubleBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>xTrans</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>175</x>
-     <y>170</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>320</x>
-     <y>164</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>yTransDoubleBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>yTrans</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>175</x>
-     <y>208</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>320</x>
-     <y>202</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>zTransDoubleBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>zTrans</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>175</x>
-     <y>246</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>320</x>
-     <y>240</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>xRotDoubleBox</sender>
    <signal>valueChanged(double)</signal>
    <receiver>xRot</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>175</x>
-     <y>335</y>
+     <x>204</x>
+     <y>298</y>
     </hint>
     <hint type="destinationlabel">
-     <x>320</x>
-     <y>329</y>
+     <x>413</x>
+     <y>300</y>
     </hint>
    </hints>
   </connection>
@@ -1704,12 +1640,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>175</x>
-     <y>373</y>
+     <x>204</x>
+     <y>335</y>
     </hint>
     <hint type="destinationlabel">
-     <x>320</x>
-     <y>367</y>
+     <x>413</x>
+     <y>337</y>
     </hint>
    </hints>
   </connection>
@@ -1720,12 +1656,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>175</x>
-     <y>425</y>
+     <x>189</x>
+     <y>393</y>
     </hint>
     <hint type="destinationlabel">
-     <x>334</x>
-     <y>419</y>
+     <x>428</x>
+     <y>395</y>
     </hint>
    </hints>
   </connection>
@@ -1736,12 +1672,12 @@
    <slot>setValue(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>334</x>
-     <y>419</y>
+     <x>428</x>
+     <y>395</y>
     </hint>
     <hint type="destinationlabel">
-     <x>175</x>
-     <y>425</y>
+     <x>189</x>
+     <y>393</y>
     </hint>
    </hints>
   </connection>
@@ -1752,12 +1688,12 @@
    <slot>setValue(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>320</x>
-     <y>367</y>
+     <x>413</x>
+     <y>337</y>
     </hint>
     <hint type="destinationlabel">
-     <x>175</x>
-     <y>373</y>
+     <x>204</x>
+     <y>335</y>
     </hint>
    </hints>
   </connection>
@@ -1768,60 +1704,12 @@
    <slot>setValue(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>320</x>
-     <y>329</y>
+     <x>413</x>
+     <y>300</y>
     </hint>
     <hint type="destinationlabel">
-     <x>175</x>
-     <y>335</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>zTrans</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>zTransDoubleBox</receiver>
-   <slot>setValue(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>320</x>
-     <y>240</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>175</x>
-     <y>246</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>yTrans</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>yTransDoubleBox</receiver>
-   <slot>setValue(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>320</x>
-     <y>202</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>175</x>
-     <y>208</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>xTrans_2</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>xTransDoubleBox_2</receiver>
-   <slot>setValue(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>243</x>
-     <y>289</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>386</x>
-     <y>295</y>
+     <x>204</x>
+     <y>298</y>
     </hint>
    </hints>
   </connection>
@@ -1832,28 +1720,12 @@
    <slot>setValue(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>243</x>
-     <y>327</y>
+     <x>78</x>
+     <y>81</y>
     </hint>
     <hint type="destinationlabel">
-     <x>386</x>
-     <y>333</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>zTrans_2</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>zTransDoubleBox_2</receiver>
-   <slot>setValue(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>243</x>
-     <y>365</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>386</x>
-     <y>371</y>
+     <x>87</x>
+     <y>81</y>
     </hint>
    </hints>
   </connection>
@@ -1864,12 +1736,12 @@
    <slot>setValue(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>243</x>
-     <y>454</y>
+     <x>78</x>
+     <y>93</y>
     </hint>
     <hint type="destinationlabel">
-     <x>386</x>
-     <y>460</y>
+     <x>87</x>
+     <y>93</y>
     </hint>
    </hints>
   </connection>
@@ -1880,12 +1752,12 @@
    <slot>setValue(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>243</x>
-     <y>492</y>
+     <x>78</x>
+     <y>88</y>
     </hint>
     <hint type="destinationlabel">
-     <x>386</x>
-     <y>498</y>
+     <x>87</x>
+     <y>88</y>
     </hint>
    </hints>
   </connection>
@@ -1896,12 +1768,12 @@
    <slot>setValue(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>243</x>
-     <y>530</y>
+     <x>78</x>
+     <y>82</y>
     </hint>
     <hint type="destinationlabel">
-     <x>386</x>
-     <y>536</y>
+     <x>87</x>
+     <y>82</y>
     </hint>
    </hints>
   </connection>
@@ -1912,12 +1784,12 @@
    <slot>setValue(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>583</y>
+     <x>81</x>
+     <y>82</y>
     </hint>
     <hint type="destinationlabel">
-     <x>433</x>
-     <y>589</y>
+     <x>102</x>
+     <y>82</y>
     </hint>
    </hints>
   </connection>
@@ -1928,12 +1800,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>433</x>
-     <y>589</y>
+     <x>102</x>
+     <y>82</y>
     </hint>
     <hint type="destinationlabel">
-     <x>213</x>
-     <y>583</y>
+     <x>81</x>
+     <y>82</y>
     </hint>
    </hints>
   </connection>
@@ -1944,12 +1816,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>386</x>
-     <y>536</y>
+     <x>87</x>
+     <y>82</y>
     </hint>
     <hint type="destinationlabel">
-     <x>243</x>
-     <y>530</y>
+     <x>78</x>
+     <y>82</y>
     </hint>
    </hints>
   </connection>
@@ -1960,12 +1832,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>386</x>
-     <y>498</y>
+     <x>87</x>
+     <y>88</y>
     </hint>
     <hint type="destinationlabel">
-     <x>243</x>
-     <y>492</y>
+     <x>78</x>
+     <y>88</y>
     </hint>
    </hints>
   </connection>
@@ -1976,28 +1848,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>386</x>
-     <y>460</y>
+     <x>87</x>
+     <y>93</y>
     </hint>
     <hint type="destinationlabel">
-     <x>243</x>
-     <y>454</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>zTransDoubleBox_2</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>zTrans_2</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>386</x>
-     <y>371</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>243</x>
-     <y>365</y>
+     <x>78</x>
+     <y>93</y>
     </hint>
    </hints>
   </connection>
@@ -2008,28 +1864,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>386</x>
-     <y>333</y>
+     <x>87</x>
+     <y>81</y>
     </hint>
     <hint type="destinationlabel">
-     <x>243</x>
-     <y>327</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>xTransDoubleBox_2</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>xTrans_2</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>386</x>
-     <y>295</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>243</x>
-     <y>289</y>
+     <x>78</x>
+     <y>81</y>
     </hint>
    </hints>
   </connection>
@@ -2040,12 +1880,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>108</x>
-     <y>297</y>
+     <x>68</x>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
-     <x>324</x>
-     <y>297</y>
+     <x>87</x>
+     <y>85</y>
     </hint>
    </hints>
   </connection>
@@ -2056,12 +1896,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>108</x>
-     <y>297</y>
+     <x>68</x>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
-     <x>76</x>
-     <y>346</y>
+     <x>68</x>
+     <y>81</y>
     </hint>
    </hints>
   </connection>
@@ -2072,12 +1912,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>108</x>
-     <y>297</y>
+     <x>68</x>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
-     <x>169</x>
-     <y>337</y>
+     <x>88</x>
+     <y>81</y>
     </hint>
    </hints>
   </connection>
@@ -2088,12 +1928,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>108</x>
-     <y>297</y>
+     <x>68</x>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
-     <x>120</x>
-     <y>387</y>
+     <x>66</x>
+     <y>75</y>
     </hint>
    </hints>
   </connection>
@@ -2104,12 +1944,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>108</x>
-     <y>297</y>
+     <x>68</x>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
-     <x>324</x>
-     <y>391</y>
+     <x>87</x>
+     <y>79</y>
     </hint>
    </hints>
   </connection>
@@ -2120,12 +1960,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>108</x>
-     <y>482</y>
+     <x>68</x>
+     <y>94</y>
     </hint>
     <hint type="destinationlabel">
-     <x>324</x>
-     <y>482</y>
+     <x>87</x>
+     <y>94</y>
     </hint>
    </hints>
   </connection>
@@ -2136,12 +1976,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>108</x>
-     <y>482</y>
+     <x>68</x>
+     <y>94</y>
     </hint>
     <hint type="destinationlabel">
-     <x>324</x>
-     <y>576</y>
+     <x>87</x>
+     <y>88</y>
     </hint>
    </hints>
   </connection>
@@ -2152,12 +1992,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>108</x>
-     <y>482</y>
+     <x>68</x>
+     <y>94</y>
     </hint>
     <hint type="destinationlabel">
-     <x>120</x>
-     <y>572</y>
+     <x>66</x>
+     <y>84</y>
     </hint>
    </hints>
   </connection>
@@ -2168,12 +2008,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>108</x>
-     <y>482</y>
+     <x>68</x>
+     <y>94</y>
     </hint>
     <hint type="destinationlabel">
-     <x>76</x>
-     <y>531</y>
+     <x>69</x>
+     <y>92</y>
     </hint>
    </hints>
   </connection>
@@ -2184,12 +2024,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>108</x>
-     <y>482</y>
+     <x>68</x>
+     <y>94</y>
     </hint>
     <hint type="destinationlabel">
-     <x>169</x>
-     <y>522</y>
+     <x>87</x>
+     <y>89</y>
     </hint>
    </hints>
   </connection>
@@ -2200,12 +2040,12 @@
    <slot>setValue(5)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>250</x>
-     <y>635</y>
+     <x>99</x>
+     <y>64</y>
     </hint>
     <hint type="destinationlabel">
-     <x>122</x>
-     <y>641</y>
+     <x>75</x>
+     <y>64</y>
     </hint>
    </hints>
   </connection>
@@ -2216,12 +2056,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>122</x>
-     <y>641</y>
+     <x>75</x>
+     <y>64</y>
     </hint>
     <hint type="destinationlabel">
-     <x>250</x>
-     <y>635</y>
+     <x>99</x>
+     <y>64</y>
     </hint>
    </hints>
   </connection>
@@ -2232,12 +2072,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>123</x>
-     <y>244</y>
+     <x>103</x>
+     <y>62</y>
     </hint>
     <hint type="destinationlabel">
-     <x>137</x>
-     <y>293</y>
+     <x>103</x>
+     <y>69</y>
     </hint>
    </hints>
   </connection>

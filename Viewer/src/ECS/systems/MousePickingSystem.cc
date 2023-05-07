@@ -52,18 +52,18 @@ void MousePickingSystem::Update() {
 
   framebuffer_->Unbind();
 
-  int objectID = framebuffer_->ReadPixel(clicked_pos_.x(), clicked_pos_.y());
+  int entity = framebuffer_->ReadPixel(clicked_pos_.x(), clicked_pos_.y());
 
   auto pickedEntities = scene_->GetEntities<PickingTag>();
 
   for (EntityID entity : pickedEntities)
     scene_->RemoveComponent<PickingTag>(entity);
 
-  if (objectID >= 0) scene_->AddComponent<PickingTag>(objectID);
+  if (entity >= 0) scene_->AddComponent<PickingTag>(entity);
 
   clicked_pos_ = imposible_pos;
 
-  qDebug() << objectID;
+  qDebug() << entity;
 }
 
 void MousePickingSystem::PrepareFramebuffer() {

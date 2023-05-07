@@ -10,6 +10,8 @@ MainWindow::MainWindow(Backend *backend, QWidget *parent)
   ui_->setupUi(this);
   ui_->openGLWidget->SetController(backend);
   this->grabKeyboard();
+
+  ConnectSignals();
 }
 
 MainWindow::~MainWindow() { delete ui_; }
@@ -40,4 +42,33 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
   backend_->KeyReleased(event);
 }
 
+void MainWindow::ConnectSignals() {
+  connect(ui_->xTrans, &QSlider::valueChanged, [&](float value) {
+    backend_->ChangeComponent<Transform>([value](auto &component) {
+      component.translation.setX(value / 100.0);
+    });
+  });
+
+  connect(ui_->yTrans, &QSlider::valueChanged, [&](float value) {
+    backend_->ChangeComponent<Transform>([value](auto &component) {
+      component.translation.setY(value / 100.0);
+    });
+  });
+
+  connect(ui_->zTrans, &QSlider::valueChanged, [&](float value) {
+    backend_->ChangeComponent<Transform>([value](auto &component) {
+      component.translation.setZ(value / 100.0);
+    });
+  });
+
+  connect(ui_->xRot, &QSlider::valueChanged, [&](float value) {
+    backend_->ChangeComponent<Transform>(
+        [value](auto &component) { component.rotation.setX(value); });
+  });
+
+  connect(ui_->yRot, &QSlider::valueChanged, [&](float value) {
+    backend_->ChangeComponent<Transform>(
+        [value](auto &component) { component.rotation.setY(value); });
+  });
+}
 }  // namespace s21

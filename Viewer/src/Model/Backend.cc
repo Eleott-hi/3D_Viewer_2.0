@@ -1,12 +1,5 @@
 #include "Backend.h"
 
-#include "events/KeyPressedEvent.h"
-#include "events/KeyReleasedEvent.h"
-#include "events/MouseDoubleClickedEvent.h"
-#include "events/MouseMovedEvent.h"
-#include "events/MouseScrolledEvent.h"
-#include "events/WindowResizeEvent.h"
-
 namespace s21 {
 
 void Backend::Init(QOpenGLWidget* widget) {
@@ -69,6 +62,7 @@ void Backend::Render() {
 
 void Backend::Update() {
   mousePickingSystem_->Update();
+  editPickedSystem_->Update();
   cameraSystem_->Update();
   projectionSystem_->Update();
   lightSystem_->Update();
@@ -77,7 +71,7 @@ void Backend::Update() {
 void Backend::Draw() {
   {
     renderSystem_->Update();
-    cubemapSystem_->Update();
+    // cubemapSystem_->Update();
     renderPickedSystem_->Update();
   }
 
@@ -167,6 +161,14 @@ void Backend::RegisterSystems() {
   {
     ComponentMask mask;
     cubemapSystem_->Init(&scene_, technique_.get());
+  }
+
+  editPickedSystem_ = scene_.RegisterSystem<EditPickedSystem>();
+  {
+    ComponentMask mask;
+    mask.set(GetComponentID<PickingTag>());
+    scene_.ChangeSystemMask<EditPickedSystem>(mask);
+    editPickedSystem_->Init(&scene_);
   }
 }
 
