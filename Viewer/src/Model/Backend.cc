@@ -21,8 +21,11 @@ void Backend::Init(QOpenGLWidget* widget) {
   EntityID projection = scene_.NewEntity();
   scene_.AddComponent<Projection>(projection);
 
+  Light component;
+  component.specular = {0.5f, 0.5f, 0.5};
+
   EntityID light = scene_.NewEntity();
-  scene_.AddComponent<Light>(light);
+  scene_.AddComponent<Light>(light, component);
   scene_.AddComponent<DirectionalLight>(light);
 }
 

@@ -89,7 +89,6 @@ void CameraSystem::ProcessKeyPressed(Camera &camera, QKeyEvent *key_event) {
 
 void CameraSystem::ProcessMouseScroll(Camera &camera, float scroll) {
   camera.zoom = qBound(1.0, camera.zoom - scroll, 45.0);
-  qDebug() << camera.zoom;
 }
 
 void CameraSystem::UpdateLookAtVectors(Camera &camera) {
