@@ -6,7 +6,7 @@
 #include "StencilOutlineTechnique.h"
 #include "cubemap_technique.h"
 #include "light_color_technique.h"
-#include "light_texture_normalmap_technique.h"
+#include "normalmap_technique.h"
 #include "light_texture_technique.h"
 #include "picking_technique.h"
 #include "quad_technique.h"

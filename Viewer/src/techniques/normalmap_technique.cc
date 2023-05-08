@@ -1,4 +1,4 @@
-#include "light_texture_normalmap_technique.h"
+#include "normalmap_technique.h"
 #include "Utils.h"
 
 namespace s21 {

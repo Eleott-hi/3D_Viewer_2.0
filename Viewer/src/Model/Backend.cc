@@ -39,7 +39,7 @@ void Backend::Init(QOpenGLWidget* widget) {
     Light light;
     light.type = LightType::POINT;
     light.position = {0, 0, 0};
-    light.specular = {0.9, 0.9, 0.9};
+    light.specular = {0.5, 0.5, 0.5};
 
     Transform transform;
     transform.translation = {0, 0, 2};
@@ -49,7 +49,6 @@ void Backend::Init(QOpenGLWidget* widget) {
 
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<Material>(entity);
-    // scene_.AddComponent<Shader>(entity, {TechniqueType::LIGHT_TEXTURE});
     scene_.AddComponent<Light>(entity, light);
     scene_.AddComponent<Transform>(entity, transform);
     scene_.AddComponent<Model>(entity, std::move(model));
@@ -67,6 +66,7 @@ void Backend::AddModel(QString path) {
   for (auto& mesh : model->meshes) mesh.bufferize(this);
 
   Material material;
+  material.shininess = 10;
   if (diffuse_map) material.diffuse = diffuse_map->id;
   if (normal_map) material.normal = normal_map->id;
   if (specular_map) material.specular = specular_map->id;
