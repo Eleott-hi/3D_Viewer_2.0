@@ -30,15 +30,17 @@ void LightSystem::Update() {
           scene_->GetComponent<Transform>(entity).translation;
   }
 
-  static QVector<TechniqueType> types = {TechniqueType::LIGHT_COLOR,
-                                         TechniqueType::LIGHT_TEXTURE,
-                                         TechniqueType::NORMALMAP};
+  static QVector<TechniqueType> types = {
+      TechniqueType::LIGHT_COLOR,
+      TechniqueType::LIGHT_TEXTURE,
+      TechniqueType::NORMALMAP,
+      TechniqueType::PHYSICAL_BASED_RENDERING,
+  };
 
   for (auto type : types) {
     technique_->Enable(type);
     technique_->setLight(lights, attenuations);
   }
-
 }
 
 // void LightSystem::Update() {

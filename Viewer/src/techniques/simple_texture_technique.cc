@@ -15,7 +15,7 @@ void SimpleTextureTechnique::setTexture(Texture const &texture) {
 }
 
 void SimpleTextureTechnique::setMaterial(Material const &material) {
-  auto const &[color, diffuse, normal,specular, shininess] = material;
+  auto const &[color, diffuse, normal, specular, shininess] = material;
 
   setTexture({diffuse, "diffuse"});
 

@@ -4,11 +4,11 @@
 
 namespace s21 {
 
-class NormalMapTechnique : public ITechnique {
+class PhysicalBasedRenderingTechnique : public ITechnique {
  public:
-  NormalMapTechnique() { init(); }
+  PhysicalBasedRenderingTechnique() { init(); }
 
-  ~NormalMapTechnique() = default;
+  ~PhysicalBasedRenderingTechnique() = default;
 
   void init() final;
   void Clear() final { index_ = 0; }

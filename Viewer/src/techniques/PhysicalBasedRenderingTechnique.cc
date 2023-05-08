@@ -1,13 +1,13 @@
-#include "normalmap_technique.h"
+#include "PhysicalBasedRenderingTechnique.h"
 
 #include "Utils.h"
 
 namespace s21 {
 
-void NormalMapTechnique::init() {
-  GenerateShaders(":/shaders/normal_mapping.vs", ":/shaders/normal_mapping.fs");
+void PhysicalBasedRenderingTechnique::init() {
+  GenerateShaders(":/shaders/PBR.vs", ":/shaders/PBR.fs");
 }
-void NormalMapTechnique::setTexture(Texture const &texture) {
+void PhysicalBasedRenderingTechnique::setTexture(Texture const &texture) {
   auto const &[id, type] = texture;
 
   shader_.setUniformValue(type.c_str(), index_);
@@ -17,8 +17,8 @@ void NormalMapTechnique::setTexture(Texture const &texture) {
   index_++;
 }
 
-void NormalMapTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                                QMatrix4x4 model) {
+void PhysicalBasedRenderingTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
+                                             QMatrix4x4 model) {
   shader_.setUniformValue("Model", model);
   shader_.setUniformValue("View", view);
   shader_.setUniformValue("Projection", proj);
@@ -28,7 +28,7 @@ void NormalMapTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
                           QVector3D{tmp(0, 3), tmp(1, 3), tmp(2, 3)});
 }
 
-void NormalMapTechnique::setMaterial(Material const &material) {
+void PhysicalBasedRenderingTechnique::setMaterial(Material const &material) {
   auto const &[color, diffuse, normal, specular, shininess] = material;
 
   setTexture({normal, "normalMap"});
@@ -37,9 +37,8 @@ void NormalMapTechnique::setMaterial(Material const &material) {
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 
-void NormalMapTechnique::SetLightComponent(QOpenGLShaderProgram &shader,
-                                           std::string const &type,
-                                           Light const &light) {
+void PhysicalBasedRenderingTechnique::SetLightComponent(
+    QOpenGLShaderProgram &shader, std::string const &type, Light const &light) {
   shader.setUniformValue(Utils::StructName(type, "ambient").c_str(),
                          light.ambient);
   shader.setUniformValue(Utils::StructName(type, "diffuse").c_str(),
@@ -48,7 +47,7 @@ void NormalMapTechnique::SetLightComponent(QOpenGLShaderProgram &shader,
                          light.specular);
 }
 
-void NormalMapTechnique::SetAttenuationComponent(
+void PhysicalBasedRenderingTechnique::SetAttenuationComponent(
     QOpenGLShaderProgram &shader, std::string const &type,
     Attenuation const &attenuation) {
   auto const &[constant, linear, quadratic] = attenuation;
@@ -58,11 +57,9 @@ void NormalMapTechnique::SetAttenuationComponent(
                          quadratic);
 }
 
-void NormalMapTechnique::SetLightSpecificComponent(QOpenGLShaderProgram &shader,
-                                                   std::string const &type,
-                                                   Light const &light,
-                                                   int light_index,
-                                                   int attenuation_index) {
+void PhysicalBasedRenderingTechnique::SetLightSpecificComponent(
+    QOpenGLShaderProgram &shader, std::string const &type, Light const &light,
+    int light_index, int attenuation_index) {
   shader.setUniformValue(Utils::StructName(type, "position").c_str(),
                          light.position);
   shader.setUniformValue(Utils::StructName(type, "direction").c_str(),
@@ -77,7 +74,7 @@ void NormalMapTechnique::SetLightSpecificComponent(QOpenGLShaderProgram &shader,
                          attenuation_index);
 }
 
-void NormalMapTechnique::setLight(
+void PhysicalBasedRenderingTechnique::setLight(
     QVector<Light> lights, QVector<std::optional<Attenuation>> attenuations) {
   int dirLightsCount = 0, pointLightsCount = 0, spotLightsCount = 0;
 

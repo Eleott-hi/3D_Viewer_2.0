@@ -3,11 +3,12 @@
 #include <memory>
 #include <vector>
 
+#include "PhysicalBasedRenderingTechnique.h"
 #include "StencilOutlineTechnique.h"
 #include "cubemap_technique.h"
 #include "light_color_technique.h"
-#include "normalmap_technique.h"
 #include "light_texture_technique.h"
+#include "normalmap_technique.h"
 #include "picking_technique.h"
 #include "quad_technique.h"
 #include "simple_color_technique.h"
@@ -26,6 +27,7 @@ TechniqueStrategy::TechniqueStrategy() noexcept
           std::make_shared<CubemapTechnique>(),
           std::make_shared<NormalMapTechnique>(),
           std::make_shared<StencilOutlineTechnique>(),
+          std::make_shared<PhysicalBasedRenderingTechnique>(),
       } {}
 
 void TechniqueStrategy::Enable(TechniqueType type) {

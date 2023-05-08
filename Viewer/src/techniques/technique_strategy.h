@@ -7,8 +7,6 @@
 
 namespace s21 {
 
-
-
 class TechniqueStrategy {
  public:
   TechniqueStrategy() noexcept;

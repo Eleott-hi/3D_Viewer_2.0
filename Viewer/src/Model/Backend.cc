@@ -72,7 +72,8 @@ void Backend::AddModel(QString path) {
   if (specular_map) material.specular = specular_map->id;
 
   EntityID entity = scene_.NewEntity();
-  scene_.AddComponent<Shader>(entity, {TechniqueType::NORMALMAP});
+  scene_.AddComponent<Shader>(entity,
+                              {TechniqueType::PHYSICAL_BASED_RENDERING});
   scene_.AddComponent<Transform>(entity);
   scene_.AddComponent<Material>(entity, material);
   scene_.AddComponent<Model>(entity, std::move(*model));

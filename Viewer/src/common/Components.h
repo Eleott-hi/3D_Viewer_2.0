@@ -21,6 +21,7 @@ enum class TechniqueType {
   CUBEMAP,
   NORMALMAP,
   STENCIL_OUTLINE,
+  PHYSICAL_BASED_RENDERING,
 };
 
 enum class LightType {
