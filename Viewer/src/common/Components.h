@@ -11,6 +11,24 @@
 
 namespace s21 {
 
+enum class TechniqueType {
+  SIMPLE_COLOR,
+  SIMPLE_TEXTURE,
+  LIGHT_COLOR,
+  LIGHT_TEXTURE,
+  MOUSE_PICKING,
+  QUAD,
+  CUBEMAP,
+  NORMALMAP,
+  STENCIL_OUTLINE,
+};
+
+enum class LightType {
+  DIRECTIONAL,
+  POINT,
+  SPOT,
+};
+
 struct Vertex {
   QVector3D position;
   QVector3D normal;
@@ -30,58 +48,30 @@ struct Mesh {
 };
 
 struct Model {
-  std::string filename = "";
+  std::string filename;
   QVector<Mesh> meshes;
 };
 
 struct Transform {
-  QVector3D translation = {0, 0, -2};
-  QVector3D rotation = {0, 0, 0};
+  QVector3D translation;
+  QVector3D rotation;
   QVector3D scale = {1, 1, 1};
 
   QMatrix4x4 GetModelMatrix() const;
 };
 
 struct Material {
-  QColor color = QColor::fromRgbF(0, 1, 0);
+  QColor color = QColor::fromRgbF(0, 0.5, 0);
 
   uint32_t diffuse = 0;
   uint32_t normal = 0;
+  uint32_t specular = 0;
 
   float shininess = 32;
 };
 
-enum class LightType { DIRECTIONAL, POINT, SPOT };
-
-struct BaseLightType {
-  virtual LightType GetType() = 0;
-};
-
-struct DirectionalLight : BaseLightType {
-  QVector3D direction = {0, 0, -1};
-
-  LightType GetType() final { return LightType::DIRECTIONAL; }
-};
-
-struct PointLight : BaseLightType {
-  QVector3D position = {0, 0, 0};
-
-  LightType GetType() final { return LightType::POINT; }
-};
-
-struct SpotLight : BaseLightType {
-  QVector3D position = {0, 0, 0};
-  QVector3D direction = {0, 0, -1};
-  float inner_cone = 12.5;
-  float outer_cone = 15.0;
-
-  LightType GetType() final { return LightType::SPOT; }
-};
-
-struct Light {
-  QVector3D ambient = {0.1, 0.1, 0.1};
-  QVector3D diffuse = {0.1, 0.1, 0.1};
-  QVector3D specular = {0.1, 0.1, 0.1};
+struct Shader {
+  TechniqueType type = TechniqueType::SIMPLE_COLOR;
 };
 
 struct Attenuation {
@@ -117,5 +107,19 @@ struct Quad {};
 struct Cubemap {};
 
 struct PickingTag {};
+
+struct Light {
+  LightType type = LightType::DIRECTIONAL;
+
+  QVector3D ambient = {0.1, 0.1, 0.1};
+  QVector3D diffuse = {0.1, 0.1, 0.1};
+  QVector3D specular = {0.1, 0.1, 0.1};
+
+  QVector3D position = {0, 0, 0};
+  QVector3D direction = {0, 0, -1};
+
+  float outer_cone = 15.0;
+  float inner_cone = 12.5;
+};
 
 }  // namespace s21

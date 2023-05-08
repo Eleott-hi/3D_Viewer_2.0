@@ -11,9 +11,9 @@ class LightColorTechnique : public ITechnique {
 
   virtual void init() override;
 
-  virtual void setLight(
-      QVector<std::tuple<Light *, BaseLightType *, Attenuation *>> lights)
-      override;
+  //   virtual void setLight(
+  //       QVector<std::tuple<Light *, BaseLightType *, Attenuation *>> lights)
+  //       override;
 
   virtual void setColor(QColor c) override;
 

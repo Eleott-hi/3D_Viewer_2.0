@@ -30,8 +30,11 @@ class ITechnique : public QOpenGLShaderProgram,
   virtual void SetObjectID(int ObjectID) {}
   virtual void setTexture(Texture const &texture) {}
   virtual void setMaterial(Material const &material) {}
-  virtual void setLight(
-      QVector<std::tuple<Light *, BaseLightType *, Attenuation *>> lights) {}
+  // virtual void setLight(
+  // QVector<std::tuple<Light *, BaseLightType *, Attenuation *>> lights) {}
+  virtual void setLight(QVector<Light> lights,
+                        QVector<std::optional<Attenuation>> attenuations) {}
+
   virtual void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) {}
 
   template <typename Type>

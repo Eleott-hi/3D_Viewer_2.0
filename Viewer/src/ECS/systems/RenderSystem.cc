@@ -31,17 +31,21 @@ void RenderSystem::Update() {
   framebuffer_->Bind();
   PrepareFramebuffer();
 
-  technique_->Enable(TechniqueType::LIGHT_TEXTURE);
   auto [proj, view] = Utils::GetProjectionAndView(scene_);
 
   for (auto entity : entities_) {
     auto &model = scene_->GetComponent<Model>(entity);
-    auto &material = scene_->GetComponent<Material>(entity);
-    auto &transform = scene_->GetComponent<Transform>(entity);
+    auto const &transform = scene_->GetComponent<Transform>(entity);
+
+    technique_->Enable(scene_->EntityHasComponent<Shader>(entity)
+                           ? scene_->GetComponent<Shader>(entity).type
+                           : TechniqueType::SIMPLE_COLOR);
 
     technique_->Clear();
     technique_->setMVP(proj, view, transform.GetModelMatrix());
-    technique_->setMaterial(material);
+
+    if (scene_->EntityHasComponent<Material>(entity))
+      technique_->setMaterial(scene_->GetComponent<Material>(entity));
 
     DrawObject(model);
   }
@@ -50,7 +54,7 @@ void RenderSystem::Update() {
 }
 
 void RenderSystem::PrepareFramebuffer() {
-  glClearColor(0, 0, 0, 1);
+  glClearColor(0.1, 0.1, 0.1, 1);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
 

@@ -2,6 +2,9 @@
 
 namespace s21 {
 
+std::string cube =
+    "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/cube.obj";
+
 void Backend::Init(QOpenGLWidget* widget) {
   initializeOpenGLFunctions();
 
@@ -15,39 +18,64 @@ void Backend::Init(QOpenGLWidget* widget) {
   RegisterComponents();
   RegisterSystems();
 
-  EntityID camera = scene_.NewEntity();
-  scene_.AddComponent<Camera>(camera);
+  {
+    Camera camera;
+    camera.position = {0, 0, 6};
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Camera>(entity, camera);
+  }
 
-  EntityID projection = scene_.NewEntity();
-  scene_.AddComponent<Projection>(projection);
+  {
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Projection>(entity);
+  }
 
-  Light component;
-  component.specular = {0.5f, 0.5f, 0.5};
+  {
+    Attenuation attenuation;
+    attenuation.constant = 0.1;
+    attenuation.linear = 0.1;
+    attenuation.quadratic = 0.1;
 
-  EntityID light = scene_.NewEntity();
-  scene_.AddComponent<Light>(light, component);
-  scene_.AddComponent<DirectionalLight>(light);
+    Light light;
+    light.type = LightType::POINT;
+    light.position = {0, 0, 0};
+    light.specular = {0.9, 0.9, 0.9};
+
+    Transform transform;
+    transform.translation = {0, 0, 2};
+
+    auto model = *parser_->loadModel(cube).model;
+    for (auto& mesh : model.meshes) mesh.bufferize(this);
+
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Material>(entity);
+    // scene_.AddComponent<Shader>(entity, {TechniqueType::LIGHT_TEXTURE});
+    scene_.AddComponent<Light>(entity, light);
+    scene_.AddComponent<Transform>(entity, transform);
+    scene_.AddComponent<Model>(entity, std::move(model));
+    scene_.AddComponent<Attenuation>(entity, attenuation);
+  }
 }
 
 void Backend::AddModel(QString path) {
   opengl_widget_->makeCurrent();
-  auto [model, diffuse_map, normal_map] =
+  auto [model, diffuse_map, normal_map, specular_map] =
       parser_->loadModel(path.toStdString());
 
   if (!model) return;
 
-  for (auto& mesh : model->meshes)
-    if (!mesh.VAO) mesh.bufferize(this);
+  for (auto& mesh : model->meshes) mesh.bufferize(this);
 
   Material material;
-
   if (diffuse_map) material.diffuse = diffuse_map->id;
   if (normal_map) material.normal = normal_map->id;
+  if (specular_map) material.specular = specular_map->id;
 
   EntityID entity = scene_.NewEntity();
-  scene_.AddComponent<Model>(entity, std::move(model.value()));
-  scene_.AddComponent<Material>(entity, material);
+  scene_.AddComponent<Shader>(entity, {TechniqueType::NORMALMAP});
   scene_.AddComponent<Transform>(entity);
+  scene_.AddComponent<Material>(entity, material);
+  scene_.AddComponent<Model>(entity, std::move(*model));
 
   opengl_widget_->doneCurrent();
 }
@@ -85,17 +113,18 @@ void Backend::RegisterComponents() {
   scene_.RegisterComponent<Quad>();
   scene_.RegisterComponent<Model>();
   scene_.RegisterComponent<Light>();
+  scene_.RegisterComponent<Shader>();
   scene_.RegisterComponent<Camera>();
   scene_.RegisterComponent<Cubemap>();
   scene_.RegisterComponent<Texture>();
   scene_.RegisterComponent<Material>();
   scene_.RegisterComponent<Transform>();
-  scene_.RegisterComponent<SpotLight>();
+  //  scene_.RegisterComponent<SpotLight>();
   scene_.RegisterComponent<Projection>();
-  scene_.RegisterComponent<PointLight>();
+  //  scene_.RegisterComponent<PointLight>();
   scene_.RegisterComponent<PickingTag>();
   scene_.RegisterComponent<Attenuation>();
-  scene_.RegisterComponent<DirectionalLight>();
+  //  scene_.RegisterComponent<DirectionalLight>();
 }
 
 void Backend::RegisterSystems() {

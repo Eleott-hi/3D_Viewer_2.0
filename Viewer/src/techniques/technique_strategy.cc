@@ -52,9 +52,14 @@ void TechniqueStrategy::SetObjectID(int ObjectID) {
   technique_->SetObjectID(ObjectID);
 }
 
+// void TechniqueStrategy::setLight(
+//     QVector<std::tuple<Light *, BaseLightType *, Attenuation *>> lights) {
+//   technique_->setLight(lights);
+// }
+
 void TechniqueStrategy::setLight(
-    QVector<std::tuple<Light *, BaseLightType *, Attenuation *>> lights) {
-  technique_->setLight(lights);
+    QVector<Light> lights, QVector<std::optional<Attenuation>> attenuations) {
+  technique_->setLight(lights, attenuations);
 }
 
 }  // namespace s21

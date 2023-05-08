@@ -1,126 +1,20 @@
 #include "light_texture_technique.h"
 
+#include "Utils.h"
+
 namespace s21 {
 void LightTextureTechnique::init() {
   GenerateShaders(":/shaders/light_texture_shader.vs",
                   ":/shaders/light_texture_shader.fs");
 }
-namespace {
-void SetLightComponent(QOpenGLShaderProgram &shader, Light *light, int index) {
-  auto const &[ambient, diffuse, specular] = *light;
-  std::string s = "u_lights[" + std::to_string(index) + "].";
-
-  shader.setUniformValue((s + "ambient").c_str(), ambient);
-  shader.setUniformValue((s + "diffuse").c_str(), diffuse);
-  shader.setUniformValue((s + "specular").c_str(), specular);
-}
-
-void SetAttenuation(QOpenGLShaderProgram &shader, Attenuation *attenuation,
-                    int index) {
-  auto const &[constant, linear, quadratic] = *attenuation;
-  std::string s = "u_attenuations[" + std::to_string(index) + "].";
-
-  shader.setUniformValue((s + "constant").c_str(), constant);
-  shader.setUniformValue((s + "linear").c_str(), linear);
-  shader.setUniformValue((s + "quadratic").c_str(), quadratic);
-}
-
-void SetIndecies(QOpenGLShaderProgram &shader, std::string const &type,
-                 int light_index, int attenuation_index) {
-  shader.setUniformValue((type + ".light_index").c_str(), light_index);
-  shader.setUniformValue((type + ".attenuation_index").c_str(),
-                         attenuation_index);
-}
-
-void SetSpotLight(QOpenGLShaderProgram &shader, SpotLight *light,
-                  std::string const &s) {
-  auto const &[position, direction, inner_cone, outer_cone] = *light;
-
-  shader.setUniformValue((s + ".position").c_str(), position);
-  shader.setUniformValue((s + ".direction").c_str(), direction);
-  shader.setUniformValue((s + ".inner_cone").c_str(),
-                         qCos(qDegreesToRadians(inner_cone)));
-  shader.setUniformValue((s + ".outer_cone").c_str(),
-                         qCos(qDegreesToRadians(outer_cone)));
-}
-
-void SetPointLight(QOpenGLShaderProgram &shader, PointLight *light,
-                   std::string const &s) {
-  auto const &[position] = *light;
-
-  shader.setUniformValue((s + ".position").c_str(), position);
-}
-
-void SetDirLight(QOpenGLShaderProgram &shader, DirectionalLight *light,
-                 std::string const &s) {
-  auto const &[direction] = *light;
-
-  shader.setUniformValue((s + ".direction").c_str(), direction);
-}
-}  // namespace
-
-void LightTextureTechnique::setLight(
-    QVector<std::tuple<Light *, BaseLightType *, Attenuation *>> lights) {
-  int dirLightsCount = 0, pointLightsCount = 0,  //
-      spotLightsCount = 0, attenuationCount = 0;
-
-  for (size_t i = 0; i < lights.size(); i++) {
-    int attenuation_index = -1;
-
-    auto [light, base_light, attenuation] = lights[i];
-    SetLightComponent(shader_, light, i);
-
-    if (attenuation) {
-      SetAttenuation(shader_, attenuation, attenuationCount);
-      attenuation_index = attenuationCount++;
-    }
-
-    auto type = base_light->GetType();
-    std::string s_type;
-
-    switch (type) {
-      case LightType::DIRECTIONAL:
-        s_type = "u_dirLights[" + std::to_string(dirLightsCount++) + "]";
-        SetDirLight(shader_, (DirectionalLight *)base_light, s_type);
-        break;
-
-      case LightType::POINT:
-        s_type = "u_pointLights[" + std::to_string(pointLightsCount++) + "]";
-        SetPointLight(shader_, (PointLight *)base_light, s_type);
-        break;
-
-      case LightType::SPOT:
-        s_type = "u_spotLights[" + std::to_string(spotLightsCount++) + "]";
-        SetSpotLight(shader_, (SpotLight *)base_light, s_type);
-        break;
-
-      default:
-        break;
-    }
-
-    SetIndecies(shader_, s_type, i, attenuation_index);
-  }
-
-  shader_.setUniformValue("u_dirLightCount", dirLightsCount);
-  shader_.setUniformValue("u_pointLightCount", pointLightsCount);
-  shader_.setUniformValue("u_spotLightCount", spotLightsCount);
-}
 
 void LightTextureTechnique::setTexture(Texture const &texture) {
   auto const &[id, type] = texture;
-  shader_.setUniformValue(type.c_str(), index_);
-  glActiveTexture(GL_TEXTURE0 + index_);
+  shader_.setUniformValue(type.c_str(), texture_index_);
+  glActiveTexture(GL_TEXTURE0 + texture_index_);
   glBindTexture(GL_TEXTURE_2D, id);
 
-  index_++;
-}
-
-void LightTextureTechnique::setMaterial(Material const &material) {
-  auto const &[color, diffuse, normal, shininess] = material;
-
-  setTexture({diffuse, "u_material.diffuse"});
-  // setTexture({normal, "normalMap"});
-  shader_.setUniformValue("u_material.shininess", material.shininess);
+  texture_index_++;
 }
 
 void LightTextureTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
@@ -130,8 +24,86 @@ void LightTextureTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
   shader_.setUniformValue("u_Projection", proj);
 
   auto tmp = view.inverted();
-  shader_.setUniformValue("u_viewPos",
+  shader_.setUniformValue("viewPos",
                           QVector3D{tmp(0, 3), tmp(1, 3), tmp(2, 3)});
+}
+
+void LightTextureTechnique::setMaterial(Material const &material) {
+  auto const &[color, diffuse, normal, specular, shininess] = material;
+
+  // setTexture({normal, "material.normalMap"});
+  setTexture({diffuse, "material.diffuseMap"});
+  setTexture({specular, "material.specularMap"});
+  shader_.setUniformValue("material.shininess", material.shininess);
+}
+
+void LightTextureTechnique::SetLightComponent(QOpenGLShaderProgram &shader, std::string const &type,
+                       Light const &light) {
+  shader.setUniformValue(Utils::StructName(type, "ambient").c_str(),
+                         light.ambient);
+  shader.setUniformValue(Utils::StructName(type, "diffuse").c_str(),
+                         light.diffuse);
+  shader.setUniformValue(Utils::StructName(type, "specular").c_str(),
+                         light.specular);
+}
+
+void LightTextureTechnique::SetAttenuationComponent(QOpenGLShaderProgram &shader,
+                             std::string const &type,
+                             Attenuation const &attenuation) {
+  auto const &[constant, linear, quadratic] = attenuation;
+  shader.setUniformValue(Utils::StructName(type, "linear").c_str(), linear);
+  shader.setUniformValue(Utils::StructName(type, "constant").c_str(), constant);
+  shader.setUniformValue(Utils::StructName(type, "quadratic").c_str(),
+                         quadratic);
+}
+
+void LightTextureTechnique::SetLightSpecificComponent(QOpenGLShaderProgram &shader,
+                               std::string const &type, Light const &light,
+                               int light_index, int attenuation_index) {
+  shader.setUniformValue(Utils::StructName(type, "position").c_str(),
+                         light.position);
+  shader.setUniformValue(Utils::StructName(type, "direction").c_str(),
+                         light.direction);
+  shader.setUniformValue(Utils::StructName(type, "inner_cone").c_str(),
+                         light.inner_cone);
+  shader.setUniformValue(Utils::StructName(type, "outer_cone").c_str(),
+                         light.outer_cone);
+  shader.setUniformValue(Utils::StructName(type, "light_index").c_str(),
+                         light_index);
+  shader.setUniformValue(Utils::StructName(type, "attenuation_index").c_str(),
+                         attenuation_index);
+}
+
+void LightTextureTechnique::setLight(
+    QVector<Light> lights, QVector<std::optional<Attenuation>> attenuations) {
+  int dirLightsCount = 0, pointLightsCount = 0, spotLightsCount = 0;
+
+  auto getArrayName = [&](Light const &light) -> std::string {
+    if (light.type == LightType::DIRECTIONAL)
+      return Utils::ArrayName("dirLights", dirLightsCount++);
+
+    if (light.type == LightType::POINT)
+      return Utils::ArrayName("pointLights", pointLightsCount++);
+
+    if (light.type == LightType::SPOT)
+      return Utils::ArrayName("spotLights", spotLightsCount++);
+
+    Q_ASSERT(false);
+  };
+
+  for (size_t i = 0; i < lights.size(); i++) {
+    if (attenuations[i])
+      SetAttenuationComponent(shader_, Utils::ArrayName("attenuations", i),
+                              *attenuations[i]);
+
+    SetLightComponent(shader_, Utils::ArrayName("lights", i), lights[i]);
+    SetLightSpecificComponent(shader_, getArrayName(lights[i]), lights[i], i,
+                              attenuations[i] ? i : -1);
+  }
+
+  shader_.setUniformValue("dirLightCount", dirLightsCount);
+  shader_.setUniformValue("pointLightCount", pointLightsCount);
+  shader_.setUniformValue("spotLightCount", spotLightsCount);
 }
 
 }  // namespace s21

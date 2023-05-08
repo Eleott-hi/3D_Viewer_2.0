@@ -53,4 +53,13 @@ EntityID GetQuad(ECS_Controller* scene) {
   return quad;
 }
 
+std::string StructName(std::string const& struct_name,
+                       std::string const& name) {
+  return (struct_name + "." + name).c_str();
+}
+
+std::string ArrayName(std::string const& name, int index) {
+  return (name + "[" + std::to_string(index) + "]").c_str();
+}
+
 }  // namespace s21::Utils

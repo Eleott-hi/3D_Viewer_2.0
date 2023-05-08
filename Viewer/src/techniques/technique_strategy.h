@@ -7,17 +7,7 @@
 
 namespace s21 {
 
-enum class TechniqueType {
-  SIMPLE_COLOR = 0,
-  SIMPLE_TEXTURE,
-  LIGHT_COLOR,
-  LIGHT_TEXTURE,
-  MOUSE_PICKING,
-  QUAD,
-  CUBEMAP,
-  NORMALMAP,
-  STENCIL_OUTLINE,
-};
+
 
 class TechniqueStrategy {
  public:
@@ -37,8 +27,8 @@ class TechniqueStrategy {
   void setTexture(Texture const &texture);
   void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model);
   ITechnique *getTechnique() { return technique_.get(); }
-  void setLight(
-      QVector<std::tuple<Light *, BaseLightType *, Attenuation *>> lights);
+  void setLight(QVector<Light> lights,
+                QVector<std::optional<Attenuation>> attenuations);
 
  private:
   std::shared_ptr<ITechnique> technique_;

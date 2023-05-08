@@ -92,6 +92,15 @@ QVector<Vertex> Parser::loadVertices(aiMesh *mesh, const aiScene *scene) {
     data_.normalMap = {textureStorage_->loadTexture(filename), "normalMap"};
   }
 
+  for (uint32_t i = 0; i < material->GetTextureCount(aiTextureType_SPECULAR);
+       i++) {
+    aiString str;
+    material->GetTexture(aiTextureType_SPECULAR, i, &str);
+
+    std::string const &filename = directory_ + "/" + str.C_Str();
+    data_.specularMap = {textureStorage_->loadTexture(filename), "specularMap"};
+  }
+
   return vertices;
 }
 

@@ -19,6 +19,7 @@ struct ParsingData {
   std::optional<Model> model = std::nullopt;
   std::optional<Texture> diffuseMap = std::nullopt;
   std::optional<Texture> normalMap = std::nullopt;
+  std::optional<Texture> specularMap = std::nullopt;
 };
 
 class Parser {

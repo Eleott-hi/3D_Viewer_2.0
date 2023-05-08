@@ -20,5 +20,8 @@ class LightSystem : public System, protected QOpenGLExtraFunctions {
  private:
   ECS_Controller *scene_;
   TechniqueStrategy *technique_;
+
+  bool isSpotLight(EntityID entity);
+  bool isPointLight(EntityID entity);
 };
 }  // namespace s21
