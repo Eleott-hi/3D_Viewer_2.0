@@ -29,11 +29,9 @@ void NormalMapTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
 }
 
 void NormalMapTechnique::setMaterial(Material const &material) {
-  auto const &[color, diffuse, normal, specular, shininess] = material;
-
-  setTexture({normal, "normalMap"});
-  setTexture({diffuse, "material.diffuseMap"});
-  setTexture({specular, "material.specularMap"});
+  setTexture({material.normal, "normalMap"});
+  setTexture({material.diffuse, "material.diffuseMap"});
+  setTexture({material.specular, "material.specularMap"});
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 

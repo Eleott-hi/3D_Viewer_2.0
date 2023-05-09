@@ -6,9 +6,11 @@ in vec3 Normal;
 in vec2 TexCoords;
 
 struct Material {
-    sampler2D diffuseMap;
+    sampler2D albedoMap;
     sampler2D specularMap;
     sampler2D normalMap;
+    sampler2D roughnessMap;
+    sampler2D aoMap;
 
     float shininess;
 };
@@ -67,6 +69,10 @@ vec3 CalcPointLight(int i, vec3 N, vec3 V);
 vec3 CalcDirectLight(int i, vec3 N, vec3 V);
 
 void main() {
+
+    // float roughness = texture(material.roughnessMap, TexCoords).r;
+    // float ao = texture(aoMap, TexCoords).r;
+
     vec3 N = getNormalFromMap();
     vec3 V = normalize(viewPos - WorldPos);
     vec3 light;
@@ -75,7 +81,10 @@ void main() {
     for(int i = 0; i < dirLightCount; i++) light += CalcDirectLight(i, N, V);
     for(int i = 0; i < pointLightCount; i++) light += CalcPointLight(i, N, V);
 
+    // vec3 ambient = vec3(0.03) * albedo * ao;
     FragColor = vec4(light, 1.0);
+
+    // FragColor = texture(material.aoMap, TexCoords);
 }
 
 vec3 CalcSpotLight(int i, vec3 N, vec3 V) {
@@ -90,8 +99,8 @@ vec3 CalcSpotLight(int i, vec3 N, vec3 V) {
     float epsilon = spotLights[i].inner_cone - spotLights[i].outer_cone;
     float intensity = clamp((theta - spotLights[i].outer_cone) / epsilon, 0.0, 1.0);
 
-    vec3 ambient = lights[spotLights[i].light_index].ambient * vec3(texture(material.diffuseMap, TexCoords));
-    vec3 diffuse = lights[spotLights[i].light_index].diffuse * diff * vec3(texture(material.diffuseMap, TexCoords));
+    vec3 ambient = lights[spotLights[i].light_index].ambient * vec3(texture(material.albedoMap, TexCoords));
+    vec3 diffuse = lights[spotLights[i].light_index].diffuse * diff * vec3(texture(material.albedoMap, TexCoords));
     vec3 specular = lights[spotLights[i].light_index].specular * spec * vec3(texture(material.specularMap, TexCoords));
 
     ambient *= intensity;
@@ -119,8 +128,8 @@ vec3 CalcPointLight(int i, vec3 N, vec3 V) {
     float diff = max(dot(N, nlightDir), 0.0);
     float spec = pow(max(dot(V, reflectDir), 0.0), material.shininess);
 
-    vec3 ambient = lights[pointLights[i].light_index].ambient * vec3(texture(material.diffuseMap, TexCoords));
-    vec3 diffuse = lights[pointLights[i].light_index].diffuse * diff * vec3(texture(material.diffuseMap, TexCoords));
+    vec3 ambient = lights[pointLights[i].light_index].ambient * vec3(texture(material.albedoMap, TexCoords));
+    vec3 diffuse = lights[pointLights[i].light_index].diffuse * diff * vec3(texture(material.albedoMap, TexCoords));
     vec3 specular = lights[pointLights[i].light_index].specular * spec * vec3(texture(material.specularMap, TexCoords));
 
     if(pointLights[i].attenuation_index != -1) {
@@ -144,8 +153,8 @@ vec3 CalcDirectLight(int i, vec3 N, vec3 V) {
     float diff = max(dot(N, lightDir), 0.0);
     float spec = pow(max(dot(V, reflectDir), 0.0), material.shininess);
 
-    vec3 ambient = lights[dirLights[i].light_index].ambient * vec3(texture(material.diffuseMap, TexCoords));
-    vec3 diffuse = lights[dirLights[i].light_index].diffuse * diff * vec3(texture(material.diffuseMap, TexCoords));
+    vec3 ambient = lights[dirLights[i].light_index].ambient * vec3(texture(material.albedoMap, TexCoords));
+    vec3 diffuse = lights[dirLights[i].light_index].diffuse * diff * vec3(texture(material.albedoMap, TexCoords));
     vec3 specular = lights[dirLights[i].light_index].specular * spec * vec3(texture(material.specularMap, TexCoords));
 
     return (ambient + diffuse + specular);

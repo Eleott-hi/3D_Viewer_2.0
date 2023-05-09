@@ -29,11 +29,11 @@ void PhysicalBasedRenderingTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
 }
 
 void PhysicalBasedRenderingTechnique::setMaterial(Material const &material) {
-  auto const &[color, diffuse, normal, specular, shininess] = material;
-
-  setTexture({normal, "normalMap"});
-  setTexture({diffuse, "material.diffuseMap"});
-  setTexture({specular, "material.specularMap"});
+  setTexture({material.ao, "material.aoMap"});
+  setTexture({material.normal, "material.normalMap"});
+  setTexture({material.diffuse, "material.albedoMap"});
+  setTexture({material.specular, "material.specularMap"});
+  setTexture({material.roughness, "material.roughnessMap"});
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 

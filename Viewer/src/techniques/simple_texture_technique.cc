@@ -15,11 +15,8 @@ void SimpleTextureTechnique::setTexture(Texture const &texture) {
 }
 
 void SimpleTextureTechnique::setMaterial(Material const &material) {
-  auto const &[color, diffuse, normal, specular, shininess] = material;
-
-  setTexture({diffuse, "diffuse"});
-
-  shader_.setUniformValue("u_material.shininess", shininess);
+  setTexture({material.diffuse, "diffuse"});
+  shader_.setUniformValue("u_material.shininess", material.shininess);
 }
 
 void SimpleTextureTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,

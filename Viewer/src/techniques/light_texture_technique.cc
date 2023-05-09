@@ -29,11 +29,9 @@ void LightTextureTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
 }
 
 void LightTextureTechnique::setMaterial(Material const &material) {
-  auto const &[color, diffuse, normal, specular, shininess] = material;
 
-  // setTexture({normal, "material.normalMap"});
-  setTexture({diffuse, "material.diffuseMap"});
-  setTexture({specular, "material.specularMap"});
+  setTexture({material.diffuse, "material.diffuseMap"});
+  setTexture({material.specular, "material.specularMap"});
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 

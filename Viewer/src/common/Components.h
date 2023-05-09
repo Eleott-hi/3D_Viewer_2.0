@@ -67,6 +67,9 @@ struct Material {
   uint32_t diffuse = 0;
   uint32_t normal = 0;
   uint32_t specular = 0;
+  uint32_t roughness = 0;
+  uint32_t metallic = 0;
+  uint32_t ao = 0;
 
   float shininess = 32;
 };

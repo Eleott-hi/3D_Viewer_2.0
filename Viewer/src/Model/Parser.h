@@ -37,6 +37,8 @@ class Parser {
   Mesh processMesh(aiMesh *mesh, const aiScene *scene);
   QVector<Vertex> loadVertices(aiMesh *mesh, const aiScene *scene);
   QVector<quint32> LoadIndices(aiMesh *mesh, const aiScene *scene);
+  void LoadTexture(aiMaterial *material, aiTextureType type,
+                   std::optional<Texture> &texture);
 };
 
 }  // namespace s21

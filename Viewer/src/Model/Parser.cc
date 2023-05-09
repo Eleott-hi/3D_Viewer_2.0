@@ -74,34 +74,22 @@ QVector<Vertex> Parser::loadVertices(aiMesh *mesh, const aiScene *scene) {
 
   aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
-  for (uint32_t i = 0; i < material->GetTextureCount(aiTextureType_DIFFUSE);
-       i++) {
-    aiString str;
-    material->GetTexture(aiTextureType_DIFFUSE, i, &str);
-
-    std::string const &filename = directory_ + "/" + str.C_Str();
-    data_.diffuseMap = {textureStorage_->loadTexture(filename), "diffuseNap"};
-  }
-
-  for (uint32_t i = 0; i < material->GetTextureCount(aiTextureType_HEIGHT);
-       i++) {
-    aiString str;
-    material->GetTexture(aiTextureType_HEIGHT, i, &str);
-
-    std::string const &filename = directory_ + "/" + str.C_Str();
-    data_.normalMap = {textureStorage_->loadTexture(filename), "normalMap"};
-  }
-
-  for (uint32_t i = 0; i < material->GetTextureCount(aiTextureType_SPECULAR);
-       i++) {
-    aiString str;
-    material->GetTexture(aiTextureType_SPECULAR, i, &str);
-
-    std::string const &filename = directory_ + "/" + str.C_Str();
-    data_.specularMap = {textureStorage_->loadTexture(filename), "specularMap"};
-  }
+  LoadTexture(material, aiTextureType_DIFFUSE, data_.diffuseMap);
+  LoadTexture(material, aiTextureType_HEIGHT, data_.normalMap);
+  LoadTexture(material, aiTextureType_SPECULAR, data_.specularMap);
 
   return vertices;
+}
+
+void Parser::LoadTexture(aiMaterial *material, aiTextureType type,
+                         std::optional<Texture> &texture) {
+  for (uint32_t i = 0; i < material->GetTextureCount(type); i++) {
+    aiString str;
+    material->GetTexture(type, i, &str);
+
+    std::string const &filename = directory_ + "/" + str.C_Str();
+    texture = {textureStorage_->loadTexture(filename), "specularMap"};
+  }
 }
 
 QVector<quint32> Parser::LoadIndices(aiMesh *mesh, const aiScene *scene) {

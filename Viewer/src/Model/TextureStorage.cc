@@ -52,6 +52,8 @@ uint32_t TextureStorage::loadTexture(std::string const& filename) {
 
   textures_[filename] = texture;
 
+  qDebug() << filename.c_str();
+
   return texture;
 }
 }  // namespace s21

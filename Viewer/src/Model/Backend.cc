@@ -50,8 +50,8 @@ void Backend::Init(QOpenGLWidget* widget) {
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<Material>(entity);
     scene_.AddComponent<Light>(entity, light);
-    scene_.AddComponent<Transform>(entity, transform);
-    scene_.AddComponent<Model>(entity, std::move(model));
+    // scene_.AddComponent<Transform>(entity, transform);
+    // scene_.AddComponent<Model>(entity, std::move(model));
     scene_.AddComponent<Attenuation>(entity, attenuation);
   }
 }
@@ -70,6 +70,13 @@ void Backend::AddModel(QString path) {
   if (diffuse_map) material.diffuse = diffuse_map->id;
   if (normal_map) material.normal = normal_map->id;
   if (specular_map) material.specular = specular_map->id;
+
+  material.roughness = texture_storage_->loadTexture(
+      "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
+      "backpack/roughness.jpg");
+  material.ao = texture_storage_->loadTexture(
+      "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
+      "backpack/ao.jpg");
 
   EntityID entity = scene_.NewEntity();
   scene_.AddComponent<Shader>(entity,
