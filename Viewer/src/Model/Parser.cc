@@ -78,6 +78,26 @@ QVector<Vertex> Parser::loadVertices(aiMesh *mesh, const aiScene *scene) {
   LoadTexture(material, aiTextureType_HEIGHT, data_.normalMap);
   LoadTexture(material, aiTextureType_SPECULAR, data_.specularMap);
 
+  // aiColor3D color(0.0f, 0.0f, 0.0f);
+  // float d = 0;
+  // material->Get(AI_MATKEY_COLOR_AMBIENT, color);
+
+  // qDebug() << color.r << " " << color.g << " " << color.b;
+
+  // material->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+  // qDebug() << color.r << " " << color.g << " " << color.b;
+
+  // material->Get(AI_MATKEY_COLOR_SPECULAR, color);
+  // qDebug() << color.r << " " << color.g << " " << color.b;
+
+  // material->Get(AI_MATKEY_COLOR_EMISSIVE, color);
+  // qDebug() << color.r << " " << color.g << " " << color.b;
+
+  // material->Get(AI_MATKEY_SHININESS, d);
+  // qDebug() << d;
+
+  // material->Get(AI_MATKEY_OPACITY, d);
+  // qDebug() << d;
   return vertices;
 }
 
