@@ -44,11 +44,11 @@ void Backend::Init(QOpenGLWidget* widget) {
     Transform transform;
     transform.translation = {0, 0, 2};
 
-    auto model = *parser_->loadModel(cube).model;
-    for (auto& mesh : model.meshes) mesh.bufferize(this);
+    // auto model = *parser_->loadModel(cube).model;
+    // for (auto& mesh : model.meshes) mesh.bufferize(this);
 
     EntityID entity = scene_.NewEntity();
-    scene_.AddComponent<Material>(entity);
+    // scene_.AddComponent<Material>(entity);
     scene_.AddComponent<Light>(entity, light);
     // scene_.AddComponent<Transform>(entity, transform);
     // scene_.AddComponent<Model>(entity, std::move(model));
@@ -63,27 +63,41 @@ void Backend::AddModel(QString path) {
 
   if (!model) return;
 
-  for (auto& mesh : model->meshes) mesh.bufferize(this);
+  QVector<EntityID> meshes;
 
-  Material material;
-  material.shininess = 10;
-  if (diffuse_map) material.diffuse = diffuse_map->id;
-  if (normal_map) material.normal = normal_map->id;
-  if (specular_map) material.specular = specular_map->id;
+  for (auto& mesh : model->meshes) {
+    mesh.bufferize(this);
 
-  material.roughness = texture_storage_->loadTexture(
-      "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
-      "backpack/roughness.jpg");
-  material.ao = texture_storage_->loadTexture(
-      "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
-      "backpack/ao.jpg");
+    Material material;
+    material.shininess = 10;
+    if (diffuse_map) material.diffuse = diffuse_map->id;
+    if (normal_map) material.normal = normal_map->id;
+    if (specular_map) material.specular = specular_map->id;
+
+    material.roughness = texture_storage_->loadTexture(
+        "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
+        "backpack/roughness.jpg");
+    material.ao = texture_storage_->loadTexture(
+        "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
+        "backpack/ao.jpg");
+
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Shader>(entity, {TechniqueType::LIGHT_TEXTURE});
+    scene_.AddComponent<Transform>(entity);
+    scene_.AddComponent<Material>(entity, material);
+    scene_.AddComponent<Model>(entity, std::move(*model));
+
+    meshes << entity;
+  }
+
+  NewModel new_model;
+  new_model.filename = path.toStdString();
+  new_model.meshes = meshes;
 
   EntityID entity = scene_.NewEntity();
-  scene_.AddComponent<Shader>(entity,
-                              {TechniqueType::PHYSICAL_BASED_RENDERING});
+  scene_.AddComponent<Shader>(entity, {TechniqueType::LIGHT_TEXTURE});
   scene_.AddComponent<Transform>(entity);
-  scene_.AddComponent<Material>(entity, material);
-  scene_.AddComponent<Model>(entity, std::move(*model));
+  scene_.AddComponent<NewModel>(entity, std::move(*new_model));
 
   opengl_widget_->doneCurrent();
 }
@@ -119,6 +133,8 @@ void Backend::Draw() {
 
 void Backend::RegisterComponents() {
   scene_.RegisterComponent<Quad>();
+  scene_.RegisterComponent<NewModel>();
+  scene_.RegisterComponent<Mesh>();
   scene_.RegisterComponent<Model>();
   scene_.RegisterComponent<Light>();
   scene_.RegisterComponent<Shader>();
@@ -155,7 +171,7 @@ void Backend::RegisterSystems() {
   mousePickingSystem_ = scene_.RegisterSystem<MousePickingSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<NewModel>());
     mask.set(GetComponentID<Transform>());
     scene_.ChangeSystemMask<MousePickingSystem>(mask);
     mousePickingSystem_->Init(&scene_, technique_.get());
@@ -164,7 +180,7 @@ void Backend::RegisterSystems() {
   renderSystem_ = scene_.RegisterSystem<RenderSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<NewModel>());
     mask.set(GetComponentID<Transform>());
     scene_.ChangeSystemMask<RenderSystem>(mask);
     renderSystem_->Init(&scene_, technique_.get());
@@ -182,7 +198,7 @@ void Backend::RegisterSystems() {
   renderPickedSystem_ = scene_.RegisterSystem<RenderPickedSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<NewModel>());
     mask.set(GetComponentID<Transform>());
     mask.set(GetComponentID<PickingTag>());
     scene_.ChangeSystemMask<RenderPickedSystem>(mask);

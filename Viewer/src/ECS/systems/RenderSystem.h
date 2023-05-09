@@ -20,12 +20,17 @@ class RenderSystem : public System, protected QOpenGLExtraFunctions {
 
  private:
   ECS_Controller *scene_ = nullptr;
+  QMatrix4x4 proj_ ;
+  QMatrix4x4 view_ ;
+  QMatrix4x4 model_;
+
   TechniqueStrategy *technique_ = nullptr;
   std::unique_ptr<IFramebuffer> framebuffer_ = std::make_unique<Framebuffer>();
 
-  void DrawObject(Model &model, GLenum form = GL_TRIANGLES);
+  void DrawObject(NewModel &model, GLenum form = GL_TRIANGLES);
+  void DrawMesh(Mesh &mesh, GLenum form);
 
-  void OnWindowResize(Event &e);
+      void OnWindowResize(Event &e);
   void PrepareFramebuffer();
 };
 }  // namespace s21

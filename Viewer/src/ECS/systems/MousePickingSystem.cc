@@ -35,16 +35,16 @@ void MousePickingSystem::Update() {
   static QPoint imposible_pos = QPoint(-1, -1);
   if (clicked_pos_ == imposible_pos) return;
 
-  auto [proj, view] = Utils::GetProjectionAndView(scene_);
+  std::tie(proj_, view_) = Utils::GetProjectionAndView(scene_);
+
   technique_->Enable(TechniqueType::MOUSE_PICKING);
   framebuffer_->Bind();
   PrepareFramebuffer();
 
   for (auto &entity : entities_) {
     auto const &transform = scene_->GetComponent<Transform>(entity);
-    auto &model = scene_->GetComponent<Model>(entity);
+    auto &model = scene_->GetComponent<NewModel>(entity);
 
-    technique_->setMVP(proj, view, transform.GetModelMatrix());
     technique_->SetObjectID((int)entity);
 
     DrawObject(model);
@@ -73,14 +73,21 @@ void MousePickingSystem::PrepareFramebuffer() {
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
-void MousePickingSystem::DrawObject(Model &model) {
-  for (auto &mesh : model.meshes) {
-    if (!mesh.VAO) mesh.bufferize(this);
+void RenderSystem::DrawObject(NewModel &model, GLenum form) {
+  for (auto objectID : model.meshes)
+    if (scene_->EntityHasComponent<Mesh>(objectID))
+      DrawMesh(scene_->GetComponent<Mesh>(objectID), form);
+    else
+      DrawObject(scene_->GetComponent<NewModel>(objectID), form);
+}
 
-    glBindVertexArray(mesh.VAO);
-    glDrawElements(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
-  }
+void RenderSystem::DrawMesh(Mesh &mesh, GLenum form) {
+  technique_->Clear();
+  technique_->setMVP(proj_, view_, mesh.GetModelMatrix());
+
+  glBindVertexArray(mesh.VAO);
+  glDrawElements(form, mesh.indices.size(), GL_UNSIGNED_INT, 0);
+  glBindVertexArray(0);
 }
 
 }  // namespace s21

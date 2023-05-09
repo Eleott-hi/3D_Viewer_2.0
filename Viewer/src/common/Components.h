@@ -30,6 +30,14 @@ enum class LightType {
   SPOT,
 };
 
+struct Transform {
+  QVector3D translation;
+  QVector3D rotation;
+  QVector3D scale = {1, 1, 1};
+
+  QMatrix4x4 GetModelMatrix() const;
+};
+
 struct Vertex {
   QVector3D position;
   QVector3D normal;
@@ -44,8 +52,10 @@ struct Mesh {
   QVector<uint32_t> indices;
   int vertex_count = 0;
   int index_count = 0;
+  Transform transform;
 
   void bufferize(QOpenGLExtraFunctions *f);
+  QMatrix4x4 GetModelMatrix() const { return transform.GetModelMatrix(); }
 };
 
 struct Model {
@@ -53,13 +63,11 @@ struct Model {
   QVector<Mesh> meshes;
 };
 
-struct Transform {
-  QVector3D translation;
-  QVector3D rotation;
-  QVector3D scale = {1, 1, 1};
-
-  QMatrix4x4 GetModelMatrix() const;
+struct NewModel {
+  std::string filename;
+  QVector<EntityID> meshes;
 };
+
 
 struct Material {
   QColor color = QColor::fromRgbF(0, 0.5, 0);

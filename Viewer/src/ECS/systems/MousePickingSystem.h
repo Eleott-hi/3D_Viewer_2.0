@@ -24,13 +24,17 @@ class MousePickingSystem : public System, protected QOpenGLExtraFunctions {
   void OnMouseDoubleClicked(Event &e);
 
  private:
+  QMatrix4x4 proj_;
+  QMatrix4x4 view_;
+  QMatrix4x4 model_;
   QPoint clicked_pos_ = QPoint(-1, -1);
   ECS_Controller *scene_;
   TechniqueStrategy *technique_;
   std::unique_ptr<IFramebuffer> framebuffer_ = std::make_unique<Framebuffer>();
 
-  void DrawObject(Model &model);
-  void bufferize(Mesh &mesh);
+  void DrawObject(NewModel &model);
+  void DrawMesh(Mesh &mesh);
+
   void PrepareFramebuffer();
 };
 }  // namespace s21
