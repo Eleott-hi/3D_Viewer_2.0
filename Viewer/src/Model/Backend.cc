@@ -43,6 +43,47 @@ void Backend::Init(QOpenGLWidget* widget) {
   }
 
   {
+    Light light;
+    light.type = LightType::DIRECTIONAL;
+    light.ambient = {150, 150, 150};
+    light.direction = {0, -1, 0};
+
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Light>(entity, light);
+  }
+
+  // {
+  //   Attenuation attenuation;
+  //   attenuation.constant = 0.1;
+  //   attenuation.linear = 0.1;
+  //   attenuation.quadratic = 0.1;
+
+  //   Light light;
+  //   light.type = LightType::POINT;
+  //   light.position = {0, 0, 0};
+  //   light.ambient = {150, 150, 150};
+  //   // light.ambient = {0.5, 0.5, 0.5};
+  //   light.specular = {0.5, 0.5, 0.5};
+
+  //   Transform transform;
+  //   transform.translation = {0, 0, 2};
+  //   transform.scale = {0.1, 0.1, 0.1};
+
+  //   Material material;
+  //   material.color = Qt::white;
+
+  //   auto model = *parser_->loadModel(cube).model;
+  //   for (auto& mesh : model.meshes) mesh.bufferize(this);
+
+  //   EntityID entity = scene_.NewEntity();
+  //   scene_.AddComponent<Light>(entity, light);
+  //   scene_.AddComponent<Material>(entity, material);
+  //   scene_.AddComponent<Transform>(entity, transform);
+  //   scene_.AddComponent<Model>(entity, std::move(model));
+  //   scene_.AddComponent<Attenuation>(entity, attenuation);
+  // }
+
+  {
     Attenuation attenuation;
     attenuation.constant = 0.1;
     attenuation.linear = 0.1;
@@ -51,20 +92,57 @@ void Backend::Init(QOpenGLWidget* widget) {
     Light light;
     light.type = LightType::POINT;
     light.position = {0, 0, 0};
+    light.ambient = {50, 50, 150};
+    // light.ambient = {0.5, 0.5, 0.5};
     light.specular = {0.5, 0.5, 0.5};
 
     Transform transform;
     transform.translation = {0, 0, 2};
+    transform.scale = {0.1, 0.1, 0.1};
+
+    Material material;
+    material.color = Qt::white;
 
     auto model = *parser_->loadModel(cube).model;
     for (auto& mesh : model.meshes) mesh.bufferize(this);
 
     EntityID entity = scene_.NewEntity();
-    scene_.AddComponent<Material>(entity);
     scene_.AddComponent<Light>(entity, light);
-    // scene_.AddComponent<Transform>(entity, transform);
-    // scene_.AddComponent<Model>(entity, std::move(model));
+    scene_.AddComponent<Material>(entity, material);
+    scene_.AddComponent<Transform>(entity, transform);
+    scene_.AddComponent<Model>(entity, std::move(model));
     scene_.AddComponent<Attenuation>(entity, attenuation);
+  }
+
+  {
+    Attenuation attenuation;
+    attenuation.constant = 0.1;
+    attenuation.linear = 0.1;
+    attenuation.quadratic = 0.1;
+
+    Light light;
+    light.type = LightType::SPOT;
+    // light.position = {0, 0, 0};
+    light.ambient = {50, 50, 50};
+    // light.ambient = {0.5, 0.5, 0.5};
+    // light.specular = {0.5, 0.5, 0.5};
+
+    Transform transform;
+    transform.translation = {0, 0, 2};
+    transform.scale = {0.1, 0.1, 0.1};
+
+    Material material;
+    material.color = Qt::white;
+
+    auto model = *parser_->loadModel(cube).model;
+    for (auto& mesh : model.meshes) mesh.bufferize(this);
+
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Light>(entity, light);
+    scene_.AddComponent<Material>(entity, material);
+    scene_.AddComponent<Transform>(entity, transform);
+    scene_.AddComponent<Model>(entity, std::move(model));
+    // scene_.AddComponent<Attenuation>(entity, attenuation);
   }
 }
 

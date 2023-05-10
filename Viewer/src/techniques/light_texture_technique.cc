@@ -29,7 +29,6 @@ void LightTextureTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
 }
 
 void LightTextureTechnique::setMaterial(Material const &material) {
-
   setTexture({material.diffuse, "material.diffuseMap"});
   setTexture({material.specular, "material.specularMap"});
   shader_.setUniformValue("material.shininess", material.shininess);
@@ -64,9 +63,9 @@ void LightTextureTechnique::SetLightSpecificComponent(
   shader.setUniformValue(Utils::StructName(type, "direction").c_str(),
                          light.direction);
   shader.setUniformValue(Utils::StructName(type, "inner_cone").c_str(),
-                         light.inner_cone);
+                         qCos(qDegreesToRadians(light.inner_cone)));
   shader.setUniformValue(Utils::StructName(type, "outer_cone").c_str(),
-                         light.outer_cone);
+                         qCos(qDegreesToRadians(light.outer_cone)));
   shader.setUniformValue(Utils::StructName(type, "light_index").c_str(),
                          light_index);
   shader.setUniformValue(Utils::StructName(type, "attenuation_index").c_str(),
