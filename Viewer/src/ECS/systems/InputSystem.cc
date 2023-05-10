@@ -36,7 +36,6 @@ void InputSystem::ProcessMouseMovement(MouseInput &input, bool constrainPitch) {
   static auto &camera =
       scene_->GetComponent<Camera>(Utils::GetCameraID(scene_));
 
-
   if (input.left_button_pressed) {
     auto offset = input.start - input.end;
     input.start = input.end;

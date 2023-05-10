@@ -20,6 +20,5 @@ class CameraSystem : public System {
   ECS_Controller *scene_ = nullptr;
 
   void UpdateLookAtVectors(Camera &camera);
-
 };
 }  // namespace s21
