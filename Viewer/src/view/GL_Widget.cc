@@ -15,6 +15,8 @@ void GLWidget::initializeGL() {
   int fps = 100;
   timer_.start(1000 / fps);
 
+  // for (size_t i = 0; i < 10; i++)
+
   backend_->AddModel(
       // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Viewer/src/others/"
       // "resources/backpack/backpack.obj"
@@ -34,17 +36,16 @@ void GLWidget::resizeGL(int w, int h) { backend_->WindowResize(w, h); }
 void GLWidget::paintGL() { backend_->Render(); }
 
 void GLWidget::mousePressEvent(QMouseEvent *event) {
-  if (event->button() == Qt::LeftButton) last_pos_ = event->pos();
+  if (event->button() == Qt::LeftButton) backend_->MousePressed(event->pos());
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event) {
-  // if (event->button() == Qt::LeftButton) {
-  backend_->MouseMoved(last_pos_ - event->pos());
-  last_pos_ = event->pos();
-  // }
+  backend_->MouseMoved(event->pos());
 }
 
-void GLWidget::mouseReleaseEvent(QMouseEvent *event) {}
+void GLWidget::mouseReleaseEvent(QMouseEvent *event) {
+  if (event->button() == Qt::LeftButton) backend_->MouseReleased(event->pos());
+}
 
 void GLWidget::mouseDoubleClickEvent(QMouseEvent *event) {
   backend_->MouseDoubleClicked(event->pos());

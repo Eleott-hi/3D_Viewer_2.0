@@ -17,8 +17,6 @@ void MousePickingSystem::Init(ECS_Controller *scene,
   technique_ = technique;
   scene_->AddEventListener(EventType::WindowResize,
                            BIND_EVENT_FN(OnWindowResize));
-  scene_->AddEventListener(EventType::MouseDoubleClicked,
-                           BIND_EVENT_FN(OnMouseDoubleClicked));
 }
 
 void MousePickingSystem::OnWindowResize(Event &e) {
@@ -26,14 +24,12 @@ void MousePickingSystem::OnWindowResize(Event &e) {
   framebuffer_->Resize(event.Width(), event.Height());
 }
 
-void MousePickingSystem::OnMouseDoubleClicked(Event &e) {
-  auto &event = static_cast<MouseDoubleClickedEvent &>(e);
-  clicked_pos_ = event.Position();
-}
-
 void MousePickingSystem::Update() {
-  static QPoint imposible_pos = QPoint(-1, -1);
-  if (clicked_pos_ == imposible_pos) return;
+  static auto &pos =
+      scene_->GetComponent<MouseInput>(scene_->GetEntities<MouseInput>().at(0))
+          .double_click;
+
+  if (pos == QPoint{-1, -1}) return;
 
   auto [proj, view] = Utils::GetProjectionAndView(scene_);
   technique_->Enable(TechniqueType::MOUSE_PICKING);
@@ -52,18 +48,7 @@ void MousePickingSystem::Update() {
 
   framebuffer_->Unbind();
 
-  int entity = framebuffer_->ReadPixel(clicked_pos_.x(), clicked_pos_.y());
-
-  auto pickedEntities = scene_->GetEntities<PickingTag>();
-
-  for (EntityID entity : pickedEntities)
-    scene_->RemoveComponent<PickingTag>(entity);
-
-  if (entity >= 0) scene_->AddComponent<PickingTag>(entity);
-
-  clicked_pos_ = imposible_pos;
-
-  qDebug() << entity;
+  PickEntity(pos);
 }
 
 void MousePickingSystem::PrepareFramebuffer() {
@@ -81,6 +66,20 @@ void MousePickingSystem::DrawObject(Model &model) {
     glDrawElements(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
   }
+}
+
+void MousePickingSystem::PickEntity(QPoint &pos) {
+  int entity = framebuffer_->ReadPixel(pos.x(), pos.y());
+  auto pickedEntities = scene_->GetEntities<PickingTag>();
+
+  for (EntityID entity : pickedEntities)
+    scene_->RemoveComponent<PickingTag>(entity);
+
+  if (entity >= 0) scene_->AddComponent<PickingTag>(entity);
+
+  pos = {-1, -1};
+
+  qDebug() << entity;
 }
 
 }  // namespace s21

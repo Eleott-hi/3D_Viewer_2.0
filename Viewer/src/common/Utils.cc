@@ -4,7 +4,7 @@
 
 namespace s21::Utils {
 
-static EntityID GetCameraID(ECS_Controller* scene) {
+EntityID GetCameraID(ECS_Controller* scene) {
   auto cameras = scene->GetEntities<Camera>();
   Q_ASSERT(cameras.size() == 1);
   return cameras[0];

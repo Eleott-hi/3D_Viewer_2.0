@@ -14,6 +14,7 @@
 #include "systems/CameraSystem.h"
 #include "systems/CubemapSystem.h"
 #include "systems/EditPickedSystem.h"
+#include "systems/InputSystem.h"
 #include "systems/LightSystem.h"
 #include "systems/MousePickingSystem.h"
 #include "systems/ProjectionSystem.h"
@@ -44,6 +45,8 @@ class Backend : QOpenGLExtraFunctions {
   void KeyPressed(QKeyEvent *key_event);
   void KeyReleased(QKeyEvent *key_event);
   void WindowResize(int width, int height);
+  void MousePressed(QPoint pos);
+  void MouseReleased(QPoint pos);
 
   template <typename Type>
   void UpdateComponent(Type const &component) {
@@ -74,6 +77,7 @@ class Backend : QOpenGLExtraFunctions {
   std::shared_ptr<TechniqueStrategy> technique_;
   std::shared_ptr<TextureStorage> texture_storage_;
 
+  std::shared_ptr<InputSystem> inputSystem_;
   std::shared_ptr<LightSystem> lightSystem_;
   std::shared_ptr<CameraSystem> cameraSystem_;
   std::shared_ptr<RenderSystem> renderSystem_;

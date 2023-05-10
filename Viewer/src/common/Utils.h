@@ -13,7 +13,7 @@ void append(std::vector<Type>& to, std::vector<Type>& from) {
 }
 
 EntityID GetQuad(ECS_Controller* scene);
-static EntityID GetCameraID(ECS_Controller* scene);
+EntityID GetCameraID(ECS_Controller* scene);
 static EntityID GetProjectionID(ECS_Controller* scene);
 std::string ArrayName(std::string const& name, int index);
 QMatrix4x4 setNormalizeMatrix(const QVector3D& min, const QVector3D& max);

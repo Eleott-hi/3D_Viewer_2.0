@@ -26,7 +26,6 @@ class GLWidget : public QOpenGLWidget {
   void wheelEvent(QWheelEvent *event) override;
 
  private:
-  QPoint last_pos_;
   QTimer timer_;
   Backend *backend_ = nullptr;
 };

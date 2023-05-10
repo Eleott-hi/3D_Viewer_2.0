@@ -19,6 +19,18 @@ void Backend::Init(QOpenGLWidget* widget) {
   RegisterSystems();
 
   {
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<InputTag>(entity);
+    scene_.AddComponent<KeyboardInput>(entity);
+  }
+
+  {
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<InputTag>(entity);
+    scene_.AddComponent<MouseInput>(entity);
+  }
+
+  {
     Camera camera;
     camera.position = {0, 0, 6};
     EntityID entity = scene_.NewEntity();
@@ -100,6 +112,7 @@ void Backend::Render() {
 }
 
 void Backend::Update() {
+  inputSystem_->Update();
   mousePickingSystem_->Update();
   editPickedSystem_->Update();
   cameraSystem_->Update();
@@ -127,6 +140,9 @@ void Backend::RegisterComponents() {
   scene_.RegisterComponent<Texture>();
   scene_.RegisterComponent<Material>();
   scene_.RegisterComponent<Transform>();
+  scene_.RegisterComponent<InputTag>();
+  scene_.RegisterComponent<MouseInput>();
+  scene_.RegisterComponent<KeyboardInput>();
   //  scene_.RegisterComponent<SpotLight>();
   scene_.RegisterComponent<Projection>();
   //  scene_.RegisterComponent<PointLight>();
@@ -209,6 +225,14 @@ void Backend::RegisterSystems() {
     mask.set(GetComponentID<PickingTag>());
     scene_.ChangeSystemMask<EditPickedSystem>(mask);
     editPickedSystem_->Init(&scene_);
+  }
+
+  inputSystem_ = scene_.RegisterSystem<InputSystem>();
+  {
+    ComponentMask mask;
+    mask.set(GetComponentID<InputTag>());
+    scene_.ChangeSystemMask<InputSystem>(mask);
+    inputSystem_->Init(&scene_);
   }
 }
 

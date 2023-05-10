@@ -6,6 +6,7 @@
 #include <QVector3D>
 #include <QVector>
 #include <string>
+#include <unordered_map>
 
 #include "core/ECS_Controller.h"
 
@@ -124,6 +125,19 @@ struct Light {
 
   float outer_cone = 15.0;
   float inner_cone = 12.5;
+};
+
+struct InputTag {};
+
+struct KeyboardInput {
+  std::unordered_map<int, bool> keys;
+};
+
+struct MouseInput {
+  bool left_button_pressed = false;
+  QPoint start;
+  QPoint end;
+  QPoint double_click = {-1, -1};
 };
 
 }  // namespace s21
