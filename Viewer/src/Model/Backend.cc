@@ -1,9 +1,23 @@
 #include "Backend.h"
 
+float skyboxVertices[] = {
+    // positions
+    -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,  -1.0f,
+    -1.0f, 1.0f,  1.0f,  -1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f,
+    -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,  1.0f,
+    -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, -1.0f, 1.0f,  -1.0f, 1.0f,  1.0f,  1.0f,
+    1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f,
+    -1.0f, 1.0f,  -1.0f, 1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,
+    1.0f,  -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,  -1.0f, 1.0f,  -1.0f, 1.0f,  1.0f,
+    -1.0f, 1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  -1.0f, 1.0f,  1.0f,  -1.0f,
+    1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, -1.0f,
+    1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,
+};
+
 namespace s21 {
 
 std::string cube =
-    "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/cube.obj";
+    "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/cube.obj";
 
 void Backend::Init(QOpenGLWidget* widget) {
   initializeOpenGLFunctions();
@@ -17,6 +31,41 @@ void Backend::Init(QOpenGLWidget* widget) {
 
   RegisterComponents();
   RegisterSystems();
+
+  {
+    uint32_t skyboxVAO, skyboxVBO;
+    glGenVertexArrays(1, &skyboxVAO);
+    glGenBuffers(1, &skyboxVBO);
+    glBindVertexArray(skyboxVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices,
+                 GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
+                          (void*)0);
+
+    std::string dir =
+        // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/skybox"
+        "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
+        "textures/skybox"  //
+        ;
+
+    std::vector<std::string> faces{dir + "/right.jpg", dir + "/left.jpg",
+                                   dir + "/top.jpg",   dir + "/bottom.jpg",
+                                   dir + "/front.jpg", dir + "/back.jpg"};
+
+    Mesh mesh;
+    mesh.VAO = skyboxVAO;
+
+    Texture texture;
+    texture.type = "cubemap";
+    texture.id = texture_storage_->LoadCubemap(faces);
+
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Mesh>(entity, mesh);
+    scene_.AddComponent<CubemapTag>(entity);
+    scene_.AddComponent<Texture>(entity, texture);
+  }
 
   {
     EntityID entity = scene_.NewEntity();
@@ -161,16 +210,23 @@ void Backend::AddModel(QString path) {
   if (normal_map) material.normal = normal_map->id;
   if (specular_map) material.specular = specular_map->id;
 
-  material.roughness = texture_storage_->loadTexture(
-      "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
-      "backpack/roughness.jpg");
-  material.ao = texture_storage_->loadTexture(
-      "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
-      "backpack/ao.jpg");
+  material.roughness = texture_storage_->LoadTexture(
+      // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/"
+      // "backpack/roughness.jpg"
+      "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
+      "backpack/roughness.jpg"  //
+  );
+
+  material.ao = texture_storage_->LoadTexture(
+      // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/"
+      // "backpack/ao.jpg"
+      "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
+      "backpack/ao.jpg"  //
+  );
 
   EntityID entity = scene_.NewEntity();
   scene_.AddComponent<Shader>(entity,
-                              {TechniqueType::PHYSICAL_BASED_RENDERING});
+                              {TechniqueType::SIMPLE_TEXTURE});
   scene_.AddComponent<Transform>(entity);
   scene_.AddComponent<Material>(entity, material);
   scene_.AddComponent<Model>(entity, std::move(*model));
@@ -180,7 +236,7 @@ void Backend::AddModel(QString path) {
 
 void Backend::LoadTexture(QString filename) {
   opengl_widget_->makeCurrent();
-  auto id = texture_storage_->loadTexture(filename.toStdString());
+  auto id = texture_storage_->LoadTexture(filename.toStdString());
   opengl_widget_->doneCurrent();
 }
 
@@ -209,25 +265,23 @@ void Backend::Draw() {
 }
 
 void Backend::RegisterComponents() {
-  scene_.RegisterComponent<Quad>();
+  scene_.RegisterComponent<QuadTag>();
+  scene_.RegisterComponent<Mesh>();
   scene_.RegisterComponent<Model>();
   scene_.RegisterComponent<Light>();
   scene_.RegisterComponent<Shader>();
   scene_.RegisterComponent<Camera>();
-  scene_.RegisterComponent<Cubemap>();
+  scene_.RegisterComponent<CubemapTag>();
   scene_.RegisterComponent<Texture>();
   scene_.RegisterComponent<Material>();
-  scene_.RegisterComponent<Transform>();
   scene_.RegisterComponent<InputTag>();
+  scene_.RegisterComponent<Transform>();
   scene_.RegisterComponent<Enviroment>();
   scene_.RegisterComponent<MouseInput>();
-  scene_.RegisterComponent<KeyboardInput>();
-  //  scene_.RegisterComponent<SpotLight>();
   scene_.RegisterComponent<Projection>();
-  //  scene_.RegisterComponent<PointLight>();
   scene_.RegisterComponent<PickingTag>();
   scene_.RegisterComponent<Attenuation>();
-  //  scene_.RegisterComponent<DirectionalLight>();
+  scene_.RegisterComponent<KeyboardInput>();
 }
 
 void Backend::RegisterSystems() {
@@ -268,7 +322,7 @@ void Backend::RegisterSystems() {
   render2DSystem_ = scene_.RegisterSystem<Render2DSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<Quad>());
+    mask.set(GetComponentID<QuadTag>());
     mask.set(GetComponentID<Texture>());
     scene_.ChangeSystemMask<Render2DSystem>(mask);
     render2DSystem_->Init(&scene_, technique_.get());
@@ -295,6 +349,10 @@ void Backend::RegisterSystems() {
   cubemapSystem_ = scene_.RegisterSystem<CubemapSystem>();
   {
     ComponentMask mask;
+    mask.set(GetComponentID<Mesh>());
+    mask.set(GetComponentID<Texture>());
+    mask.set(GetComponentID<CubemapTag>());
+    scene_.ChangeSystemMask<CubemapSystem>(mask);
     cubemapSystem_->Init(&scene_, technique_.get());
   }
 

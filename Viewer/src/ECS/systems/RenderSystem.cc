@@ -16,7 +16,7 @@ void RenderSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
 
   EntityID texture = scene_->NewEntity();
   auto textureID = framebuffer_->getTextureID();
-  scene_->AddComponent<Quad>(texture);
+  scene_->AddComponent<QuadTag>(texture);
   scene_->AddComponent<Texture>(texture, {textureID, "quad"});
   scene_->AddEventListener(EventType::WindowResize,
                            BIND_EVENT_FN(OnWindowResize));
@@ -31,8 +31,8 @@ void RenderSystem::Update() {
   framebuffer_->Bind();
   PrepareFramebuffer();
 
-  static auto &enviroment =
-      scene_->GetComponent<Enviroment>(scene_->GetEntities<Enviroment>().at(0));
+  // static auto &enviroment =
+      // scene_->GetComponent<Enviroment>(scene_->GetEntities<Enviroment>().at(0));
 
   auto [proj, view] = Utils::GetProjectionAndView(scene_);
 
@@ -47,12 +47,13 @@ void RenderSystem::Update() {
     technique_->Clear();
     technique_->setMVP(proj, view, transform.GetModelMatrix());
 
-    technique_->setTexture(enviroment.light);
+    // technique_->setTexture(enviroment.light);
 
     if (scene_->EntityHasComponent<Material>(entity))
       technique_->setMaterial(scene_->GetComponent<Material>(entity));
 
-    DrawObject(model);
+    // DrawObject(model);
+    for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
   }
 
   // framebuffer_->Unbind();
@@ -67,11 +68,11 @@ void RenderSystem::PrepareFramebuffer() {
 }
 
 void RenderSystem::DrawObject(Model &model, GLenum form) {
-  for (auto &mesh : model.meshes) {
-    glBindVertexArray(mesh.VAO);
-    glDrawElements(form, mesh.indices.size(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
-  }
+//   for (auto &mesh : model.meshes) {
+//     glBindVertexArray(mesh.VAO);
+//     glDrawElements(form, mesh.indices.size(), GL_UNSIGNED_INT, 0);
+//     glBindVertexArray(0);
+//   }
 }
 
 }  // namespace s21

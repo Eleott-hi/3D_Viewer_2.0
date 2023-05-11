@@ -40,6 +40,7 @@ include_directories(
     shared
     controller
     techniques
+    OpenGL
 )
 
 file(GLOB_RECURSE PROJECT_SOURCES *.cc *.cpp *.h *.ui)

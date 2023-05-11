@@ -44,6 +44,12 @@ void Mesh::bufferize(QOpenGLExtraFunctions *f) {
   vertex_count = vertices.size();
 }
 
+void Mesh::Draw(QOpenGLExtraFunctions *f, GLenum form) {
+  f->glBindVertexArray(VAO);
+  f->glDrawElements(form, index_count, GL_UNSIGNED_INT, 0);
+  f->glBindVertexArray(0);
+}
+
 QMatrix4x4 Transform::GetModelMatrix() const {
   QMatrix4x4 m_scale, m_translate, m_rotate, m_start;
 

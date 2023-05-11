@@ -43,7 +43,7 @@ void MousePickingSystem::Update() {
     technique_->setMVP(proj, view, transform.GetModelMatrix());
     technique_->SetObjectID((int)entity);
 
-    DrawObject(model);
+    for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
   }
 
   framebuffer_->Unbind();
@@ -56,16 +56,6 @@ void MousePickingSystem::PrepareFramebuffer() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-}
-
-void MousePickingSystem::DrawObject(Model &model) {
-  for (auto &mesh : model.meshes) {
-    if (!mesh.VAO) mesh.bufferize(this);
-
-    glBindVertexArray(mesh.VAO);
-    glDrawElements(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
-  }
 }
 
 void MousePickingSystem::PickEntity(QPoint &pos) {

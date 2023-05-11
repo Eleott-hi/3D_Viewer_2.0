@@ -18,17 +18,17 @@ void GLWidget::initializeGL() {
   // for (size_t i = 0; i < 10; i++)
 
   backend_->AddModel(
-      // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Viewer/src/others/"
-      // "resources/backpack/backpack.obj"
-      "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/"
-      "resources/backpack/backpack.obj"//
-      );
+      "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
+      "backpack/backpack.obj"
+      // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/"
+      // "resources/backpack/backpack.obj"//
+  );
 
   // backend_->LoadTexture(
-  //     "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Viewer/src/others/"
+  //     "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/"
   //     "resources/backpack/diffuse.jpg"  //
-  //     // "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/resources/"
-  //     // "awesomeface.png"
+  //     // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/"
+  //     // "awesomeface.png" //
   // );
 }
 

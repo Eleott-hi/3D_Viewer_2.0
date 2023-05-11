@@ -48,7 +48,7 @@ void SetVector(QVector3D& vec, float const& x, float const& y, float const& z) {
 }
 
 EntityID GetQuad(ECS_Controller* scene) {
-  static EntityID quad = scene->GetEntities<Quad>()[0];
+  static EntityID quad = scene->GetEntities<QuadTag>()[0];
 
   return quad;
 }

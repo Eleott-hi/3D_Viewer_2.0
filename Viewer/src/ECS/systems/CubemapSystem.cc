@@ -85,12 +85,12 @@ void CubemapSystem::irradiance_convolution() {
                            0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    RenderCube();
+//    RenderCube();
   }
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   EntityID entity = scene_->NewEntity();
-  scene_->AddComponent<Enviroment>(entity, {{irradianceMap, "irradianceMap"}});
+  scene_->AddComponent<Enviroment>(entity, {{0, "irradianceMap"}});
 }
 
 uint32_t CubemapSystem::loadCubemap(std::vector<std::string> faces) {
@@ -128,71 +128,25 @@ CubemapSystem::CubemapSystem() { initializeOpenGLFunctions(); }
 void CubemapSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
   scene_ = scene;
   technique_ = technique;
-
-  std::string dir =
-      "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/skybox"
-      // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
-      // "textures/skybox"  //
-      ;
-
-  std::vector<std::string> faces{dir + "/right.jpg", dir + "/left.jpg",
-                                 dir + "/top.jpg",   dir + "/bottom.jpg",
-                                 dir + "/front.jpg", dir + "/back.jpg"};
-
-  cubemapTexture_ = {loadCubemap(faces), "cubemap"};
-
-  irradiance_convolution();
 }
 
 void CubemapSystem::Update() {
-  glDepthFunc(GL_LEQUAL);
+  for (auto entity : entities_) {
+    glDepthFunc(GL_LEQUAL);
+    auto const &[proj, view] = Utils::GetProjectionAndView(scene_);
+    auto &texture = scene_->GetComponent<Texture>(entity);
+    auto &mesh = scene_->GetComponent<Mesh>(entity);
 
-  auto const &[proj, view] = Utils::GetProjectionAndView(scene_);
+    technique_->Enable(TechniqueType::CUBEMAP);
+    technique_->setMVP(proj, view, {});
+    technique_->setTexture(texture);
 
-  technique_->Enable(TechniqueType::CUBEMAP);
-  technique_->setMVP(proj, view, {});
-  technique_->setTexture(cubemapTexture_);
-  // technique_->setTexture(irradianceMapTexture_);
+    glBindVertexArray(mesh.VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
 
-  RenderCube();
-
-  glDepthFunc(GL_LESS);
-}
-
-void CubemapSystem::RenderCube() {
-  static uint32_t skyboxVAO = 0;
-
-  if (skyboxVAO == 0) {
-    float skyboxVertices[] = {
-        // positions
-        -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f,
-        1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,  -1.0f,
-        -1.0f, 1.0f,  1.0f,  -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, -1.0f, 1.0f,
-        -1.0f, 1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,
-        -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f, 1.0f,  1.0f,
-        1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  -1.0f, 1.0f,  -1.0f,
-        -1.0f, 1.0f,  -1.0f, 1.0f,  -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,  1.0f,
-        1.0f,  1.0f,  1.0f,  1.0f,  -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,  -1.0f,
-        -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, -1.0f, 1.0f,
-        -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,
-    };
-
-    uint32_t skyboxVBO;
-    glGenVertexArrays(1, &skyboxVAO);
-    glGenBuffers(1, &skyboxVBO);
-    glBindVertexArray(skyboxVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices,
-                 GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
-                          (void *)0);
+    glDepthFunc(GL_LESS);
   }
-
-  glBindVertexArray(skyboxVAO);
-  glDrawArrays(GL_TRIANGLES, 0, 36);
-  glBindVertexArray(0);
 }
 
 }  // namespace s21

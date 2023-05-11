@@ -47,6 +47,7 @@ struct Mesh {
   int index_count = 0;
 
   void bufferize(QOpenGLExtraFunctions *f);
+  void Draw(QOpenGLExtraFunctions *f, GLenum form);
 };
 
 struct Model {
@@ -108,11 +109,6 @@ struct Texture {
   std::string type;
 };
 
-struct Quad {};
-struct Cubemap {};
-
-struct PickingTag {};
-
 struct Light {
   LightType type = LightType::DIRECTIONAL;
 
@@ -143,5 +139,9 @@ struct MouseInput {
   QPoint end;
   QPoint double_click = {-1, -1};
 };
+
+struct QuadTag {};
+struct CubemapTag {};
+struct PickingTag {};
 
 }  // namespace s21

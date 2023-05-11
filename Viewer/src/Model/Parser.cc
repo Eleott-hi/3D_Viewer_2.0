@@ -108,7 +108,7 @@ void Parser::LoadTexture(aiMaterial *material, aiTextureType type,
     material->GetTexture(type, i, &str);
 
     std::string const &filename = directory_ + "/" + str.C_Str();
-    texture = {textureStorage_->loadTexture(filename), "specularMap"};
+    texture = {textureStorage_->LoadTexture(filename), "specularMap"};
   }
 }
 

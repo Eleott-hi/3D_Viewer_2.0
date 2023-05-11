@@ -28,7 +28,6 @@ class MousePickingSystem : public System, protected QOpenGLExtraFunctions {
 
   void PrepareFramebuffer();
   void PickEntity(QPoint &pos);
-  void DrawObject(Model &model);
   void OnWindowResize(Event &event);
 };
 }  // namespace s21
