@@ -21,7 +21,8 @@ void GLWidget::initializeGL() {
       // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Viewer/src/others/"
       // "resources/backpack/backpack.obj"
       "/opt/goinfre/pintoved/3D_Viewer_2.0/Viewer/src/others/"
-      "resources/backpack/backpack.obj");
+      "resources/backpack/backpack.obj"//
+      );
 
   // backend_->LoadTexture(
   //     "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Viewer/src/others/"
