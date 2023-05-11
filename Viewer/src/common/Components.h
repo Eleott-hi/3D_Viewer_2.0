@@ -127,6 +127,10 @@ struct Light {
   float inner_cone = 12.5;
 };
 
+struct Enviroment {
+  Texture light;
+};
+
 struct InputTag {};
 
 struct KeyboardInput {

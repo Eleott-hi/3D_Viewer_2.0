@@ -26,5 +26,6 @@ class CubemapSystem : public System, protected QOpenGLExtraFunctions {
 
   uint32_t loadCubemap(std::vector<std::string> faces);
   void RenderCube();
+  void irradiance_convolution();
 };
 }  // namespace s21

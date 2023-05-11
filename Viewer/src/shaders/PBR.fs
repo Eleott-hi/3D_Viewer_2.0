@@ -62,6 +62,8 @@ uniform SpotLight spotLights[20];
 uniform PointLight pointLights[20];
 uniform Attenuation attenuations[60];
 
+uniform samplerCube irradianceMap;
+
 uniform int dirLightCount;
 uniform int pointLightCount;
 uniform int spotLightCount;
@@ -91,13 +93,25 @@ void main() {
     for(int i = 0; i < pointLightCount; ++i) Lo += CalcPointLight(i, N, V, albedo, F0, metallic, roughness);
     for(int i = 0; i < spotLightCount; ++i) Lo += CalcSpotLight(i, N, V, albedo, F0, metallic, roughness);
 
-    vec3 ambient = vec3(0.01) * albedo * ao;
+    vec3 kS = fresnelSchlick(max(dot(N, V), 0.0), F0);
+    vec3 kD = 1.0 - kS;
+    kD *= 1.0 - metallic;
+    vec3 irradiance = texture(irradianceMap, N).rgb;
+    vec3 diffuse = irradiance * albedo;
+    vec3 ambient = (kD * diffuse) * ao;
+
+    // vec3 ambient = vec3(0.01) * albedo * ao;
+
     vec3 color = ambient + Lo;
     color = color / (color + vec3(1.0));
     color = pow(color, vec3(1.0 / 2.2));
 
     FragColor = vec4(color, 1.0);
+
+    // FragColor = vec4(ambient, 1.0);
 }
+
+// ----------------------------------------------------------------------------
 
 vec3 CalcSpotLight(int i, vec3 N, vec3 V, vec3 albedo, vec3 F0, float metallic, float roughness) {
 
@@ -129,6 +143,8 @@ vec3 CalcSpotLight(int i, vec3 N, vec3 V, vec3 albedo, vec3 F0, float metallic, 
     return (kD * albedo / PI + specular) * radiance * NdotL * intensity;
 }
 
+// ----------------------------------------------------------------------------
+
 vec3 CalcPointLight(int i, vec3 N, vec3 V, vec3 albedo, vec3 F0, float metallic, float roughness) {
 
     vec3 L_tmp = pointLights[i].position - WorldPos;
@@ -155,6 +171,8 @@ vec3 CalcPointLight(int i, vec3 N, vec3 V, vec3 albedo, vec3 F0, float metallic,
     return (kD * albedo / PI + specular) * radiance * NdotL;
 }
 
+// ----------------------------------------------------------------------------
+
 vec3 CalcDirectLight(int i, vec3 N, vec3 V, vec3 albedo, vec3 F0, float metallic, float roughness) {
 
     vec3 L = normalize(-dirLights[i].direction);
@@ -175,17 +193,6 @@ vec3 CalcDirectLight(int i, vec3 N, vec3 V, vec3 albedo, vec3 F0, float metallic
 
     return (kD * albedo / PI + specular) * NdotL;
 
-    // vec3 lightDir = normalize(-dirLights[i].direction);
-    // vec3 reflectDir = reflect(-lightDir, N);
-
-    // float diff = max(dot(N, lightDir), 0.0);
-    // float spec = pow(max(dot(V, reflectDir), 0.0), material.shininess);
-
-    // vec3 ambient = lights[dirLights[i].light_index].ambient * vec3(texture(material.albedoMap, TexCoords));
-    // vec3 diffuse = lights[dirLights[i].light_index].diffuse * diff * vec3(texture(material.albedoMap, TexCoords));
-    // vec3 specular = lights[dirLights[i].light_index].specular * spec * vec3(texture(material.specularMap, TexCoords));
-
-    // return (ambient + diffuse + specular);
 }
 
 // ----------------------------------------------------------------------------

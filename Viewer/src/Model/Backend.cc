@@ -42,15 +42,15 @@ void Backend::Init(QOpenGLWidget* widget) {
     scene_.AddComponent<Projection>(entity);
   }
 
-  {
-    Light light;
-    light.type = LightType::DIRECTIONAL;
-    light.ambient = {150, 150, 150};
-    light.direction = {0, -1, 0};
+  // {
+  //   Light light;
+  //   light.type = LightType::DIRECTIONAL;
+  //   light.ambient = {150, 150, 150};
+  //   light.direction = {0, -1, 0};
 
-    EntityID entity = scene_.NewEntity();
-    scene_.AddComponent<Light>(entity, light);
-  }
+  //   EntityID entity = scene_.NewEntity();
+  //   scene_.AddComponent<Light>(entity, light);
+  // }
 
   // {
   //   Attenuation attenuation;
@@ -92,7 +92,7 @@ void Backend::Init(QOpenGLWidget* widget) {
   //   Light light;
   //   light.type = LightType::POINT;
   //   light.position = {0, 0, 0};
-  //   light.ambient = {50, 50, 150};
+  //   light.ambient = {50, 50, 50};
   //   // light.ambient = {0.5, 0.5, 0.5};
   //   light.specular = {0.5, 0.5, 0.5};
 
@@ -219,6 +219,7 @@ void Backend::RegisterComponents() {
   scene_.RegisterComponent<Material>();
   scene_.RegisterComponent<Transform>();
   scene_.RegisterComponent<InputTag>();
+  scene_.RegisterComponent<Enviroment>();
   scene_.RegisterComponent<MouseInput>();
   scene_.RegisterComponent<KeyboardInput>();
   //  scene_.RegisterComponent<SpotLight>();

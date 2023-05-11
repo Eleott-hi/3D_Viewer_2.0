@@ -31,6 +31,9 @@ void RenderSystem::Update() {
   framebuffer_->Bind();
   PrepareFramebuffer();
 
+  static auto &enviroment =
+      scene_->GetComponent<Enviroment>(scene_->GetEntities<Enviroment>().at(0));
+
   auto [proj, view] = Utils::GetProjectionAndView(scene_);
 
   for (auto entity : entities_) {
@@ -43,6 +46,8 @@ void RenderSystem::Update() {
 
     technique_->Clear();
     technique_->setMVP(proj, view, transform.GetModelMatrix());
+
+    technique_->setTexture(enviroment.light);
 
     if (scene_->EntityHasComponent<Material>(entity))
       technique_->setMaterial(scene_->GetComponent<Material>(entity));
