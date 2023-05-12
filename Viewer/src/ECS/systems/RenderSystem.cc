@@ -32,7 +32,7 @@ void RenderSystem::Update() {
   PrepareFramebuffer();
 
   // static auto &enviroment =
-      // scene_->GetComponent<Enviroment>(scene_->GetEntities<Enviroment>().at(0));
+  // scene_->GetComponent<Enviroment>(scene_->GetEntities<Enviroment>().at(0));
 
   auto [proj, view] = Utils::GetProjectionAndView(scene_);
 
@@ -68,11 +68,11 @@ void RenderSystem::PrepareFramebuffer() {
 }
 
 void RenderSystem::DrawObject(Model &model, GLenum form) {
-//   for (auto &mesh : model.meshes) {
-//     glBindVertexArray(mesh.VAO);
-//     glDrawElements(form, mesh.indices.size(), GL_UNSIGNED_INT, 0);
-//     glBindVertexArray(0);
-//   }
+  //   for (auto &mesh : model.meshes) {
+  //     glBindVertexArray(mesh.VAO);
+  //     glDrawElements(form, mesh.indices.size(), GL_UNSIGNED_INT, 0);
+  //     glBindVertexArray(0);
+  //   }
 }
 
 }  // namespace s21

@@ -85,7 +85,7 @@ void CubemapSystem::irradiance_convolution() {
                            0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-//    RenderCube();
+    //    RenderCube();
   }
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

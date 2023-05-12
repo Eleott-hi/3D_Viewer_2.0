@@ -45,9 +45,10 @@ void Backend::Init(QOpenGLWidget* widget) {
                           (void*)0);
 
     std::string dir =
-        // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/skybox"
-        "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
-        "textures/skybox"  //
+        "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/"
+        "skybox"
+        // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
+        // "textures/skybox"  //
         ;
 
     std::vector<std::string> faces{dir + "/right.jpg", dir + "/left.jpg",
@@ -211,22 +212,21 @@ void Backend::AddModel(QString path) {
   if (specular_map) material.specular = specular_map->id;
 
   material.roughness = texture_storage_->LoadTexture(
-      // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/"
-      // "backpack/roughness.jpg"
-      "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
-      "backpack/roughness.jpg"  //
+      "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/"
+      "backpack/roughness.jpg"
+      // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
+      // "backpack/roughness.jpg"  //
   );
 
   material.ao = texture_storage_->LoadTexture(
-      // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/"
-      // "backpack/ao.jpg"
-      "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
-      "backpack/ao.jpg"  //
+      "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/"
+      "backpack/ao.jpg"
+      // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
+      // "backpack/ao.jpg"  //
   );
 
   EntityID entity = scene_.NewEntity();
-  scene_.AddComponent<Shader>(entity,
-                              {TechniqueType::SIMPLE_TEXTURE});
+  scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_TEXTURE});
   scene_.AddComponent<Transform>(entity);
   scene_.AddComponent<Material>(entity, material);
   scene_.AddComponent<Model>(entity, std::move(*model));
