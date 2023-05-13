@@ -45,10 +45,10 @@ void Backend::Init(QOpenGLWidget* widget) {
                           (void*)0);
 
     std::string dir =
-        "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/"
-        "skybox"
-        // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
-        // "textures/skybox"  //
+        // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/"
+        // "skybox"
+        "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
+        "textures/skybox"  //
         ;
 
     std::vector<std::string> faces{dir + "/right.jpg", dir + "/left.jpg",
