@@ -13,6 +13,7 @@
 #include "core/ECS_Controller.h"
 #include "systems/CameraSystem.h"
 #include "systems/CubemapSystem.h"
+#include "systems/DefferedShadingSystem.h"
 #include "systems/EditPickedSystem.h"
 #include "systems/InputSystem.h"
 #include "systems/LightSystem.h"
@@ -76,6 +77,8 @@ class Backend : QOpenGLExtraFunctions {
   QOpenGLWidget *opengl_widget_ = nullptr;
   std::shared_ptr<TechniqueStrategy> technique_;
   std::shared_ptr<TextureStorage> texture_storage_;
+  std::shared_ptr<IFramebuffer> g_buffer_;
+  std::shared_ptr<IFramebuffer> framebuffer3D_;
 
   std::shared_ptr<InputSystem> inputSystem_;
   std::shared_ptr<LightSystem> lightSystem_;
@@ -87,11 +90,13 @@ class Backend : QOpenGLExtraFunctions {
   std::shared_ptr<ProjectionSystem> projectionSystem_;
   std::shared_ptr<MousePickingSystem> mousePickingSystem_;
   std::shared_ptr<RenderPickedSystem> renderPickedSystem_;
+  std::shared_ptr<DefferedShadingSystem> defferedShadingSystem_;
 
   void RegisterComponents();
   void RegisterSystems();
   void Draw();
   void Update();
+  void PrepareFramebuffer3D();
 };
 
 }  // namespace s21

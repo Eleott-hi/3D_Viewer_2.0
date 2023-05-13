@@ -5,15 +5,14 @@
 
 #include "core/ECS_Controller.h"
 #include "core/System.h"
-#include "framebuffer.h"
 #include "technique_strategy.h"
 
 namespace s21 {
 
-class RenderSystem : public System, protected QOpenGLExtraFunctions {
+class DefferedShadingSystem : public System, protected QOpenGLExtraFunctions {
  public:
-  RenderSystem();
-  ~RenderSystem() = default;
+  DefferedShadingSystem() { initializeOpenGLFunctions(); }
+  ~DefferedShadingSystem() = default;
 
   void Init(ECS_Controller *scene, TechniqueStrategy *technique);
   void Update();

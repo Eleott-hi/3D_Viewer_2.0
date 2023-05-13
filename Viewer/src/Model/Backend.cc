@@ -17,7 +17,10 @@ float skyboxVertices[] = {
 namespace s21 {
 
 std::string cube =
-    "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/cube.obj";
+    // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/cube.obj"
+    "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
+    "cube.obj"  //
+    ;
 
 void Backend::Init(QOpenGLWidget* widget) {
   initializeOpenGLFunctions();
@@ -26,11 +29,26 @@ void Backend::Init(QOpenGLWidget* widget) {
   technique_ = std::make_shared<TechniqueStrategy>();
   texture_storage_ = std::make_shared<TextureStorage>();
   parser_ = std::make_shared<Parser>(texture_storage_.get());
+  g_buffer_ = std::make_shared<Framebuffer>();
+  framebuffer3D_ = std::make_shared<Framebuffer>();
+
+  framebuffer3D_->Create({Format::RGB, Format::DEFAULT_DEPTH});
+  g_buffer_->Create(
+      {Format::RGBA16F, Format::RGBA16F, Format::RGBA, Format::DEFAULT_DEPTH});
 
   glLineStipple(4, 0xAAAA);
 
   RegisterComponents();
   RegisterSystems();
+
+  {
+    Texture texture = {framebuffer3D_->getTextureID(), "quad"};
+    // Texture texture = {g_buffer_->getTextureID(), "quad"};
+
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<QuadTag>(entity);
+    scene_.AddComponent<Texture>(entity, texture);
+  }
 
   {
     uint32_t skyboxVAO, skyboxVBO;
@@ -45,10 +63,10 @@ void Backend::Init(QOpenGLWidget* widget) {
                           (void*)0);
 
     std::string dir =
-        "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/"
-        "skybox"
-        // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
-        // "textures/skybox"  //
+        // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/"
+        // "skybox"
+        "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
+        "textures/skybox"  //
         ;
 
     std::vector<std::string> faces{dir + "/right.jpg", dir + "/left.jpg",
@@ -102,36 +120,36 @@ void Backend::Init(QOpenGLWidget* widget) {
   //   scene_.AddComponent<Light>(entity, light);
   // }
 
-  // {
-  //   Attenuation attenuation;
-  //   attenuation.constant = 0.1;
-  //   attenuation.linear = 0.1;
-  //   attenuation.quadratic = 0.1;
+  {
+    Attenuation attenuation;
+    attenuation.constant = 0.1;
+    attenuation.linear = 0.1;
+    attenuation.quadratic = 0.1;
 
-  //   Light light;
-  //   light.type = LightType::POINT;
-  //   light.position = {0, 0, 0};
-  //   light.ambient = {150, 150, 150};
-  //   // light.ambient = {0.5, 0.5, 0.5};
-  //   light.specular = {0.5, 0.5, 0.5};
+    Light light;
+    light.type = LightType::POINT;
+    light.position = {0, 0, 0};
+    light.ambient = {150, 150, 150};
+    // light.ambient = {0.5, 0.5, 0.5};
+    light.specular = {0.5, 0.5, 0.5};
 
-  //   Transform transform;
-  //   transform.translation = {0, 0, 2};
-  //   transform.scale = {0.1, 0.1, 0.1};
+    Transform transform;
+    transform.translation = {0, 0, 2};
+    transform.scale = {0.1, 0.1, 0.1};
 
-  //   Material material;
-  //   material.color = Qt::white;
+    Material material;
+    material.color = Qt::white;
 
-  //   auto model = *parser_->loadModel(cube).model;
-  //   for (auto& mesh : model.meshes) mesh.bufferize(this);
+    auto model = *parser_->loadModel(cube).model;
+    for (auto& mesh : model.meshes) mesh.bufferize(this);
 
-  //   EntityID entity = scene_.NewEntity();
-  //   scene_.AddComponent<Light>(entity, light);
-  //   scene_.AddComponent<Material>(entity, material);
-  //   scene_.AddComponent<Transform>(entity, transform);
-  //   scene_.AddComponent<Model>(entity, std::move(model));
-  //   scene_.AddComponent<Attenuation>(entity, attenuation);
-  // }
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Light>(entity, light);
+    scene_.AddComponent<Material>(entity, material);
+    scene_.AddComponent<Transform>(entity, transform);
+    scene_.AddComponent<Model>(entity, std::move(model));
+    scene_.AddComponent<Attenuation>(entity, attenuation);
+  }
 
   // {
   //   Attenuation attenuation;
@@ -254,14 +272,46 @@ void Backend::Update() {
   lightSystem_->Update();
 }
 
+void Backend::PrepareFramebuffer3D() {
+  framebuffer3D_->ClearColor({0.1, 0.1, 0.1, 1});
+  framebuffer3D_->Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |
+                        GL_STENCIL_BUFFER_BIT);
+  framebuffer3D_->DepthTest(true);
+}
+
+void PrepareFramebuffer2D() {
+  glDisable(GL_DEPTH_TEST);
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT);
+}
+
 void Backend::Draw() {
+  // {
+  //   g_buffer_->Bind();
+  //   g_buffer_->DepthTest(true);
+  //   g_buffer_->Clear(GL_COLOR_BUFFER_BIT |  //
+  //                    GL_DEPTH_BUFFER_BIT |  //
+  //                    GL_STENCIL_BUFFER_BIT);
+  //   defferedShadingSystem_->Update();
+  //   g_buffer_->Unbind();
+  // }
+
   {
+    framebuffer3D_->Bind();
+    PrepareFramebuffer3D();
     renderSystem_->Update();
-    cubemapSystem_->Update();
-    renderPickedSystem_->Update();
+    // cubemapSystem_->Update();
+    // renderPickedSystem_->Update();
+    framebuffer3D_->Unbind();
   }
 
-  render2DSystem_->Update();
+  PrepareFramebuffer2D();
+  // // g_buffer_->CopyBuffersTo(0, GL_DEPTH_BUFFER_BIT |
+  // GL_STENCIL_BUFFER_BIT);
+
+  render2DSystem_->Update(g_buffer_->getTextureID(0),
+                          g_buffer_->getTextureID(1),
+                          g_buffer_->getTextureID(2));
 }
 
 void Backend::RegisterComponents() {
@@ -370,6 +420,15 @@ void Backend::RegisterSystems() {
     mask.set(GetComponentID<InputTag>());
     scene_.ChangeSystemMask<InputSystem>(mask);
     inputSystem_->Init(&scene_);
+  }
+
+  defferedShadingSystem_ = scene_.RegisterSystem<DefferedShadingSystem>();
+  {
+    ComponentMask mask;
+    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<Transform>());
+    scene_.ChangeSystemMask<DefferedShadingSystem>(mask);
+    defferedShadingSystem_->Init(&scene_, technique_.get());
   }
 }
 

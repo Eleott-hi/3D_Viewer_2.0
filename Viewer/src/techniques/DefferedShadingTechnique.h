@@ -4,21 +4,19 @@
 
 namespace s21 {
 
-class LightColorTechnique : public ITechnique {
+class DefferedShadingTechnique : public ITechnique {
  public:
-  LightColorTechnique() { init(); }
-  ~LightColorTechnique() {}
+  DefferedShadingTechnique() { init(); }
+  ~DefferedShadingTechnique() {}
 
   virtual void init() override;
-
-  //   virtual void setLight(
-  //       QVector<std::tuple<Light *, BaseLightType *, Attenuation *>> lights)
-  //       override;
-
+  void setTexture(Texture const &texture);
   virtual void setMaterial(Material const &material) override;
-
   virtual void setMVP(QMatrix4x4 proj, QMatrix4x4 view,
                       QMatrix4x4 model) override;
+
+ private:
+  uint32_t texture_index_ = 0;
 };
 
 }  // namespace s21

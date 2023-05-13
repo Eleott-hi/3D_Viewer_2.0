@@ -109,10 +109,6 @@ void LightColorTechnique::init() {
                   ":/shaders/light_color_shader.fs");
 }
 
-void LightColorTechnique::setColor(QColor c) {
-  // shader_.setUniformValue("u_Color", c);
-}
-
 void LightColorTechnique::setMaterial(Material const &material) {
   shader_.setUniformValue("u_Color", material.color);
   shader_.setUniformValue("u_material.shininess", material.shininess);

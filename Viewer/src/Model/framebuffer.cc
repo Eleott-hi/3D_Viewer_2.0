@@ -35,7 +35,7 @@ void Framebuffer::Create(
 }
 
 void Framebuffer::Clear() {
-  if (m_fbo) glDeleteFramebuffers(1, &m_fbo);
+  if (FBO_) glDeleteFramebuffers(1, &FBO_);
 
   if (!m_Color_Textures_.empty())
     glDeleteTextures(m_Color_Textures_.size(), m_Color_Textures_.data());
@@ -52,20 +52,13 @@ void Framebuffer::Resize(uint32_t width, uint32_t height) {
   Invalidate();
 }
 
-void Framebuffer::Bind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo); }
-void Framebuffer::Unbind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); }
-
-uint32_t Framebuffer::getTextureID(uint32_t index) {
-  return m_Color_Textures_.at(index);
-}
-
 // =============================== INVALIDATE ===============================
 void Framebuffer::Invalidate() {
-  if (m_fbo) Clear();
+  if (FBO_) Clear();
 
   // Gen framebuffer
-  glGenFramebuffers(1, &m_fbo);
-  glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+  glGenFramebuffers(1, &FBO_);
+  glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
 
   // Gen & Attach depth texture
   if (depth_format_.format_ != Format::NONE) {
@@ -80,7 +73,6 @@ void Framebuffer::Invalidate() {
     SwitchColorTexture();
   }
 
-  // Verify that the FBO is correct
   Q_ASSERT_X(
       glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE,  //
       "Framebuffer::Init()",                                                //
@@ -89,7 +81,11 @@ void Framebuffer::Invalidate() {
   if (!m_Color_Textures_.empty()) {
 #define ARRAY_SIZE(x) ((sizeof(x)) / (sizeof(x[0])))
 
-    GLenum buf[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+    GLenum buf[] = {
+        GL_COLOR_ATTACHMENT0,
+        GL_COLOR_ATTACHMENT1,
+        GL_COLOR_ATTACHMENT2,
+    };
     int n = ARRAY_SIZE(buf);
 
     Q_ASSERT_X(m_Color_Textures_.size() <= n,  //
@@ -113,6 +109,12 @@ void Framebuffer::SwitchColorTexture() {
     switch (color_formats_[i].format_) {
       case Format::RGB:
         AttachColorTexture(i, m_Color_Textures_[i], GL_RGB, GL_RGB);
+        break;
+      case Format::RGBA:
+        AttachColorTexture(i, m_Color_Textures_[i], GL_RGBA, GL_RGBA);
+        break;
+      case Format::RGBA16F:
+        AttachColorTexture(i, m_Color_Textures_[i], GL_RGBA16F, GL_RGBA);
         break;
       case Format::RED_INTEGER:
         AttachColorTexture(i, m_Color_Textures_[i], GL_R32I, GL_RED_INTEGER);
@@ -162,10 +164,7 @@ void Framebuffer::AttachDepthTexture(uint32_t id, GLenum format,
                                      GLenum attachmentType) {
   Utils::BindTexture(id);
 
-  // Set depth texture
   glTexStorage2D(GL_TEXTURE_2D, 1, format, width_, height_);
-
-  // Attach depth texture to framebuffer
   glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, GL_TEXTURE_2D, id, 0);
 
   Utils::UnbindTexture();
@@ -177,7 +176,7 @@ int Framebuffer::ReadPixel(uint32_t x, uint32_t y, int index) {
              "Framebuffer::ReadPixel()",         //
              "Index is out of bounds");
 
-  glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
+  glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO_);
   glReadBuffer(GL_COLOR_ATTACHMENT0 + index);
 
   int objectID = 0;

@@ -8,9 +8,12 @@ void QuadTechnique::init() {
 
 void QuadTechnique::setTexture(Texture const &texture) {
   auto const &[id, type] = texture;
-  shader_.setUniformValue("screenTexture", 0);
-  glActiveTexture(GL_TEXTURE0);
+  shader_.setUniformValue(type.c_str(), index_);
+  glActiveTexture(GL_TEXTURE0 + index_);
   glBindTexture(GL_TEXTURE_2D, id);
+
+  // qDebug() << "setTexture" << index_ << id << type.c_str();
+  index_++;
 }
 
 }  // namespace s21

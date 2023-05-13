@@ -1,32 +1,27 @@
-#include "RenderSystem.h"
+#include "DefferedShadingSystem.h"
 
 #include "Utils.h"
 #include "events/WindowResizeEvent.h"
 
 namespace s21 {
 
-RenderSystem::RenderSystem() { initializeOpenGLFunctions(); }
-
-void RenderSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
+void DefferedShadingSystem::Init(ECS_Controller *scene,
+                                 TechniqueStrategy *technique) {
   scene_ = scene;
   technique_ = technique;
 }
 
-void RenderSystem::Update() {
+void DefferedShadingSystem::Update() {
   auto [proj, view] = Utils::GetProjectionAndView(scene_);
 
   for (auto entity : entities_) {
     auto &model = scene_->GetComponent<Model>(entity);
     auto const &transform = scene_->GetComponent<Transform>(entity);
 
-    technique_->Enable(scene_->EntityHasComponent<Shader>(entity)
-                           ? scene_->GetComponent<Shader>(entity).type
-                           : TechniqueType::SIMPLE_COLOR);
+//    technique_->Enable(TechniqueType::DEFFERED_SHADING);
 
     technique_->Clear();
     technique_->setMVP(proj, view, transform.GetModelMatrix());
-
-    // technique_->setTexture(enviroment.light);
 
     if (scene_->EntityHasComponent<Material>(entity))
       technique_->setMaterial(scene_->GetComponent<Material>(entity));

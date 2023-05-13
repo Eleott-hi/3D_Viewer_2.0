@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 
+#include "DefferedShadingTechnique.h"
 #include "PhysicalBasedRenderingTechnique.h"
 #include "StencilOutlineTechnique.h"
 #include "cubemap_technique.h"
@@ -28,14 +29,13 @@ TechniqueStrategy::TechniqueStrategy() noexcept
           std::make_shared<NormalMapTechnique>(),
           std::make_shared<StencilOutlineTechnique>(),
           std::make_shared<PhysicalBasedRenderingTechnique>(),
+          std::make_shared<DefferedShadingTechnique>(),
       } {}
 
 void TechniqueStrategy::Enable(TechniqueType type) {
   technique_ = techniques_.at((int)type);
   technique_->Enable();
 }
-
-void TechniqueStrategy::setColor(QColor c) { technique_->setColor(c); }
 
 void TechniqueStrategy::setMaterial(Material const &material) {
   technique_->setMaterial(material);

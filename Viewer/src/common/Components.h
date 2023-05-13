@@ -23,6 +23,7 @@ enum class TechniqueType {
   NORMALMAP,
   STENCIL_OUTLINE,
   PHYSICAL_BASED_RENDERING,
+  DEFFERED_SHADING,
 };
 
 enum class LightType {

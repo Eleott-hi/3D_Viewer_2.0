@@ -26,7 +26,6 @@ class ITechnique : public QOpenGLShaderProgram,
 
   // =================== Optional ===================
   virtual void Clear() {}
-  virtual void setColor(QColor c) {}
   virtual void SetObjectID(int ObjectID) {}
   virtual void setTexture(Texture const &texture) {}
   virtual void setMaterial(Material const &material) {}

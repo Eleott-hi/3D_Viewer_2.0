@@ -9,23 +9,20 @@ void Render2DSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
   technique_ = technique;
 }
 
-void Render2DSystem::Update() {
+void Render2DSystem::Update(uint32_t tex_pos, uint32_t tex_normal,
+                            uint32_t tex_albedo) {
   static EntityID qaud = Utils::GetQuad(scene_);
-  static auto texture = scene_->GetComponent<Texture>(qaud);
+  static auto const &texture = scene_->GetComponent<Texture>(qaud);
 
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  PrepareFramebuffer();
+  // qDebug() << texture.id << "screenTexture";
 
   technique_->Enable(TechniqueType::QUAD);
-  technique_->setTexture(texture);
+  technique_->setTexture({texture.id, "screenTexture"});
+  technique_->setTexture({tex_pos, "gPosition"});
+  technique_->setTexture({tex_normal, "gNormal"});
+  technique_->setTexture({tex_albedo, "gAlbedoSpec"});
 
   renderQuad();
-}
-
-void Render2DSystem::PrepareFramebuffer() {
-  glDisable(GL_DEPTH_TEST);
-  glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void Render2DSystem::renderQuad() {

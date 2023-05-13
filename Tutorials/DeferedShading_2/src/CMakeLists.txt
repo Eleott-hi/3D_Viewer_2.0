@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(SphereTexture VERSION 1.1 LANGUAGES CXX)
+project(DeferedShading_2 VERSION 1.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -82,6 +82,7 @@ endif()
 
 include_directories(
     ../../
+    shared
 )
 
 file(GLOB_RECURSE PROJECT_SOURCES *.cc *.cpp *.h *.ui)

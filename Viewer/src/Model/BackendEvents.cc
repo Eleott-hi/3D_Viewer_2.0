@@ -12,6 +12,13 @@ void Backend::WindowResize(int w, int h) {
   qDebug() << "WindowResizeEvent:" << w << h;
   WindowResizeEvent event(w, h);
   scene_.Despatch(event);
+
+  framebuffer3D_->Resize(w, h);
+  // g_buffer_->Resize(w, h);
+
+  static auto& texture =
+      scene_.GetComponent<Texture>(scene_.GetEntities<QuadTag>().at(0));
+  texture.id = framebuffer3D_->getTextureID();
 }
 
 void Backend::MousePressed(QPoint pos) {
