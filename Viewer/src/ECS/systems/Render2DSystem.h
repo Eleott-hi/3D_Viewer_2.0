@@ -15,13 +15,12 @@ class Render2DSystem : public System, protected QOpenGLExtraFunctions {
   ~Render2DSystem() = default;
 
   void Init(ECS_Controller *scene, TechniqueStrategy *technique);
-  void Update();
+  void Update(uint32_t pos, uint32_t normal, uint32_t albedo_spec);
 
  private:
   ECS_Controller *scene_;
   TechniqueStrategy *technique_;
 
   void renderQuad();
-  void PrepareFramebuffer();
 };
 }  // namespace s21

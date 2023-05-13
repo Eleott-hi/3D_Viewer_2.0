@@ -26,11 +26,24 @@ void Backend::Init(QOpenGLWidget* widget) {
   technique_ = std::make_shared<TechniqueStrategy>();
   texture_storage_ = std::make_shared<TextureStorage>();
   parser_ = std::make_shared<Parser>(texture_storage_.get());
+  framebuffer3D_ = std::make_shared<Framebuffer>();
+  framebuffer3D_->Create({Format::RGB, Format::DEFAULT_DEPTH});
+  g_buffer_ = std::make_shared<Framebuffer>();
+  g_buffer_->Create(
+      {Format::RGBA16F, Format::RGBA16F, Format::RGBA, Format::DEFAULT_DEPTH});
 
   glLineStipple(4, 0xAAAA);
 
   RegisterComponents();
   RegisterSystems();
+
+  {
+    Texture texture = {framebuffer3D_->getTextureID(), "quad"};
+
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<QuadTag>(entity);
+    scene_.AddComponent<Texture>(entity, texture);
+  }
 
   {
     uint32_t skyboxVAO, skyboxVBO;
@@ -92,108 +105,7 @@ void Backend::Init(QOpenGLWidget* widget) {
     scene_.AddComponent<Projection>(entity);
   }
 
-  // {
-  //   Light light;
-  //   light.type = LightType::DIRECTIONAL;
-  //   light.ambient = {150, 150, 150};
-  //   light.direction = {0, -1, 0};
-
-  //   EntityID entity = scene_.NewEntity();
-  //   scene_.AddComponent<Light>(entity, light);
-  // }
-
-  // {
-  //   Attenuation attenuation;
-  //   attenuation.constant = 0.1;
-  //   attenuation.linear = 0.1;
-  //   attenuation.quadratic = 0.1;
-
-  //   Light light;
-  //   light.type = LightType::POINT;
-  //   light.position = {0, 0, 0};
-  //   light.ambient = {150, 150, 150};
-  //   // light.ambient = {0.5, 0.5, 0.5};
-  //   light.specular = {0.5, 0.5, 0.5};
-
-  //   Transform transform;
-  //   transform.translation = {0, 0, 2};
-  //   transform.scale = {0.1, 0.1, 0.1};
-
-  //   Material material;
-  //   material.color = Qt::white;
-
-  //   auto model = *parser_->loadModel(cube).model;
-  //   for (auto& mesh : model.meshes) mesh.bufferize(this);
-
-  //   EntityID entity = scene_.NewEntity();
-  //   scene_.AddComponent<Light>(entity, light);
-  //   scene_.AddComponent<Material>(entity, material);
-  //   scene_.AddComponent<Transform>(entity, transform);
-  //   scene_.AddComponent<Model>(entity, std::move(model));
-  //   scene_.AddComponent<Attenuation>(entity, attenuation);
-  // }
-
-  // {
-  //   Attenuation attenuation;
-  //   attenuation.constant = 0.1;
-  //   attenuation.linear = 0.1;
-  //   attenuation.quadratic = 0.1;
-
-  //   Light light;
-  //   light.type = LightType::POINT;
-  //   light.position = {0, 0, 0};
-  //   light.ambient = {50, 50, 50};
-  //   // light.ambient = {0.5, 0.5, 0.5};
-  //   light.specular = {0.5, 0.5, 0.5};
-
-  //   Transform transform;
-  //   transform.translation = {0, 0, 2};
-  //   transform.scale = {0.1, 0.1, 0.1};
-
-  //   Material material;
-  //   material.color = Qt::white;
-
-  //   auto model = *parser_->loadModel(cube).model;
-  //   for (auto& mesh : model.meshes) mesh.bufferize(this);
-
-  //   EntityID entity = scene_.NewEntity();
-  //   scene_.AddComponent<Light>(entity, light);
-  //   scene_.AddComponent<Material>(entity, material);
-  //   scene_.AddComponent<Transform>(entity, transform);
-  //   scene_.AddComponent<Model>(entity, std::move(model));
-  //   scene_.AddComponent<Attenuation>(entity, attenuation);
-  // }
-
-  // {
-  //   Attenuation attenuation;
-  //   attenuation.constant = 0.1;
-  //   attenuation.linear = 0.1;
-  //   attenuation.quadratic = 0.1;
-
-  //   Light light;
-  //   light.type = LightType::SPOT;
-  //   // light.position = {0, 0, 0};
-  //   light.ambient = {50, 50, 50};
-  //   // light.ambient = {0.5, 0.5, 0.5};
-  //   // light.specular = {0.5, 0.5, 0.5};
-
-  //   Transform transform;
-  //   transform.translation = {0, 0, 2};
-  //   transform.scale = {0.1, 0.1, 0.1};
-
-  //   Material material;
-  //   material.color = Qt::white;
-
-  //   auto model = *parser_->loadModel(cube).model;
-  //   for (auto& mesh : model.meshes) mesh.bufferize(this);
-
-  //   EntityID entity = scene_.NewEntity();
-  //   scene_.AddComponent<Light>(entity, light);
-  //   scene_.AddComponent<Material>(entity, material);
-  //   scene_.AddComponent<Transform>(entity, transform);
-  //   scene_.AddComponent<Model>(entity, std::move(model));
-  //   // scene_.AddComponent<Attenuation>(entity, attenuation);
-  // }
+  DebugLights(false, false, false, false);
 }
 
 void Backend::AddModel(QString path) {
@@ -256,12 +168,24 @@ void Backend::Update() {
 
 void Backend::Draw() {
   {
+    framebuffer3D_->Bind();
+    glClearColor(0.1, 0.1, 0.1, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+
     renderSystem_->Update();
     cubemapSystem_->Update();
     renderPickedSystem_->Update();
+
+    framebuffer3D_->Unbind();
   }
 
-  render2DSystem_->Update();
+  glDisable(GL_DEPTH_TEST);
+  glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT);
+  render2DSystem_->Update(g_buffer_->getTextureID(0),
+                          g_buffer_->getTextureID(1),
+                          g_buffer_->getTextureID(2));
 }
 
 void Backend::RegisterComponents() {
@@ -370,6 +294,112 @@ void Backend::RegisterSystems() {
     mask.set(GetComponentID<InputTag>());
     scene_.ChangeSystemMask<InputSystem>(mask);
     inputSystem_->Init(&scene_);
+  }
+}
+
+void Backend::DebugLights(bool directional, bool point_1, bool point_2,
+                          bool spot) {
+  if (directional) {
+    Light light;
+    light.type = LightType::DIRECTIONAL;
+    light.ambient = {150, 150, 150};
+    light.direction = {0, -1, 0};
+
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Light>(entity, light);
+  }
+
+  if (point_1) {
+    Attenuation attenuation;
+    attenuation.constant = 0.1;
+    attenuation.linear = 0.1;
+    attenuation.quadratic = 0.1;
+
+    Light light;
+    light.type = LightType::POINT;
+    light.position = {0, 0, 0};
+    light.ambient = {150, 150, 150};
+    // light.ambient = {0.5, 0.5, 0.5};
+    light.specular = {0.5, 0.5, 0.5};
+
+    Transform transform;
+    transform.translation = {0, 0, 2};
+    transform.scale = {0.1, 0.1, 0.1};
+
+    Material material;
+    material.color = Qt::white;
+
+    auto model = *parser_->loadModel(cube).model;
+    for (auto& mesh : model.meshes) mesh.bufferize(this);
+
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Light>(entity, light);
+    scene_.AddComponent<Material>(entity, material);
+    scene_.AddComponent<Transform>(entity, transform);
+    scene_.AddComponent<Model>(entity, std::move(model));
+    scene_.AddComponent<Attenuation>(entity, attenuation);
+  }
+
+  if (point_2) {
+    Attenuation attenuation;
+    attenuation.constant = 0.1;
+    attenuation.linear = 0.1;
+    attenuation.quadratic = 0.1;
+
+    Light light;
+    light.type = LightType::POINT;
+    light.position = {0, 0, 0};
+    light.ambient = {50, 50, 50};
+    // light.ambient = {0.5, 0.5, 0.5};
+    light.specular = {0.5, 0.5, 0.5};
+
+    Transform transform;
+    transform.translation = {0, 0, 2};
+    transform.scale = {0.1, 0.1, 0.1};
+
+    Material material;
+    material.color = Qt::white;
+
+    auto model = *parser_->loadModel(cube).model;
+    for (auto& mesh : model.meshes) mesh.bufferize(this);
+
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Light>(entity, light);
+    scene_.AddComponent<Material>(entity, material);
+    scene_.AddComponent<Transform>(entity, transform);
+    scene_.AddComponent<Model>(entity, std::move(model));
+    scene_.AddComponent<Attenuation>(entity, attenuation);
+  }
+
+  if (spot) {
+    Attenuation attenuation;
+    attenuation.constant = 0.1;
+    attenuation.linear = 0.1;
+    attenuation.quadratic = 0.1;
+
+    Light light;
+    light.type = LightType::SPOT;
+    // light.position = {0, 0, 0};
+    light.ambient = {50, 50, 50};
+    // light.ambient = {0.5, 0.5, 0.5};
+    // light.specular = {0.5, 0.5, 0.5};
+
+    Transform transform;
+    transform.translation = {0, 0, 2};
+    transform.scale = {0.1, 0.1, 0.1};
+
+    Material material;
+    material.color = Qt::white;
+
+    auto model = *parser_->loadModel(cube).model;
+    for (auto& mesh : model.meshes) mesh.bufferize(this);
+
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Light>(entity, light);
+    scene_.AddComponent<Material>(entity, material);
+    scene_.AddComponent<Transform>(entity, transform);
+    scene_.AddComponent<Model>(entity, std::move(model));
+    // scene_.AddComponent<Attenuation>(entity, attenuation);
   }
 }
 

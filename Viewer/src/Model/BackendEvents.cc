@@ -12,6 +12,9 @@ void Backend::WindowResize(int w, int h) {
   qDebug() << "WindowResizeEvent:" << w << h;
   WindowResizeEvent event(w, h);
   scene_.Despatch(event);
+
+  framebuffer3D_->Resize(w, h);
+  g_buffer_->Resize(w, h);
 }
 
 void Backend::MousePressed(QPoint pos) {

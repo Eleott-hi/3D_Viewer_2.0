@@ -89,7 +89,11 @@ void Framebuffer::Invalidate() {
   if (!m_Color_Textures_.empty()) {
 #define ARRAY_SIZE(x) ((sizeof(x)) / (sizeof(x[0])))
 
-    GLenum buf[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+    GLenum buf[] = {
+        GL_COLOR_ATTACHMENT0,
+        GL_COLOR_ATTACHMENT1,
+        GL_COLOR_ATTACHMENT2,
+    };
     int n = ARRAY_SIZE(buf);
 
     Q_ASSERT_X(m_Color_Textures_.size() <= n,  //
@@ -113,6 +117,12 @@ void Framebuffer::SwitchColorTexture() {
     switch (color_formats_[i].format_) {
       case Format::RGB:
         AttachColorTexture(i, m_Color_Textures_[i], GL_RGB, GL_RGB);
+        break;
+      case Format::RGBA:
+        AttachColorTexture(i, m_Color_Textures_[i], GL_RGBA, GL_RGBA);
+        break;
+      case Format::RGBA16F:
+        AttachColorTexture(i, m_Color_Textures_[i], GL_RGBA16F, GL_RGBA);
         break;
       case Format::RED_INTEGER:
         AttachColorTexture(i, m_Color_Textures_[i], GL_R32I, GL_RED_INTEGER);

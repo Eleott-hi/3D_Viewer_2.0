@@ -11,6 +11,8 @@ enum class Format {
 
   // Color
   RGB,
+  RGBA,
+  RGBA16F,
   RED_INTEGER,
 
   // Depth

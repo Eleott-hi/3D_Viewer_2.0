@@ -76,6 +76,8 @@ class Backend : QOpenGLExtraFunctions {
   QOpenGLWidget *opengl_widget_ = nullptr;
   std::shared_ptr<TechniqueStrategy> technique_;
   std::shared_ptr<TextureStorage> texture_storage_;
+  std::shared_ptr<IFramebuffer> framebuffer3D_;
+  std::shared_ptr<IFramebuffer> g_buffer_;
 
   std::shared_ptr<InputSystem> inputSystem_;
   std::shared_ptr<LightSystem> lightSystem_;
@@ -92,6 +94,7 @@ class Backend : QOpenGLExtraFunctions {
   void RegisterSystems();
   void Draw();
   void Update();
+  void DebugLights(bool directional, bool point_1, bool point_2, bool spot);
 };
 
 }  // namespace s21
