@@ -9,7 +9,11 @@ MainWindow::MainWindow(Backend *backend, QWidget *parent)
     : QMainWindow(parent), backend_(backend), ui_(new Ui::MainWindow) {
   ui_->setupUi(this);
   ui_->openGLWidget->SetController(backend);
-  this->grabKeyboard();
+  backend_->AddObserver(this);
+
+  ui_->dockTransformation->close();
+  ui_->dockMaterial->close();
+  ui_->dockLight->close();
 
   ConnectSignals();
 }
@@ -42,33 +46,41 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
   backend_->KeyReleased(event);
 }
 
-void MainWindow::ConnectSignals() {
-  connect(ui_->xTrans, &QSlider::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Transform>([value](auto &component) {
-      component.translation.setX(value / 100.0);
-    });
-  });
+void MainWindow::OnNotify() {
+  {
+    auto components = backend_->GetComponents<Transform>();
+    if (components.empty()) {
+      ui_->dockTransformation->close();
+    } else {
+      if (components.size() == 1) SetTransformUi(*components[0]);
+      ui_->dockTransformation->show();
+    }
+  }
 
-  connect(ui_->yTrans, &QSlider::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Transform>([value](auto &component) {
-      component.translation.setY(value / 100.0);
-    });
-  });
+  {
+    auto components = backend_->GetComponents<Light>();
+    if (components.empty()) {
+      ui_->dockLight->close();
+    } else {
+      if (components.size() == 1) SetLightUi(*components[0]);
+      ui_->dockLight->show();
+    }
+  }
 
-  connect(ui_->zTrans, &QSlider::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Transform>([value](auto &component) {
-      component.translation.setZ(value / 100.0);
-    });
-  });
+  {
+    auto components = backend_->GetComponents<Material>();
+    if (components.empty()) {
+      ui_->dockMaterial->close();
+    } else {
+      if (components.size() == 1) SetMaterialUi(*components[0]);
+      ui_->dockMaterial->show();
+    }
+  }
 
-  connect(ui_->xRot, &QSlider::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Transform>(
-        [value](auto &component) { component.rotation.setX(value); });
-  });
-
-  connect(ui_->yRot, &QSlider::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Transform>(
-        [value](auto &component) { component.rotation.setY(value); });
-  });
+  //  for (auto &component : components) {
+  //    qDebug() << component->translation;
+  //    qDebug() << component->rotation;
+  //  }
 }
+
 }  // namespace s21

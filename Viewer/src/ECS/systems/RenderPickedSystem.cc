@@ -15,7 +15,7 @@ void RenderPickedSystem::Update() {
 
   for (auto &entity : entities_) {
     auto const &transform = scene_->GetComponent<Transform>(entity);
-    auto const &model = scene_->GetComponent<Model>(entity);
+    auto &model = scene_->GetComponent<Model>(entity);
 
     auto const &modelMatrix = transform.GetModelMatrix();
 
@@ -34,7 +34,7 @@ void RenderPickedSystem::Update() {
     // Draw model to stencil buffer
     technique_->Enable(TechniqueType::SIMPLE_COLOR);
     technique_->setMVP(proj, view, modelMatrix);
-    DrawObject(model);
+    for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
 
     // Enable writing to color buffer
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -44,19 +44,11 @@ void RenderPickedSystem::Update() {
     // Draw outline to stencil buffer
     technique_->Enable(TechniqueType::STENCIL_OUTLINE);
     technique_->setMVP(proj, view, modelMatrix);
-    DrawObject(model);
+    for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
 
     glDisable(GL_STENCIL_TEST);  // Disable stancil buffer
     glEnable(GL_DEPTH_TEST);     // Enable depth buffer
     // ========================== STENCIL BUFFER ==========================
-  }
-}
-
-void RenderPickedSystem::DrawObject(Model const &model) {
-  for (auto const &mesh : model.meshes) {
-    glBindVertexArray(mesh.VAO);
-    glDrawElements(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
   }
 }
 

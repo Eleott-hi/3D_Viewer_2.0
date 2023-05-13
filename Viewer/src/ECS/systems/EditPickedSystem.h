@@ -31,16 +31,19 @@ class EditPickedSystem : public System {
   }
 
   template <typename Type>
-  Type *GetComponent() {
+  std::vector<Type *> GetComponents() {
+    std::vector<Type *> components;
+
     for (auto &entity : entities_)
       if (scene_->EntityHasComponent<Type>(entity))
-        return &scene_->GetComponent<Type>(entity);
+        components.push_back(&scene_->GetComponent<Type>(entity));
 
-    return nullptr;
+    return components;
   }
 
  private:
   ECS_Controller *scene_;
+  // EntityID edited_entity_ = -1;
 };
 
 }  // namespace s21

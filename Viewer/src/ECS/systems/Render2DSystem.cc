@@ -11,8 +11,8 @@ void Render2DSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
 
 void Render2DSystem::Update(uint32_t pos, uint32_t normal,
                             uint32_t albedo_spec) {
-  static EntityID qaud = Utils::GetQuad(scene_);
-  static auto const &texture = scene_->GetComponent<Texture>(qaud);
+  static auto const &texture =
+      scene_->GetComponent<Texture>(Utils::GetQuad(scene_));
 
   technique_->Enable(TechniqueType::QUAD);
   technique_->Clear();

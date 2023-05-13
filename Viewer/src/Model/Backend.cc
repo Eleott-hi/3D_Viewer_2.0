@@ -17,7 +17,9 @@ float skyboxVertices[] = {
 namespace s21 {
 
 std::string cube =
-    "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/cube.obj";
+    // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/cube.obj";
+    "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
+    "cube.obj";
 
 void Backend::Init(QOpenGLWidget* widget) {
   initializeOpenGLFunctions();
@@ -105,7 +107,7 @@ void Backend::Init(QOpenGLWidget* widget) {
     scene_.AddComponent<Projection>(entity);
   }
 
-  DebugLights(false, false, false, false);
+  DebugLights(false, true, false, false);
 }
 
 void Backend::AddModel(QString path) {
@@ -138,11 +140,10 @@ void Backend::AddModel(QString path) {
   );
 
   EntityID entity = scene_.NewEntity();
-  scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_TEXTURE});
+  scene_.AddComponent<Shader>(entity, {TechniqueType::LIGHT_TEXTURE});
   scene_.AddComponent<Transform>(entity);
   scene_.AddComponent<Material>(entity, material);
   scene_.AddComponent<Model>(entity, std::move(*model));
-
   opengl_widget_->doneCurrent();
 }
 
@@ -164,28 +165,43 @@ void Backend::Update() {
   cameraSystem_->Update();
   projectionSystem_->Update();
   lightSystem_->Update();
+
+  if (picked_) {
+    Notify();
+    picked_ = false;
+  }
 }
 
 void Backend::Draw() {
+  {
+    g_buffer_->Bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+    defferedShadingSystem_->Update();
+    g_buffer_->Unbind();
+  }
+
   {
     framebuffer3D_->Bind();
     glClearColor(0.1, 0.1, 0.1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 
-    renderSystem_->Update();
     cubemapSystem_->Update();
+    renderSystem_->Update();
     renderPickedSystem_->Update();
 
     framebuffer3D_->Unbind();
   }
 
-  glDisable(GL_DEPTH_TEST);
-  glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT);
-  render2DSystem_->Update(g_buffer_->getTextureID(0),
-                          g_buffer_->getTextureID(1),
-                          g_buffer_->getTextureID(2));
+  {
+    glDisable(GL_DEPTH_TEST);
+    glClearColor(0.1, 0.1, 0.1, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    render2DSystem_->Update(g_buffer_->getTextureID(0),
+                            g_buffer_->getTextureID(1),
+                            g_buffer_->getTextureID(2));
+  }
 }
 
 void Backend::RegisterComponents() {
@@ -239,8 +255,18 @@ void Backend::RegisterSystems() {
     ComponentMask mask;
     mask.set(GetComponentID<Model>());
     mask.set(GetComponentID<Transform>());
+    mask.set(GetComponentID<Material>());
     scene_.ChangeSystemMask<RenderSystem>(mask);
     renderSystem_->Init(&scene_, technique_.get());
+  }
+
+  defferedShadingSystem_ = scene_.RegisterSystem<DefferedShadingSystem>();
+  {
+    ComponentMask mask;
+    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<Transform>());
+    scene_.ChangeSystemMask<DefferedShadingSystem>(mask);
+    defferedShadingSystem_->Init(&scene_, technique_.get());
   }
 
   render2DSystem_ = scene_.RegisterSystem<Render2DSystem>();
@@ -302,11 +328,13 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
   if (directional) {
     Light light;
     light.type = LightType::DIRECTIONAL;
-    light.ambient = {150, 150, 150};
+    // light.ambient = {150, 150, 150};
+    light.ambient = {0.5, 0.5, 0.5};
     light.direction = {0, -1, 0};
 
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<Light>(entity, light);
+    scene_.AddComponent<PickingTag>(entity);
   }
 
   if (point_1) {
@@ -318,8 +346,8 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
     Light light;
     light.type = LightType::POINT;
     light.position = {0, 0, 0};
-    light.ambient = {150, 150, 150};
-    // light.ambient = {0.5, 0.5, 0.5};
+    // light.ambient = {150, 150, 150};
+    light.ambient = {0.5, 0.5, 0.5};
     light.specular = {0.5, 0.5, 0.5};
 
     Transform transform;
@@ -338,6 +366,7 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
     scene_.AddComponent<Transform>(entity, transform);
     scene_.AddComponent<Model>(entity, std::move(model));
     scene_.AddComponent<Attenuation>(entity, attenuation);
+    scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_COLOR});
   }
 
   if (point_2) {
@@ -368,6 +397,7 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
     scene_.AddComponent<Material>(entity, material);
     scene_.AddComponent<Transform>(entity, transform);
     scene_.AddComponent<Model>(entity, std::move(model));
+    scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_COLOR});
     scene_.AddComponent<Attenuation>(entity, attenuation);
   }
 
@@ -380,9 +410,9 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
     Light light;
     light.type = LightType::SPOT;
     // light.position = {0, 0, 0};
-    light.ambient = {50, 50, 50};
-    // light.ambient = {0.5, 0.5, 0.5};
-    // light.specular = {0.5, 0.5, 0.5};
+    // light.ambient = {50, 50, 50};
+    light.ambient = {0.5, 0.5, 0.5};
+    light.specular = {0.5, 0.5, 0.5};
 
     Transform transform;
     transform.translation = {0, 0, 2};
@@ -399,6 +429,7 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
     scene_.AddComponent<Material>(entity, material);
     scene_.AddComponent<Transform>(entity, transform);
     scene_.AddComponent<Model>(entity, std::move(model));
+    scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_COLOR});
     // scene_.AddComponent<Attenuation>(entity, attenuation);
   }
 }

@@ -53,6 +53,7 @@ void Backend::MouseDoubleClicked(QPoint pos) {
   auto& mouse =
       scene_.GetComponent<MouseInput>(scene_.GetEntities<MouseInput>().at(0));
   mouse.double_click = pos;
+  picked_ = true;
 }
 
 void Backend::KeyPressed(QKeyEvent* key_event) {

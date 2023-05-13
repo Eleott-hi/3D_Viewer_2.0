@@ -9,16 +9,16 @@
 
 namespace s21 {
 
-class RenderPickedSystem : public System, protected QOpenGLExtraFunctions {
+class DefferedShadingSystem : public System, protected QOpenGLExtraFunctions {
  public:
-  RenderPickedSystem() { initializeOpenGLFunctions(); }
-  ~RenderPickedSystem() = default;
+  DefferedShadingSystem() { initializeOpenGLFunctions(); }
+  ~DefferedShadingSystem() = default;
 
   void Init(ECS_Controller *scene, TechniqueStrategy *technique);
   void Update();
 
  private:
-  ECS_Controller *scene_;
-  TechniqueStrategy *technique_;
+  ECS_Controller *scene_ = nullptr;
+  TechniqueStrategy *technique_ = nullptr;
 };
 }  // namespace s21

@@ -1,12 +1,13 @@
 #include "GL_Widget.h"
 
 // #include <QPainter>
-#include <QCoreApplication>
+// #include <QCoreApplication>
+#include "MainWindow.h"
 
 namespace s21 {
 
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
-  connect(&timer_, &QTimer::timeout, [&]() { update(); });
+  connect(&timer_, &QTimer::timeout, [&] { update(); });
 }
 
 void GLWidget::initializeGL() {
@@ -37,6 +38,7 @@ void GLWidget::resizeGL(int w, int h) { backend_->WindowResize(w, h); }
 void GLWidget::paintGL() { backend_->Render(); }
 
 void GLWidget::mousePressEvent(QMouseEvent *event) {
+  this->setFocus();
   if (event->button() == Qt::LeftButton) backend_->MousePressed(event->pos());
 }
 

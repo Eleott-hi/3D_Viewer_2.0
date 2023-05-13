@@ -6,6 +6,22 @@
 
 namespace s21 {
 
+MouseInput &GetMouseInput(ECS_Controller *scene) {
+  auto entities = scene->GetEntities<MouseInput>();
+
+  Q_ASSERT(entities.size() == 1);
+
+  return scene->GetComponent<MouseInput>(entities[0]);
+}
+
+KeyboardInput &GetKeyboardInput(ECS_Controller *scene) {
+  auto entities = scene->GetEntities<KeyboardInput>();
+
+  Q_ASSERT(entities.size() == 1);
+
+  return scene->GetComponent<KeyboardInput>(entities[0]);
+}
+
 MousePickingSystem::MousePickingSystem() {
   initializeOpenGLFunctions();
   framebuffer_->Create({Format::RED_INTEGER, Format::DEFAULT_DEPTH});
@@ -25,9 +41,7 @@ void MousePickingSystem::OnWindowResize(Event &e) {
 }
 
 void MousePickingSystem::Update() {
-  static auto &pos =
-      scene_->GetComponent<MouseInput>(scene_->GetEntities<MouseInput>().at(0))
-          .double_click;
+  static auto &pos = GetMouseInput(scene_).double_click;
 
   if (pos == QPoint{-1, -1}) return;
 
@@ -55,17 +69,22 @@ void MousePickingSystem::PrepareFramebuffer() {
   glClearColor(-1, -1, -1, 1);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
-  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  // glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void MousePickingSystem::PickEntity(QPoint &pos) {
+  static auto &ctrl = GetKeyboardInput(scene_).keys[Qt::Key_Control];
+
   int entity = framebuffer_->ReadPixel(pos.x(), pos.y());
   auto pickedEntities = scene_->GetEntities<PickingTag>();
 
-  for (EntityID entity : pickedEntities)
-    scene_->RemoveComponent<PickingTag>(entity);
+  if (!ctrl)
+    for (EntityID entity : pickedEntities)
+      scene_->RemoveComponent<PickingTag>(entity);
 
-  if (entity >= 0) scene_->AddComponent<PickingTag>(entity);
+  if (entity >= 0 && std::find(pickedEntities.begin(), pickedEntities.end(),
+                               entity) == pickedEntities.end())
+    scene_->AddComponent<PickingTag>(entity);
 
   pos = {-1, -1};
 

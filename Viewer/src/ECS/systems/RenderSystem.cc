@@ -17,22 +17,20 @@ void RenderSystem::Update() {
   auto [proj, view] = Utils::GetProjectionAndView(scene_);
 
   for (auto entity : entities_) {
+    if (!scene_->EntityHasComponent<Shader>(entity)) continue;
+
     auto &model = scene_->GetComponent<Model>(entity);
     auto const &transform = scene_->GetComponent<Transform>(entity);
+    auto const &material = scene_->GetComponent<Material>(entity);
 
-    technique_->Enable(scene_->EntityHasComponent<Shader>(entity)
-                           ? scene_->GetComponent<Shader>(entity).type
-                           : TechniqueType::SIMPLE_COLOR);
+    technique_->Enable(scene_->GetComponent<Shader>(entity).type);
 
     technique_->Clear();
+    technique_->setMaterial(material);
     technique_->setMVP(proj, view, transform.GetModelMatrix());
 
     // technique_->setTexture(enviroment.light);
 
-    if (scene_->EntityHasComponent<Material>(entity))
-      technique_->setMaterial(scene_->GetComponent<Material>(entity));
-
-    // DrawObject(model);
     for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
   }
 }

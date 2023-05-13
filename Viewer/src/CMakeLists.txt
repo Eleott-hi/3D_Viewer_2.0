@@ -38,6 +38,7 @@ include_directories(
     model
     common
     shared
+    observer
     controller
     techniques
     OpenGL
