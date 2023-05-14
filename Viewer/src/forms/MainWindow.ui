@@ -532,12 +532,24 @@
          <property name="prefix">
           <string>x: </string>
          </property>
+         <property name="minimum">
+          <double>-100.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>100.000000000000000</double>
+         </property>
         </widget>
        </item>
        <item>
         <widget class="QDoubleSpinBox" name="lightPositionY">
          <property name="prefix">
           <string>y: </string>
+         </property>
+         <property name="minimum">
+          <double>-100.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>100.000000000000000</double>
          </property>
         </widget>
        </item>
@@ -564,6 +576,12 @@
          <property name="prefix">
           <string>x: </string>
          </property>
+         <property name="minimum">
+          <double>-100.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>100.000000000000000</double>
+         </property>
         </widget>
        </item>
        <item>
@@ -571,12 +589,24 @@
          <property name="prefix">
           <string>y: </string>
          </property>
+         <property name="minimum">
+          <double>-100.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>100.000000000000000</double>
+         </property>
         </widget>
        </item>
        <item>
         <widget class="QDoubleSpinBox" name="lightDirectionZ">
          <property name="prefix">
           <string>z: </string>
+         </property>
+         <property name="minimum">
+          <double>-100.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>100.000000000000000</double>
          </property>
         </widget>
        </item>
