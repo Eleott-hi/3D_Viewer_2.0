@@ -17,9 +17,9 @@ float skyboxVertices[] = {
 namespace s21 {
 
 std::string cube =
-    // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/cube.obj";
-    "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
-    "cube.obj";
+    "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/cube.obj";
+    // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
+    // "cube.obj";
 
 void Backend::Init(QOpenGLWidget* widget) {
   initializeOpenGLFunctions();
@@ -60,10 +60,10 @@ void Backend::Init(QOpenGLWidget* widget) {
                           (void*)0);
 
     std::string dir =
-        // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/"
-        // "skybox"
-        "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
-        "textures/skybox"  //
+        "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/"
+        "skybox"
+        // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
+        // "textures/skybox"  //
         ;
 
     std::vector<std::string> faces{dir + "/right.jpg", dir + "/left.jpg",
@@ -127,16 +127,14 @@ void Backend::AddModel(QString path) {
 
   material.roughness = texture_storage_->LoadTexture(
       "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/"
-      "backpack/roughness.jpg"
       // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
-      // "backpack/roughness.jpg"  //
+      "backpack/roughness.jpg"  //
   );
 
   material.ao = texture_storage_->LoadTexture(
       "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/"
-      "backpack/ao.jpg"
       // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
-      // "backpack/ao.jpg"  //
+      "backpack/ao.jpg"  //
   );
 
   EntityID entity = scene_.NewEntity();
