@@ -8,11 +8,9 @@ void NormalMapTechnique::init() {
   GenerateShaders(":/shaders/normal_mapping.vs", ":/shaders/normal_mapping.fs");
 }
 void NormalMapTechnique::setTexture(Texture const &texture) {
-  auto const &[id, type] = texture;
-
-  shader_.setUniformValue(type.c_str(), index_);
+  shader_.setUniformValue(texture.type.c_str(), index_);
   glActiveTexture(GL_TEXTURE0 + index_);
-  glBindTexture(GL_TEXTURE_2D, id);
+  glBindTexture(GL_TEXTURE_2D, texture.id);
 
   index_++;
 }
@@ -29,9 +27,9 @@ void NormalMapTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
 }
 
 void NormalMapTechnique::setMaterial(Material const &material) {
-  setTexture({material.normal, "normalMap"});
-  setTexture({material.diffuse, "material.diffuseMap"});
-  setTexture({material.specular, "material.specularMap"});
+  setTexture({material.normal.id, "normalMap"});
+  setTexture({material.diffuse.id, "material.diffuseMap"});
+  setTexture({material.specular.id, "material.specularMap"});
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 

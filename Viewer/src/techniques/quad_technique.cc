@@ -7,10 +7,9 @@ void QuadTechnique::init() {
 }
 
 void QuadTechnique::setTexture(Texture const &texture) {
-  auto const &[id, type] = texture;
-  shader_.setUniformValue(type.c_str(), index_);
+  shader_.setUniformValue(texture.type.c_str(), index_);
   glActiveTexture(GL_TEXTURE0 + index_);
-  glBindTexture(GL_TEXTURE_2D, id);
+  glBindTexture(GL_TEXTURE_2D, texture.id);
 
   index_++;
 }

@@ -13,13 +13,16 @@ void Backend::WindowResize(int w, int h) {
   WindowResizeEvent event(w, h);
   scene_.Despatch(event);
 
+  width_ = w;
+  height_ = h;
+
   framebuffer3D_->Resize(w, h);
   g_buffer_->Resize(w, h);
 }
 
 void Backend::MousePressed(QPoint pos) {
   qDebug() << "MousePressedEvent:" << pos;
-  auto& mouse =
+  static auto& mouse =
       scene_.GetComponent<MouseInput>(scene_.GetEntities<MouseInput>().at(0));
   mouse.left_button_pressed = true;
   mouse.start = pos;
@@ -28,7 +31,7 @@ void Backend::MousePressed(QPoint pos) {
 
 void Backend::MouseReleased(QPoint pos) {
   qDebug() << "MouseReleasedEvent:" << pos;
-  auto& mouse =
+  static auto& mouse =
       scene_.GetComponent<MouseInput>(scene_.GetEntities<MouseInput>().at(0));
   mouse.left_button_pressed = false;
   mouse.start = pos;
@@ -40,7 +43,7 @@ void Backend::MouseMoved(QPoint pos) {
   // MouseMovedEvent event(offset);
   // scene_.Despatch(event);
 
-  auto& mouse =
+  static auto& mouse =
       scene_.GetComponent<MouseInput>(scene_.GetEntities<MouseInput>().at(0));
   mouse.end = pos;
 }
@@ -50,7 +53,7 @@ void Backend::MouseDoubleClicked(QPoint pos) {
   // MouseDoubleClickedEvent event(pos);
   // scene_.Despatch(event);
 
-  auto& mouse =
+  static auto& mouse =
       scene_.GetComponent<MouseInput>(scene_.GetEntities<MouseInput>().at(0));
   mouse.double_click = pos;
   picked_ = true;
@@ -61,7 +64,7 @@ void Backend::KeyPressed(QKeyEvent* key_event) {
   // KeyPressedEvent event(key_event);
   // scene_.Despatch(event);
 
-  auto& [keyboard] = scene_.GetComponent<KeyboardInput>(
+  static auto& [keyboard] = scene_.GetComponent<KeyboardInput>(
       scene_.GetEntities<KeyboardInput>().at(0));
   keyboard[key_event->key()] = true;
 }
@@ -69,7 +72,7 @@ void Backend::KeyPressed(QKeyEvent* key_event) {
 void Backend::KeyReleased(QKeyEvent* key_event) {
   qDebug() << "KeyReleasedEvent" << key_event;
 
-  auto& [keyboard] = scene_.GetComponent<KeyboardInput>(
+  static auto& [keyboard] = scene_.GetComponent<KeyboardInput>(
       scene_.GetEntities<KeyboardInput>().at(0));
   keyboard[key_event->key()] = false;
   // KeyReleasedEvent event(key_event);

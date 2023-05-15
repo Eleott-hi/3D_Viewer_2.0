@@ -47,9 +47,13 @@ void Framebuffer::Clear() {
 }
 
 void Framebuffer::Resize(uint32_t width, uint32_t height) {
+  // auto width_ = width;
+  // if (width_ < width * magicScale_ || height_ < height * magicScale_) {
   width_ = width * magicScale_;
   height_ = height * magicScale_;
   Invalidate();
+  // }
+  // glViewport(0, 0, width * magicScale_, height * magicScale_);
 }
 
 void Framebuffer::Bind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo); }

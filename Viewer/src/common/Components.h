@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QColor>
+#include <QImage>
 #include <QMatrix4x4>
 #include <QOpenGLExtraFunctions>
 #include <QVector3D>
@@ -17,12 +18,12 @@ enum class TechniqueType {
   SIMPLE_TEXTURE,
   LIGHT_COLOR,
   LIGHT_TEXTURE,
+  PHYSICAL_BASED_RENDERING,
   MOUSE_PICKING,
   QUAD,
   CUBEMAP,
   NORMALMAP,
   STENCIL_OUTLINE,
-  PHYSICAL_BASED_RENDERING,
   DEFFERED_SHADING,
 };
 
@@ -64,15 +65,22 @@ struct Transform {
   QMatrix4x4 GetModelMatrix() const;
 };
 
+struct Texture {
+  uint32_t id = 0;
+  std::string type;
+  QImage image;
+  QString filename;
+};
+
 struct Material {
   QColor color = QColor::fromRgbF(0, 0.5, 0);
 
-  uint32_t diffuse = 0;
-  uint32_t normal = 0;
-  uint32_t specular = 0;
-  uint32_t roughness = 0;
-  uint32_t metallic = 0;
-  uint32_t ao = 0;
+  Texture diffuse;
+  Texture normal;
+  Texture specular;
+  Texture roughness;
+  Texture metallic;
+  Texture ao;
 
   float shininess = 32;
 };
@@ -103,11 +111,6 @@ struct Camera {
 struct Projection {
   QMatrix4x4 matrix;
   bool perspective = true;
-};
-
-struct Texture {
-  uint32_t id = 0;
-  std::string type;
 };
 
 struct Light {
@@ -144,5 +147,6 @@ struct MouseInput {
 struct QuadTag {};
 struct CubemapTag {};
 struct PickingTag {};
+struct RenderTag {};
 
 }  // namespace s21

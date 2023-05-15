@@ -93,14 +93,14 @@ void main() {
     for(int i = 0; i < pointLightCount; ++i) Lo += CalcPointLight(i, N, V, albedo, F0, metallic, roughness);
     for(int i = 0; i < spotLightCount; ++i) Lo += CalcSpotLight(i, N, V, albedo, F0, metallic, roughness);
 
-    vec3 kS = fresnelSchlick(max(dot(N, V), 0.0), F0);
-    vec3 kD = 1.0 - kS;
-    kD *= 1.0 - metallic;
-    vec3 irradiance = texture(irradianceMap, N).rgb;
-    vec3 diffuse = irradiance * albedo;
-    vec3 ambient = (kD * diffuse) * ao;
+    // vec3 kS = fresnelSchlick(max(dot(N, V), 0.0), F0);
+    // vec3 kD = 1.0 - kS;
+    // kD *= 1.0 - metallic;
+    // vec3 irradiance = texture(irradianceMap, N).rgb;
+    // vec3 diffuse = irradiance * albedo;
+    // vec3 ambient = (kD * diffuse) * ao;
 
-    // vec3 ambient = vec3(0.01) * albedo * ao;
+    vec3 ambient = vec3(0.01) * albedo * ao;
 
     vec3 color = ambient + Lo;
     color = color / (color + vec3(1.0));

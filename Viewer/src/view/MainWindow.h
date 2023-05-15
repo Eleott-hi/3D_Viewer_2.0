@@ -22,6 +22,7 @@ class MainWindow : public QMainWindow, protected Observer {
   ~MainWindow();
 
   void OnNotify() final;
+  void OnCameraNotify() final;
 
  private slots:
   void on_actionOpen_file_triggered();
@@ -35,12 +36,14 @@ class MainWindow : public QMainWindow, protected Observer {
   virtual void keyReleaseEvent(QKeyEvent *event) override;
 
   void ConnectSignals();
-  void SetTransformUi(Transform const &transform);
-  void SetLightUi(Light const &transform);
-  void SetMaterialUi(Material const &transform);
+  void SetTransformUi(Transform const &component);
+  void SetLightUi(Light const &component);
+  void SetMaterialUi(Material const &component);
+  void SetShaderUi(Shader const &component);
   void ConnectTransformUi();
   void ConnectLightUi();
   void ConnectMaterialUi();
+  void ConnectShaderUi();
 };
 
 }  // namespace s21

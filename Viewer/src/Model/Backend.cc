@@ -1,5 +1,7 @@
 #include "Backend.h"
 
+#include "Utils.h"
+
 float skyboxVertices[] = {
     // positions
     -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,  -1.0f,
@@ -14,12 +16,11 @@ float skyboxVertices[] = {
     1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,
 };
 
-namespace s21 {
+std::string dir =  //
+    "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
+// "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
 
-std::string cube =
-    "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/cube.obj";
-    // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
-    // "cube.obj";
+namespace s21 {
 
 void Backend::Init(QOpenGLWidget* widget) {
   initializeOpenGLFunctions();
@@ -59,16 +60,10 @@ void Backend::Init(QOpenGLWidget* widget) {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
                           (void*)0);
 
-    std::string dir =
-        "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/textures/"
-        "skybox"
-        // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
-        // "textures/skybox"  //
-        ;
-
-    std::vector<std::string> faces{dir + "/right.jpg", dir + "/left.jpg",
-                                   dir + "/top.jpg",   dir + "/bottom.jpg",
-                                   dir + "/front.jpg", dir + "/back.jpg"};
+    std::vector<std::string> faces{
+        dir + "textures/skybox/right.jpg", dir + "textures/skybox/left.jpg",
+        dir + "textures/skybox/top.jpg",   dir + "textures/skybox/bottom.jpg",
+        dir + "textures/skybox/front.jpg", dir + "textures/skybox/back.jpg"};
 
     Mesh mesh;
     mesh.VAO = skyboxVAO;
@@ -121,34 +116,28 @@ void Backend::AddModel(QString path) {
 
   Material material;
   material.shininess = 10;
-  if (diffuse_map) material.diffuse = diffuse_map->id;
-  if (normal_map) material.normal = normal_map->id;
-  if (specular_map) material.specular = specular_map->id;
+  if (diffuse_map) material.diffuse = *diffuse_map;
+  if (normal_map) material.normal = *normal_map;
+  if (specular_map) material.specular = *specular_map;
 
-  material.roughness = texture_storage_->LoadTexture(
-      "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/"
-      // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
-      "backpack/roughness.jpg"  //
-  );
+  material.roughness =
+      texture_storage_->LoadTexture(dir + "backpack/roughness.jpg");
 
-  material.ao = texture_storage_->LoadTexture(
-      "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/"
-      // "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/"
-      "backpack/ao.jpg"  //
-  );
+  material.ao = texture_storage_->LoadTexture(dir + "backpack/ao.jpg");
 
   EntityID entity = scene_.NewEntity();
   scene_.AddComponent<Shader>(entity, {TechniqueType::LIGHT_TEXTURE});
   scene_.AddComponent<Transform>(entity);
+  scene_.AddComponent<RenderTag>(entity);
   scene_.AddComponent<Material>(entity, material);
   scene_.AddComponent<Model>(entity, std::move(*model));
+
   opengl_widget_->doneCurrent();
 }
 
-void Backend::LoadTexture(QString filename) {
-  opengl_widget_->makeCurrent();
-  auto id = texture_storage_->LoadTexture(filename.toStdString());
-  opengl_widget_->doneCurrent();
+void Backend::LoadTexture(QString filename, Texture& texture) {
+  InsideOpenGLContext(
+      [&] { texture = texture_storage_->LoadTexture(filename.toStdString()); });
 }
 
 void Backend::Render() {
@@ -168,6 +157,8 @@ void Backend::Update() {
     Notify();
     picked_ = false;
   }
+
+  // NotifyCamera();
 }
 
 void Backend::Draw() {
@@ -196,6 +187,7 @@ void Backend::Draw() {
     glDisable(GL_DEPTH_TEST);
     glClearColor(0.1, 0.1, 0.1, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
+    // glViewport(0, 0, width_, height_);
     render2DSystem_->Update(g_buffer_->getTextureID(0),
                             g_buffer_->getTextureID(1),
                             g_buffer_->getTextureID(2));
@@ -203,17 +195,18 @@ void Backend::Draw() {
 }
 
 void Backend::RegisterComponents() {
-  scene_.RegisterComponent<QuadTag>();
   scene_.RegisterComponent<Mesh>();
   scene_.RegisterComponent<Model>();
   scene_.RegisterComponent<Light>();
   scene_.RegisterComponent<Shader>();
   scene_.RegisterComponent<Camera>();
-  scene_.RegisterComponent<CubemapTag>();
   scene_.RegisterComponent<Texture>();
+  scene_.RegisterComponent<QuadTag>();
   scene_.RegisterComponent<Material>();
   scene_.RegisterComponent<InputTag>();
+  scene_.RegisterComponent<RenderTag>();
   scene_.RegisterComponent<Transform>();
+  scene_.RegisterComponent<CubemapTag>();
   scene_.RegisterComponent<Enviroment>();
   scene_.RegisterComponent<MouseInput>();
   scene_.RegisterComponent<Projection>();
@@ -254,6 +247,7 @@ void Backend::RegisterSystems() {
     mask.set(GetComponentID<Model>());
     mask.set(GetComponentID<Transform>());
     mask.set(GetComponentID<Material>());
+    mask.set(GetComponentID<RenderTag>());
     scene_.ChangeSystemMask<RenderSystem>(mask);
     renderSystem_->Init(&scene_, technique_.get());
   }
@@ -355,7 +349,7 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
     Material material;
     material.color = Qt::white;
 
-    auto model = *parser_->loadModel(cube).model;
+    auto model = *parser_->loadModel(dir + "cube.obj").model;
     for (auto& mesh : model.meshes) mesh.bufferize(this);
 
     EntityID entity = scene_.NewEntity();
@@ -365,6 +359,7 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
     scene_.AddComponent<Model>(entity, std::move(model));
     scene_.AddComponent<Attenuation>(entity, attenuation);
     scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_COLOR});
+    scene_.AddComponent<RenderTag>(entity);
   }
 
   if (point_2) {
@@ -387,7 +382,7 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
     Material material;
     material.color = Qt::white;
 
-    auto model = *parser_->loadModel(cube).model;
+    auto model = *parser_->loadModel(dir + "cube.obj").model;
     for (auto& mesh : model.meshes) mesh.bufferize(this);
 
     EntityID entity = scene_.NewEntity();
@@ -397,6 +392,7 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
     scene_.AddComponent<Model>(entity, std::move(model));
     scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_COLOR});
     scene_.AddComponent<Attenuation>(entity, attenuation);
+    scene_.AddComponent<RenderTag>(entity);
   }
 
   if (spot) {
@@ -419,7 +415,7 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
     Material material;
     material.color = Qt::white;
 
-    auto model = *parser_->loadModel(cube).model;
+    auto model = *parser_->loadModel(dir + "cube.obj").model;
     for (auto& mesh : model.meshes) mesh.bufferize(this);
 
     EntityID entity = scene_.NewEntity();
@@ -428,8 +424,22 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
     scene_.AddComponent<Transform>(entity, transform);
     scene_.AddComponent<Model>(entity, std::move(model));
     scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_COLOR});
+    scene_.AddComponent<RenderTag>(entity);
     // scene_.AddComponent<Attenuation>(entity, attenuation);
   }
+}
+
+Camera const& Backend::GetCamera() {
+  qDebug() << "GetCamera";
+  static auto const& camera =
+      scene_.GetComponent<Camera>(Utils::GetCameraID(&scene_));
+  return camera;
+}
+
+void Backend::InsideOpenGLContext(std::function<void()> func) {
+  opengl_widget_->makeCurrent();
+  func();
+  opengl_widget_->doneCurrent();
 }
 
 }  // namespace s21

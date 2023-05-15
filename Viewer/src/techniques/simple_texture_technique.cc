@@ -8,14 +8,13 @@ void SimpleTextureTechnique::init() {
 }
 
 void SimpleTextureTechnique::setTexture(Texture const &texture) {
-  auto const &[id, type] = texture;
-  shader_.setUniformValue(type.c_str(), 0);
+  shader_.setUniformValue(texture.type.c_str(), 0);
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, id);
+  glBindTexture(GL_TEXTURE_2D, texture.id);
 }
 
 void SimpleTextureTechnique::setMaterial(Material const &material) {
-  setTexture({material.diffuse, "diffuse"});
+  setTexture({material.diffuse.id, "diffuse"});
   shader_.setUniformValue("u_material.shininess", material.shininess);
 }
 

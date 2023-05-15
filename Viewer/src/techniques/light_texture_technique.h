@@ -18,8 +18,6 @@ class LightTextureTechnique : public ITechnique {
   void setMaterial(Material const &material) final;
   void setTexture(Texture const &texture) final;
   void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
-  // void setLight(QVector<std::tuple<Light *, BaseLightType *, Attenuation *>>
-  // lights) final;
   void setLight(QVector<Light> lights,
                 QVector<std::optional<Attenuation>> attenuations) final;
 

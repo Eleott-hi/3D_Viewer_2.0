@@ -30,8 +30,8 @@ GLenum GetFormat(int channels) {
   Q_ASSERT(false);
 }
 
-uint32_t TextureStorage::LoadTexture(std::string const& filename) {
-  if (textures_[filename]) return textures_[filename];
+Texture TextureStorage::LoadTexture(std::string const& filename) {
+  if (textures_[filename].id) return textures_[filename];
 
   ImageInfo info = {filename, 0, 0, 0};
 
@@ -39,7 +39,7 @@ uint32_t TextureStorage::LoadTexture(std::string const& filename) {
 
   if (!data) {
     qDebug() << "Texture failed to load at path: " << filename.c_str();
-    return 0;
+    return {};
   }
 
   uint32_t texture;
@@ -58,11 +58,13 @@ uint32_t TextureStorage::LoadTexture(std::string const& filename) {
 
   stbi_image_free(data);
 
-  textures_[filename] = texture;
+  textures_[filename].id = texture;
+  textures_[filename].filename = filename.c_str();
+  textures_[filename].image = QImage(filename.c_str());
 
   qDebug() << filename.c_str();
 
-  return texture;
+  return textures_[filename];
 }
 
 uint32_t TextureStorage::LoadCubemap(std::vector<std::string> faces) {

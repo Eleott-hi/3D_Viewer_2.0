@@ -8,11 +8,9 @@ void PhysicalBasedRenderingTechnique::init() {
   GenerateShaders(":/shaders/PBR.vs", ":/shaders/PBR.fs");
 }
 void PhysicalBasedRenderingTechnique::setTexture(Texture const &texture) {
-  auto const &[id, type] = texture;
-
-  shader_.setUniformValue(type.c_str(), index_);
+  shader_.setUniformValue(texture.type.c_str(), index_);
   glActiveTexture(GL_TEXTURE0 + index_);
-  glBindTexture(GL_TEXTURE_2D, id);
+  glBindTexture(GL_TEXTURE_2D, texture.id);
 
   index_++;
 }
@@ -28,11 +26,11 @@ void PhysicalBasedRenderingTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
 }
 
 void PhysicalBasedRenderingTechnique::setMaterial(Material const &material) {
-  setTexture({material.ao, "material.aoMap"});
-  setTexture({material.normal, "material.normalMap"});
-  setTexture({material.diffuse, "material.albedoMap"});
-  setTexture({material.specular, "material.specularMap"});
-  setTexture({material.roughness, "material.roughnessMap"});
+  setTexture({material.ao.id, "material.aoMap"});
+  setTexture({material.normal.id, "material.normalMap"});
+  setTexture({material.diffuse.id, "material.albedoMap"});
+  setTexture({material.specular.id, "material.specularMap"});
+  setTexture({material.roughness.id, "material.roughnessMap"});
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 

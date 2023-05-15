@@ -108,7 +108,14 @@ void Parser::LoadTexture(aiMaterial *material, aiTextureType type,
     material->GetTexture(type, i, &str);
 
     std::string const &filename = directory_ + "/" + str.C_Str();
-    texture = {textureStorage_->LoadTexture(filename), "specularMap"};
+    std::string texture_type;
+
+    if (type == aiTextureType_DIFFUSE) texture_type = "diffuseMap";
+    if (type == aiTextureType_HEIGHT) texture_type = "normalMap";
+    if (type == aiTextureType_SPECULAR) texture_type = "specularMap";
+
+    texture = textureStorage_->LoadTexture(filename);
+    texture->type = texture_type;
   }
 }
 

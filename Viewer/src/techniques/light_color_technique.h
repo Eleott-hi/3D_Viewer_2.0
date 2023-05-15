@@ -11,16 +11,23 @@ class LightColorTechnique : public ITechnique {
 
   virtual void init() override;
 
-  //   virtual void setLight(
-  //       QVector<std::tuple<Light *, BaseLightType *, Attenuation *>> lights)
-  //       override;
-
-  virtual void setColor(QColor c) override;
-
   virtual void setMaterial(Material const &material) override;
 
   virtual void setMVP(QMatrix4x4 proj, QMatrix4x4 view,
                       QMatrix4x4 model) override;
+
+  void setLight(QVector<Light> lights,
+                QVector<std::optional<Attenuation>> attenuations) final;
+
+ private:
+  void SetLightComponent(QOpenGLShaderProgram &shader, std::string const &type,
+                         Light const &light);
+  void SetAttenuationComponent(QOpenGLShaderProgram &shader,
+                               std::string const &type,
+                               Attenuation const &attenuation);
+  void SetLightSpecificComponent(QOpenGLShaderProgram &shader,
+                                 std::string const &type, Light const &light,
+                                 int light_index, int attenuation_index);
 };
 
 }  // namespace s21

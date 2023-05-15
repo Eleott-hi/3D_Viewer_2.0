@@ -49,11 +49,11 @@ struct Attenuation {
 
 uniform vec3 viewPos;
 
-uniform DirLight dirLights[20];
+uniform Attenuation attenuations[60];
 uniform PointLight pointLights[20];
 uniform SpotLight spotLights[20];
+uniform DirLight dirLights[20];
 uniform Light lights[60];
-uniform Attenuation attenuations[60];
 
 uniform int dirLightCount;
 uniform int pointLightCount;

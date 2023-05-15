@@ -15,6 +15,10 @@ class Observable {
     for (auto &observer : observers_) observer->Notify();
   }
 
+  void NotifyCamera() {
+    for (auto &observer : observers_) observer->OnCameraNotify();
+  }
+
  private:
   std::vector<Observer *> observers_;
 };

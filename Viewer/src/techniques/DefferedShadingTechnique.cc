@@ -9,17 +9,16 @@ void DefferedShadingTechnique::init() {
 }
 
 void DefferedShadingTechnique::setTexture(Texture const &texture) {
-  auto const &[id, type] = texture;
-  shader_.setUniformValue(type.c_str(), texture_index_);
+  shader_.setUniformValue(texture.type.c_str(), texture_index_);
   glActiveTexture(GL_TEXTURE0 + texture_index_);
-  glBindTexture(GL_TEXTURE_2D, id);
+  glBindTexture(GL_TEXTURE_2D, texture.id);
 
   texture_index_++;
 }
 
 void DefferedShadingTechnique::setMaterial(Material const &material) {
-  setTexture({material.diffuse, "diffuse"});
-  setTexture({material.specular, "specular"});
+  setTexture({material.diffuse.id, "diffuse"});
+  setTexture({material.specular.id, "specular"});
 }
 
 void DefferedShadingTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,

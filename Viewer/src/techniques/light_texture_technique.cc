@@ -9,10 +9,9 @@ void LightTextureTechnique::init() {
 }
 
 void LightTextureTechnique::setTexture(Texture const &texture) {
-  auto const &[id, type] = texture;
-  shader_.setUniformValue(type.c_str(), texture_index_);
+  shader_.setUniformValue(texture.type.c_str(), texture_index_);
   glActiveTexture(GL_TEXTURE0 + texture_index_);
-  glBindTexture(GL_TEXTURE_2D, id);
+  glBindTexture(GL_TEXTURE_2D, texture.id);
 
   texture_index_++;
 }
@@ -29,8 +28,8 @@ void LightTextureTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
 }
 
 void LightTextureTechnique::setMaterial(Material const &material) {
-  setTexture({material.diffuse, "material.diffuseMap"});
-  setTexture({material.specular, "material.specularMap"});
+  setTexture({material.diffuse.id, "material.diffuseMap"});
+  setTexture({material.specular.id, "material.specularMap"});
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 

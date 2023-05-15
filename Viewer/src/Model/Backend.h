@@ -39,7 +39,7 @@ class Backend : public Observable, protected QOpenGLExtraFunctions {
   void Render();
   void AddModel(QString path);
   void Init(QOpenGLWidget *widget);
-  void LoadTexture(QString filename);
+  void LoadTexture(QString filename, Texture &texture);
 
   void MouseMoved(QPoint offset);
   void MouseScrolled(float scroll);
@@ -70,8 +70,21 @@ class Backend : public Observable, protected QOpenGLExtraFunctions {
     opengl_widget_->update();
   }
 
+  template <typename Type>
+  void RemoveComponent() {
+    editPickedSystem_->RemoveComponent<Type>();
+  }
+
+  template <typename Type>
+  void AddComponent() {
+    editPickedSystem_->AddComponent<Type>();
+  }
+
+  Camera const &GetCamera();
+
  private:
   bool picked_ = false;
+  uint32_t width_ = 500, height_ = 500;
   ECS_Controller scene_;
   std::shared_ptr<Parser> parser_;
   std::shared_ptr<IFramebuffer> g_buffer_;
@@ -97,6 +110,7 @@ class Backend : public Observable, protected QOpenGLExtraFunctions {
   void Draw();
   void Update();
   void DebugLights(bool directional, bool point_1, bool point_2, bool spot);
+  void InsideOpenGLContext(std::function<void()> func);
 };
 
 }  // namespace s21

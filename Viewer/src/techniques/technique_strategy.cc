@@ -23,12 +23,12 @@ TechniqueStrategy::TechniqueStrategy() noexcept
           std::make_shared<SimpleTextureTechnique>(),
           std::make_shared<LightColorTechnique>(),
           std::make_shared<LightTextureTechnique>(),
+          std::make_shared<PhysicalBasedRenderingTechnique>(),
           std::make_shared<PickingTechnique>(),
           std::make_shared<QuadTechnique>(),
           std::make_shared<CubemapTechnique>(),
           std::make_shared<NormalMapTechnique>(),
           std::make_shared<StencilOutlineTechnique>(),
-          std::make_shared<PhysicalBasedRenderingTechnique>(),
           std::make_shared<DefferedShadingTechnique>(),
       } {}
 
@@ -37,7 +37,7 @@ void TechniqueStrategy::Enable(TechniqueType type) {
   technique_->Enable();
 }
 
-void TechniqueStrategy::setColor(QColor c) { technique_->setColor(c); }
+// void TechniqueStrategy::setColor(QColor c) { technique_->setColor(c); }
 
 void TechniqueStrategy::setMaterial(Material const &material) {
   technique_->setMaterial(material);

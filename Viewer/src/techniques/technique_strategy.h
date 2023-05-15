@@ -18,7 +18,7 @@ class TechniqueStrategy {
   }
 
   void Clear() { technique_->Clear(); }
-  void setColor(QColor c);
+  //  void setColor(QColor c);
   void SetObjectID(int ObjectID);
   void Enable(TechniqueType type);
   void setMaterial(Material const &material);

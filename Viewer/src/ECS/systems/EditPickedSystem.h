@@ -41,6 +41,20 @@ class EditPickedSystem : public System {
     return components;
   }
 
+  template <typename Type>
+  void RemoveComponent() {
+    for (auto &entity : entities_)
+      if (scene_->EntityHasComponent<Type>(entity))
+        scene_->RemoveComponent<Type>(entity);
+  }
+
+  template <typename Type>
+  void AddComponent() {
+    for (auto &entity : entities_)
+      if (!scene_->EntityHasComponent<Type>(entity))
+        scene_->AddComponent<Type>(entity);
+  }
+
  private:
   ECS_Controller *scene_;
   // EntityID edited_entity_ = -1;

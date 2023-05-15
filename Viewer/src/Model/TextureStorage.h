@@ -12,11 +12,11 @@ class TextureStorage : public QOpenGLExtraFunctions {
   TextureStorage() { initializeOpenGLFunctions(); }
   ~TextureStorage() = default;
 
-  uint32_t LoadTexture(std::string const& filename);
+  Texture LoadTexture(std::string const& filename);
   uint32_t LoadCubemap(std::vector<std::string> faces);
 
  private:
-  std::unordered_map<std::string, uint32_t> textures_;
+  std::unordered_map<std::string, Texture> textures_;
 };
 
 }  // namespace s21
