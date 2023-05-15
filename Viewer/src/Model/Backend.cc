@@ -16,9 +16,10 @@ float skyboxVertices[] = {
     1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,
 };
 
-std::string dir =  //
-    "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
-// "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
+std::string
+    dir =  //
+           // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
+    "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
 
 namespace s21 {
 

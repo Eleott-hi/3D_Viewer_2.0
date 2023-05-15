@@ -10,8 +10,14 @@ void RenderPickedSystem::Init(ECS_Controller *scene,
   technique_ = technique;
 }
 
+
 void RenderPickedSystem::Update() {
   auto [proj, view] = Utils::GetProjectionAndView(scene_);
+
+
+  // ========================== STENCIL BUFFER ==========================
+  glEnable(GL_STENCIL_TEST);  // Enable stancil buffer
+  glDisable(GL_DEPTH_TEST);   // Disable depth buffer
 
   for (auto &entity : entities_) {
     auto const &transform = scene_->GetComponent<Transform>(entity);
@@ -19,9 +25,6 @@ void RenderPickedSystem::Update() {
 
     auto const &modelMatrix = transform.GetModelMatrix();
 
-    // ========================== STENCIL BUFFER ==========================
-    glEnable(GL_STENCIL_TEST);  // Enable stancil buffer
-    glDisable(GL_DEPTH_TEST);   // Disable depth buffer
 
     glStencilFunc(GL_ALWAYS, 1, 0xFF);          // Set any stencil to 1
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);  // Set rules
@@ -46,10 +49,11 @@ void RenderPickedSystem::Update() {
     technique_->setMVP(proj, view, modelMatrix);
     for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
 
-    glDisable(GL_STENCIL_TEST);  // Disable stancil buffer
-    glEnable(GL_DEPTH_TEST);     // Enable depth buffer
-    // ========================== STENCIL BUFFER ==========================
   }
+
+  glDisable(GL_STENCIL_TEST);  // Disable stancil buffer
+  glEnable(GL_DEPTH_TEST);     // Enable depth buffer
+  // ========================== STENCIL BUFFER ==========================
 }
 
 }  // namespace s21

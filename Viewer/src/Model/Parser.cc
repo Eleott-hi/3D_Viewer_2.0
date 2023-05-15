@@ -6,6 +6,7 @@ namespace s21 {
 
 ParsingData Parser::loadModel(std::string const &filename) {
   Assimp::Importer importer;
+  data_ = {};
 
   uint32_t flags = aiProcess_Triangulate |       //
                    aiProcess_GenSmoothNormals |  //
@@ -17,7 +18,7 @@ ParsingData Parser::loadModel(std::string const &filename) {
       scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||  //
       !scene->mRootNode) {
     qDebug() << "ERROR::ASSIMP:: " << importer.GetErrorString();
-    return {};
+    return data_;
   }
 
   directory_ = filename.substr(0, filename.find_last_of('/'));

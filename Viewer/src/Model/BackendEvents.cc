@@ -64,17 +64,17 @@ void Backend::KeyPressed(QKeyEvent* key_event) {
   // KeyPressedEvent event(key_event);
   // scene_.Despatch(event);
 
-  static auto& [keyboard] = scene_.GetComponent<KeyboardInput>(
+  static auto& keyboard = scene_.GetComponent<KeyboardInput>(
       scene_.GetEntities<KeyboardInput>().at(0));
-  keyboard[key_event->key()] = true;
+  keyboard.keys[key_event->key()] = true;
 }
 
 void Backend::KeyReleased(QKeyEvent* key_event) {
   qDebug() << "KeyReleasedEvent" << key_event;
 
-  static auto& [keyboard] = scene_.GetComponent<KeyboardInput>(
+  static auto& keyboard = scene_.GetComponent<KeyboardInput>(
       scene_.GetEntities<KeyboardInput>().at(0));
-  keyboard[key_event->key()] = false;
+  keyboard.keys[key_event->key()] = false;
   // KeyReleasedEvent event(key_event);
   // scene_.Despatch(event);
 }
