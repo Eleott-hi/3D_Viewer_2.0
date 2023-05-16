@@ -58,8 +58,8 @@ void Framebuffer::Resize(uint32_t width, uint32_t height) {
   Invalidate();
 }
 
-void Framebuffer::Bind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo); }
-void Framebuffer::Unbind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); }
+void Framebuffer::Bind() { glBindFramebuffer(GL_FRAMEBUFFER, m_fbo); }
+void Framebuffer::Unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
 uint32_t Framebuffer::getTextureID(uint32_t index) {
   return m_Color_Textures_.at(index);
@@ -69,7 +69,7 @@ void Framebuffer::Invalidate() {
   if (m_fbo) Clear();
 
   glGenFramebuffers(1, &m_fbo);
-  glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+  Bind();
 
   SwitchDepthTexture();
   SwitchColorTexture();
@@ -99,8 +99,7 @@ void Framebuffer::Invalidate() {
     glDrawBuffer(GL_NONE);
   }
 
-  // Restore the default framebuffer
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  Unbind();
 }
 
 void Framebuffer::SwitchColorTexture() {
@@ -181,11 +180,10 @@ void Framebuffer::AttachDepthTexture(GLenum internal_format, GLenum format,
 }
 
 int Framebuffer::ReadPixel(uint32_t x, uint32_t y, int index) {
-  Q_ASSERT_X(index <= m_Color_Textures_.size(),  //
-             "Framebuffer::ReadPixel()",         //
+  Q_ASSERT_X(index <= m_Color_Textures_.size(), "Framebuffer::ReadPixel()",
              "Index is out of bounds");
 
-  glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
+  Bind();
   glReadBuffer(GL_COLOR_ATTACHMENT0 + index);
 
   int objectID = 0;
@@ -194,7 +192,7 @@ int Framebuffer::ReadPixel(uint32_t x, uint32_t y, int index) {
                GL_INT, &objectID);
 
   glReadBuffer(GL_NONE);
-  glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+  Unbind();
   return objectID;
 }
 };  // namespace s21
