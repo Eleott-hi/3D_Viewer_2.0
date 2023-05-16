@@ -10,10 +10,8 @@ void RenderPickedSystem::Init(ECS_Controller *scene,
   technique_ = technique;
 }
 
-
 void RenderPickedSystem::Update() {
   auto [proj, view] = Utils::GetProjectionAndView(scene_);
-
 
   // ========================== STENCIL BUFFER ==========================
   glEnable(GL_STENCIL_TEST);  // Enable stancil buffer
@@ -24,7 +22,6 @@ void RenderPickedSystem::Update() {
     auto &model = scene_->GetComponent<Model>(entity);
 
     auto const &modelMatrix = transform.GetModelMatrix();
-
 
     glStencilFunc(GL_ALWAYS, 1, 0xFF);          // Set any stencil to 1
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);  // Set rules
@@ -48,7 +45,6 @@ void RenderPickedSystem::Update() {
     technique_->Enable(TechniqueType::STENCIL_OUTLINE);
     technique_->setMVP(proj, view, modelMatrix);
     for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
-
   }
 
   glDisable(GL_STENCIL_TEST);  // Disable stancil buffer

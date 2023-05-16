@@ -7,8 +7,8 @@
 namespace s21 {
 
 QString dir =  //
-               // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
-    "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
+    "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
+// "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
 
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
   connect(&timer_, &QTimer::timeout, [&] { update(); });
@@ -21,8 +21,8 @@ void GLWidget::initializeGL() {
   timer_.start(1000 / fps);
 
   //  for (size_t i = 0; i < 10; i++)
-  backend_->AddModel(dir + "backpack/backpack.obj");
-  backend_->AddModel(dir + "cat.obj");
+  backend_->AddModel(dir + "objects/backpack/backpack.obj");
+  backend_->AddModel(dir + "objects/cat.obj");
 }
 
 void GLWidget::resizeGL(int w, int h) { backend_->WindowResize(w, h); }

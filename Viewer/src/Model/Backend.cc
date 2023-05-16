@@ -16,10 +16,9 @@ float skyboxVertices[] = {
     1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,
 };
 
-std::string
-    dir =  //
-           // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
-    "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
+std::string dir =  //
+    "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
+// "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
 
 namespace s21 {
 
@@ -122,9 +121,9 @@ void Backend::AddModel(QString path) {
   if (specular_map) material.specular = *specular_map;
 
   material.roughness =
-      texture_storage_->LoadTexture(dir + "backpack/roughness.jpg");
+      texture_storage_->LoadTexture(dir + "objects/backpack/roughness.jpg");
 
-  material.ao = texture_storage_->LoadTexture(dir + "backpack/ao.jpg");
+  material.ao = texture_storage_->LoadTexture(dir + "objects/backpack/ao.jpg");
 
   EntityID entity = scene_.NewEntity();
   scene_.AddComponent<Shader>(entity, {TechniqueType::LIGHT_TEXTURE});
@@ -163,13 +162,13 @@ void Backend::Update() {
 }
 
 void Backend::Draw() {
-  {
-    g_buffer_->Bind();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-    defferedShadingSystem_->Update();
-    g_buffer_->Unbind();
-  }
+  // {
+  //   g_buffer_->Bind();
+  //   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |
+  //   GL_STENCIL_BUFFER_BIT); glEnable(GL_DEPTH_TEST);
+  //   defferedShadingSystem_->Update();
+  //   g_buffer_->Unbind();
+  // }
 
   {
     framebuffer3D_->Bind();
@@ -350,7 +349,7 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
     Material material;
     material.color = Qt::white;
 
-    auto model = *parser_->loadModel(dir + "cube.obj").model;
+    auto model = *parser_->loadModel(dir + "objects/cube.obj").model;
     for (auto& mesh : model.meshes) mesh.bufferize(this);
 
     EntityID entity = scene_.NewEntity();
@@ -383,7 +382,7 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
     Material material;
     material.color = Qt::white;
 
-    auto model = *parser_->loadModel(dir + "cube.obj").model;
+    auto model = *parser_->loadModel(dir + "objects/cube.obj").model;
     for (auto& mesh : model.meshes) mesh.bufferize(this);
 
     EntityID entity = scene_.NewEntity();
@@ -416,7 +415,7 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
     Material material;
     material.color = Qt::white;
 
-    auto model = *parser_->loadModel(dir + "cube.obj").model;
+    auto model = *parser_->loadModel(dir + "objects/cube.obj").model;
     for (auto& mesh : model.meshes) mesh.bufferize(this);
 
     EntityID entity = scene_.NewEntity();
@@ -430,9 +429,9 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
   }
 }
 
-Camera const& Backend::GetCamera() {
+Camera& Backend::GetCamera() {
   qDebug() << "GetCamera";
-  static auto const& camera =
+  static auto& camera =
       scene_.GetComponent<Camera>(Utils::GetCameraID(&scene_));
   return camera;
 }

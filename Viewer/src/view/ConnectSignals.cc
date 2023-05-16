@@ -7,6 +7,7 @@
 namespace s21 {
 
 void MainWindow::ConnectSignals() {
+  ConnectCameraUi();
   ConnectTransformUi();
   ConnectLightUi();
   ConnectMaterialUi();
@@ -357,6 +358,38 @@ void MainWindow::ConnectTransformUi() {
       ui_->yScale->setValue(value);
     }
   });
+}
+
+void MainWindow::ConnectCameraUi() {
+  connect(
+
+      ui_->dsb_CameraTransX, &QDoubleSpinBox::valueChanged, [&](float value) {
+        static auto &camera = backend_->GetCamera();
+        camera.position.setX(value);
+      });
+
+  connect(ui_->dsb_CameraTransY, &QDoubleSpinBox::valueChanged,
+          [&](float value) {
+            static auto &camera = backend_->GetCamera();
+            camera.position.setY(value);
+          });
+
+  connect(ui_->dsb_CameraTransZ, &QDoubleSpinBox::valueChanged,
+          [&](float value) {
+            static auto &camera = backend_->GetCamera();
+            camera.position.setZ(value);
+          });
+
+  connect(ui_->dsb_CameraYaw, &QDoubleSpinBox::valueChanged, [&](float value) {
+    static auto &camera = backend_->GetCamera();
+    camera.yaw = value;
+  });
+
+  connect(ui_->dsb_CameraPitch, &QDoubleSpinBox::valueChanged,
+          [&](float value) {
+            static auto &camera = backend_->GetCamera();
+            camera.pitch = value;
+          });
 }
 
 }  // namespace s21

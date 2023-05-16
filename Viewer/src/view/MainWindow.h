@@ -44,6 +44,7 @@ class MainWindow : public QMainWindow, protected Observer {
   void ConnectLightUi();
   void ConnectMaterialUi();
   void ConnectShaderUi();
+  void ConnectCameraUi();
 };
 
 }  // namespace s21

@@ -80,7 +80,7 @@ class Backend : public Observable, protected QOpenGLExtraFunctions {
     editPickedSystem_->AddComponent<Type>();
   }
 
-  Camera const &GetCamera();
+  Camera &GetCamera();
 
  private:
   bool picked_ = false;
