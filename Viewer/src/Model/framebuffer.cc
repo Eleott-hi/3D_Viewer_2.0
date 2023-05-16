@@ -107,13 +107,13 @@ void Framebuffer::SwitchColorTexture() {
   for (uint32_t i = 0; i < color_formats_.size(); i++) {
     switch (color_formats_[i].format_) {
       case Format::RGB:
-        AttachColorTexture(i, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+        AttachColorTexture(i, GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE);
         break;
       case Format::RGBA:
-        AttachColorTexture(i, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
+        AttachColorTexture(i, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
         break;
       case Format::RGBA16F:
-        AttachColorTexture(i, GL_RGBA16F, GL_RGBA, GL_UNSIGNED_BYTE);
+        AttachColorTexture(i, GL_RGBA16F, GL_RGBA, GL_FLOAT);
         break;
       case Format::RED_INTEGER:
         AttachColorTexture(i, GL_R32I, GL_RED_INTEGER, GL_UNSIGNED_BYTE);
@@ -133,7 +133,8 @@ void Framebuffer::AttachColorTexture(uint32_t index, GLenum internalFormat,
   texture.SetWraps(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
   texture.SetFilters(GL_LINEAR, GL_LINEAR);
   texture.ProcessWrapsAndFilters();
-  texture.Allocate(width_, height_, nullptr);
+
+  texture.AllocateStorage(width_, height_);
 
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index,
                          GL_TEXTURE_2D, texture.ID(), 0);
@@ -173,8 +174,7 @@ void Framebuffer::AttachDepthTexture(GLenum internal_format, GLenum format,
   texture.SetFilters(GL_NEAREST, GL_NEAREST);
   texture.ProcessWrapsAndFilters();
 
-  depth_storage_ ? texture.AllocateStorage(width_, height_)
-                 : texture.Allocate(width_, height_, nullptr);
+  texture.AllocateStorage(width_, height_);
 
   glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, GL_TEXTURE_2D,
                          texture.ID(), 0);

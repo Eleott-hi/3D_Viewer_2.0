@@ -45,8 +45,9 @@ void Backend::Init(QOpenGLWidget* widget) {
   RegisterSystems();
 
   {
-    //  Texture texture = {framebuffer3D_->getTextureID(), "quad"};
-    Texture texture = {framebufferShadow_->getDepthID(), "quad"};
+    Texture texture = {framebuffer3D_->getTextureID(), "quad"};
+    //    Texture texture = {framebufferShadow_->getDepthID(), "quad"};
+    //    Texture texture = {g_buffer_->getTextureID(2), "quad"};
 
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<QuadTag>(entity);
@@ -170,13 +171,15 @@ void Backend::Update() {
 void Backend::Draw() {
   glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  // {
-  //   g_buffer_->Bind();
-  //   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |
-  //   GL_STENCIL_BUFFER_BIT); glEnable(GL_DEPTH_TEST);
-  //   defferedShadingSystem_->Update();
-  //   g_buffer_->Unbind();
-  // }
+  {
+    g_buffer_->Bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+
+    defferedShadingSystem_->Update();
+
+    g_buffer_->Unbind();
+  }
   {  //
 
     framebufferShadow_->Bind();
