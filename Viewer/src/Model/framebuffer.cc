@@ -133,7 +133,6 @@ void Framebuffer::AttachColorTexture(uint32_t index, GLenum internalFormat,
   texture.SetWraps(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
   texture.SetFilters(GL_LINEAR, GL_LINEAR);
   texture.ProcessWrapsAndFilters();
-
   texture.AllocateStorage(width_, height_);
 
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index,
@@ -173,7 +172,6 @@ void Framebuffer::AttachDepthTexture(GLenum internal_format, GLenum format,
   texture.SetWraps(GL_REPEAT, GL_REPEAT, GL_REPEAT);
   texture.SetFilters(GL_NEAREST, GL_NEAREST);
   texture.ProcessWrapsAndFilters();
-
   texture.AllocateStorage(width_, height_);
 
   glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, GL_TEXTURE_2D,
