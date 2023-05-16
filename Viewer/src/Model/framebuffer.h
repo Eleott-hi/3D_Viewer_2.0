@@ -18,22 +18,23 @@ class Framebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
   Framebuffer& operator=(Framebuffer&&) = default;
   Framebuffer& operator=(const Framebuffer&) = default;
 
-  virtual void Bind() override;
-  virtual void Unbind() override;
-  virtual uint32_t getTextureID(uint32_t index = 0) override;
-  virtual void Resize(uint32_t width, uint32_t height) override;
-  virtual int ReadPixel(uint32_t x, uint32_t y, int index) override;
-  virtual void Create(
-      const std::initializer_list<AttachmentFormat>& formats) override;
+  void Bind() final;
+  void Unbind() final;
+  uint32_t getTextureID(uint32_t index = 0) final;
+  uint32_t getDepthID() final { return m_Depth_Texture_; }
+  void Resize(uint32_t width, uint32_t height) final;
+  int ReadPixel(uint32_t x, uint32_t y, int index) final;
+  void Create(const std::initializer_list<AttachmentFormat>& formats) final;
 
  private:
   void Clear();
   void Invalidate();
   void SwitchDepthTexture();
   void SwitchColorTexture();
-  void AttachDepthTexture(uint32_t id, GLenum format, GLenum attachmentType);
-  void AttachColorTexture(uint32_t index, uint32_t id, GLenum internalFormat,
-                          GLenum format);
+  void AttachDepthTexture(GLenum internal_format, GLenum format, GLenum type,
+                          GLenum attachmentType);
+  void AttachColorTexture(uint32_t index, GLenum internalFormat, GLenum format,
+                          GLenum type);
 
  private:
   uint32_t m_fbo = 0;
@@ -41,6 +42,7 @@ class Framebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
   uint32_t width_ = 500, height_ = 500;
   std::vector<uint32_t> m_Color_Textures_;
 
+  bool depth_storage_ = true;
   AttachmentFormat depth_format_;
   std::vector<AttachmentFormat> color_formats_;
 };

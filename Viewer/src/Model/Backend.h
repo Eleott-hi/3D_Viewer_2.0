@@ -87,12 +87,14 @@ class Backend : public Observable, protected QOpenGLExtraFunctions {
   bool picked_ = false;
   uint32_t width_ = 500, height_ = 500;
   ECS_Controller scene_;
-  std::shared_ptr<Parser> parser_;
-  std::shared_ptr<IFramebuffer> g_buffer_;
   QOpenGLWidget *opengl_widget_ = nullptr;
-  std::shared_ptr<IFramebuffer> framebuffer3D_;
+  std::shared_ptr<Parser> parser_;
   std::shared_ptr<TechniqueStrategy> technique_;
   std::shared_ptr<TextureStorage> texture_storage_;
+
+  std::shared_ptr<IFramebuffer> g_buffer_;
+  std::shared_ptr<IFramebuffer> framebufferShadow_;
+  std::shared_ptr<IFramebuffer> framebuffer3D_;
 
   std::shared_ptr<InputSystem> inputSystem_;
   std::shared_ptr<LightSystem> lightSystem_;

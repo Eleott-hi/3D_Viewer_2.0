@@ -13,11 +13,11 @@ void Backend::WindowResize(int w, int h) {
   WindowResizeEvent event(w, h);
   scene_.Despatch(event);
 
-  width_ = w;
-  height_ = h;
+  width_ = w, height_ = h;
 
-  framebuffer3D_->Resize(w, h);
   g_buffer_->Resize(w, h);
+  framebuffer3D_->Resize(w, h);
+  framebufferShadow_->Resize(w, h);
 }
 
 void Backend::MousePressed(QPoint pos) {

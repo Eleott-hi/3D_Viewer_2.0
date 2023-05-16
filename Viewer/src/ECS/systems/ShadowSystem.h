@@ -18,12 +18,9 @@ class ShadowSystem : public System, protected QOpenGLExtraFunctions {
   void Init(ECS_Controller *scene, TechniqueStrategy *technique);
   void Update();
 
-  uint32_t depthMap;
-
  private:
   ECS_Controller *scene_ = nullptr;
   TechniqueStrategy *technique_ = nullptr;
-  uint32_t depthMapFBO;
 };
 
 }  // namespace s21

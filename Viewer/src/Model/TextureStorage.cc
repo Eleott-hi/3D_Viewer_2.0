@@ -1,5 +1,6 @@
 #include "TextureStorage.h"
 
+#include "TextureWraper.h"
 #include "stb_image.h"
 
 namespace s21 {
@@ -42,23 +43,19 @@ Texture TextureStorage::LoadTexture(std::string const& filename) {
     return {};
   }
 
-  uint32_t texture;
-  glGenTextures(1, &texture);
-  glBindTexture(GL_TEXTURE_2D, texture);
-  glTexImage2D(GL_TEXTURE_2D, 0, GetFormat(info.channels), info.width,
-               info.height, 0, GetFormat(info.channels), GL_UNSIGNED_BYTE,
-               data);
-  glGenerateMipmap(GL_TEXTURE_2D);
+  auto format = GetFormat(info.channels);
 
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                  GL_LINEAR_MIPMAP_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  TextureWraper texture;
+  texture.SetTarget(GL_TEXTURE_2D);
+  texture.SetFormats(format, format, GL_UNSIGNED_BYTE);
+  texture.Allocate(info.width, info.height, data);
+  texture.SetWraps(GL_REPEAT, GL_REPEAT, GL_REPEAT);
+  texture.SetFilters(GL_LINEAR, GL_LINEAR);
+  texture.ProcessWrapsAndFilters();
 
   stbi_image_free(data);
 
-  textures_[filename].id = texture;
+  textures_[filename].id = texture.ID();
   textures_[filename].filename = filename.c_str();
   textures_[filename].image = QImage(filename.c_str());
 
@@ -68,33 +65,30 @@ Texture TextureStorage::LoadTexture(std::string const& filename) {
 }
 
 uint32_t TextureStorage::LoadCubemap(std::vector<std::string> faces) {
-  uint32_t textureID = 0;
+  TextureWraper texture;
+  texture.SetTarget(GL_TEXTURE_CUBE_MAP);
+  texture.SetWraps(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+  texture.SetFilters(GL_LINEAR, GL_LINEAR);
+  texture.ProcessWrapsAndFilters();
 
-  glGenTextures(1, &textureID);
-  glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
-
-  int width, height, nrChannels;
   for (uint32_t i = 0; i < faces.size(); i++) {
+    int width, height, channels;
+
     unsigned char* data =
-        stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+        stbi_load(faces[i].c_str(), &width, &height, &channels, 0);
 
     if (!data) {
       qDebug() << "Cubemap texture failed to load at path:" << faces[i].c_str();
       continue;
     }
 
-    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height,
-                 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    auto format = GetFormat(channels);
+    texture.SetFormats(format, format, GL_UNSIGNED_BYTE);
+    texture.Allocate(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, width, height, data);
     stbi_image_free(data);
   }
 
-  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-  return textureID;
+  return texture.ID();
 }
 
 }  // namespace s21

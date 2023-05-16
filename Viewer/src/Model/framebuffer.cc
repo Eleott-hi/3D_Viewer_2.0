@@ -1,5 +1,7 @@
 #include "framebuffer.h"
 
+#include "TextureWraper.h"
+
 namespace s21 {
 
 #ifdef __WIN32__
@@ -12,7 +14,7 @@ const float magicScale_ = 1;
 
 namespace Utils {
 
-static bool isDepth(Format f) { return (f == Format::DEPTH24_STENCIL8); }
+static bool isDepth(Format f) { return f >= Format::NONE; }
 static void GenTexture(uint32_t size, uint32_t *id) { glGenTextures(size, id); }
 static void BindTexture(uint32_t id) { glBindTexture(GL_TEXTURE_2D, id); }
 static void UnbindTexture() { BindTexture(0); }
@@ -47,13 +49,13 @@ void Framebuffer::Clear() {
 }
 
 void Framebuffer::Resize(uint32_t width, uint32_t height) {
-  // auto width_ = width;
-  // if (width_ < width * magicScale_ || height_ < height * magicScale_) {
-  width_ = width * magicScale_;
-  height_ = height * magicScale_;
+  uint32_t w = width * magicScale_;
+  uint32_t h = height * magicScale_;
+
+  if (width_ == w && height_ == h) return;
+
+  width_ = w, height_ = h;
   Invalidate();
-  // }
-  // glViewport(0, 0, width * magicScale_, height * magicScale_);
 }
 
 void Framebuffer::Bind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo); }
@@ -66,28 +68,15 @@ uint32_t Framebuffer::getTextureID(uint32_t index) {
 void Framebuffer::Invalidate() {
   if (m_fbo) Clear();
 
-  // Gen framebuffer
   glGenFramebuffers(1, &m_fbo);
   glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
 
-  // Gen & Attach depth texture
-  if (depth_format_.format_ != Format::NONE) {
-    Utils::GenTexture(1, &m_Depth_Texture_);
-    SwitchDepthTexture();
-  }
+  SwitchDepthTexture();
+  SwitchColorTexture();
 
-  // Gen & Attach color texture
-  if (!color_formats_.empty()) {
-    m_Color_Textures_.resize(color_formats_.size());
-    Utils::GenTexture(m_Color_Textures_.size(), m_Color_Textures_.data());
-    SwitchColorTexture();
-  }
-
-  // Verify that the FBO is correct
   Q_ASSERT_X(
-      glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE,  //
-      "Framebuffer::Init()",                                                //
-      "Framebuffer incomplete");
+      glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE,
+      "Framebuffer::Init()", "Framebuffer incomplete");
 
   if (!m_Color_Textures_.empty()) {
 #define ARRAY_SIZE(x) ((sizeof(x)) / (sizeof(x[0])))
@@ -115,19 +104,19 @@ void Framebuffer::Invalidate() {
 }
 
 void Framebuffer::SwitchColorTexture() {
-  for (uint32_t i = 0; i < m_Color_Textures_.size(); i++) {
+  for (uint32_t i = 0; i < color_formats_.size(); i++) {
     switch (color_formats_[i].format_) {
       case Format::RGB:
-        AttachColorTexture(i, m_Color_Textures_[i], GL_RGB, GL_RGB);
+        AttachColorTexture(i, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
         break;
       case Format::RGBA:
-        AttachColorTexture(i, m_Color_Textures_[i], GL_RGBA, GL_RGBA);
+        AttachColorTexture(i, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
         break;
       case Format::RGBA16F:
-        AttachColorTexture(i, m_Color_Textures_[i], GL_RGBA16F, GL_RGBA);
+        AttachColorTexture(i, GL_RGBA16F, GL_RGBA, GL_UNSIGNED_BYTE);
         break;
       case Format::RED_INTEGER:
-        AttachColorTexture(i, m_Color_Textures_[i], GL_R32I, GL_RED_INTEGER);
+        AttachColorTexture(i, GL_R32I, GL_RED_INTEGER, GL_UNSIGNED_BYTE);
         break;
       default:
         Q_ASSERT_X(false, "Framebuffer::Invalidate()", "No such color format");
@@ -136,47 +125,61 @@ void Framebuffer::SwitchColorTexture() {
   }
 }
 
-void Framebuffer::AttachColorTexture(uint32_t index, uint32_t id,
-                                     GLenum internalFormat, GLenum format) {
-  glBindTexture(GL_TEXTURE_2D, id);
+void Framebuffer::AttachColorTexture(uint32_t index, GLenum internalFormat,
+                                     GLenum format, GLenum type) {
+  TextureWraper texture;
+  texture.SetTarget(GL_TEXTURE_2D);
+  texture.SetFormats(internalFormat, format, type);
+  texture.SetWraps(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+  texture.SetFilters(GL_LINEAR, GL_LINEAR);
+  texture.ProcessWrapsAndFilters();
+  texture.Allocate(width_, height_, nullptr);
 
-  // Set depth texture
-  glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width_, height_, 0, format,
-               GL_UNSIGNED_BYTE, nullptr);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-  // Attach color texture to framebuffer
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index,
-                         GL_TEXTURE_2D, id, 0);
+                         GL_TEXTURE_2D, texture.ID(), 0);
 
-  glBindTexture(GL_TEXTURE_2D, 0);
+  m_Color_Textures_.push_back(texture.ID());
 }
 
 void Framebuffer::SwitchDepthTexture() {
   switch (depth_format_.format_) {
     case Format::DEPTH24_STENCIL8:
-      AttachDepthTexture(m_Depth_Texture_,     //
-                         GL_DEPTH24_STENCIL8,  //
-                         GL_DEPTH_STENCIL_ATTACHMENT);
+      AttachDepthTexture(GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL,
+                         GL_UNSIGNED_INT_24_8, GL_DEPTH_STENCIL_ATTACHMENT);
       break;
+
+    case Format::DEPTH32:
+      AttachDepthTexture(GL_DEPTH_COMPONENT32, GL_DEPTH_COMPONENT, GL_FLOAT,
+                         GL_DEPTH_ATTACHMENT);
+      break;
+
+    case Format::NONE:
+      qDebug() << "Framebuffer::SwitchDepthTexture()"
+               << "depth format none";
+      break;
+
     default:
       Q_ASSERT_X(false, "Framebuffer::Invalidate()", "No such depth format");
       break;
   }
 }
 
-void Framebuffer::AttachDepthTexture(uint32_t id, GLenum format,
-                                     GLenum attachmentType) {
-  Utils::BindTexture(id);
+void Framebuffer::AttachDepthTexture(GLenum internal_format, GLenum format,
+                                     GLenum type, GLenum attachmentType) {
+  TextureWraper texture;
+  texture.SetTarget(GL_TEXTURE_2D);
+  texture.SetFormats(internal_format, format, type);
+  texture.SetWraps(GL_REPEAT, GL_REPEAT, GL_REPEAT);
+  texture.SetFilters(GL_NEAREST, GL_NEAREST);
+  texture.ProcessWrapsAndFilters();
 
-  glTexStorage2D(GL_TEXTURE_2D, 1, format, width_, height_);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, GL_TEXTURE_2D, id, 0);
+  depth_storage_ ? texture.AllocateStorage(width_, height_)
+                 : texture.Allocate(width_, height_, nullptr);
 
-  Utils::UnbindTexture();
+  glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, GL_TEXTURE_2D,
+                         texture.ID(), 0);
+
+  m_Depth_Texture_ = texture.ID();
 }
 
 int Framebuffer::ReadPixel(uint32_t x, uint32_t y, int index) {
