@@ -63,7 +63,6 @@ uint32_t Framebuffer::getTextureID(uint32_t index) {
   return m_Color_Textures_.at(index);
 }
 
-// =============================== INVALIDATE ===============================
 void Framebuffer::Invalidate() {
   if (m_fbo) Clear();
 
@@ -115,7 +114,6 @@ void Framebuffer::Invalidate() {
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-// ========================== ATTACH COLOR TEXTURE ==========================
 void Framebuffer::SwitchColorTexture() {
   for (uint32_t i = 0; i < m_Color_Textures_.size(); i++) {
     switch (color_formats_[i].format_) {
@@ -158,7 +156,6 @@ void Framebuffer::AttachColorTexture(uint32_t index, uint32_t id,
   glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-// ========================== ATTACH DEPTH TEXTURE ==========================
 void Framebuffer::SwitchDepthTexture() {
   switch (depth_format_.format_) {
     case Format::DEPTH24_STENCIL8:
@@ -176,16 +173,12 @@ void Framebuffer::AttachDepthTexture(uint32_t id, GLenum format,
                                      GLenum attachmentType) {
   Utils::BindTexture(id);
 
-  // Set depth texture
   glTexStorage2D(GL_TEXTURE_2D, 1, format, width_, height_);
-
-  // Attach depth texture to framebuffer
   glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, GL_TEXTURE_2D, id, 0);
 
   Utils::UnbindTexture();
 }
 
-// =============================== READ BUFFER ===============================
 int Framebuffer::ReadPixel(uint32_t x, uint32_t y, int index) {
   Q_ASSERT_X(index <= m_Color_Textures_.size(),  //
              "Framebuffer::ReadPixel()",         //
