@@ -5,6 +5,7 @@
 
 #include "DefferedShadingTechnique.h"
 #include "PhysicalBasedRenderingTechnique.h"
+#include "ShadowMappingTechnique.h"
 #include "StencilOutlineTechnique.h"
 #include "cubemap_technique.h"
 #include "light_color_technique.h"
@@ -30,14 +31,13 @@ TechniqueStrategy::TechniqueStrategy() noexcept
           std::make_shared<NormalMapTechnique>(),
           std::make_shared<StencilOutlineTechnique>(),
           std::make_shared<DefferedShadingTechnique>(),
+          std::make_shared<ShadowMappingTechnique>(),
       } {}
 
 void TechniqueStrategy::Enable(TechniqueType type) {
   technique_ = techniques_.at((int)type);
   technique_->Enable();
 }
-
-// void TechniqueStrategy::setColor(QColor c) { technique_->setColor(c); }
 
 void TechniqueStrategy::setMaterial(Material const &material) {
   technique_->setMaterial(material);
@@ -55,11 +55,6 @@ void TechniqueStrategy::setTexture(Texture const &texture) {
 void TechniqueStrategy::SetObjectID(int ObjectID) {
   technique_->SetObjectID(ObjectID);
 }
-
-// void TechniqueStrategy::setLight(
-//     QVector<std::tuple<Light *, BaseLightType *, Attenuation *>> lights) {
-//   technique_->setLight(lights);
-// }
 
 void TechniqueStrategy::setLight(
     QVector<Light> lights, QVector<std::optional<Attenuation>> attenuations) {

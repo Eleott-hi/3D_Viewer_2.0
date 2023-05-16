@@ -41,7 +41,8 @@ void Backend::Init(QOpenGLWidget* widget) {
   RegisterSystems();
 
   {
-    Texture texture = {framebuffer3D_->getTextureID(), "quad"};
+    // Texture texture = {framebuffer3D_->getTextureID(), "quad"};
+    Texture texture = {shadowSystem_->depthMap, "quad"};
 
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<QuadTag>(entity);
@@ -129,6 +130,7 @@ void Backend::AddModel(QString path) {
   scene_.AddComponent<Shader>(entity, {TechniqueType::LIGHT_TEXTURE});
   scene_.AddComponent<Transform>(entity);
   scene_.AddComponent<RenderTag>(entity);
+  scene_.AddComponent<ShadowTag>(entity);
   scene_.AddComponent<Material>(entity, material);
   scene_.AddComponent<Model>(entity, std::move(*model));
 
@@ -162,6 +164,8 @@ void Backend::Update() {
 }
 
 void Backend::Draw() {
+  glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   // {
   //   g_buffer_->Bind();
   //   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |
@@ -169,24 +173,28 @@ void Backend::Draw() {
   //   defferedShadingSystem_->Update();
   //   g_buffer_->Unbind();
   // }
-
-  {
-    framebuffer3D_->Bind();
-    glClearColor(0.1, 0.1, 0.1, 1);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-
-    cubemapSystem_->Update();
-    renderSystem_->Update();
-    renderPickedSystem_->Update();
-
-    framebuffer3D_->Unbind();
+  {  //
+    shadowSystem_->Update();
   }
 
+  // {
+  //   framebuffer3D_->Bind();
+  //   glClearColor(0.1, 0.1, 0.1, 1);
+  //   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |
+  //   GL_STENCIL_BUFFER_BIT); glEnable(GL_DEPTH_TEST);
+
+  //   cubemapSystem_->Update();
+  //   renderSystem_->Update();
+  //   renderPickedSystem_->Update();
+
+  //   framebuffer3D_->Unbind();
+  // }
+
   {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDisable(GL_DEPTH_TEST);
-    glClearColor(0.1, 0.1, 0.1, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.1, 0.9, 0.1, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // glViewport(0, 0, width_, height_);
     render2DSystem_->Update(g_buffer_->getTextureID(0),
                             g_buffer_->getTextureID(1),
@@ -206,6 +214,7 @@ void Backend::RegisterComponents() {
   scene_.RegisterComponent<InputTag>();
   scene_.RegisterComponent<RenderTag>();
   scene_.RegisterComponent<Transform>();
+  scene_.RegisterComponent<ShadowTag>();
   scene_.RegisterComponent<CubemapTag>();
   scene_.RegisterComponent<Enviroment>();
   scene_.RegisterComponent<MouseInput>();
@@ -250,6 +259,17 @@ void Backend::RegisterSystems() {
     mask.set(GetComponentID<RenderTag>());
     scene_.ChangeSystemMask<RenderSystem>(mask);
     renderSystem_->Init(&scene_, technique_.get());
+  }
+
+  shadowSystem_ = scene_.RegisterSystem<ShadowSystem>();
+  {
+    ComponentMask mask;
+    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<Transform>());
+    mask.set(GetComponentID<ShadowTag>());
+    mask.set(GetComponentID<RenderTag>());
+    scene_.ChangeSystemMask<ShadowSystem>(mask);
+    shadowSystem_->Init(&scene_, technique_.get());
   }
 
   defferedShadingSystem_ = scene_.RegisterSystem<DefferedShadingSystem>();

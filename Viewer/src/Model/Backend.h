@@ -23,6 +23,7 @@
 #include "systems/Render2DSystem.h"
 #include "systems/RenderPickedSystem.h"
 #include "systems/RenderSystem.h"
+#include "systems/ShadowSystem.h"
 #include "technique_strategy.h"
 
 namespace s21 {
@@ -95,6 +96,7 @@ class Backend : public Observable, protected QOpenGLExtraFunctions {
 
   std::shared_ptr<InputSystem> inputSystem_;
   std::shared_ptr<LightSystem> lightSystem_;
+  std::shared_ptr<ShadowSystem> shadowSystem_;
   std::shared_ptr<CameraSystem> cameraSystem_;
   std::shared_ptr<RenderSystem> renderSystem_;
   std::shared_ptr<CubemapSystem> cubemapSystem_;
