@@ -25,6 +25,7 @@ enum class TechniqueType {
   NORMALMAP,
   STENCIL_OUTLINE,
   DEFFERED_SHADING,
+  SHADOW_MAPPING,
 };
 
 enum class LightType {
@@ -148,5 +149,6 @@ struct QuadTag {};
 struct CubemapTag {};
 struct PickingTag {};
 struct RenderTag {};
+struct ShadowTag {};
 
 }  // namespace s21
