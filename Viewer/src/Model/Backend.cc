@@ -16,10 +16,9 @@ float skyboxVertices[] = {
     1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,
 };
 
-std::string
-    dir =  //
-           //            "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
-    "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
+std::string dir =  //
+    "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
+// "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
 
 namespace s21 {
 
@@ -32,83 +31,81 @@ void Backend::Init(QOpenGLWidget* widget) {
   texture_storage_ = std::make_shared<TextureStorage>();
   parser_ = std::make_shared<Parser>(texture_storage_.get());
 
-  g_buffer_ = std::make_shared<Framebuffer>();
-  framebuffer3D_ = std::make_shared<Framebuffer>();
-  framebufferShadow_ = std::make_shared<Framebuffer>();
-
-  framebufferShadow_->Create({Format::DEPTH32});
-  framebuffer3D_->Create({Format::RGB, Format::DEFAULT_DEPTH});
-  g_buffer_->Create(
-      {Format::RGBA16F, Format::RGBA16F, Format::RGBA, Format::DEFAULT_DEPTH});
-
+  SetFramebuffers();
   RegisterComponents();
   RegisterSystems();
+  InitEntities();
+}
+
+void Backend::Update() {
+  inputSystem_->Update();
+  mousePickingSystem_->Update();
+  editPickedSystem_->Update();
+  cameraSystem_->Update();
+  projectionSystem_->Update();
+  lightSystem_->Update();
+
+  if (picked_) {
+    Notify();
+    picked_ = false;
+  }
+
+  // NotifyCamera();
+}
+
+void Backend::Draw() {
+  // glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+  // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  // {
+  //   g_buffer_->Bind();
+  // g_buffer_->PrepereBuffer();
+
+  //   defferedShadingSystem_->Update();
+
+  //   g_buffer_->Unbind();
+  // }
 
   {
-    Texture texture = {framebuffer3D_->getTextureID(), "quad"};
-    //    Texture texture = {framebufferShadow_->getDepthID(), "quad"};
-    //    Texture texture = {g_buffer_->getTextureID(2), "quad"};
+    framebufferShadow_->Bind();
+    framebufferShadow_->PrepereBuffer();
+    shadowSystem_->Update();
+    framebufferShadow_->Unbind();
+  }
 
-    EntityID entity = scene_.NewEntity();
-    scene_.AddComponent<QuadTag>(entity);
-    scene_.AddComponent<Texture>(entity, texture);
+  // {
+  //   framebuffer3D_->Bind();
+  //   framebuffer3D_->PrepereBuffer();
+
+  //   cubemapSystem_->Update();
+  //   renderSystem_->Update();
+  //   renderPickedSystem_->Update();
+
+  //   framebuffer3D_->Unbind();
+  // }
+
+  {
+    framebuffer3D_->Bind();
+    framebuffer3D_->PrepereBuffer();
+    shadowRenderSystem_->Update(framebufferShadow_->getDepthID());
+    framebuffer3D_->Unbind();
   }
 
   {
-    uint32_t skyboxVAO, skyboxVBO;
-    glGenVertexArrays(1, &skyboxVAO);
-    glGenBuffers(1, &skyboxVBO);
-    glBindVertexArray(skyboxVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices,
-                 GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
-                          (void*)0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDisable(GL_DEPTH_TEST);
+    glClearColor(0.1, 0.9, 0.1, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    std::vector<std::string> faces{
-        dir + "textures/skybox/right.jpg", dir + "textures/skybox/left.jpg",
-        dir + "textures/skybox/top.jpg",   dir + "textures/skybox/bottom.jpg",
-        dir + "textures/skybox/front.jpg", dir + "textures/skybox/back.jpg"};
-
-    Mesh mesh;
-    mesh.VAO = skyboxVAO;
-
-    Texture texture;
-    texture.type = "cubemap";
-    texture.id = texture_storage_->LoadCubemap(faces);
-
-    EntityID entity = scene_.NewEntity();
-    scene_.AddComponent<Mesh>(entity, mesh);
-    scene_.AddComponent<CubemapTag>(entity);
-    scene_.AddComponent<Texture>(entity, texture);
+    render2DSystem_->Update(g_buffer_->getTextureID(0),
+                            g_buffer_->getTextureID(1),
+                            g_buffer_->getTextureID(2));
   }
+}
 
-  {
-    EntityID entity = scene_.NewEntity();
-    scene_.AddComponent<InputTag>(entity);
-    scene_.AddComponent<KeyboardInput>(entity);
-  }
-
-  {
-    EntityID entity = scene_.NewEntity();
-    scene_.AddComponent<InputTag>(entity);
-    scene_.AddComponent<MouseInput>(entity);
-  }
-
-  {
-    Camera camera;
-    camera.position = {0, 0, 6};
-    EntityID entity = scene_.NewEntity();
-    scene_.AddComponent<Camera>(entity, camera);
-  }
-
-  {
-    EntityID entity = scene_.NewEntity();
-    scene_.AddComponent<Projection>(entity);
-  }
-
-  DebugLights(false, true, false, false);
+void Backend::Render() {
+  Update();
+  Draw();
 }
 
 void Backend::AddModel(QString path) {
@@ -145,75 +142,6 @@ void Backend::AddModel(QString path) {
 void Backend::LoadTexture(QString filename, Texture& texture) {
   InsideOpenGLContext(
       [&] { texture = texture_storage_->LoadTexture(filename.toStdString()); });
-}
-
-void Backend::Render() {
-  Update();
-  Draw();
-}
-
-void Backend::Update() {
-  inputSystem_->Update();
-  mousePickingSystem_->Update();
-  editPickedSystem_->Update();
-  cameraSystem_->Update();
-  projectionSystem_->Update();
-  lightSystem_->Update();
-
-  if (picked_) {
-    Notify();
-    picked_ = false;
-  }
-
-  // NotifyCamera();
-}
-
-void Backend::Draw() {
-  glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  {
-    g_buffer_->Bind();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-
-    defferedShadingSystem_->Update();
-
-    g_buffer_->Unbind();
-  }
-  {  //
-
-    framebufferShadow_->Bind();
-    glEnable(GL_DEPTH_TEST);
-    glClear(GL_DEPTH_BUFFER_BIT);
-
-    shadowSystem_->Update();
-
-    framebufferShadow_->Unbind();
-  }
-
-  {
-    framebuffer3D_->Bind();
-    glClearColor(0.1, 0.1, 0.1, 1);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-
-    cubemapSystem_->Update();
-    renderSystem_->Update();
-    renderPickedSystem_->Update();
-
-    framebuffer3D_->Unbind();
-  }
-
-  {
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glDisable(GL_DEPTH_TEST);
-    glClearColor(0.1, 0.9, 0.1, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    // glViewport(0, 0, width_, height_);
-    render2DSystem_->Update(g_buffer_->getTextureID(0),
-                            g_buffer_->getTextureID(1),
-                            g_buffer_->getTextureID(2));
-  }
 }
 
 void Backend::RegisterComponents() {
@@ -284,6 +212,18 @@ void Backend::RegisterSystems() {
     mask.set(GetComponentID<RenderTag>());
     scene_.ChangeSystemMask<ShadowSystem>(mask);
     shadowSystem_->Init(&scene_, technique_.get());
+  }
+
+  shadowRenderSystem_ = scene_.RegisterSystem<ShadowRenderSystem>();
+  {
+    ComponentMask mask;
+    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<Transform>());
+    mask.set(GetComponentID<Material>());
+    // mask.set(GetComponentID<ShadowTag>());
+    mask.set(GetComponentID<RenderTag>());
+    scene_.ChangeSystemMask<ShadowRenderSystem>(mask);
+    shadowRenderSystem_->Init(&scene_, technique_.get());
   }
 
   defferedShadingSystem_ = scene_.RegisterSystem<DefferedShadingSystem>();
@@ -474,6 +414,118 @@ void Backend::InsideOpenGLContext(std::function<void()> func) {
   opengl_widget_->makeCurrent();
   func();
   opengl_widget_->doneCurrent();
+}
+
+void Backend::SetFramebuffers() {
+  g_buffer_ = std::make_shared<Framebuffer>();
+  framebuffer3D_ = std::make_shared<Framebuffer>();
+  framebufferShadow_ = std::make_shared<Framebuffer>();
+
+  framebufferShadow_->Create({Format::DEPTH32});
+  framebuffer3D_->Create({Format::RGB, Format::DEFAULT_DEPTH});
+  g_buffer_->Create({Format::RGBA16F, Format::RGBA16F,  //
+                     Format::RGBA, Format::DEFAULT_DEPTH});
+
+  framebuffer3D_->SetPrepereBuffer([this] {
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.1, 0.1, 0.1, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+  });
+
+  framebufferShadow_->SetPrepereBuffer([this] {
+    glEnable(GL_DEPTH_TEST);
+    glClear(GL_DEPTH_BUFFER_BIT);
+  });
+
+  g_buffer_->SetPrepereBuffer([this] {
+    glEnable(GL_DEPTH_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+  });
+}
+
+void Backend::InitEntities() {
+  {
+    Texture texture = {framebuffer3D_->getTextureID(), "quad"};
+    // Texture texture = {framebufferShadow_->getDepthID(), "quad"};
+    //  Texture texture = {g_buffer_->getTextureID(2), "quad"};
+
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<QuadTag>(entity);
+    scene_.AddComponent<Texture>(entity, texture);
+  }
+
+  {
+    uint32_t skyboxVAO, skyboxVBO;
+    glGenVertexArrays(1, &skyboxVAO);
+    glGenBuffers(1, &skyboxVBO);
+    glBindVertexArray(skyboxVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices,
+                 GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
+                          (void*)0);
+
+    std::vector<std::string> faces{
+        dir + "textures/skybox/right.jpg", dir + "textures/skybox/left.jpg",
+        dir + "textures/skybox/top.jpg",   dir + "textures/skybox/bottom.jpg",
+        dir + "textures/skybox/front.jpg", dir + "textures/skybox/back.jpg"};
+
+    Mesh mesh;
+    mesh.VAO = skyboxVAO;
+
+    Texture texture;
+    texture.type = "cubemap";
+    texture.id = texture_storage_->LoadCubemap(faces);
+
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Mesh>(entity, mesh);
+    scene_.AddComponent<CubemapTag>(entity);
+    scene_.AddComponent<Texture>(entity, texture);
+  }
+
+  {
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<InputTag>(entity);
+    scene_.AddComponent<KeyboardInput>(entity);
+  }
+
+  {
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<InputTag>(entity);
+    scene_.AddComponent<MouseInput>(entity);
+  }
+
+  {
+    Camera camera;
+    camera.position = {0, 0, 6};
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Camera>(entity, camera);
+  }
+
+  {
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Projection>(entity);
+  }
+
+  // {
+  //   Transform transform;
+  //   transform.translation = {0, -4, 0};
+  //   transform.scale = {11, 1, 11};
+
+  //   auto model = *parser_->loadModel(dir + "objects/cube.obj").model;
+  //   for (auto& mesh : model.meshes) mesh.bufferize(this);
+
+  //   EntityID entity = scene_.NewEntity();
+  //   scene_.AddComponent<Material>(entity);
+  //   scene_.AddComponent<Transform>(entity, transform);
+  //   scene_.AddComponent<Model>(entity, std::move(model));
+  //   scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_COLOR});
+  //   scene_.AddComponent<RenderTag>(entity);
+  //   scene_.AddComponent<ShadowTag>(entity);
+  // }
+
+  DebugLights(false, true, false, false);
 }
 
 }  // namespace s21

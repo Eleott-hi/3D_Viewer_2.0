@@ -10,16 +10,13 @@
 
 namespace s21 {
 
-QMatrix4x4 Proj();
-QMatrix4x4 View();
-
-class ShadowSystem : public System, protected QOpenGLExtraFunctions {
+class ShadowRenderSystem : public System, protected QOpenGLExtraFunctions {
  public:
-  ShadowSystem() { initializeOpenGLFunctions(); }
-  ~ShadowSystem() = default;
+  ShadowRenderSystem() { initializeOpenGLFunctions(); }
+  ~ShadowRenderSystem() = default;
 
   void Init(ECS_Controller *scene, TechniqueStrategy *technique);
-  void Update();
+  void Update(uint32_t shadowMap);
 
  private:
   ECS_Controller *scene_ = nullptr;

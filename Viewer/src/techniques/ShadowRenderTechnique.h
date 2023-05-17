@@ -6,14 +6,14 @@
 
 namespace s21 {
 
-class LightTextureTechnique : public ITechnique {
+class ShadowRenderTechnique : public ITechnique {
  public:
-  LightTextureTechnique() { init(); }
+  ShadowRenderTechnique() { init(); }
 
-  ~LightTextureTechnique() = default;
+  ~ShadowRenderTechnique() = default;
 
   void init() final;
-  void Clear() final { texture_index_ = 0; }
+  void Clear() final { index_ = 0; }
   void setMaterial(Material const &material) final;
   void setTexture(Texture const &texture) final;
   void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
@@ -21,7 +21,7 @@ class LightTextureTechnique : public ITechnique {
                 QVector<std::optional<Attenuation>> attenuations) final;
 
  private:
-  uint32_t texture_index_ = 0;
+  uint32_t index_ = 0;
 
   void SetLightComponent(QOpenGLShaderProgram &shader, std::string const &type,
                          Light const &light);

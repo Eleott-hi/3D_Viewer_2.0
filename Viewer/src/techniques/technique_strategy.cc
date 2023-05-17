@@ -6,6 +6,7 @@
 #include "DefferedShadingTechnique.h"
 #include "PhysicalBasedRenderingTechnique.h"
 #include "ShadowMappingTechnique.h"
+#include "ShadowRenderTechnique.h"
 #include "StencilOutlineTechnique.h"
 #include "cubemap_technique.h"
 #include "light_color_technique.h"
@@ -32,6 +33,7 @@ TechniqueStrategy::TechniqueStrategy() noexcept
           std::make_shared<StencilOutlineTechnique>(),
           std::make_shared<DefferedShadingTechnique>(),
           std::make_shared<ShadowMappingTechnique>(),
+          std::make_shared<ShadowRenderTechnique>(),
       } {}
 
 void TechniqueStrategy::Enable(TechniqueType type) {

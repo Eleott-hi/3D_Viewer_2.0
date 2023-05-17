@@ -26,6 +26,7 @@ enum class TechniqueType {
   STENCIL_OUTLINE,
   DEFFERED_SHADING,
   SHADOW_MAPPING,
+  SHADOW_RENDERING,
 };
 
 enum class LightType {

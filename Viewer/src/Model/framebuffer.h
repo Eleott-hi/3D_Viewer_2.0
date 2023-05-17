@@ -25,6 +25,14 @@ class Framebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
   void Resize(uint32_t width, uint32_t height) final;
   int ReadPixel(uint32_t x, uint32_t y, int index) final;
   void Create(const std::initializer_list<AttachmentFormat>& formats) final;
+  void PrepereBuffer() final {
+    Q_ASSERT(prepare_func_);
+    prepare_func_();
+  }
+
+  void SetPrepereBuffer(std::function<void()> prepare_func) final {
+    prepare_func_ = prepare_func;
+  }
 
  private:
   void Clear();
@@ -41,6 +49,7 @@ class Framebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
   uint32_t m_Depth_Texture_ = 0;
   uint32_t width_ = 500, height_ = 500;
   std::vector<uint32_t> m_Color_Textures_;
+  std::function<void()> prepare_func_;
 
   bool depth_storage_ = true;
   AttachmentFormat depth_format_;

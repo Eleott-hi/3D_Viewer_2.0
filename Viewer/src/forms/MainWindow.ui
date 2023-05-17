@@ -51,7 +51,7 @@
      <x>0</x>
      <y>0</y>
      <width>1302</width>
-     <height>25</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
@@ -1257,8 +1257,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>250</width>
-          <height>858</height>
+          <width>231</width>
+          <height>1030</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1571,8 +1571,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>250</width>
-          <height>434</height>
+          <width>231</width>
+          <height>257</height>
          </rect>
         </property>
         <widget class="QGroupBox" name="groupBox_5">
@@ -1965,12 +1965,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>204</x>
-     <y>298</y>
+     <x>1118</x>
+     <y>230</y>
     </hint>
     <hint type="destinationlabel">
-     <x>413</x>
-     <y>300</y>
+     <x>1274</x>
+     <y>232</y>
     </hint>
    </hints>
   </connection>
@@ -1981,12 +1981,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>204</x>
-     <y>335</y>
+     <x>1118</x>
+     <y>267</y>
     </hint>
     <hint type="destinationlabel">
-     <x>413</x>
-     <y>337</y>
+     <x>1274</x>
+     <y>269</y>
     </hint>
    </hints>
   </connection>
@@ -1997,12 +1997,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>189</x>
-     <y>393</y>
+     <x>162</x>
+     <y>257</y>
     </hint>
     <hint type="destinationlabel">
-     <x>428</x>
-     <y>395</y>
+     <x>253</x>
+     <y>259</y>
     </hint>
    </hints>
   </connection>
@@ -2013,12 +2013,12 @@
    <slot>setValue(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>428</x>
-     <y>395</y>
+     <x>253</x>
+     <y>259</y>
     </hint>
     <hint type="destinationlabel">
-     <x>189</x>
-     <y>393</y>
+     <x>162</x>
+     <y>257</y>
     </hint>
    </hints>
   </connection>
@@ -2029,12 +2029,12 @@
    <slot>setValue(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>413</x>
-     <y>337</y>
+     <x>1274</x>
+     <y>269</y>
     </hint>
     <hint type="destinationlabel">
-     <x>204</x>
-     <y>335</y>
+     <x>1118</x>
+     <y>267</y>
     </hint>
    </hints>
   </connection>
@@ -2045,12 +2045,12 @@
    <slot>setValue(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>413</x>
-     <y>300</y>
+     <x>1274</x>
+     <y>232</y>
     </hint>
     <hint type="destinationlabel">
-     <x>204</x>
-     <y>298</y>
+     <x>1118</x>
+     <y>230</y>
     </hint>
    </hints>
   </connection>
@@ -2061,12 +2061,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>85</y>
+     <x>83</x>
+     <y>1146</y>
     </hint>
     <hint type="destinationlabel">
-     <x>87</x>
-     <y>85</y>
+     <x>171</x>
+     <y>1146</y>
     </hint>
    </hints>
   </connection>
@@ -2077,12 +2077,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>85</y>
+     <x>83</x>
+     <y>1146</y>
     </hint>
     <hint type="destinationlabel">
-     <x>68</x>
-     <y>81</y>
+     <x>84</x>
+     <y>1182</y>
     </hint>
    </hints>
   </connection>
@@ -2093,12 +2093,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>85</y>
+     <x>83</x>
+     <y>1146</y>
     </hint>
     <hint type="destinationlabel">
-     <x>88</x>
-     <y>81</y>
+     <x>135</x>
+     <y>1182</y>
     </hint>
    </hints>
   </connection>
@@ -2109,12 +2109,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>85</y>
+     <x>83</x>
+     <y>1146</y>
     </hint>
     <hint type="destinationlabel">
-     <x>66</x>
-     <y>75</y>
+     <x>82</x>
+     <y>1225</y>
     </hint>
    </hints>
   </connection>
@@ -2125,12 +2125,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>85</y>
+     <x>83</x>
+     <y>1146</y>
     </hint>
     <hint type="destinationlabel">
-     <x>87</x>
-     <y>79</y>
+     <x>180</x>
+     <y>1217</y>
     </hint>
    </hints>
   </connection>
@@ -2141,12 +2141,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>94</y>
+     <x>83</x>
+     <y>1275</y>
     </hint>
     <hint type="destinationlabel">
-     <x>87</x>
-     <y>94</y>
+     <x>171</x>
+     <y>1275</y>
     </hint>
    </hints>
   </connection>
@@ -2157,12 +2157,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>94</y>
+     <x>83</x>
+     <y>1275</y>
     </hint>
     <hint type="destinationlabel">
-     <x>87</x>
-     <y>88</y>
+     <x>180</x>
+     <y>1344</y>
     </hint>
    </hints>
   </connection>
@@ -2173,12 +2173,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>94</y>
+     <x>83</x>
+     <y>1275</y>
     </hint>
     <hint type="destinationlabel">
-     <x>66</x>
-     <y>84</y>
+     <x>82</x>
+     <y>1340</y>
     </hint>
    </hints>
   </connection>
@@ -2189,12 +2189,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>94</y>
+     <x>83</x>
+     <y>1275</y>
     </hint>
     <hint type="destinationlabel">
-     <x>69</x>
-     <y>92</y>
+     <x>85</x>
+     <y>1308</y>
     </hint>
    </hints>
   </connection>
@@ -2205,12 +2205,124 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>94</y>
+     <x>83</x>
+     <y>1275</y>
     </hint>
     <hint type="destinationlabel">
-     <x>87</x>
-     <y>89</y>
+     <x>137</x>
+     <y>1305</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>xTransDoubleBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>xTrans</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1088</x>
+     <y>72</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1173</x>
+     <y>75</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yTransDoubleBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>yTrans</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1044</x>
+     <y>106</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1178</x>
+     <y>109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zTransDoubleBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>zTrans</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1043</x>
+     <y>146</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1180</x>
+     <y>146</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zRotDoubleBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>zRot</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1074</x>
+     <y>303</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1176</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dsb_xScale</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>xScale</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1039</x>
+     <y>373</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1175</x>
+     <y>371</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yScaleDoubleBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>yScale</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1087</x>
+     <y>414</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1184</x>
+     <y>414</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zScaleDoubleBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>zScale</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1083</x>
+     <y>445</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1177</x>
+     <y>444</y>
     </hint>
    </hints>
   </connection>

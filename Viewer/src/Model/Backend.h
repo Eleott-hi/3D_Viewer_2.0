@@ -23,6 +23,7 @@
 #include "systems/Render2DSystem.h"
 #include "systems/RenderPickedSystem.h"
 #include "systems/RenderSystem.h"
+#include "systems/ShadowRenderSystem.h"
 #include "systems/ShadowSystem.h"
 #include "technique_strategy.h"
 
@@ -108,6 +109,7 @@ class Backend : public Observable, protected QOpenGLExtraFunctions {
   std::shared_ptr<MousePickingSystem> mousePickingSystem_;
   std::shared_ptr<RenderPickedSystem> renderPickedSystem_;
   std::shared_ptr<DefferedShadingSystem> defferedShadingSystem_;
+  std::shared_ptr<ShadowRenderSystem> shadowRenderSystem_;
 
   void RegisterComponents();
   void RegisterSystems();
@@ -115,6 +117,8 @@ class Backend : public Observable, protected QOpenGLExtraFunctions {
   void Update();
   void DebugLights(bool directional, bool point_1, bool point_2, bool spot);
   void InsideOpenGLContext(std::function<void()> func);
+  void SetFramebuffers();
+  void InitEntities();
 };
 
 }  // namespace s21
