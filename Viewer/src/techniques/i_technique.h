@@ -7,16 +7,15 @@
 #include <QColor>
 #include <QMatrix4x4>
 #include <QOpenGLExtraFunctions>
-#include <QOpenGLShaderProgram>
 #include <QVector3D>
 #include <QVector>
 
 #include "Components.h"
+#include "ShaderProgram.h"
 
 namespace s21 {
 
-class ITechnique : public QOpenGLShaderProgram,
-                   protected QOpenGLExtraFunctions {
+class ITechnique : protected QOpenGLExtraFunctions {
  public:
   ITechnique() { initializeOpenGLFunctions(); }
   virtual ~ITechnique() {}
@@ -44,22 +43,10 @@ class ITechnique : public QOpenGLShaderProgram,
   }
 
  protected:
-  QOpenGLShaderProgram shader_;
+  ShaderProgram shader_;
 
   void GenerateShaders(QString vertex_file, QString fragment_file) {
-    bool ok;
-    ok = shader_.addShaderFromSourceFile(QOpenGLShader::Vertex, vertex_file);
-    Q_ASSERT_X(ok, "ITechnique::GenerateShaders",
-               "Failed to compile vertex shader");
-
-    ok =
-        shader_.addShaderFromSourceFile(QOpenGLShader::Fragment, fragment_file);
-    Q_ASSERT_X(ok, "ITechnique::GenerateShaders",
-               "Failed to compile fragment shader");
-
-    ok = shader_.link();
-    Q_ASSERT_X(ok, "ITechnique::GenerateShaders",
-               "Failed to link shader program");
+    shader_.GenerateShaders(vertex_file, fragment_file);
   }
 };
 

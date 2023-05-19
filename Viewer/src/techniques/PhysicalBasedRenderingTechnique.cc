@@ -34,8 +34,9 @@ void PhysicalBasedRenderingTechnique::setMaterial(Material const &material) {
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 
-void PhysicalBasedRenderingTechnique::SetLightComponent(
-    QOpenGLShaderProgram &shader, std::string const &type, Light const &light) {
+void PhysicalBasedRenderingTechnique::SetLightComponent(ShaderProgram &shader,
+                                                        std::string const &type,
+                                                        Light const &light) {
   shader.setUniformValue(Utils::StructName(type, "ambient").c_str(),
                          light.ambient);
   shader.setUniformValue(Utils::StructName(type, "diffuse").c_str(),
@@ -45,7 +46,7 @@ void PhysicalBasedRenderingTechnique::SetLightComponent(
 }
 
 void PhysicalBasedRenderingTechnique::SetAttenuationComponent(
-    QOpenGLShaderProgram &shader, std::string const &type,
+    ShaderProgram &shader, std::string const &type,
     Attenuation const &attenuation) {
   auto const &[constant, linear, quadratic] = attenuation;
   shader.setUniformValue(Utils::StructName(type, "linear").c_str(), linear);
@@ -55,7 +56,7 @@ void PhysicalBasedRenderingTechnique::SetAttenuationComponent(
 }
 
 void PhysicalBasedRenderingTechnique::SetLightSpecificComponent(
-    QOpenGLShaderProgram &shader, std::string const &type, Light const &light,
+    ShaderProgram &shader, std::string const &type, Light const &light,
     int light_index, int attenuation_index) {
   shader.setUniformValue(Utils::StructName(type, "position").c_str(),
                          light.position);

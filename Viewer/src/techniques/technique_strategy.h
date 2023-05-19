@@ -14,7 +14,7 @@ class TechniqueStrategy {
 
   template <typename Type>
   void setCustomValue(const char *name, Type value) {
-    technique_->setUniformValue(name, value);
+    technique_->setCustomValue(name, value);
   }
 
   void Clear() { technique_->Clear(); }

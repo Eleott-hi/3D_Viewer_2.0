@@ -1,7 +1,7 @@
 #include "ShadowRenderTechnique.h"
 
-#include "systems/ShadowSystem.h"
 #include "Utils.h"
+#include "systems/ShadowSystem.h"
 
 namespace s21 {
 
@@ -37,7 +37,7 @@ void ShadowRenderTechnique::setMaterial(Material const &material) {
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 
-void ShadowRenderTechnique::SetLightComponent(QOpenGLShaderProgram &shader,
+void ShadowRenderTechnique::SetLightComponent(ShaderProgram &shader,
                                               std::string const &type,
                                               Light const &light) {
   shader.setUniformValue(Utils::StructName(type, "ambient").c_str(),
@@ -49,7 +49,7 @@ void ShadowRenderTechnique::SetLightComponent(QOpenGLShaderProgram &shader,
 }
 
 void ShadowRenderTechnique::SetAttenuationComponent(
-    QOpenGLShaderProgram &shader, std::string const &type,
+    ShaderProgram &shader, std::string const &type,
     Attenuation const &attenuation) {
   auto const &[constant, linear, quadratic] = attenuation;
   shader.setUniformValue(Utils::StructName(type, "linear").c_str(), linear);
@@ -58,9 +58,11 @@ void ShadowRenderTechnique::SetAttenuationComponent(
                          quadratic);
 }
 
-void ShadowRenderTechnique::SetLightSpecificComponent(
-    QOpenGLShaderProgram &shader, std::string const &type, Light const &light,
-    int light_index, int attenuation_index) {
+void ShadowRenderTechnique::SetLightSpecificComponent(ShaderProgram &shader,
+                                                      std::string const &type,
+                                                      Light const &light,
+                                                      int light_index,
+                                                      int attenuation_index) {
   shader.setUniformValue(Utils::StructName(type, "position").c_str(),
                          light.position);
   shader.setUniformValue(Utils::StructName(type, "direction").c_str(),

@@ -27,7 +27,7 @@ void LightColorTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
                           QVector3D{tmp(0, 3), tmp(1, 3), tmp(2, 3)});
 }
 
-void LightColorTechnique::SetLightComponent(QOpenGLShaderProgram &shader,
+void LightColorTechnique::SetLightComponent(ShaderProgram &shader,
                                             std::string const &type,
                                             Light const &light) {
   shader.setUniformValue(Utils::StructName(type, "ambient").c_str(),
@@ -39,7 +39,7 @@ void LightColorTechnique::SetLightComponent(QOpenGLShaderProgram &shader,
 }
 
 void LightColorTechnique::SetAttenuationComponent(
-    QOpenGLShaderProgram &shader, std::string const &type,
+    ShaderProgram &shader, std::string const &type,
     Attenuation const &attenuation) {
   auto const &[constant, linear, quadratic] = attenuation;
   shader.setUniformValue(Utils::StructName(type, "linear").c_str(), linear);
@@ -48,9 +48,11 @@ void LightColorTechnique::SetAttenuationComponent(
                          quadratic);
 }
 
-void LightColorTechnique::SetLightSpecificComponent(
-    QOpenGLShaderProgram &shader, std::string const &type, Light const &light,
-    int light_index, int attenuation_index) {
+void LightColorTechnique::SetLightSpecificComponent(ShaderProgram &shader,
+                                                    std::string const &type,
+                                                    Light const &light,
+                                                    int light_index,
+                                                    int attenuation_index) {
   shader.setUniformValue(Utils::StructName(type, "position").c_str(),
                          light.position);
   shader.setUniformValue(Utils::StructName(type, "direction").c_str(),

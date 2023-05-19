@@ -20,14 +20,13 @@ class LightColorTechnique : public ITechnique {
                 QVector<std::optional<Attenuation>> attenuations) final;
 
  private:
-  void SetLightComponent(QOpenGLShaderProgram &shader, std::string const &type,
+  void SetLightComponent(ShaderProgram &shader, std::string const &type,
                          Light const &light);
-  void SetAttenuationComponent(QOpenGLShaderProgram &shader,
-                               std::string const &type,
+  void SetAttenuationComponent(ShaderProgram &shader, std::string const &type,
                                Attenuation const &attenuation);
-  void SetLightSpecificComponent(QOpenGLShaderProgram &shader,
-                                 std::string const &type, Light const &light,
-                                 int light_index, int attenuation_index);
+  void SetLightSpecificComponent(ShaderProgram &shader, std::string const &type,
+                                 Light const &light, int light_index,
+                                 int attenuation_index);
 };
 
 }  // namespace s21

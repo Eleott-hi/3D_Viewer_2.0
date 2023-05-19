@@ -33,7 +33,7 @@ void NormalMapTechnique::setMaterial(Material const &material) {
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 
-void NormalMapTechnique::SetLightComponent(QOpenGLShaderProgram &shader,
+void NormalMapTechnique::SetLightComponent(ShaderProgram &shader,
                                            std::string const &type,
                                            Light const &light) {
   shader.setUniformValue(Utils::StructName(type, "ambient").c_str(),
@@ -45,7 +45,7 @@ void NormalMapTechnique::SetLightComponent(QOpenGLShaderProgram &shader,
 }
 
 void NormalMapTechnique::SetAttenuationComponent(
-    QOpenGLShaderProgram &shader, std::string const &type,
+    ShaderProgram &shader, std::string const &type,
     Attenuation const &attenuation) {
   auto const &[constant, linear, quadratic] = attenuation;
   shader.setUniformValue(Utils::StructName(type, "linear").c_str(), linear);
@@ -54,7 +54,7 @@ void NormalMapTechnique::SetAttenuationComponent(
                          quadratic);
 }
 
-void NormalMapTechnique::SetLightSpecificComponent(QOpenGLShaderProgram &shader,
+void NormalMapTechnique::SetLightSpecificComponent(ShaderProgram &shader,
                                                    std::string const &type,
                                                    Light const &light,
                                                    int light_index,

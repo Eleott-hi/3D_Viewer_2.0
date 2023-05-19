@@ -33,7 +33,7 @@ void LightTextureTechnique::setMaterial(Material const &material) {
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 
-void LightTextureTechnique::SetLightComponent(QOpenGLShaderProgram &shader,
+void LightTextureTechnique::SetLightComponent(ShaderProgram &shader,
                                               std::string const &type,
                                               Light const &light) {
   shader.setUniformValue(Utils::StructName(type, "ambient").c_str(),
@@ -45,7 +45,7 @@ void LightTextureTechnique::SetLightComponent(QOpenGLShaderProgram &shader,
 }
 
 void LightTextureTechnique::SetAttenuationComponent(
-    QOpenGLShaderProgram &shader, std::string const &type,
+    ShaderProgram &shader, std::string const &type,
     Attenuation const &attenuation) {
   auto const &[constant, linear, quadratic] = attenuation;
   shader.setUniformValue(Utils::StructName(type, "linear").c_str(), linear);
@@ -54,9 +54,11 @@ void LightTextureTechnique::SetAttenuationComponent(
                          quadratic);
 }
 
-void LightTextureTechnique::SetLightSpecificComponent(
-    QOpenGLShaderProgram &shader, std::string const &type, Light const &light,
-    int light_index, int attenuation_index) {
+void LightTextureTechnique::SetLightSpecificComponent(ShaderProgram &shader,
+                                                      std::string const &type,
+                                                      Light const &light,
+                                                      int light_index,
+                                                      int attenuation_index) {
   shader.setUniformValue(Utils::StructName(type, "position").c_str(),
                          light.position);
   shader.setUniformValue(Utils::StructName(type, "direction").c_str(),

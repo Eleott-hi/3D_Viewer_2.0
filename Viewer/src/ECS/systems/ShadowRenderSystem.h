@@ -21,7 +21,6 @@ class ShadowRenderSystem : public System, protected QOpenGLExtraFunctions {
  private:
   ECS_Controller *scene_ = nullptr;
   TechniqueStrategy *technique_ = nullptr;
-  QOpenGLShaderProgram shader_;
 };
 
 }  // namespace s21

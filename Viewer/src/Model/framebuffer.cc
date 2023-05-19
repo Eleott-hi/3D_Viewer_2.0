@@ -171,7 +171,7 @@ void Framebuffer::AttachDepthTexture(GLenum internal_format, GLenum format,
   texture.SetWraps(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
   texture.SetFilters(GL_NEAREST, GL_NEAREST);
   texture.ProcessWrapsAndFilters();
-  
+
   float borderColor[] = {1.0, 1.0, 1.0, 1.0};
   glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 

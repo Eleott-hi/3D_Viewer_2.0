@@ -16,9 +16,10 @@ float skyboxVertices[] = {
     1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,
 };
 
-std::string dir =  //
-    "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
-// "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
+std::string
+    dir =  //
+           // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
+    "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
 
 namespace s21 {
 
@@ -66,28 +67,28 @@ void Backend::Draw() {
   //   g_buffer_->Unbind();
   // }
 
-  {
-    framebufferShadow_->Bind();
-    framebufferShadow_->PrepereBuffer();
-    shadowSystem_->Update();
-    framebufferShadow_->Unbind();
-  }
+  // {
+  //   framebufferShadow_->Bind();
+  //   framebufferShadow_->PrepereBuffer();
+  //   shadowSystem_->Update();
+  //   framebufferShadow_->Unbind();
+  // }
 
   // {
   //   framebuffer3D_->Bind();
   //   framebuffer3D_->PrepereBuffer();
-
-  //   cubemapSystem_->Update();
-  //   renderSystem_->Update();
-  //   renderPickedSystem_->Update();
-
+  //   shadowRenderSystem_->Update(framebufferShadow_->getDepthID());
   //   framebuffer3D_->Unbind();
   // }
 
   {
     framebuffer3D_->Bind();
     framebuffer3D_->PrepereBuffer();
-    shadowRenderSystem_->Update(framebufferShadow_->getDepthID());
+
+    cubemapSystem_->Update();
+    renderSystem_->Update();
+    renderPickedSystem_->Update();
+
     framebuffer3D_->Unbind();
   }
 
