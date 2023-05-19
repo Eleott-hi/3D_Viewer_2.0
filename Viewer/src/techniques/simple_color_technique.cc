@@ -14,12 +14,8 @@ void SimpleColorTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
   shader_.setUniformValue("u_MVP", proj * view * model);
 }
 
-// void SimpleColorTechnique::setColor(QColor c) {
-//   shader_.setUniformValue("u_Color", c);
-// }
-
 void SimpleColorTechnique::setMaterial(Material const& material) {
-  shader_.setUniformValue("u_Color", material.color);
+  shader_.setUniformValue("material.color", material.color);
 }
 
 }  // namespace s21

@@ -12,10 +12,9 @@ class PickingTechnique : public ITechnique {
   PickingTechnique() { init(); }
   ~PickingTechnique() = default;
 
-  virtual void init() override;
-  virtual void setMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                      QMatrix4x4 model) override;
-  virtual void SetObjectID(int ObjectID) override;
+  void init() final;
+  void SetObjectID(int ObjectID) final;
+  void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
 };
 
 }  // namespace s21

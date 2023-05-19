@@ -4,6 +4,7 @@
 #include <QImage>
 #include <QMatrix4x4>
 #include <QOpenGLExtraFunctions>
+#include <QOpenGLShaderProgram>
 #include <QVector3D>
 #include <QVector>
 #include <string>

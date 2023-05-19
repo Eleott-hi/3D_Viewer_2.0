@@ -25,12 +25,9 @@ class ITechnique : protected QOpenGLExtraFunctions {
 
   // =================== Optional ===================
   virtual void Clear() {}
-  // virtual void setColor(QColor c) {}
   virtual void SetObjectID(int ObjectID) {}
   virtual void setTexture(Texture const &texture) {}
   virtual void setMaterial(Material const &material) {}
-  // virtual void setLight(
-  // QVector<std::tuple<Light *, BaseLightType *, Attenuation *>> lights) {}
   virtual void setLight(QVector<Light> lights,
                         QVector<std::optional<Attenuation>> attenuations) {}
 

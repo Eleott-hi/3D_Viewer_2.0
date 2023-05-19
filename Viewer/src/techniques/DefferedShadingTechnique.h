@@ -9,11 +9,10 @@ class DefferedShadingTechnique : public ITechnique {
   DefferedShadingTechnique() { init(); }
   ~DefferedShadingTechnique() {}
 
-  virtual void init() override;
+  void init() final;
   void setTexture(Texture const &texture);
-  virtual void setMaterial(Material const &material) override;
-  virtual void setMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                      QMatrix4x4 model) override;
+  void setMaterial(Material const &material) final;
+  void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
 
  private:
   uint32_t texture_index_ = 0;

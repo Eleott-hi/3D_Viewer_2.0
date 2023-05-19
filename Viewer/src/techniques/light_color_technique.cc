@@ -12,7 +12,7 @@ void LightColorTechnique::init() {
 }
 
 void LightColorTechnique::setMaterial(Material const &material) {
-  shader_.setUniformValue("u_Color", material.color);
+  shader_.setUniformValue("material.color", material.color);
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 

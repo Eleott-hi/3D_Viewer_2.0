@@ -9,10 +9,9 @@ class CubemapTechnique : public ITechnique {
   CubemapTechnique() { init(); }
   ~CubemapTechnique() {}
 
-  virtual void init() override;
-  void setTexture(Texture const &texture) override;
-  virtual void setMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                      QMatrix4x4 model) override;
+  void init() final;
+  void setTexture(Texture const &texture) final;
+  void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
 };
 
 }  // namespace s21

@@ -9,12 +9,9 @@ class LightColorTechnique : public ITechnique {
   LightColorTechnique() { init(); }
   ~LightColorTechnique() {}
 
-  virtual void init() override;
-
-  virtual void setMaterial(Material const &material) override;
-
-  virtual void setMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                      QMatrix4x4 model) override;
+  void init() final;
+  void setMaterial(Material const &material) final;
+  void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
 
   void setLight(QVector<Light> lights,
                 QVector<std::optional<Attenuation>> attenuations) final;

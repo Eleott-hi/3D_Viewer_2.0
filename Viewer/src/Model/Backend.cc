@@ -130,7 +130,8 @@ void Backend::AddModel(QString path) {
   material.ao = texture_storage_->LoadTexture(dir + "objects/backpack/ao.jpg");
 
   EntityID entity = scene_.NewEntity();
-  scene_.AddComponent<Shader>(entity, {TechniqueType::LIGHT_TEXTURE});
+  scene_.AddComponent<Shader>(entity,
+                              {TechniqueType::PHYSICAL_BASED_RENDERING});
   scene_.AddComponent<Transform>(entity);
   scene_.AddComponent<RenderTag>(entity);
   scene_.AddComponent<ShadowTag>(entity);
@@ -313,8 +314,8 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
     Light light;
     light.type = LightType::POINT;
     light.position = {0, 0, 0};
-    // light.ambient = {150, 150, 150};
-    light.ambient = {0.5, 0.5, 0.5};
+    light.ambient = {150, 150, 150};
+    // light.ambient = {0.5, 0.5, 0.5};
     light.specular = {0.5, 0.5, 0.5};
 
     Transform transform;

@@ -9,13 +9,11 @@ class SimpleColorTechnique : public ITechnique {
   SimpleColorTechnique() { init(); }
   ~SimpleColorTechnique() = default;
 
-  virtual void init() override;
+  void init() final;
 
-  virtual void setMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                      QMatrix4x4 model) override;
+  void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
 
-  // virtual void setColor(QColor c) override;
-  virtual void setMaterial(Material const& material) override;
+  void setMaterial(Material const& material) final;
 };
 
 }  // namespace s21

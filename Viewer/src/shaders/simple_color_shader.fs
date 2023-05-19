@@ -2,8 +2,12 @@
 
 out vec4 FragColor;
 
-uniform vec4 u_Color;
+struct Material {
+  vec4 color;
+};
 
-void main() {  //
-  FragColor = u_Color;
+uniform Material material;
+
+void main() {
+  FragColor = vec4(vec3(material.color), 1);
 }
