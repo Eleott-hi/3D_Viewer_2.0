@@ -1,6 +1,5 @@
 #pragma once
 #include <QOpenGLExtraFunctions>
-#include <functional>
 #include <vector>
 
 namespace s21 {
@@ -51,7 +50,7 @@ class TextureWraper : protected QOpenGLExtraFunctions {
   GLenum m_WrapT = GL_NONE;
   GLenum m_WrapR = GL_NONE;
   GLenum m_Type = GL_NONE;
-  
+
   uint32_t m_TextureID = 0;
 };
 }  // namespace s21
