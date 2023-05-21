@@ -24,7 +24,6 @@ void RenderSystem::Update() {
     auto const &material = scene_->GetComponent<Material>(entity);
 
     technique_->Enable(scene_->GetComponent<Shader>(entity).type);
-
     technique_->Clear();
     technique_->setMaterial(material);
     technique_->setMVP(proj, view, transform.GetModelMatrix());

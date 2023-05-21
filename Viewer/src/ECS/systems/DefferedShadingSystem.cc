@@ -17,13 +17,12 @@ void DefferedShadingSystem::Update() {
   for (auto entity : entities_) {
     auto &model = scene_->GetComponent<Model>(entity);
     auto const &transform = scene_->GetComponent<Transform>(entity);
+    auto const &material = scene_->GetComponent<Material>(entity);
 
     technique_->Enable(TechniqueType::DEFFERED_SHADING);
     technique_->Clear();
+    technique_->setMaterial(material);
     technique_->setMVP(proj, view, transform.GetModelMatrix());
-
-    if (scene_->EntityHasComponent<Material>(entity))
-      technique_->setMaterial(scene_->GetComponent<Material>(entity));
 
     for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
   }

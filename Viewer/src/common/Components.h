@@ -28,6 +28,7 @@ enum class TechniqueType {
   DEFFERED_SHADING,
   SHADOW_MAPPING,
   SHADOW_RENDERING,
+  POINT_SHADOW,
 };
 
 enum class LightType {

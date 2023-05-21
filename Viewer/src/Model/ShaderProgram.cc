@@ -49,8 +49,8 @@ QString ProcessFile(QString filename) {
   return res;
 }
 
-void ShaderProgram::GenerateShaders(QString vertex_file,
-                                    QString fragment_file) {
+void ShaderProgram::GenerateShaders(QString vertex_file, QString fragment_file,
+                                    QString geometry_file) {
   bool ok = shader_.addShaderFromSourceCode(QOpenGLShader::Vertex,
                                             ProcessFile(vertex_file));
   Q_ASSERT_X(ok, "ITechnique::GenerateShaders",
@@ -60,6 +60,13 @@ void ShaderProgram::GenerateShaders(QString vertex_file,
                                        ProcessFile(fragment_file));
   Q_ASSERT_X(ok, "ITechnique::GenerateShaders",
              "Failed to compile fragment shader");
+
+  if (geometry_file != "") {
+    ok = shader_.addShaderFromSourceCode(QOpenGLShader::Geometry,
+                                         ProcessFile(geometry_file));
+    Q_ASSERT_X(ok, "ITechnique::GenerateShaders",
+               "Failed to compile geometry shader");
+  }
 
   ok = shader_.link();
   Q_ASSERT_X(ok, "ITechnique::GenerateShaders",

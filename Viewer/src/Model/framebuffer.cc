@@ -33,19 +33,15 @@ void Framebuffer::Create(
     }
   }
 
+  SwitchColorTexture();
+  SwitchDepthTexture();
+
   Invalidate();
 }
 
 void Framebuffer::Clear() {
   if (m_fbo) glDeleteFramebuffers(1, &m_fbo);
-
-  if (!m_Color_Textures_.empty())
-    glDeleteTextures(m_Color_Textures_.size(), m_Color_Textures_.data());
-
-  if (m_Depth_Texture_) glDeleteTextures(1, &m_Depth_Texture_);
-
-  m_Color_Textures_.clear();
-  m_Depth_Texture_ = 0;
+  m_fbo = 0;
 }
 
 void Framebuffer::Resize(uint32_t width, uint32_t height) {
@@ -62,7 +58,7 @@ void Framebuffer::Bind() { glBindFramebuffer(GL_FRAMEBUFFER, m_fbo); }
 void Framebuffer::Unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
 uint32_t Framebuffer::getTextureID(uint32_t index) {
-  return m_Color_Textures_.at(index);
+  return textures_.at(index).ID();
 }
 
 void Framebuffer::Invalidate() {
@@ -71,88 +67,85 @@ void Framebuffer::Invalidate() {
   glGenFramebuffers(1, &m_fbo);
   Bind();
 
-  SwitchDepthTexture();
-  SwitchColorTexture();
+  ProcessTextures();
 
   Q_ASSERT_X(
       glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE,
       "Framebuffer::Init()", "Framebuffer incomplete");
 
-  if (!m_Color_Textures_.empty()) {
-#define ARRAY_SIZE(x) ((sizeof(x)) / (sizeof(x[0])))
+  GLenum buf[] = {
+      GL_COLOR_ATTACHMENT0,
+      GL_COLOR_ATTACHMENT1,
+      GL_COLOR_ATTACHMENT2,
+  };
 
-    GLenum buf[] = {
-        GL_COLOR_ATTACHMENT0,
-        GL_COLOR_ATTACHMENT1,
-        GL_COLOR_ATTACHMENT2,
-    };
-    int n = ARRAY_SIZE(buf);
-
-    Q_ASSERT_X(m_Color_Textures_.size() <= n,  //
-               "Framebuffer::Invalidate()",    //
-               "not supported quantity of attachments");
-
-    glDrawBuffers(n, buf);
-#undef ARRAY_SIZE
-
-  } else {
-    glDrawBuffer(GL_NONE);
-  }
+  glDrawBuffers(3, buf);
 
   Unbind();
 }
 
+void Framebuffer::ProcessTextures() {
+  Q_ASSERT(textures_.size());
+
+  for (auto &texture : textures_) {
+    texture.Clear();
+    texture.Gen();
+    texture.Bind();
+
+    // texture.SetBorderColor({1.0, 1.0, 1.0, 1.0});
+    texture.ProcessWrapsAndFilters();
+    texture.AllocateStorage(width_, height_);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, texture.Attachment(),
+                           texture.Target(), texture.ID(), 0);
+
+    texture.Unbind();
+  }
+}
+
 void Framebuffer::SwitchColorTexture() {
+  TextureWraper texture(GL_TEXTURE_2D);
+
   for (uint32_t i = 0; i < color_formats_.size(); i++) {
     switch (color_formats_[i].format_) {
       case Format::RGB:
-        AttachColorTexture(i, GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE);
+        texture.SetFormats(GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE);
         break;
       case Format::RGBA:
-        AttachColorTexture(i, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+        texture.SetFormats(GL_RGBA8, GL_RGB, GL_UNSIGNED_BYTE);
         break;
       case Format::RGBA16F:
-        AttachColorTexture(i, GL_RGBA16F, GL_RGBA, GL_FLOAT);
+        texture.SetFormats(GL_RGBA16F, GL_RGBA, GL_FLOAT);
         break;
       case Format::RED_INTEGER:
-        AttachColorTexture(i, GL_R32I, GL_RED_INTEGER, GL_UNSIGNED_BYTE);
+        texture.SetFormats(GL_R32I, GL_RED_INTEGER, GL_UNSIGNED_BYTE);
         break;
       default:
         Q_ASSERT_X(false, "Framebuffer::Invalidate()", "No such color format");
         break;
     }
+
+    texture.SetWraps(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+    texture.SetFilters(GL_LINEAR, GL_LINEAR);
+    texture.SetAttachment(GL_COLOR_ATTACHMENT0 + i);
+
+    textures_.push_back(texture);
   }
 }
 
-void Framebuffer::AttachColorTexture(uint32_t index, GLenum internalFormat,
-                                     GLenum format, GLenum type) {
-  TextureWraper texture(GL_TEXTURE_2D);
-  texture.Gen();
-  texture.Bind();
-  texture.SetFormats(internalFormat, format, type);
-  texture.SetWraps(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
-  texture.SetFilters(GL_LINEAR, GL_LINEAR);
-  texture.AllocateStorage(width_, height_);
-  texture.ProcessWrapsAndFilters();
-
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index,
-                         texture.Target(), texture.ID(), 0);
-
-  m_Color_Textures_.push_back(texture.ID());
-
-  texture.Unbind();
-}
-
 void Framebuffer::SwitchDepthTexture() {
+  TextureWraper texture(GL_TEXTURE_2D);
+
   switch (depth_format_.format_) {
     case Format::DEPTH24_STENCIL8:
-      AttachDepthTexture(GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL,
-                         GL_UNSIGNED_INT_24_8, GL_DEPTH_STENCIL_ATTACHMENT);
+      texture.SetFormats(GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL,
+                         GL_UNSIGNED_INT_24_8);
+      texture.SetAttachment(GL_DEPTH_STENCIL_ATTACHMENT);
       break;
 
     case Format::DEPTH32:
-      AttachDepthTexture(GL_DEPTH_COMPONENT32, GL_DEPTH_COMPONENT, GL_FLOAT,
-                         GL_DEPTH_ATTACHMENT);
+      texture.SetFormats(GL_DEPTH_COMPONENT32, GL_DEPTH_COMPONENT, GL_FLOAT);
+      texture.SetAttachment(GL_DEPTH_ATTACHMENT);
       break;
 
     case Format::NONE:
@@ -164,26 +157,11 @@ void Framebuffer::SwitchDepthTexture() {
       Q_ASSERT_X(false, "Framebuffer::Invalidate()", "No such depth format");
       break;
   }
-}
 
-void Framebuffer::AttachDepthTexture(GLenum internal_format, GLenum format,
-                                     GLenum type, GLenum attachmentType) {
-  TextureWraper texture(GL_TEXTURE_2D);
-  texture.Gen();
-  texture.Bind();
-  texture.SetFormats(internal_format, format, type);
-  texture.SetWraps(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
-  texture.SetFilters(GL_NEAREST, GL_NEAREST);
-  texture.ProcessWrapsAndFilters();
-  texture.SetBorderColor({1.0, 1.0, 1.0, 1.0});
-  texture.Allocate(width_, height_, nullptr);
+  texture.SetWraps(GL_CLAMP_TO_BORDER);
+  texture.SetFilters(GL_NEAREST);
 
-  glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, texture.Target(),
-                         texture.ID(), 0);
-
-  m_Depth_Texture_ = texture.ID();
-
-  texture.Unbind();
+  textures_.push_back(texture);
 }
 
 int Framebuffer::ReadPixel(uint32_t x, uint32_t y, int index) {

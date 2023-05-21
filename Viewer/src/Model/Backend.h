@@ -19,6 +19,7 @@
 #include "systems/InputSystem.h"
 #include "systems/LightSystem.h"
 #include "systems/MousePickingSystem.h"
+#include "systems/PointShadowSystem.h"
 #include "systems/ProjectionSystem.h"
 #include "systems/Render2DSystem.h"
 #include "systems/RenderPickedSystem.h"
@@ -110,6 +111,7 @@ class Backend : public Observable, protected QOpenGLExtraFunctions {
   std::shared_ptr<RenderPickedSystem> renderPickedSystem_;
   std::shared_ptr<DefferedShadingSystem> defferedShadingSystem_;
   std::shared_ptr<ShadowRenderSystem> shadowRenderSystem_;
+  std::shared_ptr<PointShadowSystem> pointShadowSystem_;
 
   void RegisterComponents();
   void RegisterSystems();

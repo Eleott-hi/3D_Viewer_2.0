@@ -2,6 +2,27 @@
 
 namespace s21 {
 
+TextureWraper::TextureWraper(GLenum target, TextureTemplate t)
+    : m_Target(target) {
+  initializeOpenGLFunctions();
+  switch (t) {
+    case TextureTemplate::RGB:
+      SetFormats(GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE);
+      break;
+    case TextureTemplate::RGBA:
+      SetFormats(GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+      break;
+
+    case TextureTemplate::RGBA16F:
+      SetFormats(GL_RGBA16F, GL_RGBA, GL_FLOAT);
+      break;
+
+    case TextureTemplate::RED_INTEGER:
+      SetFormats(GL_R32I, GL_RED_INTEGER, GL_UNSIGNED_BYTE);
+      break;
+  }
+}
+
 void TextureWraper::SetBorderColor(std::vector<float> const& borderColor) {
   glTexParameterfv(m_Target, GL_TEXTURE_BORDER_COLOR, borderColor.data());
 }

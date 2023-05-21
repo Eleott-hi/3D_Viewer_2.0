@@ -16,7 +16,8 @@ class ShaderProgram {
 
   bool bind() { return shader_.bind(); }
 
-  void GenerateShaders(QString vertex_file, QString fragment_file);
+  void GenerateShaders(QString vertex_file, QString fragment_file,
+                       QString geometry_file);
 
  private:
   QOpenGLShaderProgram shader_;

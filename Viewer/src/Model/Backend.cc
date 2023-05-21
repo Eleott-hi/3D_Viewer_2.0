@@ -59,10 +59,8 @@ void Backend::Draw() {
 
   // {
   //   g_buffer_->Bind();
-  // g_buffer_->PrepereBuffer();
-
+  //   g_buffer_->PrepereBuffer();
   //   defferedShadingSystem_->Update();
-
   //   g_buffer_->Unbind();
   // }
 
@@ -73,10 +71,12 @@ void Backend::Draw() {
   //   framebufferShadow_->Unbind();
   // }
 
+  pointShadowSystem_->Update();
+
   // {
   //   framebuffer3D_->Bind();
   //   framebuffer3D_->PrepereBuffer();
-  //   shadowRenderSystem_->Update(framebufferShadow_->getDepthID());
+  //   shadowRenderSystem_->Update(framebufferShadow_->getTextureID());
   //   framebuffer3D_->Unbind();
   // }
 
@@ -85,8 +85,8 @@ void Backend::Draw() {
     framebuffer3D_->PrepereBuffer();
 
     cubemapSystem_->Update();
-    renderSystem_->Update();
-    renderPickedSystem_->Update();
+    // renderSystem_->Update();
+    // renderPickedSystem_->Update();
 
     framebuffer3D_->Unbind();
   }
@@ -100,6 +100,8 @@ void Backend::Draw() {
     render2DSystem_->Update(g_buffer_->getTextureID(0),
                             g_buffer_->getTextureID(1),
                             g_buffer_->getTextureID(2));
+
+    // glEnable(GL_DEPTH_TEST);
   }
 }
 
@@ -213,6 +215,17 @@ void Backend::RegisterSystems() {
     mask.set(GetComponentID<RenderTag>());
     scene_.ChangeSystemMask<ShadowSystem>(mask);
     shadowSystem_->Init(&scene_, technique_.get());
+  }
+
+  pointShadowSystem_ = scene_.RegisterSystem<PointShadowSystem>();
+  {
+    ComponentMask mask;
+    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<Transform>());
+    mask.set(GetComponentID<ShadowTag>());
+    mask.set(GetComponentID<RenderTag>());
+    scene_.ChangeSystemMask<PointShadowSystem>(mask);
+    pointShadowSystem_->Init(&scene_, technique_.get());
   }
 
   shadowRenderSystem_ = scene_.RegisterSystem<ShadowRenderSystem>();
@@ -429,17 +442,21 @@ void Backend::SetFramebuffers() {
 
   framebuffer3D_->SetPrepereBuffer([this] {
     glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
     glClearColor(0.1, 0.1, 0.1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
   });
 
   framebufferShadow_->SetPrepereBuffer([this] {
     glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
     glClear(GL_DEPTH_BUFFER_BIT);
   });
 
   g_buffer_->SetPrepereBuffer([this] {
     glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glClearColor(0.9, 0.1, 0.1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
   });
 }
@@ -447,8 +464,8 @@ void Backend::SetFramebuffers() {
 void Backend::InitEntities() {
   {
     Texture texture = {framebuffer3D_->getTextureID(), "quad"};
-    // Texture texture = {framebufferShadow_->getDepthID(), "quad"};
-    //  Texture texture = {g_buffer_->getTextureID(2), "quad"};
+    // Texture texture = {framebufferShadow_->getTextureID(), "quad"};
+    // Texture texture = {g_buffer_->getTextureID(1), "quad"};
 
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<QuadTag>(entity);
@@ -477,7 +494,8 @@ void Backend::InitEntities() {
 
     Texture texture;
     texture.type = "cubemap";
-    texture.id = texture_storage_->LoadCubemap(faces);
+    // texture.id = texture_storage_->LoadCubemap(faces);
+    texture.id = pointShadowSystem_->depthCubemap;
 
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<Mesh>(entity, mesh);

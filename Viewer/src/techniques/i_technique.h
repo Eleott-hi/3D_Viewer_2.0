@@ -35,15 +35,15 @@ class ITechnique : protected QOpenGLExtraFunctions {
 
   template <typename Type>
   void setCustomValue(const char *name, Type value) {
-    qDebug() << "setCustomValue";
     shader_.setUniformValue(name, value);
   }
 
  protected:
   ShaderProgram shader_;
 
-  void GenerateShaders(QString vertex_file, QString fragment_file) {
-    shader_.GenerateShaders(vertex_file, fragment_file);
+  void GenerateShaders(QString vertex_file, QString geometry_file,
+                       QString fragment_file = "") {
+    shader_.GenerateShaders(vertex_file, geometry_file, fragment_file);
   }
 };
 

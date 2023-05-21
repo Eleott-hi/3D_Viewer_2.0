@@ -5,6 +5,7 @@
 #include <QOpenGLExtraFunctions>
 #include <vector>
 
+#include "TextureWraper.h"
 #include "i_framebuffer.h"
 
 namespace s21 {
@@ -21,7 +22,7 @@ class Framebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
   void Bind() final;
   void Unbind() final;
   uint32_t getTextureID(uint32_t index = 0) final;
-  uint32_t getDepthID() final { return m_Depth_Texture_; }
+  // uint32_t getDepthID() final { return m_Depth_Texture_; }
   void Resize(uint32_t width, uint32_t height) final;
   int ReadPixel(uint32_t x, uint32_t y, int index) final;
   void Create(const std::initializer_list<AttachmentFormat>& formats) final;
@@ -34,22 +35,26 @@ class Framebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
     prepare_func_ = prepare_func;
   }
 
+  void AddTexture(TextureWraper const& texture) {
+    textures_.push_back(texture);
+  }
+
  private:
   void Clear();
   void Invalidate();
   void SwitchDepthTexture();
   void SwitchColorTexture();
-  void AttachDepthTexture(GLenum internal_format, GLenum format, GLenum type,
-                          GLenum attachmentType);
-  void AttachColorTexture(uint32_t index, GLenum internalFormat, GLenum format,
-                          GLenum type);
+  void ProcessTextures();
 
  private:
   uint32_t m_fbo = 0;
-  uint32_t m_Depth_Texture_ = 0;
-  uint32_t width_ = 500, height_ = 500;
-  std::vector<uint32_t> m_Color_Textures_;
   std::function<void()> prepare_func_;
+  uint32_t width_ = 500, height_ = 500;
+
+  std::vector<TextureWraper> textures_;
+
+  uint32_t m_Depth_Texture_ = 0;
+  std::vector<uint32_t> m_Color_Textures_;
 
   bool depth_storage_ = true;
   AttachmentFormat depth_format_;

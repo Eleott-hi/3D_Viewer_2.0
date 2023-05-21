@@ -82,6 +82,7 @@ endif()
 
 include_directories(
     ../../
+    shared
 )
 
 file(GLOB_RECURSE PROJECT_SOURCES *.cc *.cpp *.h *.ui)

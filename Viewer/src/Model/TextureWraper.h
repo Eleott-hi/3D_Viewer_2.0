@@ -2,12 +2,25 @@
 #include <QOpenGLExtraFunctions>
 #include <vector>
 
+enum class TextureTemplate {
+  RGB,
+  RGBA,
+  RGBA16F,
+  RED_INTEGER,
+
+  DEPTH32,
+  DEPTH24_STENCIL8,
+
+};
+
 namespace s21 {
 class TextureWraper : protected QOpenGLExtraFunctions {
  public:
+  TextureWraper() { initializeOpenGLFunctions(); }
   TextureWraper(GLenum target) : m_Target(target) {
     initializeOpenGLFunctions();
   }
+  TextureWraper(GLenum target, TextureTemplate t);
 
   ~TextureWraper() = default;
 

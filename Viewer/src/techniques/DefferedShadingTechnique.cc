@@ -9,11 +9,11 @@ void DefferedShadingTechnique::init() {
 }
 
 void DefferedShadingTechnique::setTexture(Texture const &texture) {
-  shader_.setUniformValue(texture.type.c_str(), texture_index_);
-  glActiveTexture(GL_TEXTURE0 + texture_index_);
+  shader_.setUniformValue(texture.type.c_str(), index_);
+  glActiveTexture(GL_TEXTURE0 + index_);
   glBindTexture(GL_TEXTURE_2D, texture.id);
 
-  texture_index_++;
+  index_++;
 }
 
 void DefferedShadingTechnique::setMaterial(Material const &material) {
