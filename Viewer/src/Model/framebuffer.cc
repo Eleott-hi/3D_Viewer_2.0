@@ -126,18 +126,25 @@ void Framebuffer::SwitchColorTexture() {
 
 void Framebuffer::AttachColorTexture(uint32_t index, GLenum internalFormat,
                                      GLenum format, GLenum type) {
-  TextureWraper texture;
-  texture.SetTarget(GL_TEXTURE_2D);
+  TextureWraper texture(GL_TEXTURE_2D);
   texture.SetFormats(internalFormat, format, type);
   texture.SetWraps(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
   texture.SetFilters(GL_LINEAR, GL_LINEAR);
-  texture.ProcessWrapsAndFilters();
-  texture.AllocateStorage(width_, height_);
 
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index,
-                         GL_TEXTURE_2D, texture.ID(), 0);
+    texture.Gen();
+  texture.Bind();
 
-  m_Color_Textures_.push_back(texture.ID());
+  {
+    texture.ProcessWrapsAndFilters();
+    texture.AllocateStorage(width_, height_);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index,
+                           GL_TEXTURE_2D, texture.ID(), 0);
+
+    m_Color_Textures_.push_back(texture.ID());
+  }
+
+  texture.Unbind();
 }
 
 void Framebuffer::SwitchDepthTexture() {
@@ -165,22 +172,29 @@ void Framebuffer::SwitchDepthTexture() {
 
 void Framebuffer::AttachDepthTexture(GLenum internal_format, GLenum format,
                                      GLenum type, GLenum attachmentType) {
-  TextureWraper texture;
-  texture.SetTarget(GL_TEXTURE_2D);
-  texture.SetFormats(internal_format, format, type);
-  texture.SetWraps(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
-  texture.SetFilters(GL_NEAREST, GL_NEAREST);
-  texture.ProcessWrapsAndFilters();
+  TextureWraper texture(GL_TEXTURE_2D);
+  texture.Gen();
+  texture.Bind();
 
-  float borderColor[] = {1.0, 1.0, 1.0, 1.0};
-  glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+  {
+    texture.SetFormats(internal_format, format, type);
+    texture.SetWraps(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER,
+                     GL_CLAMP_TO_BORDER);
+    texture.SetFilters(GL_NEAREST, GL_NEAREST);
+    texture.ProcessWrapsAndFilters();
 
-  texture.Allocate(width_, height_, nullptr);
+    float borderColor[] = {1.0, 1.0, 1.0, 1.0};
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
-  glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, GL_TEXTURE_2D,
-                         texture.ID(), 0);
+    texture.Allocate(width_, height_, nullptr);
 
-  m_Depth_Texture_ = texture.ID();
+    glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, GL_TEXTURE_2D,
+                           texture.ID(), 0);
+
+    m_Depth_Texture_ = texture.ID();
+  }
+
+  texture.Unbind();
 }
 
 int Framebuffer::ReadPixel(uint32_t x, uint32_t y, int index) {

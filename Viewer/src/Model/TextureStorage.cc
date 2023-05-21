@@ -45,13 +45,15 @@ Texture TextureStorage::LoadTexture(std::string const& filename) {
 
   auto format = GetFormat(info.channels);
 
-  TextureWraper texture;
-  texture.SetTarget(GL_TEXTURE_2D);
+  TextureWraper texture(GL_TEXTURE_2D);
+  texture.Gen();
+  texture.Bind();
+  texture.SetFilters(GL_LINEAR, GL_LINEAR);
+  texture.SetWraps(GL_REPEAT, GL_REPEAT, GL_REPEAT);
   texture.SetFormats(format, format, GL_UNSIGNED_BYTE);
   texture.Allocate(info.width, info.height, data);
-  texture.SetWraps(GL_REPEAT, GL_REPEAT, GL_REPEAT);
-  texture.SetFilters(GL_LINEAR, GL_LINEAR);
   texture.ProcessWrapsAndFilters();
+  texture.Unbind();
 
   stbi_image_free(data);
 
@@ -65,8 +67,9 @@ Texture TextureStorage::LoadTexture(std::string const& filename) {
 }
 
 uint32_t TextureStorage::LoadCubemap(std::vector<std::string> faces) {
-  TextureWraper texture;
-  texture.SetTarget(GL_TEXTURE_CUBE_MAP);
+  TextureWraper texture(GL_TEXTURE_CUBE_MAP);
+  texture.Gen();
+  texture.Bind();
   texture.SetWraps(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
   texture.SetFilters(GL_LINEAR, GL_LINEAR);
   texture.ProcessWrapsAndFilters();
@@ -87,6 +90,8 @@ uint32_t TextureStorage::LoadCubemap(std::vector<std::string> faces) {
     texture.Allocate(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, width, height, data);
     stbi_image_free(data);
   }
+
+  texture.Unbind();
 
   return texture.ID();
 }
