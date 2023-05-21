@@ -1,6 +1,7 @@
 #pragma once
 #include <QOpenGLExtraFunctions>
 #include <functional>
+#include <vector>
 
 namespace s21 {
 class TextureWraper : protected QOpenGLExtraFunctions {
@@ -8,21 +9,29 @@ class TextureWraper : protected QOpenGLExtraFunctions {
   TextureWraper(GLenum target);
   ~TextureWraper() = default;
 
-  void Gen();
-  void Bind();
+  uint32_t ID() { return m_TextureID; }
+  uint32_t Target() { return m_Target; }
+  void SetType(GLenum type) { m_Type = type; }
+  void Unbind() { glBindTexture(m_Target, 0); }
+  void Gen() { glGenTextures(1, &m_TextureID); }
+  void SetFormat(GLenum format) { m_Format = format; }
+  void Bind() { glBindTexture(m_Target, m_TextureID); }
+  void SetWraps(GLenum wrap) { SetWraps(wrap, wrap, wrap); }
+  void SetFilters(GLenum filter) { SetFilters(filter, filter); }
+  void SetInternalFormat(GLenum internal_format) {
+    m_InternalFormat = internal_format;
+  }
+  void Allocate(uint32_t width, uint32_t height, void* data) {
+    Allocate(m_Target, width, height, data);
+  }
+
   void Clear();
-  void Unbind();
-  uint32_t ID();
-  void SetType(GLenum type);
-  void SetWraps(GLenum wrap);
-  void SetFormat(GLenum format);
   void ProcessWrapsAndFilters();
-  void SetFilters(GLenum filter);
   void SetFilters(GLenum min, GLenum mag);
-  void SetInternalFormat(GLenum internal_format);
   void AllocateStorage(uint32_t width, uint32_t height);
   void SetWraps(GLenum wrapS, GLenum wrapT, GLenum wrapR);
-  void Allocate(uint32_t width, uint32_t height, void* data);
+
+  void SetBorderColor(std::vector<float> const& borderColor);
   void SetFormats(GLenum internal_format, GLenum format, GLenum type);
   void Allocate(GLenum sub_target, uint32_t width, uint32_t height, void* data);
 
