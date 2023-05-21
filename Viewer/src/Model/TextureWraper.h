@@ -6,11 +6,15 @@
 namespace s21 {
 class TextureWraper : protected QOpenGLExtraFunctions {
  public:
-  TextureWraper(GLenum target);
+  TextureWraper(GLenum target) : m_Target(target) {
+    initializeOpenGLFunctions();
+  }
+
   ~TextureWraper() = default;
 
   uint32_t ID() { return m_TextureID; }
   uint32_t Target() { return m_Target; }
+  GLenum Attachment() { return m_Attachment; }
   void SetType(GLenum type) { m_Type = type; }
   void Unbind() { glBindTexture(m_Target, 0); }
   void Gen() { glGenTextures(1, &m_TextureID); }
@@ -18,6 +22,7 @@ class TextureWraper : protected QOpenGLExtraFunctions {
   void Bind() { glBindTexture(m_Target, m_TextureID); }
   void SetWraps(GLenum wrap) { SetWraps(wrap, wrap, wrap); }
   void SetFilters(GLenum filter) { SetFilters(filter, filter); }
+  void SetAttachment(GLenum attachment) { m_Attachment = attachment; }
   void SetInternalFormat(GLenum internal_format) {
     m_InternalFormat = internal_format;
   }
@@ -37,6 +42,7 @@ class TextureWraper : protected QOpenGLExtraFunctions {
 
  private:
   GLenum m_InternalFormat = GL_NONE;
+  GLenum m_Attachment = GL_NONE;
   GLenum m_MinFilter = GL_NONE;
   GLenum m_MagFilter = GL_NONE;
   GLenum m_Target = GL_NONE;
@@ -45,7 +51,7 @@ class TextureWraper : protected QOpenGLExtraFunctions {
   GLenum m_WrapT = GL_NONE;
   GLenum m_WrapR = GL_NONE;
   GLenum m_Type = GL_NONE;
-
+  
   uint32_t m_TextureID = 0;
 };
 }  // namespace s21

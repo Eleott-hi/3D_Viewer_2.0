@@ -2,10 +2,6 @@
 
 namespace s21 {
 
-TextureWraper::TextureWraper(GLenum target) : m_Target(target) {
-  initializeOpenGLFunctions();
-}
-
 void TextureWraper::SetBorderColor(std::vector<float> const& borderColor) {
   glTexParameterfv(m_Target, GL_TEXTURE_BORDER_COLOR, borderColor.data());
 }
