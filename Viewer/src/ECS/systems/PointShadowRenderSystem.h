@@ -10,13 +10,13 @@
 
 namespace s21 {
 
-class PointShadowSystem : public System, protected QOpenGLExtraFunctions {
+class PointShadowRenderSystem : public System, protected QOpenGLExtraFunctions {
  public:
-  PointShadowSystem() { initializeOpenGLFunctions(); }
-  ~PointShadowSystem() = default;
+  PointShadowRenderSystem() { initializeOpenGLFunctions(); }
+  ~PointShadowRenderSystem() = default;
 
   void Init(ECS_Controller *scene, TechniqueStrategy *technique);
-  void Update();
+  void Update(uint32_t shadowMap);
 
  private:
   ECS_Controller *scene_ = nullptr;

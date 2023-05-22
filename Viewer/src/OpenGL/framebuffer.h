@@ -5,7 +5,6 @@
 #include <QOpenGLExtraFunctions>
 #include <vector>
 
-#include "TextureWraper.h"
 #include "i_framebuffer.h"
 
 namespace s21 {
@@ -26,16 +25,13 @@ class Framebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
   void Resize(uint32_t width, uint32_t height) final;
   int ReadPixel(uint32_t x, uint32_t y, int index) final;
   void Create(const std::initializer_list<AttachmentFormat>& formats) final;
-  void PrepereBuffer() final {
-    Q_ASSERT(prepare_func_);
-    prepare_func_();
-  }
+  void PrepereBuffer() final;
 
   void SetPrepereBuffer(std::function<void()> prepare_func) final {
     prepare_func_ = prepare_func;
   }
 
-  void AddTexture(TextureWraper const& texture) {
+  void AddTexture(TextureWraper const& texture) final {
     textures_.push_back(texture);
   }
 

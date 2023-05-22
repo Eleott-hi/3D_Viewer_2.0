@@ -131,8 +131,9 @@ void CubemapSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
 }
 
 void CubemapSystem::Update() {
+  glDepthFunc(GL_LEQUAL);
+
   for (auto entity : entities_) {
-    glDepthFunc(GL_LEQUAL);
     auto const &[proj, view] = Utils::GetProjectionAndView(scene_);
     auto &texture = scene_->GetComponent<Texture>(entity);
     auto &mesh = scene_->GetComponent<Mesh>(entity);
@@ -144,9 +145,9 @@ void CubemapSystem::Update() {
     glBindVertexArray(mesh.VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
-
-    glDepthFunc(GL_LESS);
   }
+
+  glDepthFunc(GL_LESS);
 }
 
 }  // namespace s21

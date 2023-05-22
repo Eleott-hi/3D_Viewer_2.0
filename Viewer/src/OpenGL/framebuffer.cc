@@ -1,8 +1,6 @@
 #include "framebuffer.h"
 
-#include "TextureWraper.h"
-
-namespace s21 {
+#include "OpenGLDebug.h"
 
 #ifdef __WIN32__
 const float magicScale_ = 1.25;
@@ -12,21 +10,16 @@ const float magicScale_ = 2;
 const float magicScale_ = 1;
 #endif
 
-namespace Utils {
+namespace s21 {
 
 static bool isDepth(Format f) { return f >= Format::NONE; }
-static void GenTexture(uint32_t size, uint32_t *id) { glGenTextures(size, id); }
-static void BindTexture(uint32_t id) { glBindTexture(GL_TEXTURE_2D, id); }
-static void UnbindTexture() { BindTexture(0); }
-
-}  // namespace Utils
 
 void Framebuffer::Create(
     const std::initializer_list<AttachmentFormat> &formats) {
   color_formats_.clear();
 
   for (auto &format : formats) {
-    if (Utils::isDepth(format.format_)) {
+    if (isDepth(format.format_)) {
       depth_format_ = format;
     } else {
       color_formats_.push_back(format);
@@ -40,8 +33,12 @@ void Framebuffer::Create(
 }
 
 void Framebuffer::Clear() {
-  if (m_fbo) glDeleteFramebuffers(1, &m_fbo);
+  if (m_fbo) OPENGL_DEBUG(glDeleteFramebuffers(1, &m_fbo));
   m_fbo = 0;
+}
+
+void Framebuffer::PrepereBuffer() {
+  if (prepare_func_) OPENGL_DEBUG(prepare_func_());
 }
 
 void Framebuffer::Resize(uint32_t width, uint32_t height) {
@@ -54,8 +51,13 @@ void Framebuffer::Resize(uint32_t width, uint32_t height) {
   Invalidate();
 }
 
-void Framebuffer::Bind() { glBindFramebuffer(GL_FRAMEBUFFER, m_fbo); }
-void Framebuffer::Unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
+void Framebuffer::Bind() {
+  OPENGL_DEBUG(glViewport(0, 0, width_, height_));
+  OPENGL_DEBUG(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
+}
+void Framebuffer::Unbind() {
+  OPENGL_DEBUG(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+}
 
 uint32_t Framebuffer::getTextureID(uint32_t index) {
   return textures_.at(index).ID();
@@ -64,7 +66,7 @@ uint32_t Framebuffer::getTextureID(uint32_t index) {
 void Framebuffer::Invalidate() {
   if (m_fbo) Clear();
 
-  glGenFramebuffers(1, &m_fbo);
+  OPENGL_DEBUG(glGenFramebuffers(1, &m_fbo));
   Bind();
 
   ProcessTextures();
@@ -79,7 +81,7 @@ void Framebuffer::Invalidate() {
       GL_COLOR_ATTACHMENT2,
   };
 
-  glDrawBuffers(3, buf);
+  OPENGL_DEBUG(glDrawBuffers(3, buf));
 
   Unbind();
 }
@@ -92,21 +94,21 @@ void Framebuffer::ProcessTextures() {
     texture.Gen();
     texture.Bind();
 
-    // texture.SetBorderColor({1.0, 1.0, 1.0, 1.0});
+    texture.SetBorderColor({1.0, 1.0, 1.0, 1.0});
     texture.ProcessWrapsAndFilters();
     texture.AllocateStorage(width_, height_);
 
-    glFramebufferTexture2D(GL_FRAMEBUFFER, texture.Attachment(),
-                           texture.Target(), texture.ID(), 0);
+    OPENGL_DEBUG(glFramebufferTexture(GL_FRAMEBUFFER, texture.Attachment(),
+                                      texture.ID(), 0));
 
     texture.Unbind();
   }
 }
 
 void Framebuffer::SwitchColorTexture() {
-  TextureWraper texture(GL_TEXTURE_2D);
-
   for (uint32_t i = 0; i < color_formats_.size(); i++) {
+    TextureWraper texture(GL_TEXTURE_2D);
+
     switch (color_formats_[i].format_) {
       case Format::RGB:
         texture.SetFormats(GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE);
@@ -134,6 +136,12 @@ void Framebuffer::SwitchColorTexture() {
 }
 
 void Framebuffer::SwitchDepthTexture() {
+  if (depth_format_.format_ == Format::NONE) {
+    qDebug() << "Framebuffer::SwitchDepthTexture()"
+             << "depth format none";
+    return;
+  }
+
   TextureWraper texture(GL_TEXTURE_2D);
 
   switch (depth_format_.format_) {
@@ -146,11 +154,6 @@ void Framebuffer::SwitchDepthTexture() {
     case Format::DEPTH32:
       texture.SetFormats(GL_DEPTH_COMPONENT32, GL_DEPTH_COMPONENT, GL_FLOAT);
       texture.SetAttachment(GL_DEPTH_ATTACHMENT);
-      break;
-
-    case Format::NONE:
-      qDebug() << "Framebuffer::SwitchDepthTexture()"
-               << "depth format none";
       break;
 
     default:
@@ -169,14 +172,14 @@ int Framebuffer::ReadPixel(uint32_t x, uint32_t y, int index) {
              "Index is out of bounds");
 
   Bind();
-  glReadBuffer(GL_COLOR_ATTACHMENT0 + index);
+  OPENGL_DEBUG(glReadBuffer(GL_COLOR_ATTACHMENT0 + index));
 
   int objectID = 0;
 
-  glReadPixels(x * magicScale_, height_ - y * magicScale_, 1, 1, GL_RED_INTEGER,
-               GL_INT, &objectID);
+  OPENGL_DEBUG(glReadPixels(x * magicScale_, height_ - y * magicScale_, 1, 1,
+                            GL_RED_INTEGER, GL_INT, &objectID));
 
-  glReadBuffer(GL_NONE);
+  OPENGL_DEBUG(glReadBuffer(GL_NONE));
   Unbind();
   return objectID;
 }

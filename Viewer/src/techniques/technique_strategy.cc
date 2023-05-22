@@ -5,6 +5,7 @@
 
 #include "DefferedShadingTechnique.h"
 #include "PhysicalBasedRenderingTechnique.h"
+#include "PointShadowRenderTechnique.h"
 #include "PointShadowTechnique.h"
 #include "ShadowMappingTechnique.h"
 #include "ShadowRenderTechnique.h"
@@ -36,6 +37,7 @@ TechniqueStrategy::TechniqueStrategy() noexcept
           std::make_shared<ShadowMappingTechnique>(),
           std::make_shared<ShadowRenderTechnique>(),
           std::make_shared<PointShadowTechnique>(),
+          std::make_shared<PointShadowRenderTechnique>(),
       } {}
 
 void TechniqueStrategy::Enable(TechniqueType type) {

@@ -29,6 +29,7 @@ enum class TechniqueType {
   SHADOW_MAPPING,
   SHADOW_RENDERING,
   POINT_SHADOW,
+  POINT_SHADOW_RENDER,
 };
 
 enum class LightType {
