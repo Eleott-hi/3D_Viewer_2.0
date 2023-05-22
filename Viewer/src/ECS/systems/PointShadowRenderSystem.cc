@@ -1,4 +1,5 @@
 #include "PointShadowRenderSystem.h"
+
 #include "Utils.h"
 
 namespace s21 {

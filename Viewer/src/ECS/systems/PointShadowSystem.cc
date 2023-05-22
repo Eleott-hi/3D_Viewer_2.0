@@ -12,7 +12,7 @@ QMatrix4x4 ProjPoint() {
   QMatrix4x4 m;
 
   m.perspective(qDegreesToRadians(90),
-                (float)SHADOW_WIDTH / (float)SHADOW_HEIGHT, near_plane,
+                (float)1080 / (float)1080, near_plane,
                 far_plane);
 
   return m;
@@ -54,11 +54,11 @@ void PointShadowSystem::Update() {
 
   technique_->Enable(TechniqueType::POINT_SHADOW);
 
-  for (unsigned int i = 0; i < matriceis.size(); ++i){
+  for (unsigned int i = 0; i < matriceis.size(); ++i) {
     technique_->setCustomValue(
         ("shadowMatrices[" + std::to_string(i) + "]").c_str(), matriceis.at(i));
-        qDebug()<< matriceis.at(i);
-        }
+    qDebug() << matriceis.at(i);
+  }
 
   technique_->setCustomValue("far_plane", far_plane);
   technique_->setCustomValue("lightPos", lightPos);
