@@ -1,4 +1,4 @@
-#version 410 core
+#version 330 core
 in vec4 FragPos;
 
 uniform vec3 lightPos;
@@ -12,5 +12,5 @@ void main()
     lightDistance = lightDistance / far_plane;
     
     // write this as modified depth
-    gl_FragDepth = 0;
+    gl_FragDepth = lightDistance;
 }

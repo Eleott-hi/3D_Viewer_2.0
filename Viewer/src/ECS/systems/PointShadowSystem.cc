@@ -82,8 +82,8 @@ void PointShadowSystem::Update() {
   technique_->Enable(TechniqueType::POINT_SHADOW);
 
   for (unsigned int i = 0; i < matriceis.size(); ++i)
-    technique_->setCustomValue(("shadowMatrices[" + std::to_string(i) + "]").c_str(),
-                               matriceis.at(i));
+    technique_->setCustomValue(
+        ("shadowMatrices[" + std::to_string(i) + "]").c_str(), matriceis.at(i));
 
   technique_->setCustomValue("far_plane", far_plane);
   technique_->setCustomValue("lightPos", lightPos);

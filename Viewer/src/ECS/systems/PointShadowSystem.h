@@ -19,6 +19,7 @@ class PointShadowSystem : public System, protected QOpenGLExtraFunctions {
   void Update();
 
   unsigned int depthCubemap;
+
  private:
   ECS_Controller *scene_ = nullptr;
   TechniqueStrategy *technique_ = nullptr;
