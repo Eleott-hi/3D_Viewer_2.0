@@ -53,6 +53,12 @@ EntityID GetQuad(ECS_Controller* scene) {
   return quad;
 }
 
+EntityID GetTickTime(ECS_Controller* scene) {
+  static EntityID tick_time = scene->GetEntities<Timer>()[0];
+
+  return tick_time;
+}
+
 std::string StructName(std::string const& struct_name,
                        std::string const& name) {
   return (struct_name + "." + name).c_str();

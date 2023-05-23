@@ -12,6 +12,7 @@ void append(std::vector<Type>& to, std::vector<Type>& from) {
   to.insert(to.end(), from.begin(), from.end());
 }
 
+EntityID GetTickTime(ECS_Controller* scene);
 EntityID GetQuad(ECS_Controller* scene);
 EntityID GetCameraID(ECS_Controller* scene);
 static EntityID GetProjectionID(ECS_Controller* scene);

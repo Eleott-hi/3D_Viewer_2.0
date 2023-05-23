@@ -149,6 +149,10 @@ struct MouseInput {
   QPoint double_click = {-1, -1};
 };
 
+struct Timer {
+  float time = 0;
+};
+
 struct QuadTag {};
 struct CubemapTag {};
 struct PickingTag {};

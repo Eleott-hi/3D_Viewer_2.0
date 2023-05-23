@@ -38,6 +38,7 @@ void Backend::Init(QOpenGLWidget* widget) {
 }
 
 void Backend::Update() {
+  timeTickSystem_->Update();
   inputSystem_->Update();
   mousePickingSystem_->Update();
   editPickedSystem_->Update();
@@ -50,7 +51,7 @@ void Backend::Update() {
     picked_ = false;
   }
 
-  // NotifyCamera();
+  NotifyCamera();
 }
 
 void Backend::Draw() {
@@ -162,6 +163,7 @@ void Backend::RegisterComponents() {
   scene_.RegisterComponent<Mesh>();
   scene_.RegisterComponent<Model>();
   scene_.RegisterComponent<Light>();
+  scene_.RegisterComponent<Timer>();
   scene_.RegisterComponent<Shader>();
   scene_.RegisterComponent<Camera>();
   scene_.RegisterComponent<Texture>();
@@ -323,6 +325,14 @@ void Backend::RegisterSystems() {
     mask.set(GetComponentID<InputTag>());
     scene_.ChangeSystemMask<InputSystem>(mask);
     inputSystem_->Init(&scene_);
+  }
+
+  timeTickSystem_ = scene_.RegisterSystem<TimeTickSystem>();
+  {
+    ComponentMask mask;
+    mask.set(GetComponentID<Timer>());
+    scene_.ChangeSystemMask<TimeTickSystem>(mask);
+    timeTickSystem_->Init(&scene_);
   }
 }
 
@@ -580,6 +590,11 @@ void Backend::InitEntities() {
   {
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<Projection>(entity);
+  }
+
+  {
+    EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<Timer>(entity);
   }
 
   // {

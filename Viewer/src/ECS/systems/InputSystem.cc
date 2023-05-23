@@ -15,11 +15,17 @@ void InputSystem::Update() {
 }
 
 void InputSystem::ProcessKeyPressed(KeyboardInput &input) {
-  static const float speed = 0.1;
-  static const auto deltaTime = 1;
-  static const float velocity = speed * deltaTime;
   static auto &camera =
       scene_->GetComponent<Camera>(Utils::GetCameraID(scene_));
+  // static auto const &timer =
+  //     scene_->GetComponent<Timer>(Utils::GetTickTime(scene_));
+
+  // const float speed = 0.004;
+  // const float velocity = speed * timer.time;
+
+    static const float speed = 0.1;
+  static const auto deltaTime = 1;
+  static const float velocity = speed * deltaTime;
 
   auto &[keys] = input;
 
@@ -32,9 +38,15 @@ void InputSystem::ProcessKeyPressed(KeyboardInput &input) {
 }
 
 void InputSystem::ProcessMouseMovement(MouseInput &input, bool constrainPitch) {
-  static const float MouseSensitivity = 0.08;
   static auto &camera =
       scene_->GetComponent<Camera>(Utils::GetCameraID(scene_));
+  // static auto const &timer =
+  //     scene_->GetComponent<Timer>(Utils::GetTickTime(scene_));
+
+  // const float speed = 0.003;
+  // const float MouseSensitivity = speed * timer.time;
+
+    static const float MouseSensitivity = 0.08;
 
   if (input.left_button_pressed) {
     auto offset = input.start - input.end;

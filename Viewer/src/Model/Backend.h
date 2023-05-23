@@ -27,6 +27,7 @@
 #include "systems/RenderSystem.h"
 #include "systems/ShadowRenderSystem.h"
 #include "systems/ShadowSystem.h"
+#include "systems/TimeTickSystem.h"
 #include "technique_strategy.h"
 
 namespace s21 {
@@ -117,6 +118,7 @@ class Backend : public Observable, protected QOpenGLExtraFunctions {
   std::shared_ptr<ShadowRenderSystem> shadowRenderSystem_;
   std::shared_ptr<PointShadowSystem> pointShadowSystem_;
   std::shared_ptr<PointShadowRenderSystem> pointShadowRenderSystem_;
+  std::shared_ptr<TimeTickSystem> timeTickSystem_;
 
   void RegisterComponents();
   void RegisterSystems();
