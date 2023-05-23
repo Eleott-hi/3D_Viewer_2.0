@@ -22,7 +22,7 @@ std::vector<QMatrix4x4> ProjViewPoint(QVector3D lightPos) {
   std::vector<QMatrix4x4> looks(6);
   std::vector<QMatrix4x4> views;
 
-  auto shadowProj = ProjPoint(w, h);
+  auto shadowProj = ProjPoint();
 
   looks[0].lookAt(lightPos, lightPos + QVector3D(1, 0, 0), QVector3D(0, -1, 0));
   looks[1].lookAt(lightPos, lightPos + QVector3D(-1, 0, 0),
@@ -50,7 +50,7 @@ void PointShadowSystem::Init(ECS_Controller *scene,
 
 void PointShadowSystem::Update() {
   static auto lightPos = QVector3D(0, 0, 2);
-  static auto matriceis = ProjViewPoint(lightPos, );
+  static auto matriceis = ProjViewPoint(lightPos);
 
   technique_->Enable(TechniqueType::POINT_SHADOW);
 
