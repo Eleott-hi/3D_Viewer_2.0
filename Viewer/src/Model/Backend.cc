@@ -92,7 +92,7 @@ void Backend::Draw() {
   {
     pointShadowFramebuffer_->Bind();
     pointShadowFramebuffer_->PrepereBuffer();
-    pointShadowSystem_->Update(width_, height_);
+    pointShadowSystem_->Update();
     pointShadowFramebuffer_->Unbind();
   }
 

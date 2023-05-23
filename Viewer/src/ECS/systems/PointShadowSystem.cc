@@ -10,7 +10,7 @@ const int height = 1024;
 
 namespace s21 {
 
-QMatrix4x4 ProjPoint(int w, int h) {
+QMatrix4x4 ProjPoint() {
   QMatrix4x4 m;
 
   m.perspective(90, (float)width / (float)height, near_plane, far_plane);
@@ -18,7 +18,7 @@ QMatrix4x4 ProjPoint(int w, int h) {
   return m;
 }
 
-std::vector<QMatrix4x4> ProjViewPoint(QVector3D lightPos, int w, int h) {
+std::vector<QMatrix4x4> ProjViewPoint(QVector3D lightPos) {
   std::vector<QMatrix4x4> looks(6);
   std::vector<QMatrix4x4> views;
 
@@ -48,9 +48,9 @@ void PointShadowSystem::Init(ECS_Controller *scene,
   technique_ = technique;
 }
 
-void PointShadowSystem::Update(int w, int h) {
+void PointShadowSystem::Update() {
   static auto lightPos = QVector3D(0, 0, 2);
-  static auto matriceis = ProjViewPoint(lightPos, w, h);
+  static auto matriceis = ProjViewPoint(lightPos, );
 
   technique_->Enable(TechniqueType::POINT_SHADOW);
 
