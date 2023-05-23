@@ -6,28 +6,28 @@ namespace s21 {
 
 void InputSystem::Update() {
   for (auto entity : entities_) {
-    if (scene_->EntityHasComponent<KeyboardInput>(entity))
-      ProcessKeyPressed(scene_->GetComponent<KeyboardInput>(entity));
-
-    if (scene_->EntityHasComponent<MouseInput>(entity))
-      ProcessMouseMovement(scene_->GetComponent<MouseInput>(entity));
+    static auto &input = scene_->GetComponent<Input>(entity);
+    ProcessMouseMovement(input);
+    ProcessKeyPressed(input);
   }
 }
 
-void InputSystem::ProcessKeyPressed(KeyboardInput &input) {
+void InputSystem::ProcessKeyPressed(Input &input) {
   static auto &camera =
       scene_->GetComponent<Camera>(Utils::GetCameraID(scene_));
-  // static auto const &timer =
-  //     scene_->GetComponent<Timer>(Utils::GetTickTime(scene_));
+  static auto const &timer =
+      scene_->GetComponent<Timer>(Utils::GetTickTime(scene_));
 
-  // const float speed = 0.004;
-  // const float velocity = speed * timer.time;
+  const float speed = 0.004;
+  const float velocity = speed * timer.time;
 
-    static const float speed = 0.1;
-  static const auto deltaTime = 1;
-  static const float velocity = speed * deltaTime;
+  // static const float speed = 0.1;
+  // static const auto deltaTime = 1;
+  // static const float velocity = speed * deltaTime;
 
-  auto &[keys] = input;
+  qDebug() << "Velocity: " << velocity;
+
+  auto &keys = input.keys;
 
   if (keys[Qt::Key_W]) camera.position += camera.front * velocity;
   if (keys[Qt::Key_S]) camera.position -= camera.front * velocity;
@@ -37,16 +37,18 @@ void InputSystem::ProcessKeyPressed(KeyboardInput &input) {
   if (keys[Qt::Key_F]) camera.position -= camera.up * velocity;
 }
 
-void InputSystem::ProcessMouseMovement(MouseInput &input, bool constrainPitch) {
+void InputSystem::ProcessMouseMovement(Input &input, bool constrainPitch) {
   static auto &camera =
       scene_->GetComponent<Camera>(Utils::GetCameraID(scene_));
-  // static auto const &timer =
-  //     scene_->GetComponent<Timer>(Utils::GetTickTime(scene_));
+  static auto const &timer =
+      scene_->GetComponent<Timer>(Utils::GetTickTime(scene_));
 
-  // const float speed = 0.003;
-  // const float MouseSensitivity = speed * timer.time;
+  const float speed = 0.003;
+  const float MouseSensitivity = speed * timer.time;
 
-    static const float MouseSensitivity = 0.08;
+  qDebug() << "MouseSensitivity: " << MouseSensitivity;
+
+  // static const float MouseSensitivity = 0.08;
 
   if (input.left_button_pressed) {
     auto offset = input.start - input.end;

@@ -136,14 +136,9 @@ struct Enviroment {
   Texture light;
 };
 
-struct InputTag {};
-
-struct KeyboardInput {
-  std::unordered_map<int, bool> keys;
-};
-
-struct MouseInput {
+struct Input {
   bool left_button_pressed = false;
+  std::unordered_map<int, bool> keys;
   QPoint start;
   QPoint end;
   QPoint double_click = {-1, -1};
@@ -154,9 +149,9 @@ struct Timer {
 };
 
 struct QuadTag {};
-struct CubemapTag {};
-struct PickingTag {};
-struct RenderTag {};
 struct ShadowTag {};
+struct RenderTag {};
+struct PickingTag {};
+struct CubemapTag {};
 
 }  // namespace s21

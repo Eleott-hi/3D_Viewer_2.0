@@ -23,20 +23,20 @@ void Backend::WindowResize(int w, int h) {
 
 void Backend::MousePressed(QPoint pos) {
   qDebug() << "MousePressedEvent:" << pos;
-  static auto& mouse =
-      scene_.GetComponent<MouseInput>(scene_.GetEntities<MouseInput>().at(0));
-  mouse.left_button_pressed = true;
-  mouse.start = pos;
-  mouse.end = pos;
+  static auto& input =
+      scene_.GetComponent<Input>(scene_.GetEntities<Input>().at(0));
+  input.left_button_pressed = true;
+  input.start = pos;
+  input.end = pos;
 }
 
 void Backend::MouseReleased(QPoint pos) {
   qDebug() << "MouseReleasedEvent:" << pos;
-  static auto& mouse =
-      scene_.GetComponent<MouseInput>(scene_.GetEntities<MouseInput>().at(0));
-  mouse.left_button_pressed = false;
-  mouse.start = pos;
-  mouse.end = pos;
+  static auto& input =
+      scene_.GetComponent<Input>(scene_.GetEntities<Input>().at(0));
+  input.left_button_pressed = false;
+  input.start = pos;
+  input.end = pos;
 }
 
 void Backend::MouseMoved(QPoint pos) {
@@ -44,9 +44,9 @@ void Backend::MouseMoved(QPoint pos) {
   // MouseMovedEvent event(offset);
   // scene_.Despatch(event);
 
-  static auto& mouse =
-      scene_.GetComponent<MouseInput>(scene_.GetEntities<MouseInput>().at(0));
-  mouse.end = pos;
+  static auto& input =
+      scene_.GetComponent<Input>(scene_.GetEntities<Input>().at(0));
+  input.end = pos;
 }
 
 void Backend::MouseDoubleClicked(QPoint pos) {
@@ -54,9 +54,9 @@ void Backend::MouseDoubleClicked(QPoint pos) {
   // MouseDoubleClickedEvent event(pos);
   // scene_.Despatch(event);
 
-  static auto& mouse =
-      scene_.GetComponent<MouseInput>(scene_.GetEntities<MouseInput>().at(0));
-  mouse.double_click = pos;
+  static auto& input =
+      scene_.GetComponent<Input>(scene_.GetEntities<Input>().at(0));
+  input.double_click = pos;
   picked_ = true;
 }
 
@@ -65,17 +65,17 @@ void Backend::KeyPressed(QKeyEvent* key_event) {
   // KeyPressedEvent event(key_event);
   // scene_.Despatch(event);
 
-  static auto& keyboard = scene_.GetComponent<KeyboardInput>(
-      scene_.GetEntities<KeyboardInput>().at(0));
-  keyboard.keys[key_event->key()] = true;
+  static auto& input =
+      scene_.GetComponent<Input>(scene_.GetEntities<Input>().at(0));
+  input.keys[key_event->key()] = true;
 }
 
 void Backend::KeyReleased(QKeyEvent* key_event) {
   qDebug() << "KeyReleasedEvent" << key_event;
 
-  static auto& keyboard = scene_.GetComponent<KeyboardInput>(
-      scene_.GetEntities<KeyboardInput>().at(0));
-  keyboard.keys[key_event->key()] = false;
+  static auto& input =
+      scene_.GetComponent<Input>(scene_.GetEntities<Input>().at(0));
+  input.keys[key_event->key()] = false;
   // KeyReleasedEvent event(key_event);
   // scene_.Despatch(event);
 }

@@ -6,20 +6,12 @@
 
 namespace s21 {
 
-MouseInput &GetMouseInput(ECS_Controller *scene) {
-  auto entities = scene->GetEntities<MouseInput>();
+Input &GetInput(ECS_Controller *scene) {
+  auto entities = scene->GetEntities<Input>();
 
   Q_ASSERT(entities.size() == 1);
 
-  return scene->GetComponent<MouseInput>(entities[0]);
-}
-
-KeyboardInput &GetKeyboardInput(ECS_Controller *scene) {
-  auto entities = scene->GetEntities<KeyboardInput>();
-
-  Q_ASSERT(entities.size() == 1);
-
-  return scene->GetComponent<KeyboardInput>(entities[0]);
+  return scene->GetComponent<Input>(entities[0]);
 }
 
 MousePickingSystem::MousePickingSystem() {
@@ -41,7 +33,7 @@ void MousePickingSystem::OnWindowResize(Event &e) {
 }
 
 void MousePickingSystem::Update() {
-  static auto &pos = GetMouseInput(scene_).double_click;
+  static auto &pos = GetInput(scene_).double_click;
 
   if (pos == QPoint{-1, -1}) return;
 
@@ -73,7 +65,7 @@ void MousePickingSystem::PrepareFramebuffer() {
 }
 
 void MousePickingSystem::PickEntity(QPoint &pos) {
-  static auto &ctrl = GetKeyboardInput(scene_).keys[Qt::Key_Control];
+  static auto &ctrl = GetInput(scene_).keys[Qt::Key_Control];
 
   int entity = framebuffer_->ReadPixel(pos.x(), pos.y());
   auto pickedEntities = scene_->GetEntities<PickingTag>();

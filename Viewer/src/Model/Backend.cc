@@ -161,6 +161,7 @@ void Backend::LoadTexture(QString filename, Texture& texture) {
 
 void Backend::RegisterComponents() {
   scene_.RegisterComponent<Mesh>();
+  scene_.RegisterComponent<Input>();
   scene_.RegisterComponent<Model>();
   scene_.RegisterComponent<Light>();
   scene_.RegisterComponent<Timer>();
@@ -169,17 +170,14 @@ void Backend::RegisterComponents() {
   scene_.RegisterComponent<Texture>();
   scene_.RegisterComponent<QuadTag>();
   scene_.RegisterComponent<Material>();
-  scene_.RegisterComponent<InputTag>();
   scene_.RegisterComponent<RenderTag>();
   scene_.RegisterComponent<Transform>();
   scene_.RegisterComponent<ShadowTag>();
   scene_.RegisterComponent<CubemapTag>();
   scene_.RegisterComponent<Enviroment>();
-  scene_.RegisterComponent<MouseInput>();
   scene_.RegisterComponent<Projection>();
   scene_.RegisterComponent<PickingTag>();
   scene_.RegisterComponent<Attenuation>();
-  scene_.RegisterComponent<KeyboardInput>();
 }
 
 void Backend::RegisterSystems() {
@@ -322,7 +320,7 @@ void Backend::RegisterSystems() {
   inputSystem_ = scene_.RegisterSystem<InputSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<InputTag>());
+    mask.set(GetComponentID<Input>());
     scene_.ChangeSystemMask<InputSystem>(mask);
     inputSystem_->Init(&scene_);
   }
@@ -570,14 +568,7 @@ void Backend::InitEntities() {
 
   {
     EntityID entity = scene_.NewEntity();
-    scene_.AddComponent<InputTag>(entity);
-    scene_.AddComponent<KeyboardInput>(entity);
-  }
-
-  {
-    EntityID entity = scene_.NewEntity();
-    scene_.AddComponent<InputTag>(entity);
-    scene_.AddComponent<MouseInput>(entity);
+    scene_.AddComponent<Input>(entity);
   }
 
   {
