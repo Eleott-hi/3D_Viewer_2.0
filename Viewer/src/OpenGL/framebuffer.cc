@@ -41,14 +41,15 @@ void Framebuffer::PrepereBuffer() {
   if (prepare_func_) OPENGL_DEBUG(prepare_func_());
 }
 
-void Framebuffer::Resize(uint32_t width, uint32_t height) {
+void Framebuffer::Resize(uint32_t width, uint32_t height, bool invalidate) {
   uint32_t w = width * magicScale_;
   uint32_t h = height * magicScale_;
 
   if (width_ == w && height_ == h) return;
 
   width_ = w, height_ = h;
-  Invalidate();
+
+  if (invalidate) Invalidate();
 }
 
 void Framebuffer::Bind() {
@@ -82,6 +83,12 @@ void Framebuffer::Invalidate() {
   };
 
   OPENGL_DEBUG(glDrawBuffers(3, buf));
+
+  if (!color_formats_.size()) {
+    OPENGL_DEBUG(glDrawBuffer(GL_NONE));
+    OPENGL_DEBUG(glReadBuffer(GL_NONE));
+    qDebug() << "NONE";
+  }
 
   Unbind();
 }

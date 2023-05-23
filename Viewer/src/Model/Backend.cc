@@ -16,10 +16,9 @@ float skyboxVertices[] = {
     1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,
 };
 
-std::string
-    dir =  //
-           // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
-    "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
+std::string dir =  //
+    "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
+// "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
 
 namespace s21 {
 
@@ -93,12 +92,12 @@ void Backend::Draw() {
   {
     pointShadowFramebuffer_->Bind();
     pointShadowFramebuffer_->PrepereBuffer();
-    pointShadowSystem_->Update();
+    pointShadowSystem_->Update(width_, height_);
     pointShadowFramebuffer_->Unbind();
   }
+
   {
     framebuffer3D_->Bind();
-    // glViewport(0, 0, width_, height_);
     framebuffer3D_->PrepereBuffer();
     cubemapSystem_->Update();
     pointShadowRenderSystem_->Update(pointShadowFramebuffer_->getTextureID());
@@ -107,13 +106,18 @@ void Backend::Draw() {
 
   {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // glViewport(0, 0, width_, height_);
     glDisable(GL_DEPTH_TEST);
     glClearColor(0.1, 0.9, 0.1, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    // defaultFramebuffer_->Bind();
+    // defaultFramebuffer_->PrepereBuffer();
 
     render2DSystem_->Update(g_buffer_->getTextureID(0),
                             g_buffer_->getTextureID(1),
                             g_buffer_->getTextureID(2));
+
+    // defaultFramebuffer_->Unbind();
   }
 }
 
@@ -465,15 +469,26 @@ void Backend::SetFramebuffers() {
   framebuffer3D_ = std::make_shared<Framebuffer>();
   framebufferShadow_ = std::make_shared<Framebuffer>();
   pointShadowFramebuffer_ = std::make_shared<Framebuffer>();
+  // mousePickingFramebuffer_ = std::make_shared<Framebuffer>();
+  // defaultFramebuffer_ = std::make_shared<Framebuffer>();
 
   pointShadowFramebuffer_->AddTexture(texture);
   pointShadowFramebuffer_->Create({});
   framebufferShadow_->Create({Format::DEPTH32});
   framebuffer3D_->Create({Format::RGB, Format::DEFAULT_DEPTH});
+  // mousePickingFramebuffer_->Create(
+  // {Format::RED_INTEGER, Format::DEFAULT_DEPTH});
   g_buffer_->Create({Format::RGBA16F, Format::RGBA16F,  //
                      Format::RGBA, Format::DEFAULT_DEPTH});
 
   pointShadowFramebuffer_->Resize(1024, 1024);
+
+  // defaultFramebuffer_->SetPrepereBuffer([this] {
+  //   // glViewport(0, 0, width_, height_);
+  //   glDisable(GL_DEPTH_TEST);
+  //   glClearColor(0.1, 0.9, 0.1, 1.0);
+  //   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  // });
 
   pointShadowFramebuffer_->SetPrepereBuffer([this] {
     glClearDepth(1.0f);
@@ -541,8 +556,7 @@ void Backend::InitEntities() {
 
     Texture texture;
     texture.type = "cubemap";
-    // texture.id = texture_storage_->LoadCubemap(faces);
-    texture.id = pointShadowFramebuffer_->getTextureID();
+    texture.id = texture_storage_->LoadCubemap(faces);
 
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<Mesh>(entity, mesh);

@@ -17,8 +17,8 @@ uniform samplerCube shadowMap;
 uniform vec3 lightPos = vec3(0, 0, 2);
 uniform vec3 camPos;
 
-uniform float far_plane = 25.0f;
-uniform bool shadows = false;
+uniform float far_plane = 100.0f;
+uniform bool shadows = true;
 uniform Material material;
 
 // array of offset direction for sampling

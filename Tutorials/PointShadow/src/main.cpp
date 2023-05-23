@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+//
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
 
@@ -35,6 +36,19 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
+
+void Print(glm::mat4 const& mat){
+
+    for (int i = 0; i < 4; i++){
+        for (int j = 0; j < 4; j++){
+            std::cout<< mat[i][j] << " ";
+        }
+        std::cout<< std::endl;
+    }
+        std::cout<< std::endl;
+
+
+}
 
 int main()
 {
@@ -147,7 +161,7 @@ int main()
         // 0. create depth cubemap transformation matrices
         // -----------------------------------------------
         float near_plane = 1.0f;
-        float far_plane = 25.0f;
+        float far_plane = 100.0f;
         glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), (float)SHADOW_WIDTH / (float)SHADOW_HEIGHT, near_plane, far_plane);
         std::vector<glm::mat4> shadowTransforms;
         shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
@@ -156,6 +170,10 @@ int main()
         shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
         shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
         shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+
+
+           Print(shadowProj) ;
+
 
         // 1. render scene to depth cubemap
         // --------------------------------
@@ -172,7 +190,7 @@ int main()
 
         // 2. render scene as normal 
         // -------------------------
-        glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+        glViewport(0, 0, SCR_WIDTH*2, SCR_HEIGHT*2);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shader.use();
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);

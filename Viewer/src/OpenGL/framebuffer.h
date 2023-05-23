@@ -22,7 +22,7 @@ class Framebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
   void Unbind() final;
   uint32_t getTextureID(uint32_t index = 0) final;
   // uint32_t getDepthID() final { return m_Depth_Texture_; }
-  void Resize(uint32_t width, uint32_t height) final;
+  void Resize(uint32_t width, uint32_t height, bool invalidate = true) final;
   int ReadPixel(uint32_t x, uint32_t y, int index) final;
   void Create(const std::initializer_list<AttachmentFormat>& formats) final;
   void PrepereBuffer() final;

@@ -15,7 +15,7 @@ uniform mat4 Projection;
 uniform mat4 View;
 uniform mat4 Model;
 
-uniform bool reverse_normals = true;
+uniform bool reverse_normals = false;
 
 void main() {
     vs_out.FragPos = vec3(Model * vec4(aPos, 1.0));

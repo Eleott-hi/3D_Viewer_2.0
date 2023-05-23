@@ -18,6 +18,7 @@ void Backend::WindowResize(int w, int h) {
   g_buffer_->Resize(w, h);
   framebuffer3D_->Resize(w, h);
   framebufferShadow_->Resize(w, h);
+  // defaultFramebuffer_->Resize(w, h, false);
 }
 
 void Backend::MousePressed(QPoint pos) {

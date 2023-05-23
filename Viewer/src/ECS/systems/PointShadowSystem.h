@@ -16,7 +16,7 @@ class PointShadowSystem : public System, protected QOpenGLExtraFunctions {
   ~PointShadowSystem() = default;
 
   void Init(ECS_Controller *scene, TechniqueStrategy *technique);
-  void Update();
+  void Update(int w, int h);
 
  private:
   ECS_Controller *scene_ = nullptr;
