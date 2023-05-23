@@ -98,7 +98,7 @@ class Backend : public Observable, protected QOpenGLExtraFunctions {
   std::shared_ptr<IFramebuffer> g_buffer_;
   std::shared_ptr<IFramebuffer> framebuffer3D_;
   std::shared_ptr<IFramebuffer> framebufferShadow_;
-  // std::shared_ptr<IFramebuffer> defaultFramebuffer_;
+  std::shared_ptr<IFramebuffer> defaultFramebuffer_;
   std::shared_ptr<IFramebuffer> pointShadowFramebuffer_;
   // std::shared_ptr<IFramebuffer> mousePickingFramebuffer_;
 

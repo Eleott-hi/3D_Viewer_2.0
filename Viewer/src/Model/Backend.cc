@@ -105,19 +105,14 @@ void Backend::Draw() {
   }
 
   {
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    // glViewport(0, 0, width_, height_);
-    glDisable(GL_DEPTH_TEST);
-    glClearColor(0.1, 0.9, 0.1, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    // defaultFramebuffer_->Bind();
-    // defaultFramebuffer_->PrepereBuffer();
+    defaultFramebuffer_->Bind();
+    defaultFramebuffer_->PrepereBuffer();
 
     render2DSystem_->Update(g_buffer_->getTextureID(0),
                             g_buffer_->getTextureID(1),
                             g_buffer_->getTextureID(2));
 
-    // defaultFramebuffer_->Unbind();
+    defaultFramebuffer_->Unbind();
   }
 }
 
@@ -470,7 +465,7 @@ void Backend::SetFramebuffers() {
   framebufferShadow_ = std::make_shared<Framebuffer>();
   pointShadowFramebuffer_ = std::make_shared<Framebuffer>();
   // mousePickingFramebuffer_ = std::make_shared<Framebuffer>();
-  // defaultFramebuffer_ = std::make_shared<Framebuffer>();
+  defaultFramebuffer_ = std::make_shared<Framebuffer>();
 
   pointShadowFramebuffer_->AddTexture(texture);
   pointShadowFramebuffer_->Create({});
@@ -483,12 +478,11 @@ void Backend::SetFramebuffers() {
 
   pointShadowFramebuffer_->Resize(1024, 1024);
 
-  // defaultFramebuffer_->SetPrepereBuffer([this] {
-  //   // glViewport(0, 0, width_, height_);
-  //   glDisable(GL_DEPTH_TEST);
-  //   glClearColor(0.1, 0.9, 0.1, 1.0);
-  //   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  // });
+  defaultFramebuffer_->SetPrepereBuffer([this] {
+    glDisable(GL_DEPTH_TEST);
+    glClearColor(0.1, 0.9, 0.1, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  });
 
   pointShadowFramebuffer_->SetPrepereBuffer([this] {
     glClearDepth(1.0f);
