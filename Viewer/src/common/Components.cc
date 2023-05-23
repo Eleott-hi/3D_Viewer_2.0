@@ -64,9 +64,24 @@ QMatrix4x4 Transform::GetModelMatrix() const {
 }
 
 QMatrix4x4 Camera::GetViewMatrix() const {
-  QMatrix4x4 view;
+   QMatrix4x4 view;
   view.lookAt(position, position + front, up);
   return view;
+}
+
+void Camera::Update(){
+  static const QVector3D world_up = {0, 1, 0};
+
+  const float yaw_ = qDegreesToRadians(yaw);
+  const float pitch_ = qDegreesToRadians(pitch);
+
+  front.setX(cos(yaw_) * cos(pitch_));
+  front.setY(sin(pitch_));
+  front.setZ(sin(yaw_) * cos(pitch_));
+  front.normalize();
+
+  right = QVector3D::normal(front, world_up);
+  up = QVector3D::normal(right, front);
 }
 
 }  // namespace s21

@@ -6,7 +6,7 @@ namespace s21 {
 
 void InputSystem::Update() {
   for (auto entity : entities_) {
-    static auto &input = scene_->GetComponent<Input>(entity);
+    auto &input = scene_->GetComponent<Input>(entity);
     ProcessMouseMovement(input);
     ProcessKeyPressed(input);
   }
@@ -25,7 +25,7 @@ void InputSystem::ProcessKeyPressed(Input &input) {
   // static const auto deltaTime = 1;
   // static const float velocity = speed * deltaTime;
 
-  qDebug() << "Velocity: " << velocity;
+  // qDebug() << "Velocity: " << velocity;
 
   auto &keys = input.keys;
 
@@ -43,10 +43,10 @@ void InputSystem::ProcessMouseMovement(Input &input, bool constrainPitch) {
   static auto const &timer =
       scene_->GetComponent<Timer>(Utils::GetTickTime(scene_));
 
-  const float speed = 0.003;
-  const float MouseSensitivity = speed * timer.time;
+  const float speed = 0.1;
+  const float MouseSensitivity = 0.1;//= speed * timer.time;
 
-  qDebug() << "MouseSensitivity: " << MouseSensitivity;
+  // qDebug() << "MouseSensitivity: " << MouseSensitivity;
 
   // static const float MouseSensitivity = 0.08;
 
@@ -54,11 +54,14 @@ void InputSystem::ProcessMouseMovement(Input &input, bool constrainPitch) {
     auto offset = input.start - input.end;
     input.start = input.end;
 
+    qDebug() << offset;
+
     camera.yaw += offset.x() * MouseSensitivity;
     camera.pitch -= offset.y() * MouseSensitivity;
-
-    if (constrainPitch) camera.pitch = qBound(-89.0f, camera.pitch, 89.0f);
   }
+
+  if (constrainPitch) camera.pitch = qBound(-89.0f, camera.pitch, 89.0f);
+  camera.Update();
 }
 
 }  // namespace s21

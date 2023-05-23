@@ -51,7 +51,7 @@ void Backend::Update() {
     picked_ = false;
   }
 
-  NotifyCamera();
+  // NotifyCamera();
 }
 
 void Backend::Draw() {

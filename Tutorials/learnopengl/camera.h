@@ -89,6 +89,8 @@ public:
         Yaw   += xoffset;
         Pitch += yoffset;
 
+        
+
         // make sure that when pitch is out of bounds, screen doesn't get flipped
         if (constrainPitch)
         {

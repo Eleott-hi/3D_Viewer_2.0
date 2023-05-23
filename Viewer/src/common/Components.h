@@ -110,6 +110,8 @@ struct Camera {
   float yaw = -90;
   float zoom = 45.0;
 
+  void Update();
+
   QMatrix4x4 GetViewMatrix() const;
 };
 

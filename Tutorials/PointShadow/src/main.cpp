@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
 
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -146,6 +147,8 @@ int main()
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
+        std::cout << deltaTime << std::endl;
+
         // input
         // -----
         processInput(window);
@@ -172,7 +175,7 @@ int main()
         shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 
 
-           Print(shadowProj) ;
+        //    Print(shadowProj) ;
 
 
         // 1. render scene to depth cubemap
@@ -389,6 +392,8 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 
     lastX = xpos;
     lastY = ypos;
+
+
 
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
