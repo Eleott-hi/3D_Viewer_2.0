@@ -1,0 +1,14 @@
+﻿  context.c
+  init.c
+  input.c
+  monitor.c
+  wgl_context.c
+  win32_init.c
+  win32_monitor.c
+  win32_time.c
+  win32_tls.c
+  win32_window.c
+  window.c
+  winmm_joystick.c
+  Generating Code...
+  glfw3.vcxproj -> C:\Users\lapte\Desktop\tinygizmo\tiny-gizmo-example\third-party\glfw-3.1.2\intermediate\Debug-x64\glfw3.lib
