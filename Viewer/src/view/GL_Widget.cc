@@ -13,40 +13,40 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 }
 
 void GLWidget::initializeGL() {
-  backend_->Init(this);
+  scene_->Init(this);
 
-  int fps = 70;
+  int fps = 1000;
   timer_.start(1000 / fps);
 
   //  for (size_t i = 0; i < 10; i++)
-  backend_->AddModel(dir + "objects/backpack/backpack.obj");
-  backend_->AddModel(dir + "objects/cat.obj");
+  scene_->AddModel(dir + "objects/backpack/backpack.obj");
+  scene_->AddModel(dir + "objects/cat.obj");
 }
 
-void GLWidget::resizeGL(int w, int h) { backend_->WindowResize(w, h); }
+void GLWidget::resizeGL(int w, int h) { scene_->WindowResize(w, h); }
 
-void GLWidget::paintGL() { backend_->Render(); }
+void GLWidget::paintGL() { scene_->Render(); }
 
 void GLWidget::mousePressEvent(QMouseEvent *event) {
   this->setFocus();
-  if (event->button() == Qt::LeftButton) backend_->MousePressed(event->pos());
+  if (event->button() == Qt::LeftButton) scene_->MousePressed(event->pos());
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event) {
-  backend_->MouseMoved(event->pos());
+  scene_->MouseMoved(event->pos());
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event) {
-  if (event->button() == Qt::LeftButton) backend_->MouseReleased(event->pos());
+  if (event->button() == Qt::LeftButton) scene_->MouseReleased(event->pos());
 }
 
 void GLWidget::mouseDoubleClickEvent(QMouseEvent *event) {
-  backend_->MouseDoubleClicked(event->pos());
+  scene_->MouseDoubleClicked(event->pos());
 }
 
 void GLWidget::wheelEvent(QWheelEvent *event) {
   auto numDegrees = event->angleDelta();
-  backend_->MouseScrolled(numDegrees.y() / 80.0);
+  scene_->MouseScrolled(numDegrees.y() / 80.0);
 }
 
 }  // namespace s21

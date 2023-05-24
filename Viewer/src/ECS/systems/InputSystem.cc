@@ -40,17 +40,8 @@ void InputSystem::ProcessKeyPressed(Input &input) {
 void InputSystem::ProcessMouseMovement(Input &input, bool constrainPitch) {
   static auto &camera =
       scene_->GetComponent<Camera>(Utils::GetCameraID(scene_));
-  static auto const &timer =
-      scene_->GetComponent<Timer>(Utils::GetTickTime(scene_));
 
-  const float speed = 0.01;
-  const float MouseSensitivity //
-  // = 0.1;
-  = speed * timer.time;
-
-  // qDebug() << "MouseSensitivity: " << MouseSensitivity;
-
-  // static const float MouseSensitivity = 0.08;
+  const float MouseSensitivity = 0.1;
 
   if (input.left_button_pressed) {
     auto offset = input.start - input.end;

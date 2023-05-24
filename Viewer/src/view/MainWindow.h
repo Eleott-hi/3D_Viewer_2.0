@@ -4,7 +4,7 @@
 #include <QKeyEvent>
 #include <QMainWindow>
 
-#include "Backend.h"
+#include "Scene.h"
 #include "Observer.h"
 
 QT_BEGIN_NAMESPACE
@@ -18,7 +18,7 @@ class MainWindow : public QMainWindow, protected Observer {
   Q_OBJECT
 
  public:
-  MainWindow(Backend *backend, QWidget *parent = nullptr);
+  MainWindow(Scene *scene, QWidget *parent = nullptr);
   ~MainWindow();
 
   void OnNotify() final;
@@ -28,7 +28,7 @@ class MainWindow : public QMainWindow, protected Observer {
   void on_actionOpen_file_triggered();
 
  private:
-  Backend *backend_;
+  Scene *scene_;
   Ui::MainWindow *ui_;
 
  protected:

@@ -1,4 +1,4 @@
-#include "Backend.h"
+#include "Scene.h"
 #include "events/KeyPressedEvent.h"
 #include "events/KeyReleasedEvent.h"
 #include "events/MouseDoubleClickedEvent.h"
@@ -8,7 +8,7 @@
 
 namespace s21 {
 
-void Backend::WindowResize(int w, int h) {
+void Scene::WindowResize(int w, int h) {
   qDebug() << "WindowResizeEvent:" << w << h;
   WindowResizeEvent event(w, h);
   scene_.Despatch(event);
@@ -21,7 +21,7 @@ void Backend::WindowResize(int w, int h) {
   defaultFramebuffer_->Resize(w, h, false);
 }
 
-void Backend::MousePressed(QPoint pos) {
+void Scene::MousePressed(QPoint pos) {
   qDebug() << "MousePressedEvent:" << pos;
   static auto& input =
       scene_.GetComponent<Input>(scene_.GetEntities<Input>().at(0));
@@ -30,7 +30,7 @@ void Backend::MousePressed(QPoint pos) {
   input.end = pos;
 }
 
-void Backend::MouseReleased(QPoint pos) {
+void Scene::MouseReleased(QPoint pos) {
   qDebug() << "MouseReleasedEvent:" << pos;
   static auto& input =
       scene_.GetComponent<Input>(scene_.GetEntities<Input>().at(0));
@@ -39,7 +39,7 @@ void Backend::MouseReleased(QPoint pos) {
   input.end = pos;
 }
 
-void Backend::MouseMoved(QPoint pos) {
+void Scene::MouseMoved(QPoint pos) {
   qDebug() << "MouseMovedEvent:" << pos;
   // MouseMovedEvent event(offset);
   // scene_.Despatch(event);
@@ -49,7 +49,7 @@ void Backend::MouseMoved(QPoint pos) {
   input.end = pos;
 }
 
-void Backend::MouseDoubleClicked(QPoint pos) {
+void Scene::MouseDoubleClicked(QPoint pos) {
   qDebug() << "MouseDoubleClicked:" << pos;
   // MouseDoubleClickedEvent event(pos);
   // scene_.Despatch(event);
@@ -60,7 +60,7 @@ void Backend::MouseDoubleClicked(QPoint pos) {
   picked_ = true;
 }
 
-void Backend::KeyPressed(QKeyEvent* key_event) {
+void Scene::KeyPressed(QKeyEvent* key_event) {
   qDebug() << "KeyPressedEvent:" << key_event;
   // KeyPressedEvent event(key_event);
   // scene_.Despatch(event);
@@ -70,7 +70,7 @@ void Backend::KeyPressed(QKeyEvent* key_event) {
   input.keys[key_event->key()] = true;
 }
 
-void Backend::KeyReleased(QKeyEvent* key_event) {
+void Scene::KeyReleased(QKeyEvent* key_event) {
   qDebug() << "KeyReleasedEvent" << key_event;
 
   static auto& input =
@@ -80,7 +80,7 @@ void Backend::KeyReleased(QKeyEvent* key_event) {
   // scene_.Despatch(event);
 }
 
-void Backend::MouseScrolled(float scroll) {
+void Scene::MouseScrolled(float scroll) {
   qDebug() << "MouseScrolledEvent" << scroll;
   MouseScrolledEvent event(scroll);
   scene_.Despatch(event);

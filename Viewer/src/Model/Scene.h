@@ -32,14 +32,14 @@
 
 namespace s21 {
 
-class Backend : public Observable, protected QOpenGLExtraFunctions {
+class Scene : public Observable, protected QOpenGLExtraFunctions {
  public:
-  Backend() = default;
-  ~Backend() = default;
-  Backend(Backend &&) = delete;
-  Backend(Backend const &) = delete;
-  Backend &operator=(Backend &&) = delete;
-  Backend &operator=(Backend const &) = delete;
+  Scene() = default;
+  ~Scene() = default;
+  Scene(Scene &&) = delete;
+  Scene(Scene const &) = delete;
+  Scene &operator=(Scene &&) = delete;
+  Scene &operator=(Scene const &) = delete;
 
   void Render();
   void AddModel(QString path);
@@ -109,16 +109,16 @@ class Backend : public Observable, protected QOpenGLExtraFunctions {
   std::shared_ptr<CameraSystem> cameraSystem_;
   std::shared_ptr<RenderSystem> renderSystem_;
   std::shared_ptr<CubemapSystem> cubemapSystem_;
+  std::shared_ptr<TimeTickSystem> timeTickSystem_;
   std::shared_ptr<Render2DSystem> render2DSystem_;
   std::shared_ptr<EditPickedSystem> editPickedSystem_;
   std::shared_ptr<ProjectionSystem> projectionSystem_;
+  std::shared_ptr<PointShadowSystem> pointShadowSystem_;
   std::shared_ptr<MousePickingSystem> mousePickingSystem_;
   std::shared_ptr<RenderPickedSystem> renderPickedSystem_;
-  std::shared_ptr<DefferedShadingSystem> defferedShadingSystem_;
   std::shared_ptr<ShadowRenderSystem> shadowRenderSystem_;
-  std::shared_ptr<PointShadowSystem> pointShadowSystem_;
+  std::shared_ptr<DefferedShadingSystem> defferedShadingSystem_;
   std::shared_ptr<PointShadowRenderSystem> pointShadowRenderSystem_;
-  std::shared_ptr<TimeTickSystem> timeTickSystem_;
 
   void RegisterComponents();
   void RegisterSystems();

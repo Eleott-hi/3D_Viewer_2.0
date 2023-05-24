@@ -5,7 +5,7 @@
 #include <QOpenGLWidget>
 #include <QTimer>
 
-#include "Backend.h"
+#include "Scene.h"
 
 namespace s21 {
 class GLWidget : public QOpenGLWidget {
@@ -13,7 +13,7 @@ class GLWidget : public QOpenGLWidget {
   GLWidget(QWidget *parent = nullptr);
 
   ~GLWidget() = default;
-  void SetController(Backend *backend) { backend_ = backend; }
+  void SetController(Scene *scene) { scene_ = scene; }
 
  protected:
   void paintGL() override;
@@ -27,7 +27,7 @@ class GLWidget : public QOpenGLWidget {
 
  private:
   QTimer timer_;
-  Backend *backend_ = nullptr;
+  Scene *scene_ = nullptr;
 };
 
 }  // namespace s21

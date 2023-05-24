@@ -1,4 +1,4 @@
-#include "Backend.h"
+#include "Scene.h"
 
 #include "Utils.h"
 
@@ -22,7 +22,7 @@ std::string dir =  //
 
 namespace s21 {
 
-void Backend::Init(QOpenGLWidget* widget) {
+void Scene::Init(QOpenGLWidget* widget) {
   initializeOpenGLFunctions();
   glLineStipple(4, 0xAAAA);
 
@@ -37,7 +37,7 @@ void Backend::Init(QOpenGLWidget* widget) {
   InitEntities();
 }
 
-void Backend::Update() {
+void Scene::Update() {
   timeTickSystem_->Update();
   inputSystem_->Update();
   mousePickingSystem_->Update();
@@ -54,7 +54,7 @@ void Backend::Update() {
   NotifyCamera();
 }
 
-void Backend::Draw() {
+void Scene::Draw() {
   // glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
   // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -117,12 +117,12 @@ void Backend::Draw() {
   }
 }
 
-void Backend::Render() {
+void Scene::Render() {
   Update();
   Draw();
 }
 
-void Backend::AddModel(QString path) {
+void Scene::AddModel(QString path) {
   opengl_widget_->makeCurrent();
   auto [model, diffuse_map, normal_map, specular_map] =
       parser_->loadModel(path.toStdString());
@@ -154,12 +154,12 @@ void Backend::AddModel(QString path) {
   opengl_widget_->doneCurrent();
 }
 
-void Backend::LoadTexture(QString filename, Texture& texture) {
+void Scene::LoadTexture(QString filename, Texture& texture) {
   InsideOpenGLContext(
       [&] { texture = texture_storage_->LoadTexture(filename.toStdString()); });
 }
 
-void Backend::RegisterComponents() {
+void Scene::RegisterComponents() {
   scene_.RegisterComponent<Mesh>();
   scene_.RegisterComponent<Input>();
   scene_.RegisterComponent<Model>();
@@ -180,7 +180,7 @@ void Backend::RegisterComponents() {
   scene_.RegisterComponent<Attenuation>();
 }
 
-void Backend::RegisterSystems() {
+void Scene::RegisterSystems() {
   cameraSystem_ = scene_.RegisterSystem<CameraSystem>();
   {
     ComponentMask mask;
@@ -334,7 +334,7 @@ void Backend::RegisterSystems() {
   }
 }
 
-void Backend::DebugLights(bool directional, bool point_1, bool point_2,
+void Scene::DebugLights(bool directional, bool point_1, bool point_2,
                           bool spot) {
   if (directional) {
     Light light;
@@ -448,20 +448,20 @@ void Backend::DebugLights(bool directional, bool point_1, bool point_2,
   }
 }
 
-Camera& Backend::GetCamera() {
+Camera& Scene::GetCamera() {
   qDebug() << "GetCamera";
   static auto& camera =
       scene_.GetComponent<Camera>(Utils::GetCameraID(&scene_));
   return camera;
 }
 
-void Backend::InsideOpenGLContext(std::function<void()> func) {
+void Scene::InsideOpenGLContext(std::function<void()> func) {
   opengl_widget_->makeCurrent();
   func();
   opengl_widget_->doneCurrent();
 }
 
-void Backend::SetFramebuffers() {
+void Scene::SetFramebuffers() {
   TextureWraper texture(GL_TEXTURE_CUBE_MAP);
   texture.SetFilters(GL_NEAREST);
   texture.SetWraps(GL_CLAMP_TO_EDGE);
@@ -525,7 +525,7 @@ void Backend::SetFramebuffers() {
   });
 }
 
-void Backend::InitEntities() {
+void Scene::InitEntities() {
   {
     Texture texture = {framebuffer3D_->getTextureID(), "quad"};
     // Texture texture = {framebufferShadow_->getTextureID(), "quad"};

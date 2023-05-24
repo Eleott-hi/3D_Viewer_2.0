@@ -5,11 +5,11 @@
 #include "ui_MainWindow.h"
 
 namespace s21 {
-MainWindow::MainWindow(Backend *backend, QWidget *parent)
-    : QMainWindow(parent), backend_(backend), ui_(new Ui::MainWindow) {
+MainWindow::MainWindow(Scene *scene, QWidget *parent)
+    : QMainWindow(parent), scene_(scene), ui_(new Ui::MainWindow) {
   ui_->setupUi(this);
-  ui_->openGLWidget->SetController(backend);
-  backend_->AddObserver(this);
+  ui_->openGLWidget->SetController(scene);
+  scene_->AddObserver(this);
 
   ui_->dockTransformation->close();
   ui_->dockMaterial->close();
@@ -24,7 +24,7 @@ MainWindow::~MainWindow() { delete ui_; }
 void MainWindow::on_actionOpen_file_triggered() {
   QString filename = QFileDialog::getOpenFileName(this, "Open File", "~/",
                                                   "OBJ files (*.obj)");
-  if (!filename.isEmpty()) backend_->AddModel(filename);
+  if (!filename.isEmpty()) scene_->AddModel(filename);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
@@ -35,7 +35,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 
   if (event->key() == Qt::Key_Escape) this->close();
 
-  backend_->KeyPressed(event);
+  scene_->KeyPressed(event);
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
@@ -44,11 +44,11 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
     return;
   }
 
-  backend_->KeyReleased(event);
+  scene_->KeyReleased(event);
 }
 
 void MainWindow::OnCameraNotify() {
-  static auto const &camera = backend_->GetCamera();
+  static auto const &camera = scene_->GetCamera();
 
   ui_->dsb_CameraTransX->setValue(camera.position.x());
   ui_->dsb_CameraTransY->setValue(camera.position.y());
@@ -59,18 +59,20 @@ void MainWindow::OnCameraNotify() {
 
 void MainWindow::OnNotify() {
   {
-    auto components = backend_->GetComponents<Transform>();
+    auto components = scene_->GetComponents<Transform>();
     if (components.empty()) {
       ui_->dockTransformation->close();
+      ui_->dockProperties->close();
 
     } else {
       if (components.size() == 1) SetTransformUi(*components[0]);
       ui_->dockTransformation->show();
+      ui_->dockProperties->show();
     }
   }
 
   {
-    auto components = backend_->GetComponents<Light>();
+    auto components = scene_->GetComponents<Light>();
     ui_->tg_LightSource->setChecked(false);
 
     if (components.empty()) {
@@ -85,7 +87,7 @@ void MainWindow::OnNotify() {
   }
 
   {
-    auto components = backend_->GetComponents<Material>();
+    auto components = scene_->GetComponents<Material>();
     if (components.empty()) {
       ui_->dockMaterial->close();
     } else {
@@ -95,7 +97,7 @@ void MainWindow::OnNotify() {
   }
 
   {
-    auto components = backend_->GetComponents<Shader>();
+    auto components = scene_->GetComponents<Shader>();
     if (components.empty()) {
       ui_->dockShader->close();
     } else {
@@ -105,7 +107,7 @@ void MainWindow::OnNotify() {
   }
 
   {
-    auto components = backend_->GetComponents<RenderTag>();
+    auto components = scene_->GetComponents<RenderTag>();
     if (components.empty()) {
       ui_->tb_Render->setChecked(false);
     } else if (components.size() == 1) {

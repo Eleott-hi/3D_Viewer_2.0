@@ -1,6 +1,6 @@
 #include <QApplication>
 
-#include "Backend.h"
+#include "Scene.h"
 #include "MainWindow.h"
 #include <QSurfaceFormat>
 
@@ -17,8 +17,8 @@ int main(int argc, char *argv[]) {
   QSurfaceFormat::setDefaultFormat(format);
 
 
-  s21::Backend model;
-  s21::MainWindow window(&model);
+  s21::Scene scene;
+  s21::MainWindow window(&scene);
 
   window.show();
 
