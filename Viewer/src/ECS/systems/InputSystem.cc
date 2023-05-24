@@ -43,8 +43,10 @@ void InputSystem::ProcessMouseMovement(Input &input, bool constrainPitch) {
   static auto const &timer =
       scene_->GetComponent<Timer>(Utils::GetTickTime(scene_));
 
-  const float speed = 0.1;
-  const float MouseSensitivity = 0.1;//= speed * timer.time;
+  const float speed = 0.01;
+  const float MouseSensitivity //
+  // = 0.1;
+  = speed * timer.time;
 
   // qDebug() << "MouseSensitivity: " << MouseSensitivity;
 

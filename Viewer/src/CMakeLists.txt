@@ -12,6 +12,7 @@ endif()
 project(Viewer3D VERSION 2.0 LANGUAGES CXX)
 
 add_compile_options(-O3)
+# add_compile_options(-fsanitize=address)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
