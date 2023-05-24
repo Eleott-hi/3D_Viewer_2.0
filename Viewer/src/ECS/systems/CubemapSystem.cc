@@ -4,7 +4,7 @@
 #include <QOpenGLShaderProgram>
 
 #include "Utils.h"
-#include "stb_image.h"
+#include "stbi/stb_image.h"
 
 namespace s21 {
 

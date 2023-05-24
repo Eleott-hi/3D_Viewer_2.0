@@ -1,7 +1,7 @@
 #include "TextureStorage.h"
 
 #include "TextureWraper.h"
-#include "stb_image.h"
+#include "stbi/stb_image.h"
 
 namespace s21 {
 

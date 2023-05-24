@@ -62,12 +62,10 @@ void MainWindow::OnNotify() {
     auto components = scene_->GetComponents<Transform>();
     if (components.empty()) {
       ui_->dockTransformation->close();
-      ui_->dockProperties->close();
 
     } else {
       if (components.size() == 1) SetTransformUi(*components[0]);
       ui_->dockTransformation->show();
-      ui_->dockProperties->show();
     }
   }
 

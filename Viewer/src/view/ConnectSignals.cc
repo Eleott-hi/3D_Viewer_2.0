@@ -86,14 +86,14 @@ void MainWindow::ConnectShaderUi() {
   ui_->tb_Render->setAutoExclusive(false);
 
   connect(ui_->tb_Render, &QRadioButton::clicked, [this](bool toggle) {
-    toggle ? backend_->AddComponent<RenderTag>()
-           : backend_->RemoveComponent<RenderTag>();
+    toggle ? scene_->AddComponent<RenderTag>()
+           : scene_->RemoveComponent<RenderTag>();
 
     Notify();
   });
 
   connect(ui_->cb_ShaderType, &QComboBox::currentIndexChanged, [&](int index) {
-    backend_->ChangeComponent<Shader>(
+    scene_->ChangeComponent<Shader>(
         [index](auto &component) { component.type = (TechniqueType)index; });
   });
 }
@@ -105,13 +105,13 @@ void MainWindow::ConnectMaterialUi() {
 
     ui_->l_MaterialColor->setPalette({color});
 
-    backend_->ChangeComponent<Material>(
+    scene_->ChangeComponent<Material>(
         [color](auto &component) { component.color = color; });
   });
 
   connect(ui_->materialShininess, &QDoubleSpinBox::valueChanged,
           [&](float value) {
-            backend_->ChangeComponent<Material>(
+            scene_->ChangeComponent<Material>(
                 [value](auto &component) { component.shininess = value; });
           });
 
@@ -121,8 +121,8 @@ void MainWindow::ConnectMaterialUi() {
 
     if (filename.isEmpty()) return;
 
-    backend_->ChangeComponent<Material>([&](auto &component) {
-      backend_->LoadTexture(filename, component.diffuse);
+    scene_->ChangeComponent<Material>([&](auto &component) {
+      scene_->LoadTexture(filename, component.diffuse);
     });
 
     Notify();
@@ -134,8 +134,8 @@ void MainWindow::ConnectMaterialUi() {
 
     if (filename.isEmpty()) return;
 
-    backend_->ChangeComponent<Material>([&](auto &component) {
-      backend_->LoadTexture(filename, component.specular);
+    scene_->ChangeComponent<Material>([&](auto &component) {
+      scene_->LoadTexture(filename, component.specular);
     });
 
     Notify();
@@ -147,8 +147,8 @@ void MainWindow::ConnectMaterialUi() {
 
     if (filename.isEmpty()) return;
 
-    backend_->ChangeComponent<Material>([&](auto &component) {
-      backend_->LoadTexture(filename, component.normal);
+    scene_->ChangeComponent<Material>([&](auto &component) {
+      scene_->LoadTexture(filename, component.normal);
     });
 
     Notify();
@@ -160,8 +160,8 @@ void MainWindow::ConnectMaterialUi() {
 
     if (filename.isEmpty()) return;
 
-    backend_->ChangeComponent<Material>([&](auto &component) {
-      backend_->LoadTexture(filename, component.roughness);
+    scene_->ChangeComponent<Material>([&](auto &component) {
+      scene_->LoadTexture(filename, component.roughness);
     });
 
     Notify();
@@ -173,8 +173,8 @@ void MainWindow::ConnectMaterialUi() {
 
     if (filename.isEmpty()) return;
 
-    backend_->ChangeComponent<Material>([&](auto &component) {
-      backend_->LoadTexture(filename, component.metallic);
+    scene_->ChangeComponent<Material>([&](auto &component) {
+      scene_->LoadTexture(filename, component.metallic);
     });
 
     Notify();
@@ -186,8 +186,8 @@ void MainWindow::ConnectMaterialUi() {
 
     if (filename.isEmpty()) return;
 
-    backend_->ChangeComponent<Material>([&](auto &component) {
-      backend_->LoadTexture(filename, component.ao);
+    scene_->ChangeComponent<Material>([&](auto &component) {
+      scene_->LoadTexture(filename, component.ao);
     });
 
     Notify();
@@ -198,100 +198,100 @@ void MainWindow::ConnectLightUi() {
   ui_->tg_LightSource->setAutoExclusive(false);
 
   connect(ui_->tg_LightSource, &QRadioButton::clicked, [this](bool toggle) {
-    toggle ? backend_->AddComponent<Light>()
-           : backend_->RemoveComponent<Light>();
+    toggle ? scene_->AddComponent<Light>()
+           : scene_->RemoveComponent<Light>();
 
     Notify();
   });
 
   connect(ui_->cb_LightType, &QComboBox::currentIndexChanged, [&](int index) {
-    backend_->ChangeComponent<Light>(
+    scene_->ChangeComponent<Light>(
         [index](auto &component) { component.type = (LightType)index; });
   });
 
   connect(ui_->lightPositionX, &QDoubleSpinBox::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Light>(
+    scene_->ChangeComponent<Light>(
         [value](auto &component) { component.position.setX(value); });
   });
 
   connect(ui_->lightPositionY, &QDoubleSpinBox::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Light>(
+    scene_->ChangeComponent<Light>(
         [value](auto &component) { component.position.setY(value); });
   });
 
   connect(ui_->lightPositionZ, &QDoubleSpinBox::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Light>(
+    scene_->ChangeComponent<Light>(
         [value](auto &component) { component.position.setZ(value); });
   });
 
   connect(ui_->lightDirectionX, &QDoubleSpinBox::valueChanged,
           [&](float value) {
-            backend_->ChangeComponent<Light>(
+            scene_->ChangeComponent<Light>(
                 [value](auto &component) { component.direction.setX(value); });
           });
 
   connect(ui_->lightDirectionY, &QDoubleSpinBox::valueChanged,
           [&](float value) {
-            backend_->ChangeComponent<Light>(
+            scene_->ChangeComponent<Light>(
                 [value](auto &component) { component.direction.setY(value); });
           });
 
   connect(ui_->lightDirectionZ, &QDoubleSpinBox::valueChanged,
           [&](float value) {
-            backend_->ChangeComponent<Light>(
+            scene_->ChangeComponent<Light>(
                 [value](auto &component) { component.direction.setZ(value); });
           });
 
   connect(ui_->lightAmbientR, &QDoubleSpinBox::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Light>(
+    scene_->ChangeComponent<Light>(
         [value](auto &component) { component.ambient.setX(value); });
   });
 
   connect(ui_->lightAmbientG, &QDoubleSpinBox::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Light>(
+    scene_->ChangeComponent<Light>(
         [value](auto &component) { component.ambient.setY(value); });
   });
 
   connect(ui_->lightAmbientB, &QDoubleSpinBox::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Light>(
+    scene_->ChangeComponent<Light>(
         [value](auto &component) { component.ambient.setZ(value); });
   });
 
   connect(ui_->lightDiffuseR, &QDoubleSpinBox::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Light>(
+    scene_->ChangeComponent<Light>(
         [value](auto &component) { component.diffuse.setX(value); });
   });
 
   connect(ui_->lightDiffuseG, &QDoubleSpinBox::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Light>(
+    scene_->ChangeComponent<Light>(
         [value](auto &component) { component.diffuse.setY(value); });
   });
   connect(ui_->lightDiffuseB, &QDoubleSpinBox::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Light>(
+    scene_->ChangeComponent<Light>(
         [value](auto &component) { component.diffuse.setZ(value); });
   });
 
   connect(ui_->lightSpecularR, &QDoubleSpinBox::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Light>(
+    scene_->ChangeComponent<Light>(
         [value](auto &component) { component.specular.setX(value); });
   });
 
   connect(ui_->lightSpecularG, &QDoubleSpinBox::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Light>(
+    scene_->ChangeComponent<Light>(
         [value](auto &component) { component.specular.setY(value); });
   });
   connect(ui_->lightSpecularB, &QDoubleSpinBox::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Light>(
+    scene_->ChangeComponent<Light>(
         [value](auto &component) { component.specular.setZ(value); });
   });
 
   connect(ui_->lightInnerCone, &QDoubleSpinBox::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Light>(
+    scene_->ChangeComponent<Light>(
         [value](auto &component) { component.inner_cone = value; });
   });
 
   connect(ui_->lightOuterCone, &QDoubleSpinBox::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Light>(
+    scene_->ChangeComponent<Light>(
         [value](auto &component) { component.outer_cone = value; });
   });
 }
@@ -300,40 +300,40 @@ void MainWindow::ConnectTransformUi() {
   ui_->rb_ScaleProportional->setAutoExclusive(false);
 
   connect(ui_->xTrans, &QSlider::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Transform>([value](auto &component) {
+    scene_->ChangeComponent<Transform>([value](auto &component) {
       component.translation.setX(value / 100.0);
     });
   });
 
   connect(ui_->yTrans, &QSlider::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Transform>([value](auto &component) {
+    scene_->ChangeComponent<Transform>([value](auto &component) {
       component.translation.setY(value / 100.0);
     });
   });
 
   connect(ui_->zTrans, &QSlider::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Transform>([value](auto &component) {
+    scene_->ChangeComponent<Transform>([value](auto &component) {
       component.translation.setZ(value / 100.0);
     });
   });
 
   connect(ui_->xRot, &QSlider::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Transform>(
+    scene_->ChangeComponent<Transform>(
         [value](auto &component) { component.rotation.setX(value); });
   });
 
   connect(ui_->yRot, &QSlider::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Transform>(
+    scene_->ChangeComponent<Transform>(
         [value](auto &component) { component.rotation.setY(value); });
   });
 
   connect(ui_->zRot, &QSlider::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Transform>(
+    scene_->ChangeComponent<Transform>(
         [value](auto &component) { component.rotation.setZ(value); });
   });
 
   connect(ui_->xScale, &QSlider::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Transform>(
+    scene_->ChangeComponent<Transform>(
         [value](auto &component) { component.scale.setX(value); });
     if (ui_->rb_ScaleProportional->isChecked()) {
       ui_->yScale->setValue(value);
@@ -342,7 +342,7 @@ void MainWindow::ConnectTransformUi() {
   });
 
   connect(ui_->yScale, &QSlider::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Transform>(
+    scene_->ChangeComponent<Transform>(
         [value](auto &component) { component.scale.setY(value); });
     if (ui_->rb_ScaleProportional->isChecked()) {
       ui_->xScale->setValue(value);
@@ -351,7 +351,7 @@ void MainWindow::ConnectTransformUi() {
   });
 
   connect(ui_->zScale, &QSlider::valueChanged, [&](float value) {
-    backend_->ChangeComponent<Transform>(
+    scene_->ChangeComponent<Transform>(
         [value](auto &component) { component.scale.setZ(value); });
     if (ui_->rb_ScaleProportional->isChecked()) {
       ui_->xScale->setValue(value);
@@ -364,30 +364,30 @@ void MainWindow::ConnectCameraUi() {
   connect(
 
       ui_->dsb_CameraTransX, &QDoubleSpinBox::valueChanged, [&](float value) {
-        static auto &camera = backend_->GetCamera();
+        static auto &camera = scene_->GetCamera();
         camera.position.setX(value);
       });
 
   connect(ui_->dsb_CameraTransY, &QDoubleSpinBox::valueChanged,
           [&](float value) {
-            static auto &camera = backend_->GetCamera();
+            static auto &camera = scene_->GetCamera();
             camera.position.setY(value);
           });
 
   connect(ui_->dsb_CameraTransZ, &QDoubleSpinBox::valueChanged,
           [&](float value) {
-            static auto &camera = backend_->GetCamera();
+            static auto &camera = scene_->GetCamera();
             camera.position.setZ(value);
           });
 
   connect(ui_->dsb_CameraYaw, &QDoubleSpinBox::valueChanged, [&](float value) {
-    static auto &camera = backend_->GetCamera();
+    static auto &camera = scene_->GetCamera();
     camera.yaw = value;
   });
 
   connect(ui_->dsb_CameraPitch, &QDoubleSpinBox::valueChanged,
           [&](float value) {
-            static auto &camera = backend_->GetCamera();
+            static auto &camera = scene_->GetCamera();
             camera.pitch = value;
           });
 }
