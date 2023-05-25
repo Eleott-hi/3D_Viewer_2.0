@@ -88,6 +88,8 @@ class Scene : public Observable, protected QOpenGLExtraFunctions {
 
   Camera &GetCamera();
 
+  ECS_Controller *GetScene() { return &scene_; }
+
  private:
   bool picked_ = false;
   uint32_t width_ = 500, height_ = 500;

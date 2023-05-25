@@ -140,8 +140,6 @@ void GizmoRenderSystem::Update() {
     tinygizmo::rigid_transform xform, xform_last;
     xform = xform_last = ToRigidTransform(transform);
 
-    qDebug() << "First Gizmo render...";
-
     if (transform_gizmo("first-example-gizmo", gizmo_ctx, xform)) {
       qDebug() << "First Gizmo Hovered...";
       if (xform != xform_last) qDebug() << "First Gizmo Changed...";

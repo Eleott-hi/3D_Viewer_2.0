@@ -59,60 +59,95 @@ void MainWindow::OnCameraNotify() {
 }
 
 void MainWindow::OnNotify() {
-  {
-    auto components = scene_->GetComponents<Transform>();
-    if (components.empty()) {
-      ui_->groupBoxTransform->close();
+  ui_->groupBoxTransform->close();
+  ui_->groupBoxLight->close();
+  ui_->groupBoxMaterial->close();
+  ui_->groupBoxShader->close();
 
-    } else {
-      if (components.size() == 1) SetTransformUi(*components[0]);
+  auto scene = scene_->GetScene();
+
+  auto entities = scene->GetEntities<PickingTag>();
+
+  for (auto entity : entities) {
+
+
+    if (scene->EntityHasComponent<Transform>(entity)) {
+      SetTransformUi(scene->GetComponent<Transform>(entity));
       ui_->groupBoxTransform->show();
     }
-  }
 
-  {
-    auto components = scene_->GetComponents<Light>();
-    ui_->tg_LightSource->setChecked(false);
-
-    if (components.empty()) {
-      ui_->groupBoxLight->close();
-    } else {
-      if (components.size() == 1) {
-        SetLightUi(*components[0]);
-        ui_->tg_LightSource->setChecked(true);
-      }
-      ui_->groupBoxLight->show();
-    }
-  }
-
-  {
-    auto components = scene_->GetComponents<Material>();
-    if (components.empty()) {
-      ui_->groupBoxMaterial->close();
-    } else {
-      if (components.size() == 1) SetMaterialUi(*components[0]);
+    if (scene->EntityHasComponent<Material>(entity)) {
+      SetMaterialUi(scene->GetComponent<Material>(entity));
       ui_->groupBoxMaterial->show();
     }
-  }
 
-  {
-    auto components = scene_->GetComponents<Shader>();
-    if (components.empty()) {
-      ui_->groupBoxShader->close();
-    } else {
-      if (components.size() == 1) SetShaderUi(*components[0]);
+    if (scene->EntityHasComponent<Light>(entity)) {
+      SetLightUi(scene->GetComponent<Light>(entity));
+      ui_->groupBoxLight->show();
+    }
+
+    if (scene->EntityHasComponent<Shader>(entity)) {
+      SetShaderUi(scene->GetComponent<Shader>(entity));
       ui_->groupBoxShader->show();
     }
   }
 
-  {
-    auto components = scene_->GetComponents<RenderTag>();
-    if (components.empty()) {
-      ui_->tb_Render->setChecked(false);
-    } else if (components.size() == 1) {
-      ui_->tb_Render->setChecked(true);
-    }
-  }
+  //  for
+
+  //  {
+  //    auto components = scene_->GetComponents<Transform>();
+  //    if (components.empty()) {
+  //      ui_->groupBoxTransform->close();
+
+  //    } else {
+  //      if (components.size() == 1) SetTransformUi(*components[0]);
+  //      ui_->groupBoxTransform->show();
+  //    }
+  //  }
+
+  //  {
+  //    auto components = scene_->GetComponents<Light>();
+  //    ui_->tg_LightSource->setChecked(false);
+
+  //    if (components.empty()) {
+  //      ui_->groupBoxLight->close();
+  //    } else {
+  //      if (components.size() == 1) {
+  //        SetLightUi(*components[0]);
+  //        ui_->tg_LightSource->setChecked(true);
+  //      }
+  //      ui_->groupBoxLight->show();
+  //    }
+  //  }
+
+  //  {
+  //    auto components = scene_->GetComponents<Material>();
+  //    if (components.empty()) {
+  //      ui_->groupBoxMaterial->close();
+  //    } else {
+  //      if (components.size() == 1) SetMaterialUi(*components[0]);
+  //      ui_->groupBoxMaterial->show();
+  //    }
+  //  }
+
+  //  {
+  //    auto components = scene_->GetComponents<Shader>();
+  //    if (components.empty()) {
+  //      ui_->groupBoxShader->close();
+  //    } else {
+  //      if (components.size() == 1) SetShaderUi(*components[0]);
+  //      ui_->groupBoxShader->show();
+  //    }
+  //  }
+
+  //  {
+  //    auto components = scene_->GetComponents<RenderTag>();
+  //    if (components.empty()) {
+  //      ui_->tb_Render->setChecked(false);
+  //    } else if (components.size() == 1) {
+  //      ui_->tb_Render->setChecked(true);
+  //    }
+  //  }
 }
 
 }  // namespace s21
