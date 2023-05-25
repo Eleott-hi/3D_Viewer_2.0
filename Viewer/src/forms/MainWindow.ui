@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1302</width>
-    <height>1391</height>
+    <width>1000</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -32,7 +32,7 @@
    <string>3D_Viewer</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_11">
+   <layout class="QHBoxLayout" name="horizontalLayout_16">
     <item>
      <widget class="s21::GLWidget" name="openGLWidget">
       <property name="sizePolicy">
@@ -50,8 +50,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1302</width>
-     <height>24</height>
+     <width>1000</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
@@ -72,1163 +72,6 @@
    <addaction name="menuImage"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QDockWidget" name="dockTransformation">
-   <property name="floating">
-    <bool>false</bool>
-   </property>
-   <property name="features">
-    <set>QDockWidget::DockWidgetFeatureMask</set>
-   </property>
-   <property name="allowedAreas">
-    <set>Qt::AllDockWidgetAreas</set>
-   </property>
-   <property name="windowTitle">
-    <string>Transformation</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>2</number>
-   </attribute>
-   <widget class="QWidget" name="dockWidgetContents">
-    <layout class="QVBoxLayout" name="verticalLayout_21">
-     <item>
-      <widget class="QGroupBox" name="groupBox_7">
-       <property name="title">
-        <string>Translation</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_10">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_26">
-          <item>
-           <widget class="QDoubleSpinBox" name="xTransDoubleBox">
-            <property name="focusPolicy">
-             <enum>Qt::ClickFocus</enum>
-            </property>
-            <property name="prefix">
-             <string>x: </string>
-            </property>
-            <property name="minimum">
-             <double>-1000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSlider" name="xTrans">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimum">
-             <number>-1000</number>
-            </property>
-            <property name="maximum">
-             <number>1000</number>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_28">
-          <item>
-           <widget class="QDoubleSpinBox" name="yTransDoubleBox">
-            <property name="keyboardTracking">
-             <bool>true</bool>
-            </property>
-            <property name="prefix">
-             <string>y: </string>
-            </property>
-            <property name="minimum">
-             <double>-1000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSlider" name="yTrans">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimum">
-             <number>-1000</number>
-            </property>
-            <property name="maximum">
-             <number>1000</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_29">
-          <item>
-           <widget class="QDoubleSpinBox" name="zTransDoubleBox">
-            <property name="prefix">
-             <string>z: </string>
-            </property>
-            <property name="minimum">
-             <double>-1000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000.000000000000000</double>
-            </property>
-            <property name="value">
-             <double>-6.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSlider" name="zTrans">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimum">
-             <number>-1000</number>
-            </property>
-            <property name="maximum">
-             <number>1000</number>
-            </property>
-            <property name="value">
-             <number>-6</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_8">
-       <property name="title">
-        <string>Rotation</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_14">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_30">
-          <item>
-           <widget class="QDoubleSpinBox" name="xRotDoubleBox">
-            <property name="prefix">
-             <string>x: </string>
-            </property>
-            <property name="minimum">
-             <double>-1000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSlider" name="xRot">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimum">
-             <number>-180</number>
-            </property>
-            <property name="maximum">
-             <number>180</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_31">
-          <item>
-           <widget class="QDoubleSpinBox" name="yRotDoubleBox">
-            <property name="prefix">
-             <string>y: </string>
-            </property>
-            <property name="minimum">
-             <double>-1000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSlider" name="yRot">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimum">
-             <number>-270</number>
-            </property>
-            <property name="maximum">
-             <number>90</number>
-            </property>
-            <property name="value">
-             <number>-90</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_34">
-          <item>
-           <widget class="QDoubleSpinBox" name="zRotDoubleBox">
-            <property name="prefix">
-             <string>z: </string>
-            </property>
-            <property name="minimum">
-             <double>-1000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSlider" name="zRot">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimum">
-             <number>-270</number>
-            </property>
-            <property name="maximum">
-             <number>90</number>
-            </property>
-            <property name="value">
-             <number>-90</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_12">
-       <property name="title">
-        <string>Scale</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_18">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_36">
-          <item>
-           <widget class="QDoubleSpinBox" name="dsb_xScale">
-            <property name="prefix">
-             <string>x: </string>
-            </property>
-            <property name="minimum">
-             <double>-1000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSlider" name="xScale">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>180</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_37">
-          <item>
-           <widget class="QDoubleSpinBox" name="yScaleDoubleBox">
-            <property name="prefix">
-             <string>y: </string>
-            </property>
-            <property name="minimum">
-             <double>-1000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSlider" name="yScale">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>180</number>
-            </property>
-            <property name="value">
-             <number>1</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_38">
-          <item>
-           <widget class="QDoubleSpinBox" name="zScaleDoubleBox">
-            <property name="prefix">
-             <string>z: </string>
-            </property>
-            <property name="minimum">
-             <double>-1000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSlider" name="zScale">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>180</number>
-            </property>
-            <property name="value">
-             <number>1</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="rb_ScaleProportional">
-          <property name="text">
-           <string>Proportional</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QDockWidget" name="dockLight">
-   <property name="floating">
-    <bool>false</bool>
-   </property>
-   <property name="features">
-    <set>QDockWidget::DockWidgetFeatureMask</set>
-   </property>
-   <property name="windowTitle">
-    <string>Light Settings</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>2</number>
-   </attribute>
-   <widget class="QWidget" name="dockWidgetContents_2">
-    <layout class="QVBoxLayout" name="verticalLayout_4">
-     <item>
-      <widget class="QComboBox" name="cb_LightType">
-       <item>
-        <property name="text">
-         <string>Directional Light</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Point Light</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Spot Light</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>Position</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightPositionX">
-         <property name="prefix">
-          <string>x: </string>
-         </property>
-         <property name="minimum">
-          <double>-100.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>100.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightPositionY">
-         <property name="prefix">
-          <string>y: </string>
-         </property>
-         <property name="minimum">
-          <double>-100.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>100.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightPositionZ">
-         <property name="prefix">
-          <string>z: </string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_8">
-       <item>
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>Direction</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightDirectionX">
-         <property name="prefix">
-          <string>x: </string>
-         </property>
-         <property name="minimum">
-          <double>-100.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>100.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightDirectionY">
-         <property name="prefix">
-          <string>y: </string>
-         </property>
-         <property name="minimum">
-          <double>-100.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>100.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightDirectionZ">
-         <property name="prefix">
-          <string>z: </string>
-         </property>
-         <property name="minimum">
-          <double>-100.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>100.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Ambient</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightAmbientR">
-         <property name="prefix">
-          <string>R: </string>
-         </property>
-         <property name="minimum">
-          <double>-100.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>100.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightAmbientG">
-         <property name="prefix">
-          <string>G: </string>
-         </property>
-         <property name="minimum">
-          <double>-100.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>100.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightAmbientB">
-         <property name="prefix">
-          <string>B: </string>
-         </property>
-         <property name="minimum">
-          <double>-100.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>100.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Diffuse</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightDiffuseR">
-         <property name="prefix">
-          <string>R: </string>
-         </property>
-         <property name="minimum">
-          <double>-100.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>100.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightDiffuseG">
-         <property name="prefix">
-          <string>G: </string>
-         </property>
-         <property name="minimum">
-          <double>-100.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>100.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightDiffuseB">
-         <property name="prefix">
-          <string>B: </string>
-         </property>
-         <property name="minimum">
-          <double>-100.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>100.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_6">
-       <item>
-        <widget class="QLabel" name="label_16">
-         <property name="text">
-          <string>Specular</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightSpecularR">
-         <property name="prefix">
-          <string>R: </string>
-         </property>
-         <property name="minimum">
-          <double>-100.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>100.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightSpecularG">
-         <property name="prefix">
-          <string>G: </string>
-         </property>
-         <property name="minimum">
-          <double>-100.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>100.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightSpecularB">
-         <property name="prefix">
-          <string>B: </string>
-         </property>
-         <property name="minimum">
-          <double>-100.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>100.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_5">
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Cone</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightInnerCone">
-         <property name="prefix">
-          <string>Inner cone: </string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="lightOuterCone">
-         <property name="prefix">
-          <string>Outer cone: </string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <spacer name="verticalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QDockWidget" name="dockMaterial">
-   <property name="features">
-    <set>QDockWidget::DockWidgetFeatureMask</set>
-   </property>
-   <property name="windowTitle">
-    <string>Material</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>2</number>
-   </attribute>
-   <widget class="QWidget" name="dockWidgetContents_3">
-    <layout class="QVBoxLayout" name="verticalLayout_5">
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_10">
-       <item>
-        <widget class="QPushButton" name="pb_MaterialColorChange">
-         <property name="text">
-          <string>Change Color</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="l_MaterialColor">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Diffuse</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="l_MaterialDiffuseImage">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>100</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>50</width>
-           <height>50</height>
-          </size>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="l_MaterialDiffuseFilename">
-         <property name="text">
-          <string>filename</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QPushButton" name="pb_MaterialDiffuseChange">
-         <property name="text">
-          <string>Change</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Specular</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLabel" name="l_MaterialSpecularImage">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>100</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>50</width>
-           <height>50</height>
-          </size>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLabel" name="l_MaterialSpecularFilename">
-         <property name="text">
-          <string>filename</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3">
-        <widget class="QPushButton" name="pb_MaterialSpecularChange">
-         <property name="text">
-          <string>Change</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Normal</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLabel" name="l_MaterialNormalImage">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>100</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>50</width>
-           <height>50</height>
-          </size>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLabel" name="l_MaterialNormalFilename">
-         <property name="text">
-          <string>filename</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3">
-        <widget class="QPushButton" name="pb_MaterialNormalChange">
-         <property name="text">
-          <string>Change</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_10">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Roughness</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLabel" name="l_MaterialRoughnessImage">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>100</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>50</width>
-           <height>50</height>
-          </size>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="QLabel" name="l_MaterialRoughnessFilename">
-         <property name="text">
-          <string>filename</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3">
-        <widget class="QPushButton" name="pb_MaterialRoughnessChange">
-         <property name="text">
-          <string>Change</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_7">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Metallic</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QLabel" name="l_MaterialMetallicImage">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>100</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>50</width>
-           <height>50</height>
-          </size>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QLabel" name="l_MaterialMetallicFilename">
-         <property name="text">
-          <string>filename</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="3">
-        <widget class="QPushButton" name="pb_MaterialMetallicChange">
-         <property name="text">
-          <string>Change</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_8">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Ao</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QLabel" name="l_MaterialAoImage">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>100</horstretch>
-           <verstretch>100</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>50</width>
-           <height>50</height>
-          </size>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QLabel" name="l_MaterialAoFilename">
-         <property name="text">
-          <string>filename</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="3">
-        <widget class="QPushButton" name="pb_MaterialAoChange">
-         <property name="text">
-          <string>Change</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_9">
-       <item>
-        <widget class="QDoubleSpinBox" name="materialShininess">
-         <property name="prefix">
-          <string>Shininess: </string>
-         </property>
-         <property name="minimum">
-          <double>-1000.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1000.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSlider" name="s_materialShininess">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>180</number>
-         </property>
-         <property name="value">
-          <number>1</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </widget>
-  </widget>
   <widget class="QDockWidget" name="dockWidget_2">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -1257,8 +100,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>231</width>
-          <height>1030</height>
+          <width>250</width>
+          <height>526</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1524,6 +367,315 @@
           </layout>
          </item>
          <item>
+          <widget class="QScrollArea" name="scrollArea">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="scrollAreaWidgetContents">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>226</width>
+              <height>114</height>
+             </rect>
+            </property>
+            <widget class="QGroupBox" name="groupBox_5">
+             <property name="geometry">
+              <rect>
+               <x>12</x>
+               <y>0</y>
+               <width>172</width>
+               <height>148</height>
+              </rect>
+             </property>
+             <property name="title">
+              <string>Point</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_24">
+                <item>
+                 <widget class="QRadioButton" name="ShowVertex">
+                  <property name="text">
+                   <string>Show</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QRadioButton" name="SmoothPoints_2">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Smooth</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_20" stretch="0,1">
+                <item>
+                 <widget class="QLabel" name="label_26">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Size</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSlider" name="PointSize_2">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
+                  <property name="maximum">
+                   <number>100</number>
+                  </property>
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_21" stretch="1,1">
+                <item>
+                 <widget class="QPushButton" name="DotsColor_2">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Color</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="l_PointColor">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QGroupBox" name="groupBox_6">
+             <property name="geometry">
+              <rect>
+               <x>12</x>
+               <y>148</y>
+               <width>171</width>
+               <height>146</height>
+              </rect>
+             </property>
+             <property name="title">
+              <string>Line</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_9">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_25">
+                <item>
+                 <widget class="QRadioButton" name="showLines">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string>Show</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QRadioButton" name="DashedLines_2">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Dashed</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_23" stretch="0,1">
+                <item>
+                 <widget class="QLabel" name="label_27">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Size</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSlider" name="LineWidth_2">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
+                  <property name="maximum">
+                   <number>20</number>
+                  </property>
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="tickPosition">
+                   <enum>QSlider::NoTicks</enum>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_22" stretch="1,1">
+                <item>
+                 <widget class="QPushButton" name="LinesColor_2">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Color</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="l_ObjectColor">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QComboBox" name="cb_RenderTechnique">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>307</y>
+               <width>141</width>
+               <height>32</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>Simple Color</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Simple Texture</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Light Color</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Light Texture</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QPushButton" name="btn_ResetObject">
+             <property name="geometry">
+              <rect>
+               <x>12</x>
+               <y>341</y>
+               <width>65</width>
+               <height>32</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Reset</string>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="tg_LightSource">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>373</y>
+               <width>101</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Light Source</string>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="toggle_AxisLines">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>392</y>
+               <width>86</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Axis Lines</string>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="tb_Render">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>411</y>
+               <width>68</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Render</string>
+             </property>
+            </widget>
+           </widget>
+          </widget>
+         </item>
+         <item>
           <spacer name="verticalSpacer_2">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -1543,374 +695,975 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockWidget_3">
+  <widget class="QDockWidget" name="dockProperties">
    <property name="features">
     <set>QDockWidget::DockWidgetFeatureMask</set>
    </property>
    <property name="windowTitle">
-    <string>Form</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>1</number>
-   </attribute>
-   <widget class="QWidget" name="dockWidgetContents_6">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QScrollArea" name="scrollArea">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
-       <widget class="QWidget" name="scrollAreaWidgetContents">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>231</width>
-          <height>257</height>
-         </rect>
-        </property>
-        <widget class="QGroupBox" name="groupBox_5">
-         <property name="geometry">
-          <rect>
-           <x>12</x>
-           <y>0</y>
-           <width>172</width>
-           <height>148</height>
-          </rect>
-         </property>
-         <property name="title">
-          <string>Point</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_7">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_24">
-            <item>
-             <widget class="QRadioButton" name="ShowVertex">
-              <property name="text">
-               <string>Show</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="SmoothPoints_2">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>Smooth</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_20" stretch="0,1">
-            <item>
-             <widget class="QLabel" name="label_26">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>Size</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSlider" name="PointSize_2">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>100</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_21" stretch="1,1">
-            <item>
-             <widget class="QPushButton" name="DotsColor_2">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>Color</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="l_PointColor">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QGroupBox" name="groupBox_6">
-         <property name="geometry">
-          <rect>
-           <x>12</x>
-           <y>148</y>
-           <width>171</width>
-           <height>146</height>
-          </rect>
-         </property>
-         <property name="title">
-          <string>Line</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_9">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_25">
-            <item>
-             <widget class="QRadioButton" name="showLines">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string>Show</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="DashedLines_2">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>Dashed</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_23" stretch="0,1">
-            <item>
-             <widget class="QLabel" name="label_27">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>Size</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSlider" name="LineWidth_2">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>20</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="tickPosition">
-               <enum>QSlider::NoTicks</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_22" stretch="1,1">
-            <item>
-             <widget class="QPushButton" name="LinesColor_2">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>Color</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="l_ObjectColor">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QComboBox" name="cb_RenderTechnique">
-         <property name="geometry">
-          <rect>
-           <x>9</x>
-           <y>307</y>
-           <width>141</width>
-           <height>32</height>
-          </rect>
-         </property>
-         <item>
-          <property name="text">
-           <string>Simple Color</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Simple Texture</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Light Color</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Light Texture</string>
-          </property>
-         </item>
-        </widget>
-        <widget class="QPushButton" name="btn_ResetObject">
-         <property name="geometry">
-          <rect>
-           <x>12</x>
-           <y>341</y>
-           <width>65</width>
-           <height>32</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Reset</string>
-         </property>
-        </widget>
-        <widget class="QRadioButton" name="tg_LightSource">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>373</y>
-           <width>101</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Light Source</string>
-         </property>
-        </widget>
-        <widget class="QRadioButton" name="toggle_AxisLines">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>392</y>
-           <width>86</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Axis Lines</string>
-         </property>
-        </widget>
-        <widget class="QRadioButton" name="tb_Render">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>411</y>
-           <width>68</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Render</string>
-         </property>
-        </widget>
-       </widget>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QDockWidget" name="dockShader">
-   <property name="features">
-    <set>QDockWidget::DockWidgetFeatureMask</set>
-   </property>
-   <property name="windowTitle">
-    <string>Shader</string>
+    <string>Properties</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_4">
-    <layout class="QVBoxLayout" name="verticalLayout_6">
+   <widget class="QWidget" name="dockWidgetContents_6">
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QComboBox" name="cb_ShaderType">
-       <item>
-        <property name="text">
-         <string>Simple Color</string>
+      <widget class="QScrollArea" name="scrollArea_3">
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents_3">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>476</width>
+          <height>1550</height>
+         </rect>
         </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Simple Texture</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Light Color</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Light Texture</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Physical Based Rendering</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>None</string>
-        </property>
-       </item>
+        <layout class="QVBoxLayout" name="verticalLayout_10">
+         <item>
+          <widget class="QGroupBox" name="groupBoxTransform">
+           <property name="title">
+            <string>Transform</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QGroupBox" name="groupBox_7">
+              <property name="title">
+               <string>Translation</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_12">
+               <item>
+                <widget class="QDoubleSpinBox" name="xTransDoubleBox">
+                 <property name="focusPolicy">
+                  <enum>Qt::ClickFocus</enum>
+                 </property>
+                 <property name="prefix">
+                  <string>x: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1000.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1000.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="yTransDoubleBox">
+                 <property name="keyboardTracking">
+                  <bool>true</bool>
+                 </property>
+                 <property name="prefix">
+                  <string>y: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1000.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1000.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="zTransDoubleBox">
+                 <property name="prefix">
+                  <string>z: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1000.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1000.000000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>-6.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_8">
+              <property name="title">
+               <string>Rotation</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_14">
+               <item>
+                <widget class="QDoubleSpinBox" name="xRotDoubleBox">
+                 <property name="prefix">
+                  <string>x: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="yRotDoubleBox">
+                 <property name="prefix">
+                  <string>y: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>0.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="zRotDoubleBox">
+                 <property name="prefix">
+                  <string>z: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="wRotDoubleBox">
+                 <property name="prefix">
+                  <string>w: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_12">
+              <property name="title">
+               <string>Scale</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_13">
+               <item>
+                <widget class="QDoubleSpinBox" name="xScaleDoubleBox">
+                 <property name="prefix">
+                  <string>x: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1000.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1000.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="yScaleDoubleBox">
+                 <property name="prefix">
+                  <string>y: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1000.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1000.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="zScaleDoubleBox">
+                 <property name="prefix">
+                  <string>z: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1000.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1000.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBoxLight">
+           <property name="title">
+            <string>Light</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_13">
+            <item>
+             <widget class="QGroupBox" name="groupBox">
+              <property name="title">
+               <string>Type</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_14">
+               <item>
+                <widget class="QComboBox" name="cb_LightType">
+                 <item>
+                  <property name="text">
+                   <string>Directional Light</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Point Light</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Spot Light</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_3">
+              <property name="title">
+               <string>Position</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_11">
+               <item>
+                <widget class="QDoubleSpinBox" name="lightPositionX">
+                 <property name="prefix">
+                  <string>x: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-100.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>100.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="lightPositionY">
+                 <property name="prefix">
+                  <string>y: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-100.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>100.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="lightPositionZ">
+                 <property name="prefix">
+                  <string>z: </string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_2">
+              <property name="title">
+               <string>Direction</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_15">
+               <item>
+                <widget class="QDoubleSpinBox" name="lightDirectionX">
+                 <property name="prefix">
+                  <string>x: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-100.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>100.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="lightDirectionY">
+                 <property name="prefix">
+                  <string>y: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-100.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>100.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="lightDirectionZ">
+                 <property name="prefix">
+                  <string>z: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-100.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>100.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_4">
+              <property name="title">
+               <string>Ambient Component</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_17">
+               <item>
+                <widget class="QDoubleSpinBox" name="lightAmbientB">
+                 <property name="prefix">
+                  <string>B: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-100.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>100.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="lightAmbientR">
+                 <property name="prefix">
+                  <string>R: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-100.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>100.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="lightAmbientG">
+                 <property name="prefix">
+                  <string>G: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-100.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>100.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_9">
+              <property name="title">
+               <string>Diffuse Component</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_26">
+               <item>
+                <widget class="QDoubleSpinBox" name="lightDiffuseR">
+                 <property name="prefix">
+                  <string>R: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-100.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>100.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="lightDiffuseG">
+                 <property name="prefix">
+                  <string>G: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-100.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>100.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="lightDiffuseB">
+                 <property name="prefix">
+                  <string>B: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-100.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>100.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_10">
+              <property name="title">
+               <string>Specular Component</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_19">
+               <item>
+                <widget class="QDoubleSpinBox" name="lightSpecularR">
+                 <property name="prefix">
+                  <string>R: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-100.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>100.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="lightSpecularG">
+                 <property name="prefix">
+                  <string>G: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-100.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>100.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="lightSpecularB">
+                 <property name="prefix">
+                  <string>B: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-100.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>100.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_11">
+              <property name="title">
+               <string>Cone Component</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_18">
+               <item>
+                <widget class="QDoubleSpinBox" name="lightInnerCone">
+                 <property name="prefix">
+                  <string>Inner cone: </string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="lightOuterCone">
+                 <property name="prefix">
+                  <string>Outer cone: </string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBoxMaterial">
+           <property name="title">
+            <string>Material</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_10">
+              <item>
+               <widget class="QPushButton" name="pb_MaterialColorChange">
+                <property name="text">
+                 <string>Change Color</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="l_MaterialColor">
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QGridLayout" name="gridLayout_3">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_3">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Diffuse</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLabel" name="l_MaterialDiffuseImage">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>100</horstretch>
+                  <verstretch>100</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QLabel" name="l_MaterialDiffuseFilename">
+                <property name="text">
+                 <string>filename</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QPushButton" name="pb_MaterialDiffuseChange">
+                <property name="text">
+                 <string>Change</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_4">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Specular</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLabel" name="l_MaterialSpecularImage">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>100</horstretch>
+                  <verstretch>100</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QLabel" name="l_MaterialSpecularFilename">
+                <property name="text">
+                 <string>filename</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="QPushButton" name="pb_MaterialSpecularChange">
+                <property name="text">
+                 <string>Change</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_5">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Normal</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLabel" name="l_MaterialNormalImage">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>100</horstretch>
+                  <verstretch>100</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QLabel" name="l_MaterialNormalFilename">
+                <property name="text">
+                 <string>filename</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="3">
+               <widget class="QPushButton" name="pb_MaterialNormalChange">
+                <property name="text">
+                 <string>Change</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_10">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Roughness</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLabel" name="l_MaterialRoughnessImage">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>100</horstretch>
+                  <verstretch>100</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2">
+               <widget class="QLabel" name="l_MaterialRoughnessFilename">
+                <property name="text">
+                 <string>filename</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="3">
+               <widget class="QPushButton" name="pb_MaterialRoughnessChange">
+                <property name="text">
+                 <string>Change</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="label_7">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Metallic</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLabel" name="l_MaterialMetallicImage">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>100</horstretch>
+                  <verstretch>100</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="2">
+               <widget class="QLabel" name="l_MaterialMetallicFilename">
+                <property name="text">
+                 <string>filename</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="3">
+               <widget class="QPushButton" name="pb_MaterialMetallicChange">
+                <property name="text">
+                 <string>Change</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="label_8">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Ao</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QLabel" name="l_MaterialAoImage">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>100</horstretch>
+                  <verstretch>100</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="2">
+               <widget class="QLabel" name="l_MaterialAoFilename">
+                <property name="text">
+                 <string>filename</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="3">
+               <widget class="QPushButton" name="pb_MaterialAoChange">
+                <property name="text">
+                 <string>Change</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_9">
+              <item>
+               <widget class="QDoubleSpinBox" name="materialShininess">
+                <property name="prefix">
+                 <string>Shininess: </string>
+                </property>
+                <property name="minimum">
+                 <double>-1000.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>1000.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSlider" name="s_materialShininess">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>180</number>
+                </property>
+                <property name="value">
+                 <number>1</number>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBoxShader">
+           <property name="title">
+            <string>Shader</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_11">
+            <item>
+             <widget class="QComboBox" name="cb_ShaderType">
+              <item>
+               <property name="text">
+                <string>Simple Color</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Simple Texture</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Light Color</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Light Texture</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Physical Based Rendering</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>None</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </item>
     </layout>
@@ -1959,38 +1712,6 @@
  <resources/>
  <connections>
   <connection>
-   <sender>xRotDoubleBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>xRot</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1118</x>
-     <y>230</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1274</x>
-     <y>232</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>yRotDoubleBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>yRot</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1118</x>
-     <y>267</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1274</x>
-     <y>269</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>zRotDoubleBox_3</sender>
    <signal>valueChanged(double)</signal>
    <receiver>CameraZoom</receiver>
@@ -2019,38 +1740,6 @@
     <hint type="destinationlabel">
      <x>162</x>
      <y>257</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>yRot</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>yRotDoubleBox</receiver>
-   <slot>setValue(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1274</x>
-     <y>269</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1118</x>
-     <y>267</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>xRot</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>xRotDoubleBox</receiver>
-   <slot>setValue(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1274</x>
-     <y>232</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1118</x>
-     <y>230</y>
     </hint>
    </hints>
   </connection>
@@ -2211,118 +1900,6 @@
     <hint type="destinationlabel">
      <x>137</x>
      <y>1305</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>xTransDoubleBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>xTrans</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1088</x>
-     <y>72</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1173</x>
-     <y>75</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>yTransDoubleBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>yTrans</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1044</x>
-     <y>106</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1178</x>
-     <y>109</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>zTransDoubleBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>zTrans</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1043</x>
-     <y>146</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1180</x>
-     <y>146</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>zRotDoubleBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>zRot</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1074</x>
-     <y>303</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1176</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>dsb_xScale</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>xScale</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1039</x>
-     <y>373</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1175</x>
-     <y>371</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>yScaleDoubleBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>yScale</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1087</x>
-     <y>414</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1184</x>
-     <y>414</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>zScaleDoubleBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>zScale</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1083</x>
-     <y>445</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1177</x>
-     <y>444</y>
     </hint>
    </hints>
   </connection>

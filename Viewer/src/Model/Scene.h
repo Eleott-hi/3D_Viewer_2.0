@@ -30,6 +30,10 @@
 #include "systems/TimeTickSystem.h"
 #include "technique_strategy.h"
 
+
+#include "gizmo/tiny-gizmo.h"
+
+
 namespace s21 {
 
 class Scene : public Observable, protected QOpenGLExtraFunctions {
@@ -119,6 +123,10 @@ class Scene : public Observable, protected QOpenGLExtraFunctions {
   std::shared_ptr<ShadowRenderSystem> shadowRenderSystem_;
   std::shared_ptr<DefferedShadingSystem> defferedShadingSystem_;
   std::shared_ptr<PointShadowRenderSystem> pointShadowRenderSystem_;
+
+
+  tinygizmo::gizmo_application_state gizmo_state;
+  tinygizmo::gizmo_context gizmo_ctx;
 
   void RegisterComponents();
   void RegisterSystems();

@@ -43,29 +43,6 @@ void LightSystem::Update() {
   }
 }
 
-// void LightSystem::Update() {
-//   for (auto entity : entities_) {
-//     if (scene_->EntityHasComponent<SpotLight>(entity)) {
-//       // Light *light = &scene_->GetComponent<Light>(entity);
-//     }
 
-//     else if (scene_->EntityHasComponent<PointLight>(entity)) {
-//       // Light *light = &scene_->GetComponent<Light>(entity);
-//     }
-
-//     else {
-//     }
-//   }
-// }
-
-// bool LightSystem::isSpotLight(EntityID entity) {
-//   return scene_->EntityHasComponent<Transform>(entity) &&
-//          scene_->EntityHasComponent<Direction>(entity) &&
-//          scene_->EntityHasComponent<Cutoff>(entity);
-// }
-
-// bool LightSystem::isPointLight(EntityID entity) {
-//   return scene_->EntityHasComponent<Transform>(entity);
-// }
 
 }  // namespace s21

@@ -30,6 +30,8 @@ void ShadowSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
 void ShadowSystem::Update() {
   // auto const &[proj, view_] = Utils::GetProjectionAndView(scene_);
 
+  auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
+
   static auto proj = Proj();
   static auto view = View();
 
@@ -38,7 +40,7 @@ void ShadowSystem::Update() {
     auto const &transform = scene_->GetComponent<Transform>(entity);
 
     technique_->Enable(TechniqueType::SHADOW_MAPPING);
-    technique_->setMVP(proj, view, transform.GetModelMatrix());
+    technique_->setMVP(camera.projection_matrix, camera.view_matrix, transform.GetModelMatrix());
 
     for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
   }

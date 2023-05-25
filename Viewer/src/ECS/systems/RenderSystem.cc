@@ -14,7 +14,7 @@ void RenderSystem::Update() {
   // static auto &enviroment =
   // scene_->GetComponent<Enviroment>(scene_->GetEntities<Enviroment>().at(0));
 
-  auto [proj, view] = Utils::GetProjectionAndView(scene_);
+    auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
 
   for (auto entity : entities_) {
     if (!scene_->EntityHasComponent<Shader>(entity)) continue;
@@ -26,7 +26,7 @@ void RenderSystem::Update() {
     technique_->Enable(scene_->GetComponent<Shader>(entity).type);
     technique_->Clear();
     technique_->setMaterial(material);
-    technique_->setMVP(proj, view, transform.GetModelMatrix());
+    technique_->setMVP(camera.projection_matrix, camera.view_matrix, transform.GetModelMatrix());
 
     // technique_->setTexture(enviroment.light);
 

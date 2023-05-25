@@ -35,31 +35,36 @@ void MainWindow::SetLightUi(Light const &component) {
   ui_->lightOuterCone->setValue(component.outer_cone);
 }
 
+QString Trim(QString path) {
+  QFileInfo fi(path);
+  return fi.fileName();
+}
+
 void MainWindow::SetMaterialUi(Material const &component) {
   ui_->l_MaterialColor->setAutoFillBackground(true);
   ui_->l_MaterialColor->setPalette({component.color});
 
-  ui_->l_MaterialDiffuseFilename->setText(component.diffuse.filename);
+  ui_->l_MaterialDiffuseFilename->setText(Trim(component.diffuse.filename));
   ui_->l_MaterialDiffuseImage->setPixmap(QPixmap::fromImage(
       component.diffuse.image.scaled(ui_->l_MaterialDiffuseImage->size())));
 
-  ui_->l_MaterialSpecularFilename->setText(component.specular.filename);
+  ui_->l_MaterialSpecularFilename->setText(Trim(component.specular.filename));
   ui_->l_MaterialSpecularImage->setPixmap(QPixmap::fromImage(
       component.specular.image.scaled(ui_->l_MaterialSpecularImage->size())));
 
-  ui_->l_MaterialNormalFilename->setText(component.normal.filename);
+  ui_->l_MaterialNormalFilename->setText(Trim(component.normal.filename));
   ui_->l_MaterialNormalImage->setPixmap(QPixmap::fromImage(
       component.normal.image.scaled(ui_->l_MaterialNormalImage->size())));
 
-  ui_->l_MaterialRoughnessFilename->setText(component.roughness.filename);
+  ui_->l_MaterialRoughnessFilename->setText(Trim(component.roughness.filename));
   ui_->l_MaterialRoughnessImage->setPixmap(QPixmap::fromImage(
       component.roughness.image.scaled(ui_->l_MaterialRoughnessImage->size())));
 
-  ui_->l_MaterialMetallicFilename->setText(component.metallic.filename);
+  ui_->l_MaterialMetallicFilename->setText(Trim(component.metallic.filename));
   ui_->l_MaterialMetallicImage->setPixmap(QPixmap::fromImage(
       component.metallic.image.scaled(ui_->l_MaterialMetallicImage->size())));
 
-  ui_->l_MaterialAoFilename->setText(component.ao.filename);
+  ui_->l_MaterialAoFilename->setText(Trim(component.ao.filename));
   ui_->l_MaterialAoImage->setPixmap(QPixmap::fromImage(
       component.ao.image.scaled(ui_->l_MaterialAoImage->size())));
 
@@ -67,15 +72,16 @@ void MainWindow::SetMaterialUi(Material const &component) {
 }
 
 void MainWindow::SetTransformUi(Transform const &component) {
-  ui_->xTrans->setValue(component.translation.x() * 100);
-  ui_->yTrans->setValue(component.translation.y() * 100);
-  ui_->zTrans->setValue(component.translation.z() * 100);
-  ui_->xRot->setValue(component.rotation.x());
-  ui_->yRot->setValue(component.rotation.y());
-  ui_->zRot->setValue(component.rotation.z());
-  ui_->xScale->setValue(component.scale.x());
-  ui_->yScale->setValue(component.scale.y());
-  ui_->zScale->setValue(component.scale.z());
+  ui_->xTransDoubleBox->setValue(component.translation.x());
+  ui_->yTransDoubleBox->setValue(component.translation.y());
+  ui_->zTransDoubleBox->setValue(component.translation.z());
+  ui_->xRotDoubleBox->setValue(component.rotation.x());
+  ui_->yRotDoubleBox->setValue(component.rotation.y());
+  ui_->zRotDoubleBox->setValue(component.rotation.z());
+  ui_->wRotDoubleBox->setValue(component.rotation.scalar());
+  ui_->xScaleDoubleBox->setValue(component.scale.x());
+  ui_->yScaleDoubleBox->setValue(component.scale.y());
+  ui_->zScaleDoubleBox->setValue(component.scale.z());
 }
 
 void MainWindow::SetShaderUi(Shader const &component) {
@@ -186,9 +192,8 @@ void MainWindow::ConnectMaterialUi() {
 
     if (filename.isEmpty()) return;
 
-    scene_->ChangeComponent<Material>([&](auto &component) {
-      scene_->LoadTexture(filename, component.ao);
-    });
+    scene_->ChangeComponent<Material>(
+        [&](auto &component) { scene_->LoadTexture(filename, component.ao); });
 
     Notify();
   });
@@ -198,8 +203,7 @@ void MainWindow::ConnectLightUi() {
   ui_->tg_LightSource->setAutoExclusive(false);
 
   connect(ui_->tg_LightSource, &QRadioButton::clicked, [this](bool toggle) {
-    toggle ? scene_->AddComponent<Light>()
-           : scene_->RemoveComponent<Light>();
+    toggle ? scene_->AddComponent<Light>() : scene_->RemoveComponent<Light>();
 
     Notify();
   });
@@ -297,67 +301,73 @@ void MainWindow::ConnectLightUi() {
 }
 
 void MainWindow::ConnectTransformUi() {
-  ui_->rb_ScaleProportional->setAutoExclusive(false);
+  connect(
+      ui_->xTransDoubleBox, &QDoubleSpinBox::valueChanged, [&](float value) {
+        scene_->ChangeComponent<Transform>(
+            [value](auto &component) { component.translation.setX(value); });
+      });
 
-  connect(ui_->xTrans, &QSlider::valueChanged, [&](float value) {
-    scene_->ChangeComponent<Transform>([value](auto &component) {
-      component.translation.setX(value / 100.0);
+  connect(
+      ui_->yTransDoubleBox, &QDoubleSpinBox::valueChanged, [&](float value) {
+        scene_->ChangeComponent<Transform>(
+            [value](auto &component) { component.translation.setY(value); });
+      });
+
+  connect(
+      ui_->zTransDoubleBox, &QDoubleSpinBox::valueChanged, [&](float value) {
+        scene_->ChangeComponent<Transform>(
+            [value](auto &component) { component.translation.setZ(value); });
+      });
+
+  connect(ui_->xRotDoubleBox, &QDoubleSpinBox::valueChanged, [&](float value) {
+    scene_->ChangeComponent<Transform>([&,value](auto &component) {
+      component.rotation.setX(value);
+      component.rotation.normalize();
+      SetTransformUi(component);
     });
   });
 
-  connect(ui_->yTrans, &QSlider::valueChanged, [&](float value) {
-    scene_->ChangeComponent<Transform>([value](auto &component) {
-      component.translation.setY(value / 100.0);
+  connect(ui_->yRotDoubleBox, &QDoubleSpinBox::valueChanged, [&](float value) {
+    scene_->ChangeComponent<Transform>([&,value](auto &component) {
+      component.rotation.setY(value);
+      component.rotation.normalize();
+      SetTransformUi(component);
     });
   });
 
-  connect(ui_->zTrans, &QSlider::valueChanged, [&](float value) {
-    scene_->ChangeComponent<Transform>([value](auto &component) {
-      component.translation.setZ(value / 100.0);
+  connect(ui_->zRotDoubleBox, &QDoubleSpinBox::valueChanged, [&](float value) {
+    scene_->ChangeComponent<Transform>([&,value](auto &component) {
+      component.rotation.setZ(value);
+      component.rotation.normalize();
+      SetTransformUi(component);
     });
   });
 
-  connect(ui_->xRot, &QSlider::valueChanged, [&](float value) {
-    scene_->ChangeComponent<Transform>(
-        [value](auto &component) { component.rotation.setX(value); });
+  connect(ui_->wRotDoubleBox, &QDoubleSpinBox::valueChanged, [&](float value) {
+    scene_->ChangeComponent<Transform>([&,value](auto &component) {
+      component.rotation.setScalar(value);
+      component.rotation.normalize();
+      SetTransformUi(component);
+    });
   });
 
-  connect(ui_->yRot, &QSlider::valueChanged, [&](float value) {
-    scene_->ChangeComponent<Transform>(
-        [value](auto &component) { component.rotation.setY(value); });
-  });
+  connect(ui_->xScaleDoubleBox, &QDoubleSpinBox::valueChanged,
+          [&](float value) {
+            scene_->ChangeComponent<Transform>(
+                [value](auto &component) { component.scale.setX(value); });
+          });
 
-  connect(ui_->zRot, &QSlider::valueChanged, [&](float value) {
-    scene_->ChangeComponent<Transform>(
-        [value](auto &component) { component.rotation.setZ(value); });
-  });
+  connect(ui_->yScaleDoubleBox, &QDoubleSpinBox::valueChanged,
+          [&](float value) {
+            scene_->ChangeComponent<Transform>(
+                [value](auto &component) { component.scale.setY(value); });
+          });
 
-  connect(ui_->xScale, &QSlider::valueChanged, [&](float value) {
-    scene_->ChangeComponent<Transform>(
-        [value](auto &component) { component.scale.setX(value); });
-    if (ui_->rb_ScaleProportional->isChecked()) {
-      ui_->yScale->setValue(value);
-      ui_->zScale->setValue(value);
-    }
-  });
-
-  connect(ui_->yScale, &QSlider::valueChanged, [&](float value) {
-    scene_->ChangeComponent<Transform>(
-        [value](auto &component) { component.scale.setY(value); });
-    if (ui_->rb_ScaleProportional->isChecked()) {
-      ui_->xScale->setValue(value);
-      ui_->zScale->setValue(value);
-    }
-  });
-
-  connect(ui_->zScale, &QSlider::valueChanged, [&](float value) {
-    scene_->ChangeComponent<Transform>(
-        [value](auto &component) { component.scale.setZ(value); });
-    if (ui_->rb_ScaleProportional->isChecked()) {
-      ui_->xScale->setValue(value);
-      ui_->yScale->setValue(value);
-    }
-  });
+  connect(ui_->zScaleDoubleBox, &QDoubleSpinBox::valueChanged,
+          [&](float value) {
+            scene_->ChangeComponent<Transform>(
+                [value](auto &component) { component.scale.setZ(value); });
+          });
 }
 
 void MainWindow::ConnectCameraUi() {

@@ -37,7 +37,7 @@ void MousePickingSystem::Update() {
 
   if (pos == QPoint{-1, -1}) return;
 
-  auto [proj, view] = Utils::GetProjectionAndView(scene_);
+  auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
   technique_->Enable(TechniqueType::MOUSE_PICKING);
   framebuffer_->Bind();
   PrepareFramebuffer();
@@ -46,7 +46,8 @@ void MousePickingSystem::Update() {
     auto const &transform = scene_->GetComponent<Transform>(entity);
     auto &model = scene_->GetComponent<Model>(entity);
 
-    technique_->setMVP(proj, view, transform.GetModelMatrix());
+    technique_->setMVP(camera.projection_matrix, camera.view_matrix,
+                       transform.GetModelMatrix());
     technique_->SetObjectID((int)entity);
 
     for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);

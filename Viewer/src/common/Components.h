@@ -64,7 +64,8 @@ struct Model {
 
 struct Transform {
   QVector3D translation;
-  QVector3D rotation;
+  QQuaternion rotation;
+  // QVector3D rotation;
   QVector3D scale = {1, 1, 1};
 
   QMatrix4x4 GetModelMatrix() const;
@@ -101,18 +102,33 @@ struct Attenuation {
 };
 
 struct Camera {
-  QVector3D position;
+  QVector3D position = {0, 0, 0};
   QVector3D front = {0, 0, -1};
   QVector3D right = {1, 0, 0};
   QVector3D up = {0, 1, 0};
 
-  float pitch = 0;
-  float yaw = -90;
   float zoom = 45.0;
+  float yaw = -90, pitch = 0;
+  bool constrain_pitch = true;
+
+  float width = 800, height = 600;
+
+  float left_clip = -1, right_clip = 1;
+  float bottom_clip = -1, top_clip = 1;
+  float near_clip = 1, far_clip = 1000;
+
+  float speed = 0.004;
+  float mouse_sensitivity = 0.1;
+
+  QMatrix4x4 view_matrix;
+  QMatrix4x4 projection_matrix;
+
+  bool primary = true;
+  bool perspective = true;
 
   void Update();
-
-  QMatrix4x4 GetViewMatrix() const;
+  void UpdateViewMatrix();
+  void UpdateProjectionMatrix();
 };
 
 struct Projection {

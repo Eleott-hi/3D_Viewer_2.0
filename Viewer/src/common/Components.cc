@@ -56,20 +56,22 @@ QMatrix4x4 Transform::GetModelMatrix() const {
   m_scale.scale(scale);
   m_translate.translate(translation);
 
-  m_rotate.rotate(rotation.x(), 1, 0, 0);
-  m_rotate.rotate(rotation.y(), 0, 1, 0);
-  m_rotate.rotate(rotation.z(), 0, 0, 1);
+  
+
+  m_rotate.rotate(rotation);
+  // m_rotate.rotate(rotation.y(), 0, 1, 0);
+  // m_rotate.rotate(rotation.z(), 0, 0, 1);
 
   return m_translate * m_scale * m_rotate * m_start;
 }
 
-QMatrix4x4 Camera::GetViewMatrix() const {
-   QMatrix4x4 view;
+void Camera::UpdateViewMatrix() {
+  QMatrix4x4 view;
   view.lookAt(position, position + front, up);
-  return view;
+  view_matrix = view;
 }
 
-void Camera::Update(){
+void Camera::Update() {
   static const QVector3D world_up = {0, 1, 0};
 
   const float yaw_ = qDegreesToRadians(yaw);
@@ -82,6 +84,20 @@ void Camera::Update(){
 
   right = QVector3D::normal(front, world_up);
   up = QVector3D::normal(right, front);
+
+  UpdateViewMatrix();
+}
+
+void Camera::UpdateProjectionMatrix() {
+  QMatrix4x4 m;
+  if (!perspective)
+    m.perspective(zoom, width / height, 1.0, 500.0);
+  else
+    m.ortho(left_clip, right_clip,  //
+            bottom_clip, top_clip,  //
+            near_clip, far_clip);
+
+  projection_matrix = m;
 }
 
 }  // namespace s21

@@ -11,10 +11,11 @@ MainWindow::MainWindow(Scene *scene, QWidget *parent)
   ui_->openGLWidget->SetController(scene);
   scene_->AddObserver(this);
 
-  ui_->dockTransformation->close();
-  ui_->dockMaterial->close();
-  ui_->dockLight->close();
-  ui_->dockShader->close();
+  ui_->groupBoxShader->close();
+  ui_->groupBoxTransform->close();
+  ui_->groupBoxMaterial->close();
+
+  ui_->groupBoxLight->close();
 
   ConnectSignals();
 }
@@ -61,11 +62,11 @@ void MainWindow::OnNotify() {
   {
     auto components = scene_->GetComponents<Transform>();
     if (components.empty()) {
-      ui_->dockTransformation->close();
+      ui_->groupBoxTransform->close();
 
     } else {
       if (components.size() == 1) SetTransformUi(*components[0]);
-      ui_->dockTransformation->show();
+      ui_->groupBoxTransform->show();
     }
   }
 
@@ -74,33 +75,33 @@ void MainWindow::OnNotify() {
     ui_->tg_LightSource->setChecked(false);
 
     if (components.empty()) {
-      ui_->dockLight->close();
+      ui_->groupBoxLight->close();
     } else {
       if (components.size() == 1) {
         SetLightUi(*components[0]);
         ui_->tg_LightSource->setChecked(true);
       }
-      ui_->dockLight->show();
+      ui_->groupBoxLight->show();
     }
   }
 
   {
     auto components = scene_->GetComponents<Material>();
     if (components.empty()) {
-      ui_->dockMaterial->close();
+      ui_->groupBoxMaterial->close();
     } else {
       if (components.size() == 1) SetMaterialUi(*components[0]);
-      ui_->dockMaterial->show();
+      ui_->groupBoxMaterial->show();
     }
   }
 
   {
     auto components = scene_->GetComponents<Shader>();
     if (components.empty()) {
-      ui_->dockShader->close();
+      ui_->groupBoxShader->close();
     } else {
       if (components.size() == 1) SetShaderUi(*components[0]);
-      ui_->dockShader->show();
+      ui_->groupBoxShader->show();
     }
   }
 

@@ -12,7 +12,7 @@ void DefferedShadingSystem::Init(ECS_Controller *scene,
 }
 
 void DefferedShadingSystem::Update() {
-  auto [proj, view] = Utils::GetProjectionAndView(scene_);
+  auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
 
   for (auto entity : entities_) {
     auto &model = scene_->GetComponent<Model>(entity);
@@ -22,7 +22,8 @@ void DefferedShadingSystem::Update() {
     technique_->Enable(TechniqueType::DEFFERED_SHADING);
     technique_->Clear();
     technique_->setMaterial(material);
-    technique_->setMVP(proj, view, transform.GetModelMatrix());
+    technique_->setMVP(camera.projection_matrix, camera.view_matrix,
+                       transform.GetModelMatrix());
 
     for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
   }

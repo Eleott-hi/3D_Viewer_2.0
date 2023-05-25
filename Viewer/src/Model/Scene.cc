@@ -16,15 +16,23 @@ float skyboxVertices[] = {
     1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,
 };
 
-std::string dir =  //
-    // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
-"C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
+std::string
+    dir =  //
+           // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
+    "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
 
 namespace s21 {
 
 void Scene::Init(QOpenGLWidget* widget) {
   initializeOpenGLFunctions();
   glLineStipple(4, 0xAAAA);
+
+  gizmo_ctx.render = [&](const tinygizmo::geometry_mesh& r) {
+    // Render logic
+  };
+
+  // transform -> rigid_transform
+  tinygizmo::rigid_transform xform_a;
 
   opengl_widget_ = widget;
   technique_ = std::make_shared<TechniqueStrategy>();
@@ -39,11 +47,11 @@ void Scene::Init(QOpenGLWidget* widget) {
 
 void Scene::Update() {
   timeTickSystem_->Update();
-  inputSystem_->Update();
+  // inputSystem_->Update();
   mousePickingSystem_->Update();
   editPickedSystem_->Update();
   cameraSystem_->Update();
-  projectionSystem_->Update();
+  // projectionSystem_->Update();
   lightSystem_->Update();
 
   if (picked_) {
@@ -79,31 +87,45 @@ void Scene::Draw() {
   //   framebuffer3D_->Unbind();
   // }
 
-  // {
-  //   framebuffer3D_->Bind();
-  //   framebuffer3D_->PrepereBuffer();
-
-  //   cubemapSystem_->Update();
-  //   renderSystem_->Update();
-  //   renderPickedSystem_->Update();
-
-  //   framebuffer3D_->Unbind();
-  // }
-
-  {
-    pointShadowFramebuffer_->Bind();
-    pointShadowFramebuffer_->PrepereBuffer();
-    pointShadowSystem_->Update();
-    pointShadowFramebuffer_->Unbind();
-  }
-
   {
     framebuffer3D_->Bind();
     framebuffer3D_->PrepereBuffer();
+
     cubemapSystem_->Update();
-    pointShadowRenderSystem_->Update(pointShadowFramebuffer_->getTextureID());
+    renderSystem_->Update();
+    renderPickedSystem_->Update();
+
     framebuffer3D_->Unbind();
   }
+
+  // Draw Gizmo(){
+  // gizmo_ctx.update(gizmo_state);
+
+  // if (transform_gizmo("first-example-gizmo", gizmo_ctx, xform_a))
+  // {
+  // std::cout << get_local_time_ns() << " - " << "First Gizmo Hovered..." <<
+  // std::endl; if (xform_a != xform_a_last) std::cout << get_local_time_ns() <<
+  // " - " << "First Gizmo Changed..." << std::endl; xform_a_last = xform_a;
+  // }
+
+  // transform_gizmo("second-example-gizmo", gizmo_ctx, xform_b);
+  // gizmo_ctx.draw();
+  // }
+
+  // {
+  //   pointShadowFramebuffer_->Bind();
+  //   pointShadowFramebuffer_->PrepereBuffer();
+  //   pointShadowSystem_->Update();
+  //   pointShadowFramebuffer_->Unbind();
+  // }
+
+  // {
+  //   framebuffer3D_->Bind();
+  //   framebuffer3D_->PrepereBuffer();
+  //   cubemapSystem_->Update();
+  //   pointShadowRenderSystem_->Update(pointShadowFramebuffer_->getTextureID());
+  //   framebuffer3D_->Unbind();
+  // }
 
   {
     defaultFramebuffer_->Bind();
@@ -155,8 +177,9 @@ void Scene::AddModel(QString path) {
 }
 
 void Scene::LoadTexture(QString filename, Texture& texture) {
-  InsideOpenGLContext(
-      [&] { texture = texture_storage_->LoadTexture(filename.toStdString()); });
+  opengl_widget_->makeCurrent();
+  texture = texture_storage_->LoadTexture(filename.toStdString());
+  opengl_widget_->doneCurrent();
 }
 
 void Scene::RegisterComponents() {
@@ -335,7 +358,7 @@ void Scene::RegisterSystems() {
 }
 
 void Scene::DebugLights(bool directional, bool point_1, bool point_2,
-                          bool spot) {
+                        bool spot) {
   if (directional) {
     Light light;
     light.type = LightType::DIRECTIONAL;
@@ -450,8 +473,7 @@ void Scene::DebugLights(bool directional, bool point_1, bool point_2,
 
 Camera& Scene::GetCamera() {
   qDebug() << "GetCamera";
-  static auto& camera =
-      scene_.GetComponent<Camera>(Utils::GetCameraID(&scene_));
+  static auto& camera = scene_.GetComponent<Camera>(Utils::GetCamera(&scene_));
   return camera;
 }
 

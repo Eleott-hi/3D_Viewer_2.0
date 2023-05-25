@@ -4,8 +4,8 @@
 #include <QKeyEvent>
 #include <QMainWindow>
 
-#include "Scene.h"
 #include "Observer.h"
+#include "Scene.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

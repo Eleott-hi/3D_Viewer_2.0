@@ -11,7 +11,7 @@ void RenderPickedSystem::Init(ECS_Controller *scene,
 }
 
 void RenderPickedSystem::Update() {
-  auto [proj, view] = Utils::GetProjectionAndView(scene_);
+  auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
 
   // ========================== STENCIL BUFFER ==========================
   glEnable(GL_STENCIL_TEST);  // Enable stancil buffer
@@ -33,7 +33,8 @@ void RenderPickedSystem::Update() {
 
     // Draw model to stencil buffer
     technique_->Enable(TechniqueType::SIMPLE_COLOR);
-    technique_->setMVP(proj, view, modelMatrix);
+    technique_->setMVP(camera.projection_matrix, camera.view_matrix,
+                       modelMatrix);
     for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
 
     // Enable writing to color buffer
@@ -43,7 +44,8 @@ void RenderPickedSystem::Update() {
 
     // Draw outline to stencil buffer
     technique_->Enable(TechniqueType::STENCIL_OUTLINE);
-    technique_->setMVP(proj, view, modelMatrix);
+    technique_->setMVP(camera.projection_matrix, camera.view_matrix,
+                       modelMatrix);
     for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
   }
 

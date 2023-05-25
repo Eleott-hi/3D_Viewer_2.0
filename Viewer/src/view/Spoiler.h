@@ -19,6 +19,6 @@ class Spoiler : public QWidget {
 
  public:
   explicit Spoiler(QWidget *parent = nullptr, const QString &title = "",
-                   const int animationDuration = 300 );
+                   const int animationDuration = 300);
   void setContentLayout(QLayout &contentLayout);
 };

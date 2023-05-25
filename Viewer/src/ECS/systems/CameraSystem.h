@@ -19,6 +19,8 @@ class CameraSystem : public System {
  private:
   ECS_Controller *scene_ = nullptr;
 
-  void UpdateLookAtVectors(Camera &camera);
+  // void UpdateLookAtVectors(Camera &camera);
+  // void ProcessKeyboardInput(Camera &camera, Input&input);
+  // void ProcessMouseInput(Camera &camera   , Input&input);
 };
 }  // namespace s21

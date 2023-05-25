@@ -19,6 +19,9 @@ void Scene::WindowResize(int w, int h) {
   framebuffer3D_->Resize(w, h);
   framebufferShadow_->Resize(w, h);
   defaultFramebuffer_->Resize(w, h, false);
+
+  auto& camera = scene_.GetComponent<Camera>(Utils::GetCamera(&scene_));
+  camera.width = w, camera.height = h;
 }
 
 void Scene::MousePressed(QPoint pos) {

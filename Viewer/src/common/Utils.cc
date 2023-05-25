@@ -4,27 +4,31 @@
 
 namespace s21::Utils {
 
-EntityID GetCameraID(ECS_Controller* scene) {
-  auto cameras = scene->GetEntities<Camera>();
+EntityID GetCamera(ECS_Controller* scene) {
+  static auto cameras = scene->GetEntities<Camera>();
+
   Q_ASSERT(cameras.size() == 1);
+
   return cameras[0];
 }
 
-static EntityID GetProjectionID(ECS_Controller* scene) {
-  auto projections = scene->GetEntities<Projection>();
-  Q_ASSERT(projections.size() == 1);
-  return projections[0];
-}
+// static EntityID GetProjectionID(ECS_Controller* scene) {
+//   auto projections = scene->GetEntities<Projection>();
 
-std::tuple<QMatrix4x4, QMatrix4x4> GetProjectionAndView(ECS_Controller* scene) {
-  static EntityID camera_id = GetCameraID(scene);
-  static EntityID projection_id = GetProjectionID(scene);
+//   Q_ASSERT(projections.size() == 1);
+  
+//   return projections[0];
+// }
 
-  auto const& projection = scene->GetComponent<Projection>(projection_id);
-  auto const& camera = scene->GetComponent<Camera>(camera_id);
+// std::tuple<QMatrix4x4, QMatrix4x4> GetProjectionAndView(ECS_Controller* scene) {
+//   // static EntityID camera_id = GetCameraID(scene);
+//   static EntityID projection_id = GetProjectionID(scene);
 
-  return {projection.matrix, camera.GetViewMatrix()};
-}
+//   auto const& projection = scene->GetComponent<Projection>(projection_id);
+//   auto const& camera = scene->GetComponent<Camera>(camera_id);
+
+//   return {camera.projection_matrix, camera.view_matrix};
+// }
 
 QMatrix4x4 setNormalizeMatrix(const QVector3D& min, const QVector3D& max) {
   QVector3D CenterTranslate = {(min.x() + max.x()) / 2.0f,
@@ -53,10 +57,20 @@ EntityID GetQuad(ECS_Controller* scene) {
   return quad;
 }
 
-EntityID GetTickTime(ECS_Controller* scene) {
-  static EntityID tick_time = scene->GetEntities<Timer>()[0];
+EntityID GetTimer(ECS_Controller* scene) {
+  static auto tick_time = scene->GetEntities<Timer>();
 
-  return tick_time;
+  Q_ASSERT(tick_time.size() == 1);
+
+  return tick_time[0];
+}
+
+EntityID GetInput(ECS_Controller* scene) {
+  static auto input = scene->GetEntities<Input>();
+
+  Q_ASSERT(input.size() == 1);
+
+  return input[0];
 }
 
 std::string StructName(std::string const& struct_name,
