@@ -25,7 +25,10 @@ void GLWidget::initializeGL() {
 
 void GLWidget::resizeGL(int w, int h) { scene_->WindowResize(w, h); }
 
-void GLWidget::paintGL() { scene_->Render(); }
+void GLWidget::paintGL() {
+  scene_->MousePos(mapFromGlobal(QCursor::pos()));
+  scene_->Render();
+}
 
 void GLWidget::mousePressEvent(QMouseEvent *event) {
   this->setFocus();

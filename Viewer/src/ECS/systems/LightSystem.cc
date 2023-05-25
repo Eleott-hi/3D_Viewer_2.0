@@ -43,6 +43,4 @@ void LightSystem::Update() {
   }
 }
 
-
-
 }  // namespace s21

@@ -16,12 +16,12 @@
 #include "systems/CubemapSystem.h"
 #include "systems/DefferedShadingSystem.h"
 #include "systems/EditPickedSystem.h"
+#include "systems/GizmoRenderSystem.h"
 #include "systems/InputSystem.h"
 #include "systems/LightSystem.h"
 #include "systems/MousePickingSystem.h"
 #include "systems/PointShadowRenderSystem.h"
 #include "systems/PointShadowSystem.h"
-#include "systems/ProjectionSystem.h"
 #include "systems/Render2DSystem.h"
 #include "systems/RenderPickedSystem.h"
 #include "systems/RenderSystem.h"
@@ -29,10 +29,6 @@
 #include "systems/ShadowSystem.h"
 #include "systems/TimeTickSystem.h"
 #include "technique_strategy.h"
-
-
-#include "gizmo/tiny-gizmo.h"
-
 
 namespace s21 {
 
@@ -58,6 +54,7 @@ class Scene : public Observable, protected QOpenGLExtraFunctions {
   void WindowResize(int width, int height);
   void MousePressed(QPoint pos);
   void MouseReleased(QPoint pos);
+  void MousePos(QPoint pos);
 
   template <typename Type>
   void UpdateComponent(Type const &component) {
@@ -116,17 +113,13 @@ class Scene : public Observable, protected QOpenGLExtraFunctions {
   std::shared_ptr<TimeTickSystem> timeTickSystem_;
   std::shared_ptr<Render2DSystem> render2DSystem_;
   std::shared_ptr<EditPickedSystem> editPickedSystem_;
-  std::shared_ptr<ProjectionSystem> projectionSystem_;
   std::shared_ptr<PointShadowSystem> pointShadowSystem_;
   std::shared_ptr<MousePickingSystem> mousePickingSystem_;
   std::shared_ptr<RenderPickedSystem> renderPickedSystem_;
   std::shared_ptr<ShadowRenderSystem> shadowRenderSystem_;
   std::shared_ptr<DefferedShadingSystem> defferedShadingSystem_;
   std::shared_ptr<PointShadowRenderSystem> pointShadowRenderSystem_;
-
-
-  tinygizmo::gizmo_application_state gizmo_state;
-  tinygizmo::gizmo_context gizmo_ctx;
+  std::shared_ptr<GizmoRenderSystem> gizmoRenderSystem_;
 
   void RegisterComponents();
   void RegisterSystems();

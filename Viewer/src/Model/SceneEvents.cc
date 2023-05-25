@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "Utils.h"
 #include "events/KeyPressedEvent.h"
 #include "events/KeyReleasedEvent.h"
 #include "events/MouseDoubleClickedEvent.h"
@@ -7,6 +8,12 @@
 #include "events/WindowResizeEvent.h"
 
 namespace s21 {
+
+void Scene::MousePos(QPoint pos) {
+  static auto& input = scene_.GetComponent<Input>(Utils::GetInput(&scene_));
+
+  input.mouse_pos = pos;
+}
 
 void Scene::WindowResize(int w, int h) {
   qDebug() << "WindowResizeEvent:" << w << h;

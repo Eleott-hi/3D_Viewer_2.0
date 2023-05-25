@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "DefferedShadingTechnique.h"
+#include "GizmoTechnique.h"
 #include "PhysicalBasedRenderingTechnique.h"
 #include "PointShadowRenderTechnique.h"
 #include "PointShadowTechnique.h"
@@ -38,6 +39,7 @@ TechniqueStrategy::TechniqueStrategy() noexcept
           std::make_shared<ShadowRenderTechnique>(),
           std::make_shared<PointShadowTechnique>(),
           std::make_shared<PointShadowRenderTechnique>(),
+          std::make_shared<GizmoTechnique>(),
       } {}
 
 void TechniqueStrategy::Enable(TechniqueType type) {

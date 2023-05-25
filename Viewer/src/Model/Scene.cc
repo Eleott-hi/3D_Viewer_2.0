@@ -27,13 +27,6 @@ void Scene::Init(QOpenGLWidget* widget) {
   initializeOpenGLFunctions();
   glLineStipple(4, 0xAAAA);
 
-  gizmo_ctx.render = [&](const tinygizmo::geometry_mesh& r) {
-    // Render logic
-  };
-
-  // transform -> rigid_transform
-  tinygizmo::rigid_transform xform_a;
-
   opengl_widget_ = widget;
   technique_ = std::make_shared<TechniqueStrategy>();
   texture_storage_ = std::make_shared<TextureStorage>();
@@ -47,11 +40,10 @@ void Scene::Init(QOpenGLWidget* widget) {
 
 void Scene::Update() {
   timeTickSystem_->Update();
-  // inputSystem_->Update();
+  inputSystem_->Update();
   mousePickingSystem_->Update();
   editPickedSystem_->Update();
   cameraSystem_->Update();
-  // projectionSystem_->Update();
   lightSystem_->Update();
 
   if (picked_) {
@@ -94,6 +86,7 @@ void Scene::Draw() {
     cubemapSystem_->Update();
     renderSystem_->Update();
     renderPickedSystem_->Update();
+    gizmoRenderSystem_->Update();
 
     framebuffer3D_->Unbind();
   }
@@ -108,8 +101,6 @@ void Scene::Draw() {
   // " - " << "First Gizmo Changed..." << std::endl; xform_a_last = xform_a;
   // }
 
-  // transform_gizmo("second-example-gizmo", gizmo_ctx, xform_b);
-  // gizmo_ctx.draw();
   // }
 
   // {
@@ -198,7 +189,6 @@ void Scene::RegisterComponents() {
   scene_.RegisterComponent<ShadowTag>();
   scene_.RegisterComponent<CubemapTag>();
   scene_.RegisterComponent<Enviroment>();
-  scene_.RegisterComponent<Projection>();
   scene_.RegisterComponent<PickingTag>();
   scene_.RegisterComponent<Attenuation>();
 }
@@ -210,14 +200,6 @@ void Scene::RegisterSystems() {
     mask.set(GetComponentID<Camera>());
     scene_.ChangeSystemMask<CameraSystem>(mask);
     cameraSystem_->Init(&scene_);
-  }
-
-  projectionSystem_ = scene_.RegisterSystem<ProjectionSystem>();
-  {
-    ComponentMask mask;
-    mask.set(GetComponentID<Projection>());
-    scene_.ChangeSystemMask<ProjectionSystem>(mask);
-    projectionSystem_->Init(&scene_);
   }
 
   mousePickingSystem_ = scene_.RegisterSystem<MousePickingSystem>();
@@ -238,6 +220,15 @@ void Scene::RegisterSystems() {
     mask.set(GetComponentID<RenderTag>());
     scene_.ChangeSystemMask<RenderSystem>(mask);
     renderSystem_->Init(&scene_, technique_.get());
+  }
+
+  gizmoRenderSystem_ = scene_.RegisterSystem<GizmoRenderSystem>();
+  {
+    ComponentMask mask;
+    mask.set(GetComponentID<Transform>());
+    mask.set(GetComponentID<PickingTag>());
+    scene_.ChangeSystemMask<GizmoRenderSystem>(mask);
+    gizmoRenderSystem_->Init(&scene_, technique_.get());
   }
 
   shadowSystem_ = scene_.RegisterSystem<ShadowSystem>();
@@ -395,13 +386,13 @@ void Scene::DebugLights(bool directional, bool point_1, bool point_2,
     for (auto& mesh : model.meshes) mesh.bufferize(this);
 
     EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<RenderTag>(entity);
     scene_.AddComponent<Light>(entity, light);
     scene_.AddComponent<Material>(entity, material);
     scene_.AddComponent<Transform>(entity, transform);
     scene_.AddComponent<Model>(entity, std::move(model));
     scene_.AddComponent<Attenuation>(entity, attenuation);
     scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_COLOR});
-    scene_.AddComponent<RenderTag>(entity);
   }
 
   if (point_2) {
@@ -428,13 +419,13 @@ void Scene::DebugLights(bool directional, bool point_1, bool point_2,
     for (auto& mesh : model.meshes) mesh.bufferize(this);
 
     EntityID entity = scene_.NewEntity();
+    scene_.AddComponent<RenderTag>(entity);
     scene_.AddComponent<Light>(entity, light);
     scene_.AddComponent<Material>(entity, material);
     scene_.AddComponent<Transform>(entity, transform);
     scene_.AddComponent<Model>(entity, std::move(model));
-    scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_COLOR});
     scene_.AddComponent<Attenuation>(entity, attenuation);
-    scene_.AddComponent<RenderTag>(entity);
+    scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_COLOR});
   }
 
   if (spot) {
@@ -598,11 +589,6 @@ void Scene::InitEntities() {
     camera.position = {0, 0, 6};
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<Camera>(entity, camera);
-  }
-
-  {
-    EntityID entity = scene_.NewEntity();
-    scene_.AddComponent<Projection>(entity);
   }
 
   {

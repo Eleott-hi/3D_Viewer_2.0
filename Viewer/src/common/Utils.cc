@@ -16,11 +16,12 @@ EntityID GetCamera(ECS_Controller* scene) {
 //   auto projections = scene->GetEntities<Projection>();
 
 //   Q_ASSERT(projections.size() == 1);
-  
+
 //   return projections[0];
 // }
 
-// std::tuple<QMatrix4x4, QMatrix4x4> GetProjectionAndView(ECS_Controller* scene) {
+// std::tuple<QMatrix4x4, QMatrix4x4> GetProjectionAndView(ECS_Controller*
+// scene) {
 //   // static EntityID camera_id = GetCameraID(scene);
 //   static EntityID projection_id = GetProjectionID(scene);
 

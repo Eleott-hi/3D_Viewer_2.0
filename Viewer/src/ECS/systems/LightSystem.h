@@ -20,6 +20,5 @@ class LightSystem : public System, protected QOpenGLExtraFunctions {
  private:
   ECS_Controller *scene_;
   TechniqueStrategy *technique_;
-
 };
 }  // namespace s21

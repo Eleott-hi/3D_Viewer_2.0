@@ -320,7 +320,7 @@ void MainWindow::ConnectTransformUi() {
       });
 
   connect(ui_->xRotDoubleBox, &QDoubleSpinBox::valueChanged, [&](float value) {
-    scene_->ChangeComponent<Transform>([&,value](auto &component) {
+    scene_->ChangeComponent<Transform>([&, value](auto &component) {
       component.rotation.setX(value);
       component.rotation.normalize();
       SetTransformUi(component);
@@ -328,7 +328,7 @@ void MainWindow::ConnectTransformUi() {
   });
 
   connect(ui_->yRotDoubleBox, &QDoubleSpinBox::valueChanged, [&](float value) {
-    scene_->ChangeComponent<Transform>([&,value](auto &component) {
+    scene_->ChangeComponent<Transform>([&, value](auto &component) {
       component.rotation.setY(value);
       component.rotation.normalize();
       SetTransformUi(component);
@@ -336,7 +336,7 @@ void MainWindow::ConnectTransformUi() {
   });
 
   connect(ui_->zRotDoubleBox, &QDoubleSpinBox::valueChanged, [&](float value) {
-    scene_->ChangeComponent<Transform>([&,value](auto &component) {
+    scene_->ChangeComponent<Transform>([&, value](auto &component) {
       component.rotation.setZ(value);
       component.rotation.normalize();
       SetTransformUi(component);
@@ -344,7 +344,7 @@ void MainWindow::ConnectTransformUi() {
   });
 
   connect(ui_->wRotDoubleBox, &QDoubleSpinBox::valueChanged, [&](float value) {
-    scene_->ChangeComponent<Transform>([&,value](auto &component) {
+    scene_->ChangeComponent<Transform>([&, value](auto &component) {
       component.rotation.setScalar(value);
       component.rotation.normalize();
       SetTransformUi(component);

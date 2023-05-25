@@ -30,6 +30,7 @@ enum class TechniqueType {
   SHADOW_RENDERING,
   POINT_SHADOW,
   POINT_SHADOW_RENDER,
+  GIZMO,
 };
 
 enum class LightType {
@@ -125,15 +126,6 @@ struct Camera {
 
   bool primary = true;
   bool perspective = true;
-
-  void Update();
-  void UpdateViewMatrix();
-  void UpdateProjectionMatrix();
-};
-
-struct Projection {
-  QMatrix4x4 matrix;
-  bool perspective = true;
 };
 
 struct Light {
@@ -157,6 +149,7 @@ struct Enviroment {
 struct Input {
   bool left_button_pressed = false;
   std::unordered_map<int, bool> keys;
+  QPoint mouse_pos;
   QPoint start;
   QPoint end;
   QPoint double_click = {-1, -1};
