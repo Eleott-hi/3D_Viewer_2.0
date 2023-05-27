@@ -112,6 +112,18 @@ qt_add_resources(${PROJECT_NAME}  "shader"
   FILES ${SHADERS_FILES}
 )
 
+file(GLOB_RECURSE ICON_FILES resources/icons/*.svg)
+
+foreach(i ${ICON_FILES})
+    message("Icons file: " ${i})
+endforeach()
+
+qt_add_resources(${PROJECT_NAME}  "resources"
+  PREFIX "/icons/"
+  BASE "${CMAKE_SOURCE_DIR}/resources/icons"
+  FILES ${ICON_FILES}
+)
+
 
 foreach(i ${QT_LIBS})
     target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::${i})

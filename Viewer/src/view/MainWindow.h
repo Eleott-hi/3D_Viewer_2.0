@@ -36,15 +36,16 @@ class MainWindow : public QMainWindow, protected Observer {
   virtual void keyReleaseEvent(QKeyEvent *event) override;
 
   void ConnectSignals();
-  void SetTransformUi(Transform const &component);
-  void SetLightUi(Light const &component);
-  void SetMaterialUi(Material const &component);
-  void SetShaderUi(Shader const &component);
-  void ConnectTransformUi();
   void ConnectLightUi();
-  void ConnectMaterialUi();
   void ConnectShaderUi();
   void ConnectCameraUi();
+  void ConnectMaterialUi();
+  void ConnectTransformUi();
+  void SetCameraUi(Camera const &camera);
+  void SetLightUi(Light const &component);
+  void SetShaderUi(Shader const &component);
+  void SetMaterialUi(Material const &component);
+  void SetTransformUi(Transform const &component);
 };
 
 }  // namespace s21

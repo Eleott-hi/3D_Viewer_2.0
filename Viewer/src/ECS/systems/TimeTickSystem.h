@@ -23,7 +23,7 @@ class TimeTickSystem : public System {
 
       timer.time = timer_.nsecsElapsed() / 1000000.0;
 
-      qDebug() << timer.time << "ms";
+      // qDebug() << timer.time << "ms";
 
       timer_.start();
     }

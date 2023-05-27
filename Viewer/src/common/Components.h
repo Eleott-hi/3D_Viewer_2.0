@@ -112,7 +112,7 @@ struct Camera {
   float yaw = -90, pitch = 0;
   bool constrain_pitch = true;
 
-  float width = 800, height = 600;
+  uint32_t width = 800, height = 600;
 
   float left_clip = -1, right_clip = 1;
   float bottom_clip = -1, top_clip = 1;

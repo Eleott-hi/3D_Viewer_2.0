@@ -1,0 +1,1 @@
+C:\Users\lapte\Desktop\tinygizmo\tiny-gizmo-example\third-party\glfw-3.1.2\intermediate\Debug-x64\glfw3.lib

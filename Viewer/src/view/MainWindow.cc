@@ -11,11 +11,72 @@ MainWindow::MainWindow(Scene *scene, QWidget *parent)
   ui_->openGLWidget->SetController(scene);
   scene_->AddObserver(this);
 
-  ui_->groupBoxShader->close();
-  ui_->groupBoxTransform->close();
-  ui_->groupBoxMaterial->close();
+  emit ui_->labelGroupBoxLight->CloseSignal();
+  emit ui_->labelGroupBoxShader->CloseSignal();
+  emit ui_->labelGroupBoxMaterial->CloseSignal();
+  emit ui_->labelGroupBoxTransform->CloseSignal();
 
-  ui_->groupBoxLight->close();
+  connect(ui_->labelCameraTransform, &CustomLabel::mousePressEvent, [this] {
+    if (ui_->labelCameraTransform->text().contains("▼")) {
+      ui_->labelCameraTransform->Replace("▼", "▲");
+      ui_->groupBoxCameraTransform->show();
+    } else {
+      ui_->labelCameraTransform->Replace("▲", "▼");
+      ui_->groupBoxCameraTransform->close();
+    }
+  });
+
+  connect(ui_->labelCameraPlanes, &CustomLabel::mousePressEvent, [this] {
+    if (ui_->labelCameraPlanes->text().contains("▼")) {
+      ui_->labelCameraPlanes->Replace("▼", "▲");
+      ui_->groupBoxCameraPlanes->show();
+    } else {
+      ui_->labelCameraPlanes->Replace("▲", "▼");
+      ui_->groupBoxCameraPlanes->close();
+    }
+  });
+
+  connect(ui_->labelGroupBoxTransform, &CustomLabel::mousePressEvent, [this] {
+    if (ui_->labelGroupBoxTransform->text().contains("▼")) {
+      ui_->labelGroupBoxTransform->Replace("▼", "▲");
+      ui_->groupBoxTransform->show();
+    } else {
+      ui_->labelGroupBoxTransform->Replace("▲", "▼");
+      ui_->groupBoxTransform->close();
+    }
+  });
+
+  connect(ui_->labelGroupBoxLight, &CustomLabel::mousePressEvent, [this] {
+    if (ui_->labelGroupBoxLight->text().contains("▼")) {
+      ui_->labelGroupBoxLight->Replace("▼", "▲");
+      ui_->groupBoxLight->show();
+    } else {
+      ui_->labelGroupBoxLight->Replace("▲", "▼");
+      ui_->groupBoxLight->close();
+    }
+  });
+
+  connect(ui_->labelGroupBoxMaterial, &CustomLabel::mousePressEvent, [this] {
+    if (ui_->labelGroupBoxMaterial->text().contains("▼")) {
+      ui_->labelGroupBoxMaterial->Replace("▼", "▲");
+      ui_->groupBoxMaterial->show();
+    } else {
+      ui_->labelGroupBoxMaterial->Replace("▲", "▼");
+      ui_->groupBoxMaterial->close();
+    }
+  });
+
+  connect(ui_->labelGroupBoxShader, &CustomLabel::mousePressEvent, [this] {
+    if (ui_->labelGroupBoxShader->text().contains("▼")) {
+      ui_->labelGroupBoxShader->Replace("▼", "▲");
+      ui_->groupBoxShader->show();
+    } else {
+      ui_->labelGroupBoxShader->Replace("▲", "▼");
+      ui_->groupBoxShader->close();
+    }
+  });
+
+  // Q_ASSERT(false);
 
   ConnectSignals();
 }
@@ -49,105 +110,50 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
 }
 
 void MainWindow::OnCameraNotify() {
-  static auto const &camera = scene_->GetCamera();
+  auto scene = scene_->GetScene();
+  auto const &camera = scene->GetComponent<Camera>(Utils::GetCamera(scene));
 
-  ui_->dsb_CameraTransX->setValue(camera.position.x());
-  ui_->dsb_CameraTransY->setValue(camera.position.y());
-  ui_->dsb_CameraTransZ->setValue(camera.position.z());
-  ui_->dsb_CameraPitch->setValue(camera.pitch);
-  ui_->dsb_CameraYaw->setValue(camera.yaw);
+  SetCameraUi(camera);
 }
 
 void MainWindow::OnNotify() {
-  ui_->groupBoxTransform->close();
-  ui_->groupBoxLight->close();
-  ui_->groupBoxMaterial->close();
-  ui_->groupBoxShader->close();
+  ui_->labelGroupBoxLight->Replace("▲", "▼");
+  ui_->labelGroupBoxShader->Replace("▲", "▼");
+  ui_->labelGroupBoxMaterial->Replace("▲", "▼");
+  ui_->labelGroupBoxTransform->Replace("▲", "▼");
+  emit ui_->labelGroupBoxLight->CloseSignal();
+  emit ui_->labelGroupBoxShader->CloseSignal();
+  emit ui_->labelGroupBoxMaterial->CloseSignal();
+  emit ui_->labelGroupBoxTransform->CloseSignal();
 
   auto scene = scene_->GetScene();
-
   auto entities = scene->GetEntities<PickingTag>();
 
   for (auto entity : entities) {
-
-
     if (scene->EntityHasComponent<Transform>(entity)) {
       SetTransformUi(scene->GetComponent<Transform>(entity));
-      ui_->groupBoxTransform->show();
+
+      emit ui_->labelGroupBoxTransform->ShowSignal();
     }
 
     if (scene->EntityHasComponent<Material>(entity)) {
       SetMaterialUi(scene->GetComponent<Material>(entity));
-      ui_->groupBoxMaterial->show();
+
+      emit ui_->labelGroupBoxMaterial->ShowSignal();
     }
 
     if (scene->EntityHasComponent<Light>(entity)) {
       SetLightUi(scene->GetComponent<Light>(entity));
-      ui_->groupBoxLight->show();
+
+      emit ui_->labelGroupBoxLight->ShowSignal();
     }
 
     if (scene->EntityHasComponent<Shader>(entity)) {
       SetShaderUi(scene->GetComponent<Shader>(entity));
-      ui_->groupBoxShader->show();
+
+      emit ui_->labelGroupBoxShader->ShowSignal();
     }
   }
-
-  //  for
-
-  //  {
-  //    auto components = scene_->GetComponents<Transform>();
-  //    if (components.empty()) {
-  //      ui_->groupBoxTransform->close();
-
-  //    } else {
-  //      if (components.size() == 1) SetTransformUi(*components[0]);
-  //      ui_->groupBoxTransform->show();
-  //    }
-  //  }
-
-  //  {
-  //    auto components = scene_->GetComponents<Light>();
-  //    ui_->tg_LightSource->setChecked(false);
-
-  //    if (components.empty()) {
-  //      ui_->groupBoxLight->close();
-  //    } else {
-  //      if (components.size() == 1) {
-  //        SetLightUi(*components[0]);
-  //        ui_->tg_LightSource->setChecked(true);
-  //      }
-  //      ui_->groupBoxLight->show();
-  //    }
-  //  }
-
-  //  {
-  //    auto components = scene_->GetComponents<Material>();
-  //    if (components.empty()) {
-  //      ui_->groupBoxMaterial->close();
-  //    } else {
-  //      if (components.size() == 1) SetMaterialUi(*components[0]);
-  //      ui_->groupBoxMaterial->show();
-  //    }
-  //  }
-
-  //  {
-  //    auto components = scene_->GetComponents<Shader>();
-  //    if (components.empty()) {
-  //      ui_->groupBoxShader->close();
-  //    } else {
-  //      if (components.size() == 1) SetShaderUi(*components[0]);
-  //      ui_->groupBoxShader->show();
-  //    }
-  //  }
-
-  //  {
-  //    auto components = scene_->GetComponents<RenderTag>();
-  //    if (components.empty()) {
-  //      ui_->tb_Render->setChecked(false);
-  //    } else if (components.size() == 1) {
-  //      ui_->tb_Render->setChecked(true);
-  //    }
-  //  }
 }
 
 }  // namespace s21

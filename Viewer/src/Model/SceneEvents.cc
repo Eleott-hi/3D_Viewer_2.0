@@ -92,7 +92,10 @@ void Scene::KeyReleased(QKeyEvent* key_event) {
 
 void Scene::MouseScrolled(float scroll) {
   qDebug() << "MouseScrolledEvent" << scroll;
-  MouseScrolledEvent event(scroll);
-  scene_.Despatch(event);
+  // MouseScrolledEvent event(scroll);
+  // scene_.Despatch(event);
+
+  static auto& camera = scene_.GetComponent<Camera>(Utils::GetCamera(&scene_));
+  camera.zoom += scroll;
 }
 }  // namespace s21

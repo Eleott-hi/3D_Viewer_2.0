@@ -2,6 +2,7 @@
 #include <QFileDialog>
 
 #include "MainWindow.h"
+#include "Utils.h"
 #include "ui_MainWindow.h"
 
 namespace s21 {
@@ -33,6 +34,23 @@ void MainWindow::SetLightUi(Light const &component) {
   ui_->lightSpecularB->setValue(component.specular.z());
   ui_->lightInnerCone->setValue(component.inner_cone);
   ui_->lightOuterCone->setValue(component.outer_cone);
+}
+
+void MainWindow::SetCameraUi(Camera const &camera) {
+  ui_->dsb_CameraTransX->setValue(camera.position.x());
+  ui_->dsb_CameraTransY->setValue(camera.position.y());
+  ui_->dsb_CameraTransZ->setValue(camera.position.z());
+
+  ui_->dsb_CameraYaw->setValue(camera.yaw);
+  ui_->dsb_CameraZoom->setValue(camera.zoom);
+  ui_->dsb_CameraPitch->setValue(camera.pitch);
+
+  ui_->doubleSpinBoxTopClip->setValue(camera.top_clip);
+  ui_->doubleSpinBoxFarClip->setValue(camera.far_clip);
+  ui_->doubleSpinBoxNearClip->setValue(camera.near_clip);
+  ui_->doubleSpinBoxLeftClip->setValue(camera.left_clip);
+  ui_->doubleSpinBoxRightClip->setValue(camera.right_clip);
+  ui_->doubleSpinBoxBottomClip->setValue(camera.bottom_clip);
 }
 
 QString Trim(QString path) {
@@ -371,34 +389,86 @@ void MainWindow::ConnectTransformUi() {
 }
 
 void MainWindow::ConnectCameraUi() {
-  connect(
-
-      ui_->dsb_CameraTransX, &QDoubleSpinBox::valueChanged, [&](float value) {
-        static auto &camera = scene_->GetCamera();
-        camera.position.setX(value);
-      });
+  connect(ui_->dsb_CameraTransX, &QDoubleSpinBox::valueChanged,
+          [&](float value) {
+            auto scene = scene_->GetScene();
+            auto &camera = scene->GetComponent<Camera>(Utils::GetCamera(scene));
+            camera.position.setX(value);
+          });
 
   connect(ui_->dsb_CameraTransY, &QDoubleSpinBox::valueChanged,
           [&](float value) {
-            static auto &camera = scene_->GetCamera();
+            auto scene = scene_->GetScene();
+            auto &camera = scene->GetComponent<Camera>(Utils::GetCamera(scene));
             camera.position.setY(value);
           });
 
   connect(ui_->dsb_CameraTransZ, &QDoubleSpinBox::valueChanged,
           [&](float value) {
-            static auto &camera = scene_->GetCamera();
+            auto scene = scene_->GetScene();
+            auto &camera = scene->GetComponent<Camera>(Utils::GetCamera(scene));
             camera.position.setZ(value);
           });
 
   connect(ui_->dsb_CameraYaw, &QDoubleSpinBox::valueChanged, [&](float value) {
-    static auto &camera = scene_->GetCamera();
+    auto scene = scene_->GetScene();
+    auto &camera = scene->GetComponent<Camera>(Utils::GetCamera(scene));
     camera.yaw = value;
   });
 
   connect(ui_->dsb_CameraPitch, &QDoubleSpinBox::valueChanged,
           [&](float value) {
-            static auto &camera = scene_->GetCamera();
+            auto scene = scene_->GetScene();
+            auto &camera = scene->GetComponent<Camera>(Utils::GetCamera(scene));
             camera.pitch = value;
+          });
+
+  connect(ui_->dsb_CameraZoom, &QDoubleSpinBox::valueChanged, [&](float value) {
+    auto scene = scene_->GetScene();
+    auto &camera = scene->GetComponent<Camera>(Utils::GetCamera(scene));
+    camera.zoom = value;
+  });
+
+  connect(ui_->doubleSpinBoxLeftClip, &QDoubleSpinBox::valueChanged,
+          [&](float value) {
+            auto scene = scene_->GetScene();
+            auto &camera = scene->GetComponent<Camera>(Utils::GetCamera(scene));
+            camera.left_clip = value;
+          });
+
+  connect(ui_->doubleSpinBoxRightClip, &QDoubleSpinBox::valueChanged,
+          [&](float value) {
+            auto scene = scene_->GetScene();
+            auto &camera = scene->GetComponent<Camera>(Utils::GetCamera(scene));
+            camera.right_clip = value;
+          });
+
+  connect(ui_->doubleSpinBoxTopClip, &QDoubleSpinBox::valueChanged,
+          [&](float value) {
+            auto scene = scene_->GetScene();
+            auto &camera = scene->GetComponent<Camera>(Utils::GetCamera(scene));
+            camera.top_clip = value;
+          });
+
+  connect(ui_->doubleSpinBoxBottomClip, &QDoubleSpinBox::valueChanged,
+          [&](float value) {
+            auto scene = scene_->GetScene();
+            auto &camera = scene->GetComponent<Camera>(Utils::GetCamera(scene));
+            camera.bottom_clip = value;
+          });
+
+  connect(ui_->doubleSpinBoxNearClip, &QDoubleSpinBox::valueChanged,
+          [&](float value) {
+            auto scene = scene_->GetScene();
+            auto &camera = scene->GetComponent<Camera>(Utils::GetCamera(scene));
+            camera.near_clip = value;
+          });
+
+  connect(ui_->doubleSpinBoxFarClip, &QDoubleSpinBox::valueChanged,
+          [&](float value) {
+            auto scene = scene_->GetScene();
+            auto &camera = scene->GetComponent<Camera>(Utils::GetCamera(scene));
+            camera.far_clip = value;
           });
 }
 

@@ -51,7 +51,8 @@ void UpdateMatricies(Camera &camera) {
   QMatrix4x4 projection;
 
   camera.perspective
-      ? projection.perspective(camera.zoom, camera.width / camera.height,
+      ? projection.perspective(camera.zoom,
+                               (float)camera.width / (float)camera.height,
                                camera.near_clip, camera.far_clip)
       : projection.ortho(camera.left_clip, camera.right_clip,
                          camera.bottom_clip, camera.top_clip, camera.near_clip,
@@ -68,6 +69,9 @@ void CameraSystem::Init(ECS_Controller *scene) { scene_ = scene; }
 void CameraSystem::Update() {
   static auto &input = scene_->GetComponent<Input>(Utils::GetInput(scene_));
   static auto &timer = scene_->GetComponent<Timer>(Utils::GetTimer(scene_));
+
+  if (input.keys[Qt::Key_Control]) return;
+  if (scene_->GetEntities<PickingTag>().size()) return;
 
   for (auto &entity : entities_) {
     auto &camera = scene_->GetComponent<Camera>(entity);

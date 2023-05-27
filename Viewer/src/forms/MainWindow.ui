@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
+    <width>1324</width>
     <height>600</height>
    </rect>
   </property>
@@ -50,7 +50,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1000</width>
+     <width>1324</width>
      <height>25</height>
     </rect>
    </property>
@@ -101,243 +101,224 @@
           <x>0</x>
           <y>0</y>
           <width>250</width>
-          <height>526</height>
+          <height>1197</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_27">
-           <item>
-            <widget class="QDoubleSpinBox" name="dsb_CameraTransX">
-             <property name="focusPolicy">
-              <enum>Qt::ClickFocus</enum>
-             </property>
-             <property name="prefix">
-              <string>x: </string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSlider" name="xTrans_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimum">
-              <number>-1000</number>
-             </property>
-             <property name="maximum">
-              <number>1000</number>
-             </property>
-             <property name="value">
-              <number>0</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="CustomLabel" name="labelCameraTransform">
+           <property name="text">
+            <string>Transform ▲</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_33">
-           <item>
-            <widget class="QDoubleSpinBox" name="dsb_CameraTransY">
-             <property name="keyboardTracking">
-              <bool>true</bool>
-             </property>
-             <property name="prefix">
-              <string>y: </string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSlider" name="yTrans_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimum">
-              <number>-1000</number>
-             </property>
-             <property name="maximum">
-              <number>1000</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QGroupBox" name="groupBoxCameraTransform">
+           <property name="title">
+            <string/>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_10">
+            <item>
+             <widget class="QGroupBox" name="groupBoxCameraPosition">
+              <property name="title">
+               <string>Position</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_12">
+               <item>
+                <widget class="QDoubleSpinBox" name="dsb_CameraTransX">
+                 <property name="focusPolicy">
+                  <enum>Qt::ClickFocus</enum>
+                 </property>
+                 <property name="prefix">
+                  <string>x: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1000.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1000.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="dsb_CameraTransY">
+                 <property name="keyboardTracking">
+                  <bool>true</bool>
+                 </property>
+                 <property name="prefix">
+                  <string>y: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1000.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1000.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="dsb_CameraTransZ">
+                 <property name="prefix">
+                  <string>z: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1000.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1000.000000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>-6.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBoxCameraRotation">
+              <property name="title">
+               <string>Rotation</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_15">
+               <item>
+                <widget class="QDoubleSpinBox" name="dsb_CameraYaw">
+                 <property name="prefix">
+                  <string>Yaw: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1000.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1000.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="dsb_CameraPitch">
+                 <property name="prefix">
+                  <string>Pitch: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1000.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1000.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="dsb_CameraZoom">
+                 <property name="prefix">
+                  <string>zoom: </string>
+                 </property>
+                 <property name="minimum">
+                  <double>-1000.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1000.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_35">
-           <item>
-            <widget class="QDoubleSpinBox" name="dsb_CameraTransZ">
-             <property name="prefix">
-              <string>z: </string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>-6.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSlider" name="zTrans_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimum">
-              <number>-1000</number>
-             </property>
-             <property name="maximum">
-              <number>1000</number>
-             </property>
-             <property name="value">
-              <number>-6</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="CustomLabel" name="labelCameraPlanes">
+           <property name="text">
+            <string>Planes ▲</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_39">
-           <item>
-            <widget class="QDoubleSpinBox" name="dsb_CameraYaw">
-             <property name="prefix">
-              <string>Yaw: </string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSlider" name="xRot_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimum">
-              <number>-180</number>
-             </property>
-             <property name="maximum">
-              <number>180</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_41">
-           <item>
-            <widget class="QDoubleSpinBox" name="dsb_CameraPitch">
-             <property name="prefix">
-              <string>Pitch: </string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSlider" name="yRot_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimum">
-              <number>-270</number>
-             </property>
-             <property name="maximum">
-              <number>90</number>
-             </property>
-             <property name="value">
-              <number>-90</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
-           <item>
-            <widget class="QDoubleSpinBox" name="zRotDoubleBox_3">
-             <property name="prefix">
-              <string>zoom: </string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSlider" name="CameraZoom">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimum">
-              <number>-100</number>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QGroupBox" name="groupBoxCameraPlanes">
+           <property name="title">
+            <string/>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <item>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxLeftClip">
+              <property name="prefix">
+               <string>Left: </string>
+              </property>
+              <property name="minimum">
+               <double>-1000.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>1000.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxRightClip">
+              <property name="prefix">
+               <string>Right: </string>
+              </property>
+              <property name="minimum">
+               <double>-1000.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>1000.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxTopClip">
+              <property name="prefix">
+               <string>Top: </string>
+              </property>
+              <property name="minimum">
+               <double>-1000.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>1000.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxBottomClip">
+              <property name="prefix">
+               <string>Bottom: </string>
+              </property>
+              <property name="minimum">
+               <double>-1000.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>1000.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxNearClip">
+              <property name="prefix">
+               <string>Near: </string>
+              </property>
+              <property name="minimum">
+               <double>-1000.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>1000.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxFarClip">
+              <property name="prefix">
+               <string>Far: </string>
+              </property>
+              <property name="minimum">
+               <double>-1000.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>1000.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -382,296 +363,256 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>226</width>
-              <height>114</height>
+              <width>209</width>
+              <height>491</height>
              </rect>
             </property>
-            <widget class="QGroupBox" name="groupBox_5">
-             <property name="geometry">
-              <rect>
-               <x>12</x>
-               <y>0</y>
-               <width>172</width>
-               <height>148</height>
-              </rect>
-             </property>
-             <property name="title">
-              <string>Point</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_7">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_24">
-                <item>
-                 <widget class="QRadioButton" name="ShowVertex">
-                  <property name="text">
-                   <string>Show</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="SmoothPoints_2">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Smooth</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_20" stretch="0,1">
-                <item>
-                 <widget class="QLabel" name="label_26">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Size</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSlider" name="PointSize_2">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>100</number>
-                  </property>
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_21" stretch="1,1">
-                <item>
-                 <widget class="QPushButton" name="DotsColor_2">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Color</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="l_PointColor">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QGroupBox" name="groupBox_6">
-             <property name="geometry">
-              <rect>
-               <x>12</x>
-               <y>148</y>
-               <width>171</width>
-               <height>146</height>
-              </rect>
-             </property>
-             <property name="title">
-              <string>Line</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_9">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_25">
-                <item>
-                 <widget class="QRadioButton" name="showLines">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="text">
-                   <string>Show</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="DashedLines_2">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Dashed</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_23" stretch="0,1">
-                <item>
-                 <widget class="QLabel" name="label_27">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Size</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSlider" name="LineWidth_2">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>20</number>
-                  </property>
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="tickPosition">
-                   <enum>QSlider::NoTicks</enum>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_22" stretch="1,1">
-                <item>
-                 <widget class="QPushButton" name="LinesColor_2">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Color</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="l_ObjectColor">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QComboBox" name="cb_RenderTechnique">
-             <property name="geometry">
-              <rect>
-               <x>9</x>
-               <y>307</y>
-               <width>141</width>
-               <height>32</height>
-              </rect>
-             </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
              <item>
-              <property name="text">
-               <string>Simple Color</string>
-              </property>
+              <widget class="QGroupBox" name="groupBox_5">
+               <property name="title">
+                <string>Point</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_7">
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_24">
+                  <item>
+                   <widget class="QRadioButton" name="ShowVertex">
+                    <property name="text">
+                     <string>Show</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="SmoothPoints_2">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string>Smooth</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_20" stretch="0,1">
+                  <item>
+                   <widget class="CustomLabel" name="label_26">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string>Size</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSlider" name="PointSize_2">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimum">
+                     <number>1</number>
+                    </property>
+                    <property name="maximum">
+                     <number>100</number>
+                    </property>
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_21" stretch="1,1">
+                  <item>
+                   <widget class="QPushButton" name="DotsColor_2">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string>Color</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="CustomLabel" name="l_PointColor">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
              </item>
              <item>
-              <property name="text">
-               <string>Simple Texture</string>
-              </property>
+              <widget class="QGroupBox" name="groupBox_6">
+               <property name="title">
+                <string>Line</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_9">
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_25">
+                  <item>
+                   <widget class="QRadioButton" name="showLines">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="text">
+                     <string>Show</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="DashedLines_2">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string>Dashed</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_23" stretch="0,1">
+                  <item>
+                   <widget class="CustomLabel" name="label_27">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string>Size</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSlider" name="LineWidth_2">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimum">
+                     <number>1</number>
+                    </property>
+                    <property name="maximum">
+                     <number>20</number>
+                    </property>
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="tickPosition">
+                     <enum>QSlider::NoTicks</enum>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_22" stretch="1,1">
+                  <item>
+                   <widget class="QPushButton" name="LinesColor_2">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string>Color</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="CustomLabel" name="l_ObjectColor">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
              </item>
              <item>
-              <property name="text">
-               <string>Light Color</string>
-              </property>
+              <widget class="QComboBox" name="cb_RenderTechnique">
+               <item>
+                <property name="text">
+                 <string>Simple Color</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Simple Texture</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Light Color</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Light Texture</string>
+                </property>
+               </item>
+              </widget>
              </item>
              <item>
-              <property name="text">
-               <string>Light Texture</string>
-              </property>
+              <widget class="QPushButton" name="btn_ResetObject">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Reset</string>
+               </property>
+              </widget>
              </item>
-            </widget>
-            <widget class="QPushButton" name="btn_ResetObject">
-             <property name="geometry">
-              <rect>
-               <x>12</x>
-               <y>341</y>
-               <width>65</width>
-               <height>32</height>
-              </rect>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Reset</string>
-             </property>
-            </widget>
-            <widget class="QRadioButton" name="tg_LightSource">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>373</y>
-               <width>101</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Light Source</string>
-             </property>
-            </widget>
-            <widget class="QRadioButton" name="toggle_AxisLines">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>392</y>
-               <width>86</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Axis Lines</string>
-             </property>
-            </widget>
-            <widget class="QRadioButton" name="tb_Render">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>411</y>
-               <width>68</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Render</string>
-             </property>
-            </widget>
+             <item>
+              <widget class="QRadioButton" name="tg_LightSource">
+               <property name="text">
+                <string>Light Source</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="toggle_AxisLines">
+               <property name="text">
+                <string>Axis Lines</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="tb_Render">
+               <property name="text">
+                <string>Render</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </widget>
          </item>
@@ -716,16 +657,23 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>0</y>
-          <width>476</width>
-          <height>1550</height>
+          <y>-61</y>
+          <width>509</width>
+          <height>1578</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_10">
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="CustomLabel" name="labelGroupBoxTransform">
+           <property name="text">
+            <string>Transform ▲</string>
+           </property>
+          </widget>
+         </item>
          <item>
           <widget class="QGroupBox" name="groupBoxTransform">
            <property name="title">
-            <string>Transform</string>
+            <string/>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
@@ -913,9 +861,16 @@
           </widget>
          </item>
          <item>
+          <widget class="CustomLabel" name="labelGroupBoxLight">
+           <property name="text">
+            <string>Light ▲</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QGroupBox" name="groupBoxLight">
            <property name="title">
-            <string>Light</string>
+            <string/>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_13">
             <item>
@@ -1261,9 +1216,16 @@
           </widget>
          </item>
          <item>
+          <widget class="CustomLabel" name="labelGroupBoxMaterial">
+           <property name="text">
+            <string>Material ▲</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QGroupBox" name="groupBoxMaterial">
            <property name="title">
-            <string>Material</string>
+            <string/>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_8">
             <item>
@@ -1276,7 +1238,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="l_MaterialColor">
+               <widget class="CustomLabel" name="l_MaterialColor">
                 <property name="text">
                  <string/>
                 </property>
@@ -1287,7 +1249,7 @@
             <item>
              <layout class="QGridLayout" name="gridLayout_3">
               <item row="0" column="0">
-               <widget class="QLabel" name="label_3">
+               <widget class="CustomLabel" name="label_3">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                   <horstretch>0</horstretch>
@@ -1300,7 +1262,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QLabel" name="l_MaterialDiffuseImage">
+               <widget class="CustomLabel" name="l_MaterialDiffuseImage">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>100</horstretch>
@@ -1319,7 +1281,7 @@
                </widget>
               </item>
               <item row="0" column="2">
-               <widget class="QLabel" name="l_MaterialDiffuseFilename">
+               <widget class="CustomLabel" name="l_MaterialDiffuseFilename">
                 <property name="text">
                  <string>filename</string>
                 </property>
@@ -1333,7 +1295,7 @@
                </widget>
               </item>
               <item row="1" column="0">
-               <widget class="QLabel" name="label_4">
+               <widget class="CustomLabel" name="label_4">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                   <horstretch>0</horstretch>
@@ -1346,7 +1308,7 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QLabel" name="l_MaterialSpecularImage">
+               <widget class="CustomLabel" name="l_MaterialSpecularImage">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>100</horstretch>
@@ -1365,7 +1327,7 @@
                </widget>
               </item>
               <item row="1" column="2">
-               <widget class="QLabel" name="l_MaterialSpecularFilename">
+               <widget class="CustomLabel" name="l_MaterialSpecularFilename">
                 <property name="text">
                  <string>filename</string>
                 </property>
@@ -1379,7 +1341,7 @@
                </widget>
               </item>
               <item row="2" column="0">
-               <widget class="QLabel" name="label_5">
+               <widget class="CustomLabel" name="label_5">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                   <horstretch>0</horstretch>
@@ -1392,7 +1354,7 @@
                </widget>
               </item>
               <item row="2" column="1">
-               <widget class="QLabel" name="l_MaterialNormalImage">
+               <widget class="CustomLabel" name="l_MaterialNormalImage">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>100</horstretch>
@@ -1411,7 +1373,7 @@
                </widget>
               </item>
               <item row="2" column="2">
-               <widget class="QLabel" name="l_MaterialNormalFilename">
+               <widget class="CustomLabel" name="l_MaterialNormalFilename">
                 <property name="text">
                  <string>filename</string>
                 </property>
@@ -1425,7 +1387,7 @@
                </widget>
               </item>
               <item row="3" column="0">
-               <widget class="QLabel" name="label_10">
+               <widget class="CustomLabel" name="label_10">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                   <horstretch>0</horstretch>
@@ -1438,7 +1400,7 @@
                </widget>
               </item>
               <item row="3" column="1">
-               <widget class="QLabel" name="l_MaterialRoughnessImage">
+               <widget class="CustomLabel" name="l_MaterialRoughnessImage">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>100</horstretch>
@@ -1457,7 +1419,7 @@
                </widget>
               </item>
               <item row="3" column="2">
-               <widget class="QLabel" name="l_MaterialRoughnessFilename">
+               <widget class="CustomLabel" name="l_MaterialRoughnessFilename">
                 <property name="text">
                  <string>filename</string>
                 </property>
@@ -1471,7 +1433,7 @@
                </widget>
               </item>
               <item row="4" column="0">
-               <widget class="QLabel" name="label_7">
+               <widget class="CustomLabel" name="label_7">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                   <horstretch>0</horstretch>
@@ -1484,7 +1446,7 @@
                </widget>
               </item>
               <item row="4" column="1">
-               <widget class="QLabel" name="l_MaterialMetallicImage">
+               <widget class="CustomLabel" name="l_MaterialMetallicImage">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>100</horstretch>
@@ -1503,7 +1465,7 @@
                </widget>
               </item>
               <item row="4" column="2">
-               <widget class="QLabel" name="l_MaterialMetallicFilename">
+               <widget class="CustomLabel" name="l_MaterialMetallicFilename">
                 <property name="text">
                  <string>filename</string>
                 </property>
@@ -1517,7 +1479,7 @@
                </widget>
               </item>
               <item row="5" column="0">
-               <widget class="QLabel" name="label_8">
+               <widget class="CustomLabel" name="label_8">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                   <horstretch>0</horstretch>
@@ -1530,7 +1492,7 @@
                </widget>
               </item>
               <item row="5" column="1">
-               <widget class="QLabel" name="l_MaterialAoImage">
+               <widget class="CustomLabel" name="l_MaterialAoImage">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>100</horstretch>
@@ -1549,7 +1511,7 @@
                </widget>
               </item>
               <item row="5" column="2">
-               <widget class="QLabel" name="l_MaterialAoFilename">
+               <widget class="CustomLabel" name="l_MaterialAoFilename">
                 <property name="text">
                  <string>filename</string>
                 </property>
@@ -1607,9 +1569,16 @@
           </widget>
          </item>
          <item>
+          <widget class="CustomLabel" name="labelGroupBoxShader">
+           <property name="text">
+            <string>Shader ▲</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QGroupBox" name="groupBoxShader">
            <property name="title">
-            <string>Shader</string>
+            <string/>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_11">
             <item>
@@ -1650,7 +1619,7 @@
           </widget>
          </item>
          <item>
-          <spacer name="verticalSpacer_5">
+          <spacer name="verticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
@@ -1681,9 +1650,6 @@
    <property name="text">
     <string>&amp;Screenshot</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+S</string>
-   </property>
   </action>
   <action name="actionGif">
    <property name="text">
@@ -1708,198 +1674,80 @@
    <extends>QOpenGLWidget</extends>
    <header>GL_Widget.h</header>
   </customwidget>
+  <customwidget>
+   <class>CustomLabel</class>
+   <extends>QLabel</extends>
+   <header>CustomLabel.h</header>
+   <slots>
+    <signal>CloseSignal()</signal>
+    <signal>ShowSignal()</signal>
+    <signal>mousePressEvent(QMouseEvent*)</signal>
+   </slots>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
   <connection>
-   <sender>zRotDoubleBox_3</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>CameraZoom</receiver>
-   <slot>setValue(int)</slot>
+   <sender>labelGroupBoxTransform</sender>
+   <signal>CloseSignal()</signal>
+   <receiver>groupBoxTransform</receiver>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>162</x>
-     <y>257</y>
+     <x>860</x>
+     <y>-3</y>
     </hint>
     <hint type="destinationlabel">
-     <x>253</x>
-     <y>259</y>
+     <x>860</x>
+     <y>220</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>CameraZoom</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>zRotDoubleBox_3</receiver>
-   <slot>setValue(double)</slot>
+   <sender>labelGroupBoxLight</sender>
+   <signal>CloseSignal()</signal>
+   <receiver>groupBoxLight</receiver>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>253</x>
-     <y>259</y>
+     <x>869</x>
+     <y>319</y>
     </hint>
     <hint type="destinationlabel">
-     <x>162</x>
-     <y>257</y>
+     <x>887</x>
+     <y>542</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>ShowVertex</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>SmoothPoints_2</receiver>
-   <slot>setEnabled(bool)</slot>
+   <sender>labelGroupBoxMaterial</sender>
+   <signal>CloseSignal()</signal>
+   <receiver>groupBoxMaterial</receiver>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>1146</y>
+     <x>842</x>
+     <y>980</y>
     </hint>
     <hint type="destinationlabel">
-     <x>171</x>
-     <y>1146</y>
+     <x>851</x>
+     <y>1209</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>ShowVertex</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_26</receiver>
-   <slot>setEnabled(bool)</slot>
+   <sender>labelGroupBoxShader</sender>
+   <signal>CloseSignal()</signal>
+   <receiver>groupBoxShader</receiver>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>1146</y>
+     <x>834</x>
+     <y>1462</y>
     </hint>
     <hint type="destinationlabel">
-     <x>84</x>
-     <y>1182</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ShowVertex</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>PointSize_2</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>83</x>
-     <y>1146</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>135</x>
-     <y>1182</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ShowVertex</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>DotsColor_2</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>83</x>
-     <y>1146</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>82</x>
-     <y>1225</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ShowVertex</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>l_PointColor</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>83</x>
-     <y>1146</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>180</x>
-     <y>1217</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>showLines</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>DashedLines_2</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>83</x>
-     <y>1275</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>171</x>
-     <y>1275</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>showLines</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>l_ObjectColor</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>83</x>
-     <y>1275</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>180</x>
-     <y>1344</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>showLines</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>LinesColor_2</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>83</x>
-     <y>1275</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>82</x>
-     <y>1340</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>showLines</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_27</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>83</x>
-     <y>1275</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>85</x>
-     <y>1308</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>showLines</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>LineWidth_2</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>83</x>
-     <y>1275</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>137</x>
-     <y>1305</y>
+     <x>838</x>
+     <y>1479</y>
     </hint>
    </hints>
   </connection>

@@ -86,7 +86,7 @@ class Scene : public Observable, protected QOpenGLExtraFunctions {
     editPickedSystem_->AddComponent<Type>();
   }
 
-  Camera &GetCamera();
+  // Camera &GetCamera();
 
   ECS_Controller *GetScene() { return &scene_; }
 
@@ -128,7 +128,7 @@ class Scene : public Observable, protected QOpenGLExtraFunctions {
   void Draw();
   void Update();
   void DebugLights(bool directional, bool point_1, bool point_2, bool spot);
-  void InsideOpenGLContext(std::function<void()> func);
+  // void InsideOpenGLContext(std::function<void()> func);
   void SetFramebuffers();
   void InitEntities();
 };
