@@ -13,6 +13,11 @@ void MainWindow::ConnectSignals() {
   ConnectLightUi();
   ConnectMaterialUi();
   ConnectShaderUi();
+
+  scene_->SetUpdateUiCallback([this] {
+    OnCameraNotify();
+    OnNotify();
+  });
 }
 
 void MainWindow::SetLightUi(Light const &component) {

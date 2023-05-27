@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 
 #include <QFileDialog>
+#include <map>
 
 #include "ui_MainWindow.h"
 
@@ -11,72 +12,27 @@ MainWindow::MainWindow(Scene *scene, QWidget *parent)
   ui_->openGLWidget->SetController(scene);
   scene_->AddObserver(this);
 
-  emit ui_->labelGroupBoxLight->CloseSignal();
-  emit ui_->labelGroupBoxShader->CloseSignal();
-  emit ui_->labelGroupBoxMaterial->CloseSignal();
-  emit ui_->labelGroupBoxTransform->CloseSignal();
+  std::map<CustomLabel *, QGroupBox *> bindings = {
+      {ui_->labelGroupBoxLight, ui_->groupBoxLight},
+      {ui_->labelGroupBoxShader, ui_->groupBoxShader},
+      {ui_->labelGroupBoxMaterial, ui_->groupBoxMaterial},
+      {ui_->labelGroupBoxTransform, ui_->groupBoxTransform},
+  };
 
-  connect(ui_->labelCameraTransform, &CustomLabel::mousePressEvent, [this] {
-    if (ui_->labelCameraTransform->text().contains("▼")) {
-      ui_->labelCameraTransform->Replace("▼", "▲");
-      ui_->groupBoxCameraTransform->show();
-    } else {
-      ui_->labelCameraTransform->Replace("▲", "▼");
-      ui_->groupBoxCameraTransform->close();
-    }
-  });
+  for (auto [label, groupBox] : bindings) {
+    connect(label, &CustomLabel::mousePressEvent, [label, groupBox] {
+      if (label->text().contains("▼")) {
+        label->Replace("▼", "▲");
+        groupBox->show();
+      } else {
+        label->Replace("▲", "▼");
+        groupBox->close();
+      }
+    });
 
-  connect(ui_->labelCameraPlanes, &CustomLabel::mousePressEvent, [this] {
-    if (ui_->labelCameraPlanes->text().contains("▼")) {
-      ui_->labelCameraPlanes->Replace("▼", "▲");
-      ui_->groupBoxCameraPlanes->show();
-    } else {
-      ui_->labelCameraPlanes->Replace("▲", "▼");
-      ui_->groupBoxCameraPlanes->close();
-    }
-  });
-
-  connect(ui_->labelGroupBoxTransform, &CustomLabel::mousePressEvent, [this] {
-    if (ui_->labelGroupBoxTransform->text().contains("▼")) {
-      ui_->labelGroupBoxTransform->Replace("▼", "▲");
-      ui_->groupBoxTransform->show();
-    } else {
-      ui_->labelGroupBoxTransform->Replace("▲", "▼");
-      ui_->groupBoxTransform->close();
-    }
-  });
-
-  connect(ui_->labelGroupBoxLight, &CustomLabel::mousePressEvent, [this] {
-    if (ui_->labelGroupBoxLight->text().contains("▼")) {
-      ui_->labelGroupBoxLight->Replace("▼", "▲");
-      ui_->groupBoxLight->show();
-    } else {
-      ui_->labelGroupBoxLight->Replace("▲", "▼");
-      ui_->groupBoxLight->close();
-    }
-  });
-
-  connect(ui_->labelGroupBoxMaterial, &CustomLabel::mousePressEvent, [this] {
-    if (ui_->labelGroupBoxMaterial->text().contains("▼")) {
-      ui_->labelGroupBoxMaterial->Replace("▼", "▲");
-      ui_->groupBoxMaterial->show();
-    } else {
-      ui_->labelGroupBoxMaterial->Replace("▲", "▼");
-      ui_->groupBoxMaterial->close();
-    }
-  });
-
-  connect(ui_->labelGroupBoxShader, &CustomLabel::mousePressEvent, [this] {
-    if (ui_->labelGroupBoxShader->text().contains("▼")) {
-      ui_->labelGroupBoxShader->Replace("▼", "▲");
-      ui_->groupBoxShader->show();
-    } else {
-      ui_->labelGroupBoxShader->Replace("▲", "▼");
-      ui_->groupBoxShader->close();
-    }
-  });
-
-  // Q_ASSERT(false);
+    label->Replace("▲", "▼");
+    emit label->CloseSignal();
+  }
 
   ConnectSignals();
 }
@@ -117,14 +73,14 @@ void MainWindow::OnCameraNotify() {
 }
 
 void MainWindow::OnNotify() {
-  ui_->labelGroupBoxLight->Replace("▲", "▼");
-  ui_->labelGroupBoxShader->Replace("▲", "▼");
-  ui_->labelGroupBoxMaterial->Replace("▲", "▼");
-  ui_->labelGroupBoxTransform->Replace("▲", "▼");
-  emit ui_->labelGroupBoxLight->CloseSignal();
-  emit ui_->labelGroupBoxShader->CloseSignal();
-  emit ui_->labelGroupBoxMaterial->CloseSignal();
-  emit ui_->labelGroupBoxTransform->CloseSignal();
+  // ui_->labelGroupBoxLight->Replace("▲", "▼");
+  // ui_->labelGroupBoxShader->Replace("▲", "▼");
+  // ui_->labelGroupBoxMaterial->Replace("▲", "▼");
+  // ui_->labelGroupBoxTransform->Replace("▲", "▼");
+  // emit ui_->labelGroupBoxLight->CloseSignal();
+  // emit ui_->labelGroupBoxShader->CloseSignal();
+  // emit ui_->labelGroupBoxMaterial->CloseSignal();
+  // emit ui_->labelGroupBoxTransform->CloseSignal();
 
   auto scene = scene_->GetScene();
   auto entities = scene->GetEntities<PickingTag>();
@@ -153,6 +109,13 @@ void MainWindow::OnNotify() {
 
       emit ui_->labelGroupBoxShader->ShowSignal();
     }
+  }
+
+  if (entities.empty()) {
+    emit ui_->labelGroupBoxLight->CloseSignal();
+    emit ui_->labelGroupBoxShader->CloseSignal();
+    emit ui_->labelGroupBoxMaterial->CloseSignal();
+    emit ui_->labelGroupBoxTransform->CloseSignal();
   }
 }
 

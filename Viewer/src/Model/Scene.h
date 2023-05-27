@@ -90,6 +90,10 @@ class Scene : public Observable, protected QOpenGLExtraFunctions {
 
   ECS_Controller *GetScene() { return &scene_; }
 
+  void SetUpdateUiCallback(std::function<void()> &&callback_) {
+    update_ui_callback_ = std::move(callback_);
+  }
+
  private:
   bool picked_ = false;
   uint32_t width_ = 500, height_ = 500;
@@ -122,6 +126,8 @@ class Scene : public Observable, protected QOpenGLExtraFunctions {
   std::shared_ptr<DefferedShadingSystem> defferedShadingSystem_;
   std::shared_ptr<PointShadowRenderSystem> pointShadowRenderSystem_;
   std::shared_ptr<GizmoRenderSystem> gizmoRenderSystem_;
+
+  std::function<void()> update_ui_callback_;
 
   void RegisterComponents();
   void RegisterSystems();

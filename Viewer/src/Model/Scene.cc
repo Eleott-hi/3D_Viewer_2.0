@@ -46,12 +46,14 @@ void Scene::Update() {
   cameraSystem_->Update();
   lightSystem_->Update();
 
-  if (picked_) {
-    Notify();
-    picked_ = false;
-  }
+  update_ui_callback_();
 
-  NotifyCamera();
+  // if (picked_) {
+  //   Notify();
+  //   picked_ = false;
+  // }
+
+  // NotifyCamera();
 }
 
 void Scene::Draw() {
