@@ -24,7 +24,5 @@ class GizmoRenderSystem : public System, protected QOpenGLExtraFunctions {
 
   tinygizmo::gizmo_application_state gizmo_state;
   tinygizmo::gizmo_context gizmo_ctx;
-
-  void RenderGizmo(const tinygizmo::geometry_mesh &r);
 };
 }  // namespace s21

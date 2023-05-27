@@ -51,6 +51,8 @@ void MainWindow::SetCameraUi(Camera const &camera) {
   ui_->doubleSpinBoxLeftClip->setValue(camera.left_clip);
   ui_->doubleSpinBoxRightClip->setValue(camera.right_clip);
   ui_->doubleSpinBoxBottomClip->setValue(camera.bottom_clip);
+
+  ui_->doubleSpinBoxDebug->setValue(camera.debug);
 }
 
 QString Trim(QString path) {
@@ -389,6 +391,13 @@ void MainWindow::ConnectTransformUi() {
 }
 
 void MainWindow::ConnectCameraUi() {
+  connect(ui_->doubleSpinBoxDebug, &QDoubleSpinBox::valueChanged,
+          [&](float value) {
+            auto scene = scene_->GetScene();
+            auto &camera = scene->GetComponent<Camera>(Utils::GetCamera(scene));
+            camera.debug = value;
+          });
+
   connect(ui_->dsb_CameraTransX, &QDoubleSpinBox::valueChanged,
           [&](float value) {
             auto scene = scene_->GetScene();

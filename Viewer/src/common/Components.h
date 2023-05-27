@@ -103,6 +103,9 @@ struct Attenuation {
 };
 
 struct Camera {
+  //! DEBUG DELETE
+  float debug = 0;
+
   QVector3D position = {0, 0, 0};
   QVector3D front = {0, 0, -1};
   QVector3D right = {1, 0, 0};

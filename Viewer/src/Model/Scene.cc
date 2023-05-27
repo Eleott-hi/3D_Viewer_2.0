@@ -462,18 +462,6 @@ void Scene::DebugLights(bool directional, bool point_1, bool point_2,
   }
 }
 
-// Camera& Scene::GetCamera() {
-//   qDebug() << "GetCamera";
-//   static auto& camera = scene_.GetComponent<Camera>(Utils::GetCamera(&scene_));
-//   return camera;
-// }
-
-// void Scene::InsideOpenGLContext(std::function<void()> func) {
-//   opengl_widget_->makeCurrent();
-//   func();
-//   opengl_widget_->doneCurrent();
-// }
-
 void Scene::SetFramebuffers() {
   TextureWraper texture(GL_TEXTURE_CUBE_MAP);
   texture.SetFilters(GL_NEAREST);

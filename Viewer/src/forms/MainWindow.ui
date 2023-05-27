@@ -101,7 +101,7 @@
           <x>0</x>
           <y>0</y>
           <width>250</width>
-          <height>1197</height>
+          <height>1233</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -181,6 +181,16 @@
                <string>Rotation</string>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_15">
+               <item>
+                <widget class="QDoubleSpinBox" name="doubleSpinBoxDebug">
+                 <property name="minimum">
+                  <double>-1000.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1000.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
                <item>
                 <widget class="QDoubleSpinBox" name="dsb_CameraYaw">
                  <property name="prefix">
