@@ -20,8 +20,8 @@ class InputSystem : public System, protected QOpenGLExtraFunctions {
  private:
   ECS_Controller *scene_;
 
-  void ProcessKeyPressed(Input &input);
-  void ProcessMouseMovement(Input &input, bool constrainPitch = true);
+  void ProcessKeyPressed(InputCompomemt &input);
+  void ProcessMouseMovement(InputCompomemt &input, bool constrainPitch = true);
 };
 
 }  // namespace s21

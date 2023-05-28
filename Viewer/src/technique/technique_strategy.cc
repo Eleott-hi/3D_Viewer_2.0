@@ -3,22 +3,22 @@
 #include <memory>
 #include <vector>
 
-#include "DefferedShadingTechnique.h"
-#include "GizmoTechnique.h"
-#include "PhysicalBasedRenderingTechnique.h"
-#include "PointShadowRenderTechnique.h"
-#include "PointShadowTechnique.h"
-#include "ShadowMappingTechnique.h"
-#include "ShadowRenderTechnique.h"
-#include "StencilOutlineTechnique.h"
-#include "cubemap_technique.h"
-#include "light_color_technique.h"
-#include "light_texture_technique.h"
-#include "normalmap_technique.h"
-#include "picking_technique.h"
-#include "quad_technique.h"
-#include "simple_color_technique.h"
-#include "simple_texture_technique.h"
+#include "techniques/DefferedShadingTechnique.h"
+#include "techniques/GizmoTechnique.h"
+#include "techniques/PhysicalBasedRenderingTechnique.h"
+#include "techniques/PointShadowRenderTechnique.h"
+#include "techniques/PointShadowTechnique.h"
+#include "techniques/ShadowMappingTechnique.h"
+#include "techniques/ShadowRenderTechnique.h"
+#include "techniques/StencilOutlineTechnique.h"
+#include "techniques/cubemap_technique.h"
+#include "techniques/light_color_technique.h"
+#include "techniques/light_texture_technique.h"
+#include "techniques/normalmap_technique.h"
+#include "techniques/picking_technique.h"
+#include "techniques/quad_technique.h"
+#include "techniques/simple_color_technique.h"
+#include "techniques/simple_texture_technique.h"
 
 namespace s21 {
 

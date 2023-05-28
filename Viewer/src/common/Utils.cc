@@ -67,7 +67,7 @@ EntityID GetTimer(ECS_Controller* scene) {
 }
 
 EntityID GetInput(ECS_Controller* scene) {
-  static auto input = scene->GetEntities<Input>();
+  static auto input = scene->GetEntities<InputCompomemt>();
 
   Q_ASSERT(input.size() == 1);
 

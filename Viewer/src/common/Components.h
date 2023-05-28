@@ -149,10 +149,10 @@ struct Enviroment {
   Texture light;
 };
 
-struct Input {
-  bool left_button_pressed = false;
-  std::unordered_map<int, bool> keys;
-  QPoint mouse_pos;
+struct InputCompomemt {
+  // bool left_button_pressed = false;
+  // std::unordered_map<int, bool> keys;
+  // QPoint mouse_pos;
   QPoint start;
   QPoint end;
   QPoint double_click = {-1, -1};

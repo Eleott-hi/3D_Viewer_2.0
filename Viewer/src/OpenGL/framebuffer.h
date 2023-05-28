@@ -25,6 +25,7 @@ class Framebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
   void Resize(uint32_t width, uint32_t height, bool invalidate = true) final;
   int ReadPixel(uint32_t x, uint32_t y, int index) final;
   void Create(const std::initializer_list<AttachmentFormat>& formats) final;
+  void SetStartCoordinates(uint32_t x, uint32_t y) final { x_ = x, y_ = y; }
   void PrepereBuffer() final;
 
   void SetPrepereBuffer(std::function<void()> prepare_func) final {
@@ -45,6 +46,7 @@ class Framebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
  private:
   uint32_t m_fbo = 0;
   std::function<void()> prepare_func_;
+  uint32_t x_ = 0, y_ = 0;
   uint32_t width_ = 500, height_ = 500;
 
   std::vector<TextureWraper> textures_;

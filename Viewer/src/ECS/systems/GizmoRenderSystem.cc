@@ -2,6 +2,7 @@
 
 #include <QVector4D>
 
+#include "Input.h"
 #include "OpenGLDebug.h"
 #include "Utils.h"
 
@@ -55,8 +56,6 @@ void RenderGizmo(QOpenGLExtraFunctions *f,
       f->glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, 0));
   OPENGL_DEBUG(f->glBindVertexArray(0));
 
-  qDebug() << VAO;
-
   OPENGL_DEBUG(f->glDeleteBuffers(1, &VBO));
   OPENGL_DEBUG(f->glDeleteBuffers(1, &EBO));
   OPENGL_DEBUG(f->glDeleteVertexArrays(1, &VAO));
@@ -102,9 +101,9 @@ QVector3D GetRayFromPixel(QPoint pixel, Camera const &camera) {
 }
 
 void UpdateState(tinygizmo::gizmo_application_state &gizmo_state,
-                 const Camera &camera, Input &input) {
+                 const Camera &camera) {
   auto q = QQuaternion::fromEulerAngles(camera.pitch, -(camera.yaw + 90), 0.0f);
-  auto ray = GetRayFromPixel(input.mouse_pos, camera);
+  auto ray = GetRayFromPixel(Input::MousePosition(), camera);
 
   gizmo_state.cam.far_clip = camera.far_clip;
   gizmo_state.cam.near_clip = camera.near_clip;
@@ -117,14 +116,14 @@ void UpdateState(tinygizmo::gizmo_application_state &gizmo_state,
       camera.position.x(), camera.position.y(), camera.position.z());
 
   // optional flag to draw the gizmos at a constant screen-space scale
-  gizmo_state.screenspace_scale = 80.f;
+  // gizmo_state.screenspace_scale = 80.f;
 
-  gizmo_state.mouse_left = input.left_button_pressed;
-  gizmo_state.hotkey_local = input.keys[Qt::Key_L];
-  gizmo_state.hotkey_scale = input.keys[Qt::Key_S];
-  gizmo_state.hotkey_rotate = input.keys[Qt::Key_R];
-  gizmo_state.hotkey_translate = input.keys[Qt::Key_T];
-  gizmo_state.hotkey_ctrl = input.keys[Qt::Key_Control];
+  gizmo_state.mouse_left = Input::IsMouseButtonPressed(Qt::LeftButton);
+  gizmo_state.hotkey_local = Input::IsKeyPressed(Qt::Key_L);
+  gizmo_state.hotkey_scale = Input::IsKeyPressed(Qt::Key_S);
+  gizmo_state.hotkey_rotate = Input::IsKeyPressed(Qt::Key_R);
+  gizmo_state.hotkey_translate = Input::IsKeyPressed(Qt::Key_T);
+  gizmo_state.hotkey_ctrl = Input::IsKeyPressed(Qt::Key_Control);
 }
 
 void GizmoRenderSystem::Init(ECS_Controller *scene,
@@ -139,9 +138,8 @@ void GizmoRenderSystem::Init(ECS_Controller *scene,
 
 void GizmoRenderSystem::Update() {
   auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
-  auto &input = scene_->GetComponent<Input>(Utils::GetInput(scene_));
 
-  UpdateState(gizmo_state, camera, input);
+  UpdateState(gizmo_state, camera);
   gizmo_ctx.update(gizmo_state);
 
   glEnable(GL_BLEND);

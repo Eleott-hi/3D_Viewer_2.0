@@ -1,5 +1,6 @@
 #include "CameraSystem.h"
 
+#include "Input.h"
 #include "Utils.h"
 
 namespace s21 {
@@ -19,20 +20,25 @@ void UpdateLookAtVectors(Camera &camera) {
   camera.up = QVector3D::normal(camera.right, camera.front);
 }
 
-void ProcessKeyboardInput(Camera &camera, Input &input, Timer &timer) {
+void ProcessKeyboardInput(Camera &camera, Timer &timer) {
   const float velocity = camera.speed * timer.time;
-  auto &keys = input.keys;
 
-  if (keys[Qt::Key_W]) camera.position += camera.front * velocity;
-  if (keys[Qt::Key_S]) camera.position -= camera.front * velocity;
-  if (keys[Qt::Key_D]) camera.position += camera.right * velocity;
-  if (keys[Qt::Key_A]) camera.position -= camera.right * velocity;
-  if (keys[Qt::Key_R]) camera.position += camera.up * velocity;
-  if (keys[Qt::Key_F]) camera.position -= camera.up * velocity;
+  if (Input::IsKeyPressed(Qt::Key_W))
+    camera.position += camera.front * velocity;
+  if (Input::IsKeyPressed(Qt::Key_S))
+    camera.position -= camera.front * velocity;
+  if (Input::IsKeyPressed(Qt::Key_D))
+    camera.position += camera.right * velocity;
+  if (Input::IsKeyPressed(Qt::Key_A))
+    camera.position -= camera.right * velocity;
+  if (Input::IsKeyPressed(Qt::Key_R))  //
+    camera.position += camera.up * velocity;
+  if (Input::IsKeyPressed(Qt::Key_F))  //
+    camera.position -= camera.up * velocity;
 }
 
-void ProcessMouseInput(Camera &camera, Input &input, Timer &timer) {
-  if (input.left_button_pressed) {
+void ProcessMouseInput(Camera &camera, InputCompomemt &input, Timer &timer) {
+  if (Input::IsMouseButtonPressed(Qt::LeftButton)) {
     auto offset = input.start - input.end;
     input.start = input.end;
 
@@ -67,17 +73,18 @@ void UpdateMatricies(Camera &camera) {
 void CameraSystem::Init(ECS_Controller *scene) { scene_ = scene; }
 
 void CameraSystem::Update() {
-  static auto &input = scene_->GetComponent<Input>(Utils::GetInput(scene_));
+  static auto &input =
+      scene_->GetComponent<InputCompomemt>(Utils::GetInput(scene_));
   static auto &timer = scene_->GetComponent<Timer>(Utils::GetTimer(scene_));
 
-  if (input.keys[Qt::Key_Control]) return;
-  if (scene_->GetEntities<PickingTag>().size()) return;
+  if (Input::IsKeyPressed(Qt::Key_Control)) return;
+  // if (scene_->GetEntities<PickingTag>().size()) return;
 
   for (auto &entity : entities_) {
     auto &camera = scene_->GetComponent<Camera>(entity);
 
     ProcessMouseInput(camera, input, timer);
-    ProcessKeyboardInput(camera, input, timer);
+    ProcessKeyboardInput(camera, timer);
     UpdateMatricies(camera);
   }
 }

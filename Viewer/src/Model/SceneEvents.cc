@@ -10,9 +10,10 @@
 namespace s21 {
 
 void Scene::MousePos(QPoint pos) {
-  static auto& input = scene_.GetComponent<Input>(Utils::GetInput(&scene_));
+  //  auto& input =
+  //  scene_.GetComponent<InputCompomemt>(Utils::GetInput(&scene_));
 
-  input.mouse_pos = pos;
+  // input.mouse_pos = pos;
 }
 
 void Scene::WindowResize(int w, int h) {
@@ -33,18 +34,16 @@ void Scene::WindowResize(int w, int h) {
 
 void Scene::MousePressed(QPoint pos) {
   qDebug() << "MousePressedEvent:" << pos;
-  static auto& input =
-      scene_.GetComponent<Input>(scene_.GetEntities<Input>().at(0));
-  input.left_button_pressed = true;
+  auto& input = scene_.GetComponent<InputCompomemt>(Utils::GetInput(&scene_));
+  // input.left_button_pressed = true;
   input.start = pos;
   input.end = pos;
 }
 
 void Scene::MouseReleased(QPoint pos) {
   qDebug() << "MouseReleasedEvent:" << pos;
-  static auto& input =
-      scene_.GetComponent<Input>(scene_.GetEntities<Input>().at(0));
-  input.left_button_pressed = false;
+  auto& input = scene_.GetComponent<InputCompomemt>(Utils::GetInput(&scene_));
+  // input.left_button_pressed = false;
   input.start = pos;
   input.end = pos;
 }
@@ -54,8 +53,7 @@ void Scene::MouseMoved(QPoint pos) {
   // MouseMovedEvent event(offset);
   // scene_.Despatch(event);
 
-  static auto& input =
-      scene_.GetComponent<Input>(scene_.GetEntities<Input>().at(0));
+  auto& input = scene_.GetComponent<InputCompomemt>(Utils::GetInput(&scene_));
   input.end = pos;
 }
 
@@ -64,10 +62,9 @@ void Scene::MouseDoubleClicked(QPoint pos) {
   // MouseDoubleClickedEvent event(pos);
   // scene_.Despatch(event);
 
-  static auto& input =
-      scene_.GetComponent<Input>(scene_.GetEntities<Input>().at(0));
+  auto& input = scene_.GetComponent<InputCompomemt>(Utils::GetInput(&scene_));
   input.double_click = pos;
-  picked_ = true;
+  // picked_ = true;
 }
 
 void Scene::KeyPressed(QKeyEvent* key_event) {
@@ -75,17 +72,17 @@ void Scene::KeyPressed(QKeyEvent* key_event) {
   // KeyPressedEvent event(key_event);
   // scene_.Despatch(event);
 
-  static auto& input =
-      scene_.GetComponent<Input>(scene_.GetEntities<Input>().at(0));
-  input.keys[key_event->key()] = true;
+  // auto& input =
+  // scene_.GetComponent<InputCompomemt>(Utils::GetInput(&scene_));
+  // input.keys[key_event->key()] = true;
 }
 
 void Scene::KeyReleased(QKeyEvent* key_event) {
   qDebug() << "KeyReleasedEvent" << key_event;
 
-  static auto& input =
-      scene_.GetComponent<Input>(scene_.GetEntities<Input>().at(0));
-  input.keys[key_event->key()] = false;
+  // auto& input =
+  // scene_.GetComponent<InputCompomemt>(Utils::GetInput(&scene_));
+  // input.keys[key_event->key()] = false;
   // KeyReleasedEvent event(key_event);
   // scene_.Despatch(event);
 }
@@ -95,7 +92,7 @@ void Scene::MouseScrolled(float scroll) {
   // MouseScrolledEvent event(scroll);
   // scene_.Despatch(event);
 
-  static auto& camera = scene_.GetComponent<Camera>(Utils::GetCamera(&scene_));
+  auto& camera = scene_.GetComponent<Camera>(Utils::GetCamera(&scene_));
   camera.zoom += scroll;
 }
 }  // namespace s21

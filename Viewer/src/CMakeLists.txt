@@ -41,8 +41,9 @@ include_directories(
     shared
     observer
     controller
-    techniques
+    technique
     OpenGL
+    core
 )
 
 file(GLOB_RECURSE PROJECT_SOURCES *.cc *.cpp *.h *.ui)

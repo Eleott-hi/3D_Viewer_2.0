@@ -5,9 +5,8 @@
 namespace s21 {
 
 void InputSystem::Update() {}
-
-void InputSystem::ProcessKeyPressed(Input &input) {}
-
-void InputSystem::ProcessMouseMovement(Input &input, bool constrainPitch) {}
+void InputSystem::ProcessKeyPressed(InputCompomemt &input) {}
+void InputSystem::ProcessMouseMovement(InputCompomemt &input,
+                                       bool constrainPitch) {}
 
 }  // namespace s21

@@ -53,9 +53,10 @@ void Framebuffer::Resize(uint32_t width, uint32_t height, bool invalidate) {
 }
 
 void Framebuffer::Bind() {
-  OPENGL_DEBUG(glViewport(0, 0, width_, height_));
+  OPENGL_DEBUG(glViewport(x_, y_, width_, height_));
   OPENGL_DEBUG(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 }
+
 void Framebuffer::Unbind() {
   OPENGL_DEBUG(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }

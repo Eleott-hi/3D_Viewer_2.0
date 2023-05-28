@@ -3,6 +3,7 @@
 #include <QFileDialog>
 #include <map>
 
+#include "Input.h"
 #include "ui_MainWindow.h"
 
 namespace s21 {
@@ -51,9 +52,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     return;
   }
 
-  if (event->key() == Qt::Key_Escape) this->close();
+  if (event->key() == Qt::Key_Escape) qApp->closeAllWindows();
 
-  scene_->KeyPressed(event);
+  // scene_->KeyPressed(event);
+  Input::KeyPressed((Qt::Key)event->key());
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
@@ -62,7 +64,8 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
     return;
   }
 
-  scene_->KeyReleased(event);
+  Input::KeyReleased((Qt::Key)event->key());
+  // scene_->KeyReleased(event);
 }
 
 void MainWindow::OnCameraNotify() {

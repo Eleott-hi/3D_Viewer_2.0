@@ -1,5 +1,6 @@
 #include "GL_Widget.h"
 
+#include "Input.h"
 #include "MainWindow.h"
 
 namespace s21 {
@@ -26,13 +27,16 @@ void GLWidget::initializeGL() {
 void GLWidget::resizeGL(int w, int h) { scene_->WindowResize(w, h); }
 
 void GLWidget::paintGL() {
-  scene_->MousePos(mapFromGlobal(QCursor::pos()));
+  Input::MousePosition(mapFromGlobal(QCursor::pos()));
+  // scene_->MousePos(mapFromGlobal(QCursor::pos()));
   scene_->Render();
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event) {
   this->setFocus();
   if (event->button() == Qt::LeftButton) scene_->MousePressed(event->pos());
+
+  Input::MousePressed(event->button());
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event) {
@@ -40,7 +44,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event) {
-  if (event->button() == Qt::LeftButton) scene_->MouseReleased(event->pos());
+  Input::MouseReleased(event->button());
 }
 
 void GLWidget::mouseDoubleClickEvent(QMouseEvent *event) {

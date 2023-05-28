@@ -177,7 +177,6 @@ void Scene::LoadTexture(QString filename, Texture& texture) {
 
 void Scene::RegisterComponents() {
   scene_.RegisterComponent<Mesh>();
-  scene_.RegisterComponent<Input>();
   scene_.RegisterComponent<Model>();
   scene_.RegisterComponent<Light>();
   scene_.RegisterComponent<Timer>();
@@ -193,6 +192,7 @@ void Scene::RegisterComponents() {
   scene_.RegisterComponent<Enviroment>();
   scene_.RegisterComponent<PickingTag>();
   scene_.RegisterComponent<Attenuation>();
+  scene_.RegisterComponent<InputCompomemt>();
 }
 
 void Scene::RegisterSystems() {
@@ -336,7 +336,7 @@ void Scene::RegisterSystems() {
   inputSystem_ = scene_.RegisterSystem<InputSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<Input>());
+    mask.set(GetComponentID<InputCompomemt>());
     scene_.ChangeSystemMask<InputSystem>(mask);
     inputSystem_->Init(&scene_);
   }
@@ -571,7 +571,7 @@ void Scene::InitEntities() {
 
   {
     EntityID entity = scene_.NewEntity();
-    scene_.AddComponent<Input>(entity);
+    scene_.AddComponent<InputCompomemt>(entity);
   }
 
   {

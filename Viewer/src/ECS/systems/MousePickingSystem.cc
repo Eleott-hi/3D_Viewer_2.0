@@ -1,18 +1,11 @@
 #include "MousePickingSystem.h"
 
+#include "Input.h"
 #include "Utils.h"
 #include "events/MouseDoubleClickedEvent.h"
 #include "events/WindowResizeEvent.h"
 
 namespace s21 {
-
-Input &GetInput(ECS_Controller *scene) {
-  auto entities = scene->GetEntities<Input>();
-
-  Q_ASSERT(entities.size() == 1);
-
-  return scene->GetComponent<Input>(entities[0]);
-}
 
 MousePickingSystem::MousePickingSystem() {
   initializeOpenGLFunctions();
@@ -33,7 +26,9 @@ void MousePickingSystem::OnWindowResize(Event &e) {
 }
 
 void MousePickingSystem::Update() {
-  static auto &pos = GetInput(scene_).double_click;
+  static auto &pos =
+      scene_->GetComponent<InputCompomemt>(Utils::GetInput(scene_))
+          .double_click;
 
   if (pos == QPoint{-1, -1}) return;
 
@@ -66,12 +61,10 @@ void MousePickingSystem::PrepareFramebuffer() {
 }
 
 void MousePickingSystem::PickEntity(QPoint &pos) {
-  static auto &ctrl = GetInput(scene_).keys[Qt::Key_Control];
-
   int entity = framebuffer_->ReadPixel(pos.x(), pos.y());
   auto pickedEntities = scene_->GetEntities<PickingTag>();
 
-  if (!ctrl)
+  if (!Input::IsKeyPressed(Qt::Key_Control))
     for (EntityID entity : pickedEntities)
       scene_->RemoveComponent<PickingTag>(entity);
 
@@ -80,8 +73,6 @@ void MousePickingSystem::PickEntity(QPoint &pos) {
     scene_->AddComponent<PickingTag>(entity);
 
   pos = {-1, -1};
-
-  qDebug() << entity;
 }
 
 }  // namespace s21
