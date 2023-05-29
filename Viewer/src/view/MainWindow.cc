@@ -21,7 +21,7 @@ MainWindow::MainWindow(Scene *scene, QWidget *parent)
   };
 
   for (auto [label, groupBox] : bindings) {
-    connect(label, &CustomLabel::mousePressEvent, [label, groupBox] {
+    connect(label, &CustomLabel::mousePressEvent, [label = label, groupBox = groupBox] {
       if (label->text().contains("▼")) {
         label->Replace("▼", "▲");
         groupBox->show();
