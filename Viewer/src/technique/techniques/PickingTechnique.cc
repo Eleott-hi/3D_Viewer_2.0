@@ -1,4 +1,4 @@
-#include "picking_technique.h"
+#include "PickingTechnique.h"
 
 namespace s21 {
 

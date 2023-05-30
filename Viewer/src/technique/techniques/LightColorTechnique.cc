@@ -1,41 +1,35 @@
-#include "light_texture_technique.h"
+#include "LightColorTechnique.h"
+
+#include <string>
 
 #include "Utils.h"
 
 namespace s21 {
-void LightTextureTechnique::init() {
-  GenerateShaders(":/shaders/light_texture_shader.vs",
-                  ":/shaders/light_texture_shader.fs");
+
+void LightColorTechnique::init() {
+  GenerateShaders(":/shaders/light_color_shader.vs",
+                  ":/shaders/light_color_shader.fs");
 }
 
-void LightTextureTechnique::setTexture(Texture const &texture) {
-  shader_.setUniformValue(texture.type.c_str(), index_);
-  glActiveTexture(GL_TEXTURE0 + index_);
-  glBindTexture(GL_TEXTURE_2D, texture.id);
-
-  index_++;
+void LightColorTechnique::setMaterial(Material const &material) {
+  shader_.setUniformValue("material.color", material.color);
+  shader_.setUniformValue("material.shininess", material.shininess);
 }
 
-void LightTextureTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                                   QMatrix4x4 model) {
-  shader_.setUniformValue("u_Model", model);
-  shader_.setUniformValue("u_View", view);
-  shader_.setUniformValue("u_Projection", proj);
+void LightColorTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
+                                 QMatrix4x4 model) {
+  shader_.setUniformValue("Model", model);
+  shader_.setUniformValue("View", view);
+  shader_.setUniformValue("Projection", proj);
 
   auto tmp = view.inverted();
   shader_.setUniformValue("viewPos",
                           QVector3D{tmp(0, 3), tmp(1, 3), tmp(2, 3)});
 }
 
-void LightTextureTechnique::setMaterial(Material const &material) {
-  setTexture({material.diffuse.id, "material.diffuseMap"});
-  setTexture({material.specular.id, "material.specularMap"});
-  shader_.setUniformValue("material.shininess", material.shininess);
-}
-
-void LightTextureTechnique::SetLightComponent(ShaderProgram &shader,
-                                              std::string const &type,
-                                              Light const &light) {
+void LightColorTechnique::SetLightComponent(ShaderProgram &shader,
+                                            std::string const &type,
+                                            Light const &light) {
   shader.setUniformValue(Utils::StructName(type, "ambient").c_str(),
                          light.ambient);
   shader.setUniformValue(Utils::StructName(type, "diffuse").c_str(),
@@ -44,7 +38,7 @@ void LightTextureTechnique::SetLightComponent(ShaderProgram &shader,
                          light.specular);
 }
 
-void LightTextureTechnique::SetAttenuationComponent(
+void LightColorTechnique::SetAttenuationComponent(
     ShaderProgram &shader, std::string const &type,
     Attenuation const &attenuation) {
   auto const &[constant, linear, quadratic] = attenuation;
@@ -54,11 +48,11 @@ void LightTextureTechnique::SetAttenuationComponent(
                          quadratic);
 }
 
-void LightTextureTechnique::SetLightSpecificComponent(ShaderProgram &shader,
-                                                      std::string const &type,
-                                                      Light const &light,
-                                                      int light_index,
-                                                      int attenuation_index) {
+void LightColorTechnique::SetLightSpecificComponent(ShaderProgram &shader,
+                                                    std::string const &type,
+                                                    Light const &light,
+                                                    int light_index,
+                                                    int attenuation_index) {
   shader.setUniformValue(Utils::StructName(type, "position").c_str(),
                          light.position);
   shader.setUniformValue(Utils::StructName(type, "direction").c_str(),
@@ -73,7 +67,7 @@ void LightTextureTechnique::SetLightSpecificComponent(ShaderProgram &shader,
                          attenuation_index);
 }
 
-void LightTextureTechnique::setLight(
+void LightColorTechnique::setLight(
     QVector<Light> lights, QVector<std::optional<Attenuation>> attenuations) {
   int dirLightsCount = 0, pointLightsCount = 0, spotLightsCount = 0;
 

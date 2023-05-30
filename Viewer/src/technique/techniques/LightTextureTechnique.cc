@@ -1,13 +1,14 @@
-#include "normalmap_technique.h"
+#include "LightTextureTechnique.h"
 
 #include "Utils.h"
 
 namespace s21 {
-
-void NormalMapTechnique::init() {
-  GenerateShaders(":/shaders/normal_mapping.vs", ":/shaders/normal_mapping.fs");
+void LightTextureTechnique::init() {
+  GenerateShaders(":/shaders/light_texture_shader.vs",
+                  ":/shaders/light_texture_shader.fs");
 }
-void NormalMapTechnique::setTexture(Texture const &texture) {
+
+void LightTextureTechnique::setTexture(Texture const &texture) {
   shader_.setUniformValue(texture.type.c_str(), index_);
   glActiveTexture(GL_TEXTURE0 + index_);
   glBindTexture(GL_TEXTURE_2D, texture.id);
@@ -15,27 +16,26 @@ void NormalMapTechnique::setTexture(Texture const &texture) {
   index_++;
 }
 
-void NormalMapTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                                QMatrix4x4 model) {
-  shader_.setUniformValue("Model", model);
-  shader_.setUniformValue("View", view);
-  shader_.setUniformValue("Projection", proj);
+void LightTextureTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
+                                   QMatrix4x4 model) {
+  shader_.setUniformValue("u_Model", model);
+  shader_.setUniformValue("u_View", view);
+  shader_.setUniformValue("u_Projection", proj);
 
   auto tmp = view.inverted();
   shader_.setUniformValue("viewPos",
                           QVector3D{tmp(0, 3), tmp(1, 3), tmp(2, 3)});
 }
 
-void NormalMapTechnique::setMaterial(Material const &material) {
-  setTexture({material.normal.id, "normalMap"});
+void LightTextureTechnique::setMaterial(Material const &material) {
   setTexture({material.diffuse.id, "material.diffuseMap"});
   setTexture({material.specular.id, "material.specularMap"});
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 
-void NormalMapTechnique::SetLightComponent(ShaderProgram &shader,
-                                           std::string const &type,
-                                           Light const &light) {
+void LightTextureTechnique::SetLightComponent(ShaderProgram &shader,
+                                              std::string const &type,
+                                              Light const &light) {
   shader.setUniformValue(Utils::StructName(type, "ambient").c_str(),
                          light.ambient);
   shader.setUniformValue(Utils::StructName(type, "diffuse").c_str(),
@@ -44,7 +44,7 @@ void NormalMapTechnique::SetLightComponent(ShaderProgram &shader,
                          light.specular);
 }
 
-void NormalMapTechnique::SetAttenuationComponent(
+void LightTextureTechnique::SetAttenuationComponent(
     ShaderProgram &shader, std::string const &type,
     Attenuation const &attenuation) {
   auto const &[constant, linear, quadratic] = attenuation;
@@ -54,26 +54,26 @@ void NormalMapTechnique::SetAttenuationComponent(
                          quadratic);
 }
 
-void NormalMapTechnique::SetLightSpecificComponent(ShaderProgram &shader,
-                                                   std::string const &type,
-                                                   Light const &light,
-                                                   int light_index,
-                                                   int attenuation_index) {
+void LightTextureTechnique::SetLightSpecificComponent(ShaderProgram &shader,
+                                                      std::string const &type,
+                                                      Light const &light,
+                                                      int light_index,
+                                                      int attenuation_index) {
   shader.setUniformValue(Utils::StructName(type, "position").c_str(),
                          light.position);
   shader.setUniformValue(Utils::StructName(type, "direction").c_str(),
                          light.direction);
   shader.setUniformValue(Utils::StructName(type, "inner_cone").c_str(),
-                         light.inner_cone);
+                         qCos(qDegreesToRadians(light.inner_cone)));
   shader.setUniformValue(Utils::StructName(type, "outer_cone").c_str(),
-                         light.outer_cone);
+                         qCos(qDegreesToRadians(light.outer_cone)));
   shader.setUniformValue(Utils::StructName(type, "light_index").c_str(),
                          light_index);
   shader.setUniformValue(Utils::StructName(type, "attenuation_index").c_str(),
                          attenuation_index);
 }
 
-void NormalMapTechnique::setLight(
+void LightTextureTechnique::setLight(
     QVector<Light> lights, QVector<std::optional<Attenuation>> attenuations) {
   int dirLightsCount = 0, pointLightsCount = 0, spotLightsCount = 0;
 

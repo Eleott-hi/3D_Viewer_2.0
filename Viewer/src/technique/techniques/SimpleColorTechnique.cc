@@ -1,4 +1,4 @@
-#include "simple_color_technique.h"
+#include "SimpleColorTechnique.h"
 
 #include <QDir>
 

@@ -1,4 +1,4 @@
-#include "quad_technique.h"
+#include "QuadTechnique.h"
 
 namespace s21 {
 

@@ -1,4 +1,4 @@
-#include "simple_texture_technique.h"
+#include "SimpleTextureTechnique.h"
 
 namespace s21 {
 
