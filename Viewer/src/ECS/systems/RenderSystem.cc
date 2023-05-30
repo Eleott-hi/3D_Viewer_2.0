@@ -32,6 +32,8 @@ void RenderSystem::Update() {
     // technique_->setTexture(enviroment.light);
 
     for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
+
+    model.Draw(this, GL_TRIANGLES);
   }
 }
 

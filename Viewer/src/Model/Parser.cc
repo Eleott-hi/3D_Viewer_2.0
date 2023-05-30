@@ -29,8 +29,15 @@ ParsingData Parser::loadModel(std::string const &filename) {
 }
 
 void Parser::processNode(aiNode *node, const aiScene *scene) {
-  for (quint32 i = 0; i < node->mNumMeshes; i++)
+  // static bool here = false;
+
+  // if (here) return;
+
+  for (quint32 i = 0; i < node->mNumMeshes; i++) {
     data_.model->meshes << processMesh(scene->mMeshes[node->mMeshes[i]], scene);
+    // here = true;
+    // return;
+  }
 
   for (quint32 i = 0; i < node->mNumChildren; i++)
     processNode(node->mChildren[i], scene);

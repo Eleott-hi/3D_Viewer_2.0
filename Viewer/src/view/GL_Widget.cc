@@ -28,32 +28,36 @@ void GLWidget::resizeGL(int w, int h) { scene_->WindowResize(w, h); }
 
 void GLWidget::paintGL() {
   Input::MousePosition(mapFromGlobal(QCursor::pos()));
-  // scene_->MousePos(mapFromGlobal(QCursor::pos()));
+
   scene_->Render();
+
+  Input::MouseLastPosition(Input::MousePosition());
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event) {
+  qDebug() << "MousePressedEvent:" << event;
   this->setFocus();
-  if (event->button() == Qt::LeftButton) scene_->MousePressed(event->pos());
-
   Input::MousePressed(event->button());
 }
 
-void GLWidget::mouseMoveEvent(QMouseEvent *event) {
-  scene_->MouseMoved(event->pos());
-}
-
 void GLWidget::mouseReleaseEvent(QMouseEvent *event) {
+  qDebug() << "MouseReleasedEvent:" << event;
   Input::MouseReleased(event->button());
 }
 
 void GLWidget::mouseDoubleClickEvent(QMouseEvent *event) {
-  scene_->MouseDoubleClicked(event->pos());
+  qDebug() << "MouseDoubleClicked:" << event;
+  Input::MouseDoubleClick(true);
 }
 
 void GLWidget::wheelEvent(QWheelEvent *event) {
-  auto numDegrees = event->angleDelta();
-  scene_->MouseScrolled(numDegrees.y() / 80.0);
+  qDebug() << "MouseScrolledEvent:" << event;
+
+  auto scene = scene_->GetScene();
+  auto &camera = scene->GetComponent<Camera>(Utils::GetCamera(scene));
+
+  float scroll = event->angleDelta().y() / 80.0;
+  camera.zoom += scroll;
 }
 
 }  // namespace s21

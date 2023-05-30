@@ -40,7 +40,7 @@ void Scene::Init(QOpenGLWidget* widget) {
 
 void Scene::Update() {
   timeTickSystem_->Update();
-  inputSystem_->Update();
+  //  inputSystem_->Update();
   mousePickingSystem_->Update();
   editPickedSystem_->Update();
   cameraSystem_->Update();
@@ -192,7 +192,7 @@ void Scene::RegisterComponents() {
   scene_.RegisterComponent<Enviroment>();
   scene_.RegisterComponent<PickingTag>();
   scene_.RegisterComponent<Attenuation>();
-  scene_.RegisterComponent<InputCompomemt>();
+  //  scene_.RegisterComponent<InputCompomemt>();
 }
 
 void Scene::RegisterSystems() {
@@ -333,13 +333,13 @@ void Scene::RegisterSystems() {
     editPickedSystem_->Init(&scene_);
   }
 
-  inputSystem_ = scene_.RegisterSystem<InputSystem>();
-  {
-    ComponentMask mask;
-    mask.set(GetComponentID<InputCompomemt>());
-    scene_.ChangeSystemMask<InputSystem>(mask);
-    inputSystem_->Init(&scene_);
-  }
+  //  inputSystem_ = scene_.RegisterSystem<InputSystem>();
+  //  {
+  //    ComponentMask mask;
+  //    mask.set(GetComponentID<InputCompomemt>());
+  //    scene_.ChangeSystemMask<InputSystem>(mask);
+  //    inputSystem_->Init(&scene_);
+  //  }
 
   timeTickSystem_ = scene_.RegisterSystem<TimeTickSystem>();
   {
@@ -569,10 +569,10 @@ void Scene::InitEntities() {
     scene_.AddComponent<Texture>(entity, texture);
   }
 
-  {
-    EntityID entity = scene_.NewEntity();
-    scene_.AddComponent<InputCompomemt>(entity);
-  }
+  //  {
+  //    EntityID entity = scene_.NewEntity();
+  //    scene_.AddComponent<InputCompomemt>(entity);
+  //  }
 
   {
     Camera camera;

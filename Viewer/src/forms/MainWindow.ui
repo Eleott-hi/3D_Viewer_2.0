@@ -667,8 +667,8 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>-61</y>
-          <width>509</width>
+          <y>0</y>
+          <width>419</width>
           <height>1578</height>
          </rect>
         </property>

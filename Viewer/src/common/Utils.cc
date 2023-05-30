@@ -66,13 +66,13 @@ EntityID GetTimer(ECS_Controller* scene) {
   return tick_time[0];
 }
 
-EntityID GetInput(ECS_Controller* scene) {
-  static auto input = scene->GetEntities<InputCompomemt>();
+// EntityID GetInput(ECS_Controller* scene) {
+//   static auto input = scene->GetEntities<InputCompomemt>();
 
-  Q_ASSERT(input.size() == 1);
+//  Q_ASSERT(input.size() == 1);
 
-  return input[0];
-}
+//  return input[0];
+//}
 
 std::string StructName(std::string const& struct_name,
                        std::string const& name) {

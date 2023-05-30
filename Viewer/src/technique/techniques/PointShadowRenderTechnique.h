@@ -12,8 +12,6 @@ class PointShadowRenderTechnique : public ITechnique {
     GenerateShaders(":/shaders/point_shadows.vs", ":/shaders/point_shadows.fs");
   }
 
-  void Clear() final { index_ = 0; }
-
   void setTexture(Texture const &texture) final {
     shader_.setUniformValue(texture.type.c_str(), index_);
     glActiveTexture(GL_TEXTURE0 + index_);
@@ -40,8 +38,5 @@ class PointShadowRenderTechnique : public ITechnique {
     shader_.setUniformValue("camPos",
                             QVector3D{tmp(0, 3), tmp(1, 3), tmp(2, 3)});
   }
-
- private:
-  uint32_t index_ = 0;
 };
 }  // namespace s21

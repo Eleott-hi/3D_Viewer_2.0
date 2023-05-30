@@ -50,6 +50,10 @@ void Mesh::Draw(QOpenGLExtraFunctions *f, GLenum form) {
   f->glBindVertexArray(0);
 }
 
+void Model::Draw(QOpenGLExtraFunctions *f, GLenum form) {
+  for (auto &mesh : meshes) mesh.Draw(f, form);
+}
+
 QMatrix4x4 Transform::GetModelMatrix() const {
   QMatrix4x4 m_scale, m_translate, m_rotate, m_start;
 

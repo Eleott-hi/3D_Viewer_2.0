@@ -11,14 +11,16 @@ class Input {
   static void KeyReleased(Qt::Key key);
 
   static QPoint MousePosition();
+  static QPoint MouseLastPosition();
   static void MousePosition(QPoint pos);
+  static void MouseLastPosition(QPoint pos);
 
   static bool IsMouseButtonPressed(Qt::MouseButton button);
   static void MousePressed(Qt::MouseButton button);
   static void MouseReleased(Qt::MouseButton button);
 
-  static bool IsMouseDoubleClicked();
-  static void SetDoubleClicked(bool double_click);
+  static bool MouseDoubleClick();
+  static void MouseDoubleClick(bool double_click);
 
  private:
 };

@@ -37,19 +37,18 @@ void ProcessKeyboardInput(Camera &camera, Timer &timer) {
     camera.position -= camera.up * velocity;
 }
 
-void ProcessMouseInput(Camera &camera, InputCompomemt &input, Timer &timer) {
+void ProcessMouseInput(Camera &camera, Timer &timer) {
   if (Input::IsMouseButtonPressed(Qt::LeftButton)) {
-    auto offset = input.start - input.end;
-    input.start = input.end;
+    QPoint offset = Input::MouseLastPosition() - Input::MousePosition();
 
     camera.yaw += offset.x() * camera.mouse_sensitivity;
     camera.pitch -= offset.y() * camera.mouse_sensitivity;
+
+    if (camera.constrain_pitch)
+      camera.pitch = qBound(-89.0f, camera.pitch, 89.0f);
+
+    UpdateLookAtVectors(camera);
   }
-
-  if (camera.constrain_pitch)
-    camera.pitch = qBound(-89.0f, camera.pitch, 89.0f);
-
-  UpdateLookAtVectors(camera);
 }
 
 void UpdateMatricies(Camera &camera) {
@@ -73,9 +72,7 @@ void UpdateMatricies(Camera &camera) {
 void CameraSystem::Init(ECS_Controller *scene) { scene_ = scene; }
 
 void CameraSystem::Update() {
-  static auto &input =
-      scene_->GetComponent<InputCompomemt>(Utils::GetInput(scene_));
-  static auto &timer = scene_->GetComponent<Timer>(Utils::GetTimer(scene_));
+  auto &timer = scene_->GetComponent<Timer>(Utils::GetTimer(scene_));
 
   if (Input::IsKeyPressed(Qt::Key_Control)) return;
   // if (scene_->GetEntities<PickingTag>().size()) return;
@@ -83,7 +80,7 @@ void CameraSystem::Update() {
   for (auto &entity : entities_) {
     auto &camera = scene_->GetComponent<Camera>(entity);
 
-    ProcessMouseInput(camera, input, timer);
+    ProcessMouseInput(camera, timer);
     ProcessKeyboardInput(camera, timer);
     UpdateMatricies(camera);
   }

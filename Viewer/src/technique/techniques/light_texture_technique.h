@@ -13,7 +13,6 @@ class LightTextureTechnique : public ITechnique {
   ~LightTextureTechnique() = default;
 
   void init() final;
-  void Clear() final { texture_index_ = 0; }
   void setMaterial(Material const &material) final;
   void setTexture(Texture const &texture) final;
   void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
@@ -21,8 +20,6 @@ class LightTextureTechnique : public ITechnique {
                 QVector<std::optional<Attenuation>> attenuations) final;
 
  private:
-  uint32_t texture_index_ = 0;
-
   void SetLightComponent(ShaderProgram &shader, std::string const &type,
                          Light const &light);
   void SetAttenuationComponent(ShaderProgram &shader, std::string const &type,

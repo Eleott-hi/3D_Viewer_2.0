@@ -26,11 +26,11 @@ void MousePickingSystem::OnWindowResize(Event &e) {
 }
 
 void MousePickingSystem::Update() {
-  static auto &pos =
-      scene_->GetComponent<InputCompomemt>(Utils::GetInput(scene_))
-          .double_click;
+  // static auto &pos =
+  // scene_->GetComponent<InputCompomemt>(Utils::GetInput(scene_))
+  // .double_click;
 
-  if (pos == QPoint{-1, -1}) return;
+  if (Input::MouseDoubleClick() == false) return;
 
   auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
   technique_->Enable(TechniqueType::MOUSE_PICKING);
@@ -50,7 +50,9 @@ void MousePickingSystem::Update() {
 
   framebuffer_->Unbind();
 
-  PickEntity(pos);
+  PickEntity(Input::MousePosition());
+
+  Input::MouseDoubleClick(false);
 }
 
 void MousePickingSystem::PrepareFramebuffer() {
@@ -60,7 +62,7 @@ void MousePickingSystem::PrepareFramebuffer() {
   // glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
-void MousePickingSystem::PickEntity(QPoint &pos) {
+void MousePickingSystem::PickEntity(QPoint pos) {
   int entity = framebuffer_->ReadPixel(pos.x(), pos.y());
   auto pickedEntities = scene_->GetEntities<PickingTag>();
 
@@ -72,7 +74,7 @@ void MousePickingSystem::PickEntity(QPoint &pos) {
                                entity) == pickedEntities.end())
     scene_->AddComponent<PickingTag>(entity);
 
-  pos = {-1, -1};
+  //  pos = {-1, -1};
 }
 
 }  // namespace s21

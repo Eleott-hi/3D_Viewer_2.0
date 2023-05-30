@@ -17,7 +17,7 @@
 #include "systems/DefferedShadingSystem.h"
 #include "systems/EditPickedSystem.h"
 #include "systems/GizmoRenderSystem.h"
-#include "systems/InputSystem.h"
+//// #include "systems/InputSystem.h"
 #include "systems/LightSystem.h"
 #include "systems/MousePickingSystem.h"
 #include "systems/PointShadowRenderSystem.h"
@@ -110,7 +110,7 @@ class Scene : public Observable, protected QOpenGLExtraFunctions {
   std::shared_ptr<IFramebuffer> pointShadowFramebuffer_;
   // std::shared_ptr<IFramebuffer> mousePickingFramebuffer_;
 
-  std::shared_ptr<InputSystem> inputSystem_;
+  //  std::shared_ptr<InputSystem> inputSystem_;
   std::shared_ptr<LightSystem> lightSystem_;
   std::shared_ptr<ShadowSystem> shadowSystem_;
   std::shared_ptr<CameraSystem> cameraSystem_;

@@ -87,7 +87,9 @@ Transform FromRigidTransform(tinygizmo::rigid_transform const &xform) {
   return transform;
 }
 
-QVector3D GetRayFromPixel(QPoint pixel, Camera const &camera) {
+QVector3D GetRayFromPixel(Camera const &camera) {
+  QPoint pixel = Input::MousePosition();
+
   const float x = 2 * (float)(pixel.x() - 0) / (float)camera.width - 1;
   const float y = 1 - 2 * (float)(pixel.y() - 0) / (float)camera.height;
 
@@ -103,7 +105,7 @@ QVector3D GetRayFromPixel(QPoint pixel, Camera const &camera) {
 void UpdateState(tinygizmo::gizmo_application_state &gizmo_state,
                  const Camera &camera) {
   auto q = QQuaternion::fromEulerAngles(camera.pitch, -(camera.yaw + 90), 0.0f);
-  auto ray = GetRayFromPixel(Input::MousePosition(), camera);
+  auto ray = GetRayFromPixel(camera);
 
   gizmo_state.cam.far_clip = camera.far_clip;
   gizmo_state.cam.near_clip = camera.near_clip;

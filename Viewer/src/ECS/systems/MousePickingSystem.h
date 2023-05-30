@@ -27,7 +27,7 @@ class MousePickingSystem : public System, protected QOpenGLExtraFunctions {
   std::unique_ptr<IFramebuffer> framebuffer_ = std::make_unique<Framebuffer>();
 
   void PrepareFramebuffer();
-  void PickEntity(QPoint &pos);
+  void PickEntity(QPoint pos);
   void OnWindowResize(Event &event);
 };
 }  // namespace s21

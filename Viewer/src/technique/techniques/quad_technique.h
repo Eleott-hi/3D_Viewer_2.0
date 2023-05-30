@@ -9,12 +9,8 @@ class QuadTechnique : public ITechnique {
   QuadTechnique() { init(); }
   ~QuadTechnique() {}
 
-  void Clear() final { index_ = 0; }
   void init() final;
   void setTexture(Texture const &texture) final;
-
- private:
-  uint32_t index_ = 0;
 };
 
 }  // namespace s21

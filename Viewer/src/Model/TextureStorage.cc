@@ -31,6 +31,10 @@ GLenum GetFormat(int channels) {
   Q_ASSERT(false);
 }
 
+TextureStorage::~TextureStorage() {
+  for (auto [_, texture] : textures_) glDeleteTextures(1, &texture.id);
+}
+
 Texture TextureStorage::LoadTexture(std::string const& filename) {
   if (textures_[filename].id) return textures_[filename];
 

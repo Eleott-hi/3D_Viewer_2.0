@@ -24,7 +24,7 @@ class ITechnique : protected QOpenGLExtraFunctions {
   virtual void Enable() { shader_.bind(); };
 
   // =================== Optional ===================
-  virtual void Clear() {}
+  virtual void Clear() { index_ = 0; }
   virtual void SetObjectID(int ObjectID) {}
   virtual void setTexture(Texture const &texture) {}
   virtual void setMaterial(Material const &material) {}
@@ -40,6 +40,7 @@ class ITechnique : protected QOpenGLExtraFunctions {
 
  protected:
   ShaderProgram shader_;
+  uint32_t index_ = 0;
 
   void GenerateShaders(QString vertex_file, QString geometry_file,
                        QString fragment_file = "") {

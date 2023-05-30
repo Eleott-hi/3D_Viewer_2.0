@@ -19,11 +19,10 @@ class GLWidget : public QOpenGLWidget {
   void paintGL() override;
   void initializeGL() override;
   void resizeGL(int w, int h) override;
-  void mouseMoveEvent(QMouseEvent *event) override;
+  void wheelEvent(QWheelEvent *event) override;
   void mousePressEvent(QMouseEvent *event) override;
   void mouseReleaseEvent(QMouseEvent *event) override;
   void mouseDoubleClickEvent(QMouseEvent *event) override;
-  void wheelEvent(QWheelEvent *event) override;
 
  private:
   QTimer timer_;

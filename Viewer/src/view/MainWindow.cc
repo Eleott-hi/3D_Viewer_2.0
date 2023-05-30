@@ -21,15 +21,16 @@ MainWindow::MainWindow(Scene *scene, QWidget *parent)
   };
 
   for (auto [label, groupBox] : bindings) {
-    connect(label, &CustomLabel::mousePressEvent, [label = label, groupBox = groupBox] {
-      if (label->text().contains("▼")) {
-        label->Replace("▼", "▲");
-        groupBox->show();
-      } else {
-        label->Replace("▲", "▼");
-        groupBox->close();
-      }
-    });
+    connect(label, &CustomLabel::mousePressEvent,
+            [label = label, groupBox = groupBox] {
+              if (label->text().contains("▼")) {
+                label->Replace("▼", "▲");
+                groupBox->show();
+              } else {
+                label->Replace("▲", "▼");
+                groupBox->close();
+              }
+            });
 
     label->Replace("▲", "▼");
     emit label->CloseSignal();
@@ -51,10 +52,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     event->ignore();
     return;
   }
+  qDebug() << "KeyPressedEvent:" << event;
 
   if (event->key() == Qt::Key_Escape) qApp->closeAllWindows();
 
-  // scene_->KeyPressed(event);
   Input::KeyPressed((Qt::Key)event->key());
 }
 
@@ -64,8 +65,8 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
     return;
   }
 
+  qDebug() << "KeyReleasedEvent:" << event;
   Input::KeyReleased((Qt::Key)event->key());
-  // scene_->KeyReleased(event);
 }
 
 void MainWindow::OnCameraNotify() {

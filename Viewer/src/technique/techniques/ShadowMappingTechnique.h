@@ -13,9 +13,6 @@ class ShadowMappingTechnique : public ITechnique {
   void setTexture(Texture const &texture) final;
 
   void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
-
- private:
-  uint32_t index_ = 0;
 };
 
 }  // namespace s21

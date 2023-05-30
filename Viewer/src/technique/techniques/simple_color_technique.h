@@ -10,10 +10,8 @@ class SimpleColorTechnique : public ITechnique {
   ~SimpleColorTechnique() = default;
 
   void init() final;
-
-  void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
-
   void setMaterial(Material const& material) final;
+  void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
 };
 
 }  // namespace s21
