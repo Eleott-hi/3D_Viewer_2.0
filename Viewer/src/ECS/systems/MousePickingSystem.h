@@ -4,11 +4,11 @@
 #include <QOpenGLExtraFunctions>
 #include <QPoint>
 
+#include "OpenGLFramebuffer.h"
 #include "TechniqueStrategy.h"
 #include "core/ECS_Controller.h"
 #include "core/Event.h"
 #include "core/System.h"
-#include "OpenGLFramebuffer.h"
 
 namespace s21 {
 
@@ -24,7 +24,8 @@ class MousePickingSystem : public System, protected QOpenGLExtraFunctions {
   QPoint clicked_pos_ = QPoint(-1, -1);
   ECS_Controller *scene_;
   TechniqueStrategy *technique_;
-  std::unique_ptr<IFramebuffer> framebuffer_ = std::make_unique<OpenGLFramebuffer>();
+  std::unique_ptr<IFramebuffer> framebuffer_ =
+      std::make_unique<OpenGLFramebuffer>();
 
   void PrepareFramebuffer();
   void PickEntity(QPoint pos);

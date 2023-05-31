@@ -41,7 +41,8 @@ void OpenGLFramebuffer::PrepereBuffer() {
   if (prepare_func_) OPENGL_DEBUG(prepare_func_());
 }
 
-void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height, bool invalidate) {
+void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height,
+                               bool invalidate) {
   uint32_t w = width * magicScale_;
   uint32_t h = height * magicScale_;
 
