@@ -17,9 +17,7 @@ namespace s21 {
 
 struct ParsingData {
   std::optional<Model> model = std::nullopt;
-  std::optional<Texture> diffuseMap = std::nullopt;
-  std::optional<Texture> normalMap = std::nullopt;
-  std::optional<Texture> specularMap = std::nullopt;
+  std::optional<Material> material = std::nullopt;
 };
 
 class Parser {
@@ -37,8 +35,7 @@ class Parser {
   Mesh processMesh(aiMesh *mesh, const aiScene *scene);
   QVector<Vertex> loadVertices(aiMesh *mesh, const aiScene *scene);
   QVector<quint32> LoadIndices(aiMesh *mesh, const aiScene *scene);
-  void LoadTexture(aiMaterial *material, aiTextureType type,
-                   std::optional<Texture> &texture);
+  void LoadTexture(aiMaterial *material, aiTextureType type, Texture &texture);
 };
 
 }  // namespace s21

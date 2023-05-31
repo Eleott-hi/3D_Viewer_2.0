@@ -139,23 +139,16 @@ void Scene::Render() {
 
 void Scene::AddModel(QString path) {
   opengl_widget_->makeCurrent();
-  auto [model, diffuse_map, normal_map, specular_map] =
-      parser_->loadModel(path.toStdString());
+  auto data = parser_->loadModel(path.toStdString());
 
-  if (!model) return;
+  if (!data.model) return;
 
-  for (auto& mesh : model->meshes) mesh.bufferize(this);
+  for (auto& mesh : data.model->meshes) mesh.bufferize(this);
 
-  Material material;
-  material.shininess = 10;
-  if (diffuse_map) material.diffuse = *diffuse_map;
-  if (normal_map) material.normal = *normal_map;
-  if (specular_map) material.specular = *specular_map;
-
-  material.roughness =
+  data.material->roughness =
       texture_storage_->LoadTexture(dir + "objects/backpack/roughness.jpg");
-
-  material.ao = texture_storage_->LoadTexture(dir + "objects/backpack/ao.jpg");
+  data.material->ao =
+      texture_storage_->LoadTexture(dir + "objects/backpack/ao.jpg");
 
   EntityID entity = scene_.NewEntity();
   scene_.AddComponent<Shader>(entity,
@@ -163,8 +156,8 @@ void Scene::AddModel(QString path) {
   scene_.AddComponent<Transform>(entity);
   scene_.AddComponent<RenderTag>(entity);
   scene_.AddComponent<ShadowTag>(entity);
-  scene_.AddComponent<Material>(entity, material);
-  scene_.AddComponent<Model>(entity, std::move(*model));
+  scene_.AddComponent<Material>(entity, *data.material);
+  scene_.AddComponent<Model>(entity, std::move(*data.model));
 
   opengl_widget_->doneCurrent();
 }

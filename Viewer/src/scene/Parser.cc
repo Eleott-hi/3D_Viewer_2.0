@@ -5,9 +5,9 @@
 namespace s21 {
 
 ParsingData Parser::loadModel(std::string const &filename) {
-  Assimp::Importer importer;
   data_ = {};
 
+  Assimp::Importer importer;
   uint32_t flags = aiProcess_Triangulate |       //
                    aiProcess_GenSmoothNormals |  //
                    aiProcess_FlipUVs |           //
@@ -23,21 +23,17 @@ ParsingData Parser::loadModel(std::string const &filename) {
 
   directory_ = filename.substr(0, filename.find_last_of('/'));
 
-  data_.model = {filename, QVector<Mesh>{}};
+  data_.model = Model{filename, {}};
+  data_.material = Material{};
+
   processNode(scene->mRootNode, scene);
+
   return data_;
 }
 
 void Parser::processNode(aiNode *node, const aiScene *scene) {
-  // static bool here = false;
-
-  // if (here) return;
-
-  for (quint32 i = 0; i < node->mNumMeshes; i++) {
+  for (quint32 i = 0; i < node->mNumMeshes; i++)
     data_.model->meshes << processMesh(scene->mMeshes[node->mMeshes[i]], scene);
-    // here = true;
-    // return;
-  }
 
   for (quint32 i = 0; i < node->mNumChildren; i++)
     processNode(node->mChildren[i], scene);
@@ -82,9 +78,9 @@ QVector<Vertex> Parser::loadVertices(aiMesh *mesh, const aiScene *scene) {
 
   aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
-  LoadTexture(material, aiTextureType_DIFFUSE, data_.diffuseMap);
-  LoadTexture(material, aiTextureType_HEIGHT, data_.normalMap);
-  LoadTexture(material, aiTextureType_SPECULAR, data_.specularMap);
+  LoadTexture(material, aiTextureType_HEIGHT, data_.material->normal);
+  LoadTexture(material, aiTextureType_DIFFUSE, data_.material->diffuse);
+  LoadTexture(material, aiTextureType_SPECULAR, data_.material->specular);
 
   // aiColor3D color(0.0f, 0.0f, 0.0f);
   // float d = 0;
@@ -110,20 +106,17 @@ QVector<Vertex> Parser::loadVertices(aiMesh *mesh, const aiScene *scene) {
 }
 
 void Parser::LoadTexture(aiMaterial *material, aiTextureType type,
-                         std::optional<Texture> &texture) {
+                         Texture &texture) {
   for (uint32_t i = 0; i < material->GetTextureCount(type); i++) {
     aiString str;
     material->GetTexture(type, i, &str);
 
     std::string const &filename = directory_ + "/" + str.C_Str();
-    std::string texture_type;
 
-    if (type == aiTextureType_DIFFUSE) texture_type = "diffuseMap";
-    if (type == aiTextureType_HEIGHT) texture_type = "normalMap";
-    if (type == aiTextureType_SPECULAR) texture_type = "specularMap";
-
-    texture = textureStorage_->LoadTexture(filename);
-    texture->type = texture_type;
+    auto tmp = textureStorage_->LoadTexture(filename);
+    texture.id = tmp.id;
+    texture.image = tmp.image;
+    texture.filename = tmp.filename;
   }
 }
 

@@ -120,12 +120,14 @@ void UpdateState(tinygizmo::gizmo_application_state &gizmo_state,
   // optional flag to draw the gizmos at a constant screen-space scale
   // gizmo_state.screenspace_scale = 80.f;
 
-  gizmo_state.mouse_left = Input::IsMouseButtonPressed(Qt::LeftButton);
   gizmo_state.hotkey_local = Input::IsKeyPressed(Qt::Key_L);
   gizmo_state.hotkey_scale = Input::IsKeyPressed(Qt::Key_S);
   gizmo_state.hotkey_rotate = Input::IsKeyPressed(Qt::Key_R);
   gizmo_state.hotkey_translate = Input::IsKeyPressed(Qt::Key_T);
   gizmo_state.hotkey_ctrl = Input::IsKeyPressed(Qt::Key_Control);
+  gizmo_state.mouse_left = gizmo_state.hotkey_ctrl
+                               ? Input::IsMouseButtonPressed(Qt::LeftButton)
+                               : false;
 }
 
 void GizmoRenderSystem::Init(ECS_Controller *scene,
@@ -141,6 +143,9 @@ void GizmoRenderSystem::Init(ECS_Controller *scene,
 void GizmoRenderSystem::Update() {
   auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
 
+  technique_->Enable(TechniqueType::GIZMO);
+  technique_->SetMVP(camera.projection_matrix, camera.view_matrix, {});
+
   UpdateState(gizmo_state, camera);
   gizmo_ctx.update(gizmo_state);
 
@@ -150,9 +155,6 @@ void GizmoRenderSystem::Update() {
 
   for (auto entity : entities_) {
     auto &transform = scene_->GetComponent<Transform>(entity);
-
-    technique_->Enable(TechniqueType::GIZMO);
-    technique_->SetMVP(camera.projection_matrix, camera.view_matrix, {});
 
     tinygizmo::rigid_transform xform, xform_last;
     xform = xform_last = ToRigidTransform(transform);
@@ -166,8 +168,6 @@ void GizmoRenderSystem::Update() {
         qDebug() << name << "Changed...";
         transform = FromRigidTransform(xform);
       }
-    } else {
-      qDebug() << name + " not hovered...";
     }
 
     gizmo_ctx.draw();

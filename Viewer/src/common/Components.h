@@ -84,12 +84,12 @@ struct Texture {
 struct Material {
   QColor color = QColor::fromRgbF(0, 0.5, 0);
 
-  Texture diffuse;
-  Texture normal;
-  Texture specular;
-  Texture roughness;
-  Texture metallic;
-  Texture ao;
+  Texture ao = {0, "aoMap"};
+  Texture normal = {0, "normalMap"};
+  Texture diffuse = {0, "diffuseMap"};
+  Texture specular = {0, "specularMap"};
+  Texture metallic = {0, "metallicMap"};
+  Texture roughness = {0, "roughnessMap"};
 
   float shininess = 32;
 };
