@@ -3,10 +3,10 @@
 
 #include <QOpenGLExtraFunctions>
 
+#include "TechniqueStrategy.h"
 #include "core/ECS_Controller.h"
 #include "core/System.h"
-#include "framebuffer.h"
-#include "technique_strategy.h"
+#include "OpenGLFramebuffer.h"
 
 namespace s21 {
 

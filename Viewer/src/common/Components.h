@@ -59,7 +59,7 @@ struct Mesh {
 };
 
 struct Model {
-  std::string filename;
+  std::string name;
   QVector<Mesh> meshes;
 
   void Draw(QOpenGLExtraFunctions *f, GLenum form);
@@ -151,17 +151,12 @@ struct Enviroment {
   Texture light;
 };
 
-// struct InputCompomemt {
-//   // bool left_button_pressed = false;
-//   // std::unordered_map<int, bool> keys;
-//   // QPoint mouse_pos;
-//   QPoint start;
-//   QPoint end;
-//   QPoint double_click = {-1, -1};
-// };
-
 struct Timer {
   float time = 0;
+};
+
+struct StringTag {
+  std::string name;
 };
 
 struct QuadTag {};

@@ -1,7 +1,7 @@
 #ifndef SRC_HEADERS_SIMPLE_TEXTURE_H
 #define SRC_HEADERS_SIMPLE_TEXTURE_H
 
-#include "i_technique.h"
+#include "ITechnique.h"
 
 namespace s21 {
 

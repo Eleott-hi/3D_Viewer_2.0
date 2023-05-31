@@ -1,5 +1,5 @@
 #pragma once
-#include "i_technique.h"
+#include "ITechnique.h"
 
 namespace s21 {
 class PointShadowTechnique : public ITechnique {

@@ -3,10 +3,10 @@
 
 #include <QOpenGLExtraFunctions>
 
+#include "TechniqueStrategy.h"
 #include "core/ECS_Controller.h"
 #include "core/System.h"
 #include "gizmo/tiny-gizmo.h"
-#include "technique_strategy.h"
 
 namespace s21 {
 

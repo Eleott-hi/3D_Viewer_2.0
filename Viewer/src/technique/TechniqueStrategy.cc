@@ -1,4 +1,4 @@
-#include "technique_strategy.h"
+#include "TechniqueStrategy.h"
 
 #include <memory>
 #include <vector>

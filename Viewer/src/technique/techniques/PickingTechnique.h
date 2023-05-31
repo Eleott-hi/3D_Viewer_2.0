@@ -3,7 +3,7 @@
 // ================================================
 #pragma once
 
-#include "i_technique.h"
+#include "ITechnique.h"
 
 namespace s21 {
 

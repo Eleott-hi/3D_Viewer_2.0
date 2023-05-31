@@ -35,15 +35,15 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS ${QT_LIBS})
 
 include_directories(
     ECS
+    core
     view
-    model
+    scene
+    OpenGL
     common
     shared
     observer
-    controller
     technique
-    OpenGL
-    core
+    controller
 )
 
 file(GLOB_RECURSE PROJECT_SOURCES *.cc *.cpp *.h *.ui)

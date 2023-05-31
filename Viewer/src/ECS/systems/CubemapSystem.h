@@ -4,10 +4,10 @@
 #include <QOpenGLExtraFunctions>
 
 #include "Components.h"
+#include "TechniqueStrategy.h"
 #include "core/ECS_Controller.h"
 #include "core/Event.h"
 #include "core/System.h"
-#include "technique_strategy.h"
 
 namespace s21 {
 

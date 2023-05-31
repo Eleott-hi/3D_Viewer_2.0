@@ -471,12 +471,12 @@ void Scene::SetFramebuffers() {
   texture.SetAttachment(GL_DEPTH_ATTACHMENT);
   texture.SetFormats(GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_FLOAT);
 
-  g_buffer_ = std::make_shared<Framebuffer>();
-  framebuffer3D_ = std::make_shared<Framebuffer>();
-  framebufferShadow_ = std::make_shared<Framebuffer>();
-  pointShadowFramebuffer_ = std::make_shared<Framebuffer>();
+  g_buffer_ = std::make_shared<OpenGLFramebuffer>();
+  framebuffer3D_ = std::make_shared<OpenGLFramebuffer>();
+  framebufferShadow_ = std::make_shared<OpenGLFramebuffer>();
+  pointShadowFramebuffer_ = std::make_shared<OpenGLFramebuffer>();
   // mousePickingFramebuffer_ = std::make_shared<Framebuffer>();
-  defaultFramebuffer_ = std::make_shared<Framebuffer>();
+  defaultFramebuffer_ = std::make_shared<OpenGLFramebuffer>();
 
   pointShadowFramebuffer_->AddTexture(texture);
   pointShadowFramebuffer_->Create({});

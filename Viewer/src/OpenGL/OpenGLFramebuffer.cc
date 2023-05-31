@@ -1,4 +1,4 @@
-#include "framebuffer.h"
+#include "OpenGLFramebuffer.h"
 
 #include "OpenGLDebug.h"
 
@@ -14,7 +14,7 @@ namespace s21 {
 
 static bool isDepth(Format f) { return f >= Format::NONE; }
 
-void Framebuffer::Create(
+void OpenGLFramebuffer::Create(
     const std::initializer_list<AttachmentFormat> &formats) {
   color_formats_.clear();
 
@@ -32,16 +32,16 @@ void Framebuffer::Create(
   Invalidate();
 }
 
-void Framebuffer::Clear() {
+void OpenGLFramebuffer::Clear() {
   if (m_fbo) OPENGL_DEBUG(glDeleteFramebuffers(1, &m_fbo));
   m_fbo = 0;
 }
 
-void Framebuffer::PrepereBuffer() {
+void OpenGLFramebuffer::PrepereBuffer() {
   if (prepare_func_) OPENGL_DEBUG(prepare_func_());
 }
 
-void Framebuffer::Resize(uint32_t width, uint32_t height, bool invalidate) {
+void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height, bool invalidate) {
   uint32_t w = width * magicScale_;
   uint32_t h = height * magicScale_;
 
@@ -52,20 +52,20 @@ void Framebuffer::Resize(uint32_t width, uint32_t height, bool invalidate) {
   if (invalidate) Invalidate();
 }
 
-void Framebuffer::Bind() {
+void OpenGLFramebuffer::Bind() {
   OPENGL_DEBUG(glViewport(x_, y_, width_, height_));
   OPENGL_DEBUG(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 }
 
-void Framebuffer::Unbind() {
+void OpenGLFramebuffer::Unbind() {
   OPENGL_DEBUG(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
-uint32_t Framebuffer::getTextureID(uint32_t index) {
+uint32_t OpenGLFramebuffer::getTextureID(uint32_t index) {
   return textures_.at(index).ID();
 }
 
-void Framebuffer::Invalidate() {
+void OpenGLFramebuffer::Invalidate() {
   if (m_fbo) Clear();
 
   OPENGL_DEBUG(glGenFramebuffers(1, &m_fbo));
@@ -94,7 +94,7 @@ void Framebuffer::Invalidate() {
   Unbind();
 }
 
-void Framebuffer::ProcessTextures() {
+void OpenGLFramebuffer::ProcessTextures() {
   Q_ASSERT(textures_.size());
 
   for (auto &texture : textures_) {
@@ -113,7 +113,7 @@ void Framebuffer::ProcessTextures() {
   }
 }
 
-void Framebuffer::SwitchColorTexture() {
+void OpenGLFramebuffer::SwitchColorTexture() {
   for (uint32_t i = 0; i < color_formats_.size(); i++) {
     TextureWraper texture(GL_TEXTURE_2D);
 
@@ -143,7 +143,7 @@ void Framebuffer::SwitchColorTexture() {
   }
 }
 
-void Framebuffer::SwitchDepthTexture() {
+void OpenGLFramebuffer::SwitchDepthTexture() {
   if (depth_format_.format_ == Format::NONE) {
     qDebug() << "Framebuffer::SwitchDepthTexture()"
              << "depth format none";
@@ -175,7 +175,7 @@ void Framebuffer::SwitchDepthTexture() {
   textures_.push_back(texture);
 }
 
-int Framebuffer::ReadPixel(uint32_t x, uint32_t y, int index) {
+int OpenGLFramebuffer::ReadPixel(uint32_t x, uint32_t y, int index) {
   Q_ASSERT_X(index <= m_Color_Textures_.size(), "Framebuffer::ReadPixel()",
              "Index is out of bounds");
 

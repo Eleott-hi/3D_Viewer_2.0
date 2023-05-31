@@ -18,6 +18,7 @@
 #include "systems/EditPickedSystem.h"
 #include "systems/GizmoRenderSystem.h"
 //// #include "systems/InputSystem.h"
+#include "TechniqueStrategy.h"
 #include "systems/LightSystem.h"
 #include "systems/MousePickingSystem.h"
 #include "systems/PointShadowRenderSystem.h"
@@ -28,7 +29,6 @@
 #include "systems/ShadowRenderSystem.h"
 #include "systems/ShadowSystem.h"
 #include "systems/TimeTickSystem.h"
-#include "technique_strategy.h"
 
 namespace s21 {
 

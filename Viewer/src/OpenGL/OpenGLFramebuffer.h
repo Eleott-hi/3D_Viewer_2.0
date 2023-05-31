@@ -5,18 +5,18 @@
 #include <QOpenGLExtraFunctions>
 #include <vector>
 
-#include "i_framebuffer.h"
+#include "IFramebuffer.h"
 
 namespace s21 {
 
-class Framebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
+class OpenGLFramebuffer : public IFramebuffer, protected QOpenGLExtraFunctions {
  public:
-  Framebuffer() { initializeOpenGLFunctions(); }
+  OpenGLFramebuffer() { initializeOpenGLFunctions(); }
 
-  Framebuffer(Framebuffer&&) = default;
-  Framebuffer(const Framebuffer&) = default;
-  Framebuffer& operator=(Framebuffer&&) = default;
-  Framebuffer& operator=(const Framebuffer&) = default;
+  OpenGLFramebuffer(OpenGLFramebuffer&&) = default;
+  OpenGLFramebuffer(const OpenGLFramebuffer&) = default;
+  OpenGLFramebuffer& operator=(OpenGLFramebuffer&&) = default;
+  OpenGLFramebuffer& operator=(const OpenGLFramebuffer&) = default;
 
   void Bind() final;
   void Unbind() final;
