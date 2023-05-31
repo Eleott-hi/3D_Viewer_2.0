@@ -41,7 +41,7 @@ void MousePickingSystem::Update() {
     auto const &transform = scene_->GetComponent<Transform>(entity);
     auto &model = scene_->GetComponent<Model>(entity);
 
-    technique_->setMVP(camera.projection_matrix, camera.view_matrix,
+    technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
                        transform.GetModelMatrix());
     technique_->SetObjectID((int)entity);
 

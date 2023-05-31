@@ -25,11 +25,11 @@ void RenderSystem::Update() {
 
     technique_->Enable(scene_->GetComponent<Shader>(entity).type);
     technique_->Clear();
-    technique_->setMaterial(material);
-    technique_->setMVP(camera.projection_matrix, camera.view_matrix,
+    technique_->SetMaterial(material);
+    technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
                        transform.GetModelMatrix());
 
-    // technique_->setTexture(enviroment.light);
+    // technique_->SetTexture(enviroment.light);
 
     for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
 

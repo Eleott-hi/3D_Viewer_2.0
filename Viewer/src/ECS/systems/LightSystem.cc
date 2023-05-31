@@ -39,7 +39,7 @@ void LightSystem::Update() {
 
   for (auto type : types) {
     technique_->Enable(type);
-    technique_->setLight(lights, attenuations);
+    technique_->SetLight(lights, attenuations);
   }
 }
 

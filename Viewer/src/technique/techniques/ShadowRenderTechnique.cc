@@ -5,10 +5,10 @@
 
 namespace s21 {
 
-void ShadowRenderTechnique::init() {
+void ShadowRenderTechnique::Init() {
   GenerateShaders(":/shaders/shadows.vs", ":/shaders/shadows.fs");
 }
-void ShadowRenderTechnique::setTexture(Texture const &texture) {
+void ShadowRenderTechnique::SetTexture(Texture const &texture) {
   shader_.setUniformValue(texture.type.c_str(), index_);
   glActiveTexture(GL_TEXTURE0 + index_);
   glBindTexture(GL_TEXTURE_2D, texture.id);
@@ -16,7 +16,7 @@ void ShadowRenderTechnique::setTexture(Texture const &texture) {
   index_++;
 }
 
-void ShadowRenderTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
+void ShadowRenderTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                                    QMatrix4x4 model) {
   shader_.setUniformValue("Model", model);
   shader_.setUniformValue("View", view);
@@ -28,12 +28,12 @@ void ShadowRenderTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
   shader_.setUniformValue("camPos", QVector3D{tmp(0, 3), tmp(1, 3), tmp(2, 3)});
 }
 
-void ShadowRenderTechnique::setMaterial(Material const &material) {
-  setTexture({material.ao.id, "material.aoMap"});
-  setTexture({material.normal.id, "material.normalMap"});
-  setTexture({material.diffuse.id, "material.albedoMap"});
-  setTexture({material.specular.id, "material.specularMap"});
-  setTexture({material.roughness.id, "material.roughnessMap"});
+void ShadowRenderTechnique::SetMaterial(Material const &material) {
+  SetTexture({material.ao.id, "material.aoMap"});
+  SetTexture({material.normal.id, "material.normalMap"});
+  SetTexture({material.diffuse.id, "material.albedoMap"});
+  SetTexture({material.specular.id, "material.specularMap"});
+  SetTexture({material.roughness.id, "material.roughnessMap"});
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 
@@ -77,7 +77,7 @@ void ShadowRenderTechnique::SetLightSpecificComponent(ShaderProgram &shader,
                          attenuation_index);
 }
 
-void ShadowRenderTechnique::setLight(
+void ShadowRenderTechnique::SetLight(
     QVector<Light> lights, QVector<std::optional<Attenuation>> attenuations) {
   int dirLightsCount = 0, pointLightsCount = 0, spotLightsCount = 0;
 

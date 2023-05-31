@@ -8,15 +8,15 @@ namespace s21 {
 
 class LightTextureTechnique : public ITechnique {
  public:
-  LightTextureTechnique() { init(); }
+  LightTextureTechnique() { Init(); }
 
   ~LightTextureTechnique() = default;
 
-  void init() final;
-  void setMaterial(Material const &material) final;
-  void setTexture(Texture const &texture) final;
-  void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
-  void setLight(QVector<Light> lights,
+  void Init() final;
+  void SetMaterial(Material const &material) final;
+  void SetTexture(Texture const &texture) final;
+  void SetMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
+  void SetLight(QVector<Light> lights,
                 QVector<std::optional<Attenuation>> attenuations) final;
 
  private:

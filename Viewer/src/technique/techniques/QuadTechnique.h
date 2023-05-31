@@ -6,11 +6,11 @@ namespace s21 {
 
 class QuadTechnique : public ITechnique {
  public:
-  QuadTechnique() { init(); }
+  QuadTechnique() { Init(); }
   ~QuadTechnique() {}
 
-  void init() final;
-  void setTexture(Texture const &texture) final;
+  void Init() final;
+  void SetTexture(Texture const &texture) final;
 };
 
 }  // namespace s21

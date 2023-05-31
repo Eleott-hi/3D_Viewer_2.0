@@ -47,26 +47,26 @@ void TechniqueStrategy::Enable(TechniqueType type) {
   technique_->Enable();
 }
 
-void TechniqueStrategy::setMaterial(Material const &material) {
-  technique_->setMaterial(material);
+void TechniqueStrategy::SetMaterial(Material const &material) {
+  technique_->SetMaterial(material);
 }
 
-void TechniqueStrategy::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
+void TechniqueStrategy::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                                QMatrix4x4 model) {
-  technique_->setMVP(proj, view, model);
+  technique_->SetMVP(proj, view, model);
 }
 
-void TechniqueStrategy::setTexture(Texture const &texture) {
-  technique_->setTexture(texture);
+void TechniqueStrategy::SetTexture(Texture const &texture) {
+  technique_->SetTexture(texture);
 }
 
 void TechniqueStrategy::SetObjectID(int ObjectID) {
   technique_->SetObjectID(ObjectID);
 }
 
-void TechniqueStrategy::setLight(
+void TechniqueStrategy::SetLight(
     QVector<Light> lights, QVector<std::optional<Attenuation>> attenuations) {
-  technique_->setLight(lights, attenuations);
+  technique_->SetLight(lights, attenuations);
 }
 
 }  // namespace s21

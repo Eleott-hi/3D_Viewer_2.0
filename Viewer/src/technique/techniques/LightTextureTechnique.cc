@@ -3,12 +3,12 @@
 #include "Utils.h"
 
 namespace s21 {
-void LightTextureTechnique::init() {
+void LightTextureTechnique::Init() {
   GenerateShaders(":/shaders/light_texture_shader.vs",
                   ":/shaders/light_texture_shader.fs");
 }
 
-void LightTextureTechnique::setTexture(Texture const &texture) {
+void LightTextureTechnique::SetTexture(Texture const &texture) {
   shader_.setUniformValue(texture.type.c_str(), index_);
   glActiveTexture(GL_TEXTURE0 + index_);
   glBindTexture(GL_TEXTURE_2D, texture.id);
@@ -16,7 +16,7 @@ void LightTextureTechnique::setTexture(Texture const &texture) {
   index_++;
 }
 
-void LightTextureTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
+void LightTextureTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                                    QMatrix4x4 model) {
   shader_.setUniformValue("u_Model", model);
   shader_.setUniformValue("u_View", view);
@@ -27,9 +27,9 @@ void LightTextureTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
                           QVector3D{tmp(0, 3), tmp(1, 3), tmp(2, 3)});
 }
 
-void LightTextureTechnique::setMaterial(Material const &material) {
-  setTexture({material.diffuse.id, "material.diffuseMap"});
-  setTexture({material.specular.id, "material.specularMap"});
+void LightTextureTechnique::SetMaterial(Material const &material) {
+  SetTexture({material.diffuse.id, "material.diffuseMap"});
+  SetTexture({material.specular.id, "material.specularMap"});
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 
@@ -73,7 +73,7 @@ void LightTextureTechnique::SetLightSpecificComponent(ShaderProgram &shader,
                          attenuation_index);
 }
 
-void LightTextureTechnique::setLight(
+void LightTextureTechnique::SetLight(
     QVector<Light> lights, QVector<std::optional<Attenuation>> attenuations) {
   int dirLightsCount = 0, pointLightsCount = 0, spotLightsCount = 0;
 

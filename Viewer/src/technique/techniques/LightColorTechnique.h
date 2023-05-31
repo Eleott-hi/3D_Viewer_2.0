@@ -6,14 +6,14 @@ namespace s21 {
 
 class LightColorTechnique : public ITechnique {
  public:
-  LightColorTechnique() { init(); }
+  LightColorTechnique() { Init(); }
   ~LightColorTechnique() {}
 
-  void init() final;
-  void setMaterial(Material const &material) final;
-  void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
+  void Init() final;
+  void SetMaterial(Material const &material) final;
+  void SetMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
 
-  void setLight(QVector<Light> lights,
+  void SetLight(QVector<Light> lights,
                 QVector<std::optional<Attenuation>> attenuations) final;
 
  private:

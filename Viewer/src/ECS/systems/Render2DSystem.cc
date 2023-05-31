@@ -16,10 +16,10 @@ void Render2DSystem::Update(uint32_t pos, uint32_t normal,
 
   technique_->Enable(TechniqueType::QUAD);
   technique_->Clear();
-  technique_->setTexture({texture.id, "screenTexture"});
-  technique_->setTexture({pos, "gPosition"});
-  technique_->setTexture({normal, "gNormal"});
-  technique_->setTexture({albedo_spec, "gAlbedoSpec"});
+  technique_->SetTexture({texture.id, "screenTexture"});
+  technique_->SetTexture({pos, "gPosition"});
+  technique_->SetTexture({normal, "gNormal"});
+  technique_->SetTexture({albedo_spec, "gAlbedoSpec"});
 
   renderQuad();
 }

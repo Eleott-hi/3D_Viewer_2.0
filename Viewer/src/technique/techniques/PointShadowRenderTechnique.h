@@ -5,14 +5,14 @@
 namespace s21 {
 class PointShadowRenderTechnique : public ITechnique {
  public:
-  PointShadowRenderTechnique() { init(); }
+  PointShadowRenderTechnique() { Init(); }
   ~PointShadowRenderTechnique() = default;
 
-  void init() final {
+  void Init() final {
     GenerateShaders(":/shaders/point_shadows.vs", ":/shaders/point_shadows.fs");
   }
 
-  void setTexture(Texture const &texture) final {
+  void SetTexture(Texture const &texture) final {
     shader_.setUniformValue(texture.type.c_str(), index_);
     glActiveTexture(GL_TEXTURE0 + index_);
     glBindTexture(index_ ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, texture.id);
@@ -20,16 +20,16 @@ class PointShadowRenderTechnique : public ITechnique {
     index_++;
   }
 
-  void setMaterial(Material const &material) {
-    setTexture({material.ao.id, "material.aoMap"});
-    setTexture({material.normal.id, "material.normalMap"});
-    setTexture({material.diffuse.id, "material.albedoMap"});
-    setTexture({material.specular.id, "material.specularMap"});
-    setTexture({material.roughness.id, "material.roughnessMap"});
+  void SetMaterial(Material const &material) {
+    SetTexture({material.ao.id, "material.aoMap"});
+    SetTexture({material.normal.id, "material.normalMap"});
+    SetTexture({material.diffuse.id, "material.albedoMap"});
+    SetTexture({material.specular.id, "material.specularMap"});
+    SetTexture({material.roughness.id, "material.roughnessMap"});
     shader_.setUniformValue("material.shininess", material.shininess);
   }
 
-  void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final {
+  void SetMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final {
     shader_.setUniformValue("Projection", proj);
     shader_.setUniformValue("View", view);
     shader_.setUniformValue("Model", model);

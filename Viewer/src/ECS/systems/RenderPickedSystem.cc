@@ -33,7 +33,7 @@ void RenderPickedSystem::Update() {
 
     // Draw model to stencil buffer
     technique_->Enable(TechniqueType::SIMPLE_COLOR);
-    technique_->setMVP(camera.projection_matrix, camera.view_matrix,
+    technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
                        modelMatrix);
     for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
 
@@ -44,7 +44,7 @@ void RenderPickedSystem::Update() {
 
     // Draw outline to stencil buffer
     technique_->Enable(TechniqueType::STENCIL_OUTLINE);
-    technique_->setMVP(camera.projection_matrix, camera.view_matrix,
+    technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
                        modelMatrix);
     for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
   }

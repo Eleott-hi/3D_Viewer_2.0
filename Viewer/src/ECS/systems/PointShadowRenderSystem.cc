@@ -22,9 +22,9 @@ void PointShadowRenderSystem::Update(uint32_t shadowMap) {
 
     technique_->Enable(TechniqueType::POINT_SHADOW_RENDER);
     technique_->Clear();
-    technique_->setTexture({shadowMap, "shadowMap"});
-    technique_->setMaterial(material);
-    technique_->setMVP(camera.projection_matrix, camera.view_matrix,
+    technique_->SetTexture({shadowMap, "shadowMap"});
+    technique_->SetMaterial(material);
+    technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
                        transform.GetModelMatrix());
 
     for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);

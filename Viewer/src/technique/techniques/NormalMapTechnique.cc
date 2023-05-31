@@ -4,10 +4,10 @@
 
 namespace s21 {
 
-void NormalMapTechnique::init() {
+void NormalMapTechnique::Init() {
   GenerateShaders(":/shaders/normal_mapping.vs", ":/shaders/normal_mapping.fs");
 }
-void NormalMapTechnique::setTexture(Texture const &texture) {
+void NormalMapTechnique::SetTexture(Texture const &texture) {
   shader_.setUniformValue(texture.type.c_str(), index_);
   glActiveTexture(GL_TEXTURE0 + index_);
   glBindTexture(GL_TEXTURE_2D, texture.id);
@@ -15,7 +15,7 @@ void NormalMapTechnique::setTexture(Texture const &texture) {
   index_++;
 }
 
-void NormalMapTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
+void NormalMapTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                                 QMatrix4x4 model) {
   shader_.setUniformValue("Model", model);
   shader_.setUniformValue("View", view);
@@ -26,10 +26,10 @@ void NormalMapTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
                           QVector3D{tmp(0, 3), tmp(1, 3), tmp(2, 3)});
 }
 
-void NormalMapTechnique::setMaterial(Material const &material) {
-  setTexture({material.normal.id, "normalMap"});
-  setTexture({material.diffuse.id, "material.diffuseMap"});
-  setTexture({material.specular.id, "material.specularMap"});
+void NormalMapTechnique::SetMaterial(Material const &material) {
+  SetTexture({material.normal.id, "normalMap"});
+  SetTexture({material.diffuse.id, "material.diffuseMap"});
+  SetTexture({material.specular.id, "material.specularMap"});
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 
@@ -73,7 +73,7 @@ void NormalMapTechnique::SetLightSpecificComponent(ShaderProgram &shader,
                          attenuation_index);
 }
 
-void NormalMapTechnique::setLight(
+void NormalMapTechnique::SetLight(
     QVector<Light> lights, QVector<std::optional<Attenuation>> attenuations) {
   int dirLightsCount = 0, pointLightsCount = 0, spotLightsCount = 0;
 

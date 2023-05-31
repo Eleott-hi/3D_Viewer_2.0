@@ -4,10 +4,10 @@
 
 namespace s21 {
 
-void PhysicalBasedRenderingTechnique::init() {
+void PhysicalBasedRenderingTechnique::Init() {
   GenerateShaders(":/shaders/PBR.vs", ":/shaders/PBR.fs");
 }
-void PhysicalBasedRenderingTechnique::setTexture(Texture const &texture) {
+void PhysicalBasedRenderingTechnique::SetTexture(Texture const &texture) {
   shader_.setUniformValue(texture.type.c_str(), index_);
   glActiveTexture(GL_TEXTURE0 + index_);
   glBindTexture(GL_TEXTURE_2D, texture.id);
@@ -15,7 +15,7 @@ void PhysicalBasedRenderingTechnique::setTexture(Texture const &texture) {
   index_++;
 }
 
-void PhysicalBasedRenderingTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
+void PhysicalBasedRenderingTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                                              QMatrix4x4 model) {
   shader_.setUniformValue("Model", model);
   shader_.setUniformValue("View", view);
@@ -25,12 +25,12 @@ void PhysicalBasedRenderingTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
   shader_.setUniformValue("camPos", QVector3D{tmp(0, 3), tmp(1, 3), tmp(2, 3)});
 }
 
-void PhysicalBasedRenderingTechnique::setMaterial(Material const &material) {
-  setTexture({material.ao.id, "material.aoMap"});
-  setTexture({material.normal.id, "material.normalMap"});
-  setTexture({material.diffuse.id, "material.albedoMap"});
-  setTexture({material.specular.id, "material.specularMap"});
-  setTexture({material.roughness.id, "material.roughnessMap"});
+void PhysicalBasedRenderingTechnique::SetMaterial(Material const &material) {
+  SetTexture({material.ao.id, "material.aoMap"});
+  SetTexture({material.normal.id, "material.normalMap"});
+  SetTexture({material.diffuse.id, "material.albedoMap"});
+  SetTexture({material.specular.id, "material.specularMap"});
+  SetTexture({material.roughness.id, "material.roughnessMap"});
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 
@@ -72,7 +72,7 @@ void PhysicalBasedRenderingTechnique::SetLightSpecificComponent(
                          attenuation_index);
 }
 
-void PhysicalBasedRenderingTechnique::setLight(
+void PhysicalBasedRenderingTechnique::SetLight(
     QVector<Light> lights, QVector<std::optional<Attenuation>> attenuations) {
   int dirLightsCount = 0, pointLightsCount = 0, spotLightsCount = 0;
 

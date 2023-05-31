@@ -20,18 +20,18 @@ class ITechnique : protected QOpenGLExtraFunctions {
   ITechnique() { initializeOpenGLFunctions(); }
   virtual ~ITechnique() {}
 
-  virtual void init() = 0;
+  virtual void Init() = 0;
   virtual void Enable() { shader_.bind(); };
 
   // =================== Optional ===================
   virtual void Clear() { index_ = 0; }
   virtual void SetObjectID(int ObjectID) {}
-  virtual void setTexture(Texture const &texture) {}
-  virtual void setMaterial(Material const &material) {}
-  virtual void setLight(QVector<Light> lights,
+  virtual void SetTexture(Texture const &texture) {}
+  virtual void SetMaterial(Material const &material) {}
+  virtual void SetLight(QVector<Light> lights,
                         QVector<std::optional<Attenuation>> attenuations) {}
 
-  virtual void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) {}
+  virtual void SetMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) {}
 
   template <typename Type>
   void setCustomValue(const char *name, Type value) {

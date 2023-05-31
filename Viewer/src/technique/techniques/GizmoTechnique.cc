@@ -2,11 +2,11 @@
 
 namespace s21 {
 
-void GizmoTechnique::init() {
+void GizmoTechnique::Init() {
   GenerateShaders(":/shaders/gizmo.vs", ":/shaders/gizmo.fs");
 }
 
-void GizmoTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
+void GizmoTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                             QMatrix4x4 model) {
   shader_.setUniformValue("u_mvp", proj * view * model);
 

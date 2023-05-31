@@ -6,17 +6,17 @@
 
 namespace s21 {
 
-void LightColorTechnique::init() {
+void LightColorTechnique::Init() {
   GenerateShaders(":/shaders/light_color_shader.vs",
                   ":/shaders/light_color_shader.fs");
 }
 
-void LightColorTechnique::setMaterial(Material const &material) {
+void LightColorTechnique::SetMaterial(Material const &material) {
   shader_.setUniformValue("material.color", material.color);
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 
-void LightColorTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
+void LightColorTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                                  QMatrix4x4 model) {
   shader_.setUniformValue("Model", model);
   shader_.setUniformValue("View", view);
@@ -67,7 +67,7 @@ void LightColorTechnique::SetLightSpecificComponent(ShaderProgram &shader,
                          attenuation_index);
 }
 
-void LightColorTechnique::setLight(
+void LightColorTechnique::SetLight(
     QVector<Light> lights, QVector<std::optional<Attenuation>> attenuations) {
   int dirLightsCount = 0, pointLightsCount = 0, spotLightsCount = 0;
 

@@ -21,11 +21,11 @@ class TechniqueStrategy {
   //  void setColor(QColor c);
   void SetObjectID(int ObjectID);
   void Enable(TechniqueType type);
-  void setMaterial(Material const &material);
-  void setTexture(Texture const &texture);
-  void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model);
+  void SetMaterial(Material const &material);
+  void SetTexture(Texture const &texture);
+  void SetMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model);
   ITechnique *getTechnique() { return technique_.get(); }
-  void setLight(QVector<Light> lights,
+  void SetLight(QVector<Light> lights,
                 QVector<std::optional<Attenuation>> attenuations);
 
  private:

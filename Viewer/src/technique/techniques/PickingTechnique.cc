@@ -2,11 +2,11 @@
 
 namespace s21 {
 
-void PickingTechnique::init() {
+void PickingTechnique::Init() {
   GenerateShaders(":/shaders/picking_shader.vs", ":/shaders/picking_shader.fs");
 }
 
-void PickingTechnique::setMVP(QMatrix4x4 proj, QMatrix4x4 view,
+void PickingTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                               QMatrix4x4 model) {
   shader_.setUniformValue("u_MVP", proj * view * model);
 }

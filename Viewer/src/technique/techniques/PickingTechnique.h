@@ -9,12 +9,12 @@ namespace s21 {
 
 class PickingTechnique : public ITechnique {
  public:
-  PickingTechnique() { init(); }
+  PickingTechnique() { Init(); }
   ~PickingTechnique() = default;
 
-  void init() final;
+  void Init() final;
   void SetObjectID(int ObjectID) final;
-  void setMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
+  void SetMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
 };
 
 }  // namespace s21

@@ -152,7 +152,7 @@ void GizmoRenderSystem::Update() {
     auto &transform = scene_->GetComponent<Transform>(entity);
 
     technique_->Enable(TechniqueType::GIZMO);
-    technique_->setMVP(camera.projection_matrix, camera.view_matrix, {});
+    technique_->SetMVP(camera.projection_matrix, camera.view_matrix, {});
 
     tinygizmo::rigid_transform xform, xform_last;
     xform = xform_last = ToRigidTransform(transform);
