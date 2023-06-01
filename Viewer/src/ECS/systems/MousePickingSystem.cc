@@ -44,10 +44,9 @@ void MousePickingSystem::Update() {
     auto &model = scene_->GetComponent<Mesh>(entity);
     // auto &heirarchy = scene_->GetComponent<HierarchyComponent>(entity);
 
-    technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
+    technique_->SetMVP(camera.projection_, camera.view_,
                        transform.GetModelMatrix());
     technique_->SetObjectID((int)entity);
-
     model.Draw(this, GL_TRIANGLES);
   }
 

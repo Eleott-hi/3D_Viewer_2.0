@@ -1,5 +1,6 @@
 #include "RenderSystem.h"
 
+#include "Hierarchy.h"
 #include "Utils.h"
 #include "events/WindowResizeEvent.h"
 
@@ -14,6 +15,20 @@ void RenderSystem::Update() {
   // static auto &enviroment =
   // scene_->GetComponent<Enviroment>(scene_->GetEntities<Enviroment>().at(0));
 
+  std::unordered_map<int, QMatrix4x4> matricies;
+  std::function<QMatrix4x4(EntityID)> get_model_matrix = [&](EntityID entity) {
+    if (matricies.find(entity) == matricies.end() &&
+        scene_->EntityHasComponent<Transform>(entity)) {
+      auto &transform = scene_->GetComponent<Transform>(entity);
+      auto &hierarchy = scene_->GetComponent<HierarchyComponent>(entity);
+
+      matricies[entity] =
+          get_model_matrix(hierarchy.parent) * transform.GetModelMatrix();
+    }
+
+    return matricies[entity];
+  };
+
   auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
 
   for (auto entity : entities_) {
@@ -26,8 +41,8 @@ void RenderSystem::Update() {
     technique_->Enable(scene_->GetComponent<Shader>(entity).type);
     technique_->Clear();
     technique_->SetMaterial(material);
-    technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
-                       transform.GetModelMatrix());
+    technique_->SetMVP(camera.projection_, camera.view_,
+                       get_model_matrix(entity));
 
     // technique_->SetTexture(enviroment.light);
 

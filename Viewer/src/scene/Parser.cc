@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "Components.h"
+#include "Hierarchy.h"
 #include "TextureStorage.h"
 #include "Utils.h"
 
@@ -22,13 +23,7 @@ void LoadTexture(aiMaterial *material, aiTextureType type, Texture &texture) {
   for (uint32_t i = 0; i < material->GetTextureCount(type); i++) {
     aiString str;
     material->GetTexture(type, i, &str);
-
-    std::string const &filename = directory_ + "/" + str.C_Str();
-
-    auto tmp = TextureStorage::LoadTexture(filename);
-    texture.id = tmp.id;
-    texture.image = tmp.image;
-    texture.filename = tmp.filename;
+    texture = TextureStorage::LoadTexture(directory_ + "/" + str.C_Str());
   }
 }
 
@@ -90,10 +85,8 @@ QVector<Vertex> loadVertices(aiMesh *mesh, const aiScene *scene) {
     if (mesh->mTextureCoords[0]) {
       auto const &[cx, cy, cz] = mesh->mTextureCoords[0][i];
       vertex.tex_coords = {cx, cy};
-
       auto const &[tx, ty, tz] = mesh->mTangents[i];
       vertex.tangent = {tx, ty, tz};
-
       auto const &[bx, by, bz] = mesh->mBitangents[i];
       vertex.bitangent = {bx, by, bz};
     }
@@ -101,7 +94,7 @@ QVector<Vertex> loadVertices(aiMesh *mesh, const aiScene *scene) {
     auto const &[px, py, pz] = mesh->mVertices[i];
     vertex.position = {px, py, pz};
 
-    vertices << vertex;
+    vertices << std::move(vertex);
   }
 
   return vertices;
@@ -154,10 +147,17 @@ void Parser::loadModel(ECS_Controller *ecs_scene, std::string const &filename) {
 
   processNode(ecs_scene, scene->mRootNode, scene);
 
+  if (meshes.empty()) return;
+
   EntityID entity = ecs_scene->NewEntity();
   ecs_scene->AddComponent<Transform>(entity);
-  ecs_scene->AddComponent<HierarchyComponent>(entity, {0, meshes});
-  ecs_scene->AddComponent<Model>(entity, {filename});
+  ecs_scene->AddComponent<HierarchyComponent>(entity);
+  // ecs_scene->AddComponent<Model>(entity, {filename});
+  static int tmp = 0;
+  if (tmp == 0) ecs_scene->AddComponent<PickingTag>(entity);
+  tmp++;
+
+  Hierarchy::AddChildren(ecs_scene, entity, meshes);
 }
 
 }  // namespace s21

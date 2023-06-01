@@ -22,7 +22,7 @@ void DefferedShadingSystem::Update() {
     technique_->Enable(TechniqueType::DEFFERED_SHADING);
     technique_->Clear();
     technique_->SetMaterial(material);
-    technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
+    technique_->SetMVP(camera.projection_, camera.view_,
                        transform.GetModelMatrix());
 
     model.Draw(this, GL_TRIANGLES);

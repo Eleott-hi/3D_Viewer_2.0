@@ -31,6 +31,8 @@ enum class TechniqueType {
   POINT_SHADOW,
   POINT_SHADOW_RENDER,
   GIZMO,
+
+  COUNT,
 };
 
 enum class LightType {
@@ -49,7 +51,7 @@ struct Vertex {
 
 struct HierarchyComponent {
   EntityID parent = 0;
-  QVector<EntityID> entities;
+  QVector<EntityID> children;
 };
 
 struct Mesh {
@@ -132,8 +134,8 @@ struct Camera {
   float speed = 0.004;
   float mouse_sensitivity = 0.1;
 
-  QMatrix4x4 view_matrix;
-  QMatrix4x4 projection_matrix;
+  QMatrix4x4 view_;
+  QMatrix4x4 projection_;
 
   bool primary = true;
   bool perspective = true;

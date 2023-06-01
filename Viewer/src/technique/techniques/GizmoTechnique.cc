@@ -8,10 +8,9 @@ void GizmoTechnique::Init() {
 
 void GizmoTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                             QMatrix4x4 model) {
-  shader_.setUniformValue("u_mvp", proj * view * model);
+  shader_.setUniformValue("u_mvp", projection_ * view_ * model);
 
-  auto tmp = view.inverted();
-  shader_.setUniformValue("u_eye", QVector3D{tmp(0, 3), tmp(1, 3), tmp(2, 3)});
+  shader_.setUniformValue("u_eye", QVector3D{view_.inverted().column(3)});
 }
 
 }  // namespace s21

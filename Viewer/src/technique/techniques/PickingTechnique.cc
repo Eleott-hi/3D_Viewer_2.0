@@ -8,7 +8,7 @@ void PickingTechnique::Init() {
 
 void PickingTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                               QMatrix4x4 model) {
-  shader_.setUniformValue("u_MVP", proj * view * model);
+  shader_.setUniformValue("u_MVP", projection_ * view_ * model);
 }
 
 void PickingTechnique::SetObjectID(int ObjectID) {

@@ -1,5 +1,6 @@
 #include "Scene.h"
 
+#include "Hierarchy.h"
 #include "TextureStorage.h"
 #include "Utils.h"
 
@@ -30,8 +31,6 @@ void Scene::Init(QOpenGLWidget* widget) {
 
   opengl_widget_ = widget;
   technique_ = std::make_shared<TechniqueStrategy>();
-  // texture_storage_ = std::make_shared<TextureStorage>();
-  parser_ = std::make_shared<Parser>();
 
   SetFramebuffers();
   RegisterComponents();
@@ -41,20 +40,12 @@ void Scene::Init(QOpenGLWidget* widget) {
 
 void Scene::Update() {
   timeTickSystem_->Update();
-  //  inputSystem_->Update();
   mousePickingSystem_->Update();
   editPickedSystem_->Update();
   cameraSystem_->Update();
   lightSystem_->Update();
 
-  update_ui_callback_();
-
-  // if (picked_) {
-  //   Notify();
-  //   picked_ = false;
-  // }
-
-  // NotifyCamera();
+  // update_ui_callback_();
 }
 
 void Scene::Draw() {
@@ -140,30 +131,7 @@ void Scene::Render() {
 
 void Scene::AddModel(QString path) {
   opengl_widget_->makeCurrent();
-
-  // auto data =
-  parser_->loadModel(&scene_, path.toStdString());
-
-  // if (data.empty()) return;
-
-  // for (auto& [mesh, material] : data) {
-  //   mesh->bufferize(this);
-
-  //   material->roughness =
-  //       TextureStorage::LoadTexture(dir + "objects/backpack/roughness.jpg");
-  //   material->ao = TextureStorage::LoadTexture(dir +
-  //   "objects/backpack/ao.jpg");
-
-  //   EntityID entity = scene_.NewEntity();
-  //   scene_.AddComponent<Shader>(entity,
-  //                               {TechniqueType::PHYSICAL_BASED_RENDERING});
-  //   scene_.AddComponent<Transform>(entity);
-  //   scene_.AddComponent<RenderTag>(entity);
-  //   scene_.AddComponent<ShadowTag>(entity);
-  //   scene_.AddComponent<Material>(entity, *material);
-  //   scene_.AddComponent<Mesh>(entity, std::move(*mesh));
-  // }
-
+  Parser::loadModel(&scene_, path.toStdString());
   opengl_widget_->doneCurrent();
 }
 
@@ -199,7 +167,7 @@ void Scene::RegisterSystems() {
     ComponentMask mask;
     mask.set(GetComponentID<Camera>());
     scene_.ChangeSystemMask<CameraSystem>(mask);
-    cameraSystem_->Init(&scene_);
+    cameraSystem_->Init(&scene_, technique_.get());
   }
 
   mousePickingSystem_ = scene_.RegisterSystem<MousePickingSystem>();
@@ -530,6 +498,11 @@ void Scene::SetFramebuffers() {
 }
 
 void Scene::InitEntities() {
+  {
+    root_ = scene_.NewEntity();
+    scene_.AddComponent<HierarchyComponent>(root_);
+  }
+
   {
     Texture texture = {framebuffer3D_->getTextureID(), "quad"};
     // Texture texture = {framebufferShadow_->getTextureID(), "quad"};

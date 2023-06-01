@@ -140,7 +140,7 @@ void CubemapSystem::Update() {
     auto &mesh = scene_->GetComponent<Mesh>(entity);
 
     technique_->Enable(TechniqueType::CUBEMAP);
-    technique_->SetMVP(camera.projection_matrix, camera.view_matrix, {});
+    technique_->SetMVP(camera.projection_, camera.view_, {});
     technique_->SetTexture(texture);
 
     glBindVertexArray(mesh.VAO);

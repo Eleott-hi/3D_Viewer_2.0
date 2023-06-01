@@ -98,7 +98,7 @@ QVector3D GetRayFromPixel(Camera const &camera) {
   const float y = 1 - 2 * (float)(pixel.y() - 0) / (float)camera.height;
 
   QMatrix4x4 inveresed_proj_view =
-      (camera.projection_matrix * camera.view_matrix).inverted();
+      (camera.projection_ * camera.view_).inverted();
 
   QVector4D p0 = inveresed_proj_view * QVector4D(x, y, -1, 1);
   QVector4D p1 = inveresed_proj_view * QVector4D(x, y, +1, 1);
@@ -148,7 +148,7 @@ void GizmoRenderSystem::Update() {
   auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
 
   technique_->Enable(TechniqueType::GIZMO);
-  technique_->SetMVP(camera.projection_matrix, camera.view_matrix, {});
+  technique_->SetMVP(camera.projection_, camera.view_, {});
 
   UpdateState(gizmo_state, camera);
   gizmo_ctx.update(gizmo_state);

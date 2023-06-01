@@ -32,6 +32,10 @@ class ITechnique : protected QOpenGLExtraFunctions {
                         QVector<std::optional<Attenuation>> attenuations) {}
 
   virtual void SetMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) {}
+  void SetProjectionViewMatrix(QMatrix4x4 proj, QMatrix4x4 view) {
+    projection_ = proj, view_ = view;
+  }
+  void SetModelMatrix(QMatrix4x4 model) { model_ = model; }
 
   template <typename Type>
   void setCustomValue(const char *name, Type value) {
@@ -39,8 +43,9 @@ class ITechnique : protected QOpenGLExtraFunctions {
   }
 
  protected:
-  ShaderProgram shader_;
   uint32_t index_ = 0;
+  ShaderProgram shader_;
+  static QMatrix4x4 projection_, view_, model_;
 
   void GenerateShaders(QString vertex_file, QString geometry_file,
                        QString fragment_file = "") {

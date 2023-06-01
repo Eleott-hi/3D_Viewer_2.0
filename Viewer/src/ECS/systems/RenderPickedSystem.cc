@@ -33,8 +33,7 @@ void RenderPickedSystem::Update() {
 
     // Draw model to stencil buffer
     technique_->Enable(TechniqueType::SIMPLE_COLOR);
-    technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
-                       modelMatrix);
+    technique_->SetMVP(camera.projection_, camera.view_, modelMatrix);
     model.Draw(this, GL_TRIANGLES);
 
     // Enable writing to color buffer
@@ -44,8 +43,7 @@ void RenderPickedSystem::Update() {
 
     // Draw outline to stencil buffer
     technique_->Enable(TechniqueType::STENCIL_OUTLINE);
-    technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
-                       modelMatrix);
+    technique_->SetMVP(camera.projection_, camera.view_, modelMatrix);
     model.Draw(this, GL_TRIANGLES);
   }
 

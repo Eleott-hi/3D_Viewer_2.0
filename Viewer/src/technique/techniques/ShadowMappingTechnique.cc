@@ -17,8 +17,8 @@ void ShadowMappingTechnique::SetTexture(Texture const &texture) {
 
 void ShadowMappingTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                                     QMatrix4x4 model) {
-  shader_.setUniformValue("Projection", proj);
-  shader_.setUniformValue("View", view);
+  shader_.setUniformValue("Projection", projection_);
+  shader_.setUniformValue("View", view_);
   shader_.setUniformValue("Model", model);
 }
 

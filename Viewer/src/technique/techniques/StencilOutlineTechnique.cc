@@ -8,8 +8,8 @@ void StencilOutlineTechnique::Init() {
 
 void StencilOutlineTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                                      QMatrix4x4 model) {
-  shader_.setUniformValue("proj", proj);
-  shader_.setUniformValue("view", view);
+  shader_.setUniformValue("proj", projection_);
+  shader_.setUniformValue("view", view_);
   shader_.setUniformValue("model", model);
 }
 

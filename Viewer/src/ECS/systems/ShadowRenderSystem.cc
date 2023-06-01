@@ -24,7 +24,7 @@ void ShadowRenderSystem::Update(uint32_t shadowMap) {
     technique_->Clear();
     technique_->SetMaterial(material);
     technique_->SetTexture({shadowMap, "shadowMap"});
-    technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
+    technique_->SetMVP(camera.projection_, camera.view_,
                        transform.GetModelMatrix());
 
     model.Draw(this, GL_TRIANGLES);

@@ -18,12 +18,10 @@ void NormalMapTechnique::SetTexture(Texture const &texture) {
 void NormalMapTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                                 QMatrix4x4 model) {
   shader_.setUniformValue("Model", model);
-  shader_.setUniformValue("View", view);
-  shader_.setUniformValue("Projection", proj);
+  shader_.setUniformValue("View", view_);
+  shader_.setUniformValue("Projection", projection_);
 
-  auto tmp = view.inverted();
-  shader_.setUniformValue("viewPos",
-                          QVector3D{tmp(0, 3), tmp(1, 3), tmp(2, 3)});
+  shader_.setUniformValue("viewPos", QVector3D{view_.inverted().column(3)});
 }
 
 void NormalMapTechnique::SetMaterial(Material const &material) {

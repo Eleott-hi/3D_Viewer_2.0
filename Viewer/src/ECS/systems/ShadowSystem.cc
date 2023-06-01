@@ -40,7 +40,7 @@ void ShadowSystem::Update() {
     auto const &transform = scene_->GetComponent<Transform>(entity);
 
     technique_->Enable(TechniqueType::SHADOW_MAPPING);
-    technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
+    technique_->SetMVP(camera.projection_, camera.view_,
                        transform.GetModelMatrix());
 
     model.Draw(this, GL_TRIANGLES);

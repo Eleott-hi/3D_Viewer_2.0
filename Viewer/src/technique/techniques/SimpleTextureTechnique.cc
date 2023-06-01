@@ -20,7 +20,7 @@ void SimpleTextureTechnique::SetMaterial(Material const &material) {
 
 void SimpleTextureTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                                     QMatrix4x4 model) {
-  shader_.setUniformValue("u_MVP", proj * view * model);
+  shader_.setUniformValue("u_MVP", projection_ * view_ * model);
 }
 
 }  // namespace s21

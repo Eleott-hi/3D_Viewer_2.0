@@ -37,7 +37,11 @@ TextureStorage& TextureStorage::Instance() {
 }
 
 TextureStorage::~TextureStorage() {
-  for (auto [_, texture] : textures_) glDeleteTextures(1, &texture.id);
+  qDebug() << "DEBUG1";
+
+  // for (auto [_, texture] : textures_) glDeleteTextures(1, &texture.id);
+
+  qDebug() << "DEBUG2";
 }
 
 Texture TextureStorage::LoadTexture(std::string const& filename) {

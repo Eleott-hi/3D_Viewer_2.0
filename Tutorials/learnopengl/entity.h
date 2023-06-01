@@ -422,7 +422,8 @@ public:
 			std::abs(glm::dot(glm::vec3{ 0.f, 1.f, 0.f }, up)) +
 			std::abs(glm::dot(glm::vec3{ 0.f, 1.f, 0.f }, forward));
 
-		const float newIk = std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, right)) +
+		const float newIk = 
+			std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, right)) +
 			std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, up)) +
 			std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, forward));
 

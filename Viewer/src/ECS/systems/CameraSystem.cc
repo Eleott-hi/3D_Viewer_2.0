@@ -63,13 +63,16 @@ void UpdateMatricies(Camera &camera) {
                          camera.bottom_clip, camera.top_clip, camera.near_clip,
                          camera.far_clip);
 
-  camera.projection_matrix = projection;
+  camera.projection_ = projection;
 
   view.lookAt(camera.position, camera.position + camera.front, camera.up);
-  camera.view_matrix = view;
+  camera.view_ = view;
 }
 
-void CameraSystem::Init(ECS_Controller *scene) { scene_ = scene; }
+void CameraSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
+  scene_ = scene;
+  technique_ = technique;
+}
 
 void CameraSystem::Update() {
   auto &timer = scene_->GetComponent<Timer>(Utils::GetTimer(scene_));
@@ -83,6 +86,8 @@ void CameraSystem::Update() {
     ProcessMouseInput(camera, timer);
     ProcessKeyboardInput(camera, timer);
     UpdateMatricies(camera);
+
+    technique_->SetProjectionViewMatrix(camera.projection_, camera.view_);
   }
 }
 

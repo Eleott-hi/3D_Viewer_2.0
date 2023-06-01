@@ -15,8 +15,9 @@ class TextureStorage : protected QOpenGLExtraFunctions {
  private:
   std::unordered_map<std::string, Texture> textures_;
 
-  ~TextureStorage();
   static TextureStorage& Instance();
+
+  ~TextureStorage();
   TextureStorage() { initializeOpenGLFunctions(); }
 };
 

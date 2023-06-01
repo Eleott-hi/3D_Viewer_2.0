@@ -29,6 +29,8 @@
 #include "systems/ShadowSystem.h"
 #include "systems/TimeTickSystem.h"
 
+// #include "Hierarchy.h"
+
 namespace s21 {
 
 class Scene : public Observable, protected QOpenGLExtraFunctions {
@@ -97,8 +99,10 @@ class Scene : public Observable, protected QOpenGLExtraFunctions {
   bool picked_ = false;
   uint32_t width_ = 500, height_ = 500;
   ECS_Controller scene_;
+  EntityID root_ = 0;
   QOpenGLWidget *opengl_widget_ = nullptr;
-  std::shared_ptr<Parser> parser_;
+  // std::shared_ptr<Parser> parser_;
+  // std::shared_ptr<Hierarchy> heirarchy_manager_;
   std::shared_ptr<TechniqueStrategy> technique_;
   // std::shared_ptr<TextureStorage> texture_storage_;
 

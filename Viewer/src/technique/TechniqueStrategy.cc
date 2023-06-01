@@ -56,6 +56,15 @@ void TechniqueStrategy::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
   technique_->SetMVP(proj, view, model);
 }
 
+void TechniqueStrategy::SetProjectionViewMatrix(QMatrix4x4 proj,
+                                                QMatrix4x4 view) {
+  technique_->SetProjectionViewMatrix(proj, view);
+}
+
+void TechniqueStrategy::SetModelMatrix(QMatrix4x4 model) {
+  technique_->SetModelMatrix(model);
+}
+
 void TechniqueStrategy::SetTexture(Texture const &texture) {
   technique_->SetTexture(texture);
 }

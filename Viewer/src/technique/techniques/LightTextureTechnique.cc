@@ -19,12 +19,10 @@ void LightTextureTechnique::SetTexture(Texture const &texture) {
 void LightTextureTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                                    QMatrix4x4 model) {
   shader_.setUniformValue("u_Model", model);
-  shader_.setUniformValue("u_View", view);
-  shader_.setUniformValue("u_Projection", proj);
+  shader_.setUniformValue("u_View", view_);
+  shader_.setUniformValue("u_Projection", projection_);
 
-  auto tmp = view.inverted();
-  shader_.setUniformValue("viewPos",
-                          QVector3D{tmp(0, 3), tmp(1, 3), tmp(2, 3)});
+  shader_.setUniformValue("viewPos", QVector3D{view_.inverted().column(3)});
 }
 
 void LightTextureTechnique::SetMaterial(Material const &material) {

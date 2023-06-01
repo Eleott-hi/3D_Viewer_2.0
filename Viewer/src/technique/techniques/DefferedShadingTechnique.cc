@@ -23,9 +23,9 @@ void DefferedShadingTechnique::SetMaterial(Material const &material) {
 
 void DefferedShadingTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
                                       QMatrix4x4 model) {
-  shader_.setUniformValue("view", view);
+  shader_.setUniformValue("view", view_);
   shader_.setUniformValue("model", model);
-  shader_.setUniformValue("projection", proj);
+  shader_.setUniformValue("projection", projection_);
 }
 
 }  // namespace s21
