@@ -15,7 +15,7 @@ void DefferedShadingSystem::Update() {
   auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
 
   for (auto entity : entities_) {
-    auto &model = scene_->GetComponent<Model>(entity);
+    auto &model = scene_->GetComponent<Mesh>(entity);
     auto const &transform = scene_->GetComponent<Transform>(entity);
     auto const &material = scene_->GetComponent<Material>(entity);
 
@@ -25,7 +25,7 @@ void DefferedShadingSystem::Update() {
     technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
                        transform.GetModelMatrix());
 
-    for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
+    model.Draw(this, GL_TRIANGLES);
   }
 }
 

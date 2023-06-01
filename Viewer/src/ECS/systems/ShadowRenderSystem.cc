@@ -16,7 +16,7 @@ void ShadowRenderSystem::Update(uint32_t shadowMap) {
   for (auto entity : entities_) {
     if (!scene_->EntityHasComponent<Shader>(entity)) continue;
 
-    auto &model = scene_->GetComponent<Model>(entity);
+    auto &model = scene_->GetComponent<Mesh>(entity);
     auto const &transform = scene_->GetComponent<Transform>(entity);
     auto const &material = scene_->GetComponent<Material>(entity);
 
@@ -27,7 +27,7 @@ void ShadowRenderSystem::Update(uint32_t shadowMap) {
     technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
                        transform.GetModelMatrix());
 
-    for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
+    model.Draw(this, GL_TRIANGLES);
   }
 }
 

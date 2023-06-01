@@ -36,14 +36,14 @@ void ShadowSystem::Update() {
   static auto view = View();
 
   for (auto entity : entities_) {
-    auto &model = scene_->GetComponent<Model>(entity);
+    auto &model = scene_->GetComponent<Mesh>(entity);
     auto const &transform = scene_->GetComponent<Transform>(entity);
 
     technique_->Enable(TechniqueType::SHADOW_MAPPING);
     technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
                        transform.GetModelMatrix());
 
-    for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
+    model.Draw(this, GL_TRIANGLES);
   }
 }
 

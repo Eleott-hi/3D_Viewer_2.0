@@ -47,10 +47,16 @@ struct Vertex {
   QVector3D bitangent;
 };
 
+struct HierarchyComponent {
+  EntityID parent = 0;
+  QVector<EntityID> entities;
+};
+
 struct Mesh {
-  quint32 VAO = 0;
   QVector<Vertex> vertices;
   QVector<uint32_t> indices;
+
+  quint32 VAO = 0;
   int vertex_count = 0;
   int index_count = 0;
 
@@ -60,7 +66,7 @@ struct Mesh {
 
 struct Model {
   std::string name;
-  QVector<Mesh> meshes;
+  // QVector<EntityID> meshes;
 
   void Draw(QOpenGLExtraFunctions *f, GLenum form);
 };

@@ -1,86 +1,55 @@
 #include "Parser.h"
 
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
+
+#include <QString>
+#include <assimp/Importer.hpp>
+#include <map>
+#include <optional>
+#include <vector>
+
+#include "Components.h"
+#include "TextureStorage.h"
 #include "Utils.h"
 
 namespace s21 {
 
-ParsingData Parser::loadModel(std::string const &filename) {
-  data_ = {};
+std::string directory_;
+QVector<EntityID> meshes;
 
-  Assimp::Importer importer;
-  uint32_t flags = aiProcess_Triangulate |       //
-                   aiProcess_GenSmoothNormals |  //
-                   aiProcess_FlipUVs |           //
-                   aiProcess_CalcTangentSpace;
-  const aiScene *scene = importer.ReadFile(filename, flags);
+void LoadTexture(aiMaterial *material, aiTextureType type, Texture &texture) {
+  for (uint32_t i = 0; i < material->GetTextureCount(type); i++) {
+    aiString str;
+    material->GetTexture(type, i, &str);
 
-  if (!scene ||                                     //
-      scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||  //
-      !scene->mRootNode) {
-    qDebug() << "ERROR::ASSIMP:: " << importer.GetErrorString();
-    return data_;
+    std::string const &filename = directory_ + "/" + str.C_Str();
+
+    auto tmp = TextureStorage::LoadTexture(filename);
+    texture.id = tmp.id;
+    texture.image = tmp.image;
+    texture.filename = tmp.filename;
   }
-
-  directory_ = filename.substr(0, filename.find_last_of('/'));
-
-  data_.model = Model{filename, {}};
-  data_.material = Material{};
-
-  processNode(scene->mRootNode, scene);
-
-  return data_;
 }
 
-void Parser::processNode(aiNode *node, const aiScene *scene) {
-  for (quint32 i = 0; i < node->mNumMeshes; i++)
-    data_.model->meshes << processMesh(scene->mMeshes[node->mMeshes[i]], scene);
+QVector<quint32> LoadIndices(aiMesh *mesh, const aiScene *scene) {
+  QVector<quint32> indices;
 
-  for (quint32 i = 0; i < node->mNumChildren; i++)
-    processNode(node->mChildren[i], scene);
+  for (quint32 i = 0; i < mesh->mNumFaces; i++)
+    indices << QVector<quint32>(
+        mesh->mFaces[i].mIndices,
+        mesh->mFaces[i].mIndices + mesh->mFaces[i].mNumIndices);
+
+  return indices;
 }
 
-Mesh Parser::processMesh(aiMesh *mesh, const aiScene *scene) {
-  return {0, loadVertices(mesh, scene), LoadIndices(mesh, scene)};
-}
+Material LoadMaterial(aiMesh *mesh, const aiScene *scene) {
+  Material material;
+  aiMaterial *ai_material = scene->mMaterials[mesh->mMaterialIndex];
 
-QVector<Vertex> Parser::loadVertices(aiMesh *mesh, const aiScene *scene) {
-  QVector<Vertex> vertices;
-  vertices.reserve(mesh->mNumVertices);
-
-  for (uint32_t i = 0; i < mesh->mNumVertices; i++) {
-    Vertex vertex;
-
-    if (mesh->HasNormals()) {
-      auto const &[x, y, z] = mesh->mNormals[i];
-      vertex.normal = {x, y, z};
-    }
-
-    if (mesh->mTextureCoords[0]) {
-      {
-        auto const &[x, y, z] = mesh->mTextureCoords[0][i];
-        vertex.tex_coords = {x, y};
-      }
-      {
-        auto const &[x, y, z] = mesh->mTangents[i];
-        vertex.tangent = {x, y, z};
-      }
-      {
-        auto const &[x, y, z] = mesh->mBitangents[i];
-        vertex.bitangent = {x, y, z};
-      }
-    }
-
-    auto const &[x, y, z] = mesh->mVertices[i];
-    vertex.position = {x, y, z};
-
-    vertices << vertex;
-  }
-
-  aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-
-  LoadTexture(material, aiTextureType_HEIGHT, data_.material->normal);
-  LoadTexture(material, aiTextureType_DIFFUSE, data_.material->diffuse);
-  LoadTexture(material, aiTextureType_SPECULAR, data_.material->specular);
+  LoadTexture(ai_material, aiTextureType_HEIGHT, material.normal);
+  LoadTexture(ai_material, aiTextureType_DIFFUSE, material.diffuse);
+  LoadTexture(ai_material, aiTextureType_SPECULAR, material.specular);
 
   // aiColor3D color(0.0f, 0.0f, 0.0f);
   // float d = 0;
@@ -102,33 +71,93 @@ QVector<Vertex> Parser::loadVertices(aiMesh *mesh, const aiScene *scene) {
 
   // material->Get(AI_MATKEY_OPACITY, d);
   // qDebug() << d;
+
+  return material;
+}
+
+QVector<Vertex> loadVertices(aiMesh *mesh, const aiScene *scene) {
+  QVector<Vertex> vertices;
+  vertices.reserve(mesh->mNumVertices);
+
+  for (uint32_t i = 0; i < mesh->mNumVertices; i++) {
+    Vertex vertex;
+
+    if (mesh->HasNormals()) {
+      auto const &[nx, ny, nz] = mesh->mNormals[i];
+      vertex.normal = {nx, ny, nz};
+    }
+
+    if (mesh->mTextureCoords[0]) {
+      auto const &[cx, cy, cz] = mesh->mTextureCoords[0][i];
+      vertex.tex_coords = {cx, cy};
+
+      auto const &[tx, ty, tz] = mesh->mTangents[i];
+      vertex.tangent = {tx, ty, tz};
+
+      auto const &[bx, by, bz] = mesh->mBitangents[i];
+      vertex.bitangent = {bx, by, bz};
+    }
+
+    auto const &[px, py, pz] = mesh->mVertices[i];
+    vertex.position = {px, py, pz};
+
+    vertices << vertex;
+  }
+
   return vertices;
 }
 
-void Parser::LoadTexture(aiMaterial *material, aiTextureType type,
-                         Texture &texture) {
-  for (uint32_t i = 0; i < material->GetTextureCount(type); i++) {
-    aiString str;
-    material->GetTexture(type, i, &str);
+void processMesh(ECS_Controller *ecs_scene, aiMesh *ai_mesh,
+                 const aiScene *scene) {
+  Mesh mesh = {loadVertices(ai_mesh, scene), LoadIndices(ai_mesh, scene)};
+  Material material = LoadMaterial(ai_mesh, scene);
 
-    std::string const &filename = directory_ + "/" + str.C_Str();
+  EntityID entity = ecs_scene->NewEntity();
+  ecs_scene->AddComponent<Shader>(entity,
+                                  {TechniqueType::PHYSICAL_BASED_RENDERING});
+  ecs_scene->AddComponent<Transform>(entity);
+  ecs_scene->AddComponent<RenderTag>(entity);
+  ecs_scene->AddComponent<ShadowTag>(entity);
+  ecs_scene->AddComponent<Material>(entity, material);
+  ecs_scene->AddComponent<Mesh>(entity, std::move(mesh));
 
-    auto tmp = textureStorage_->LoadTexture(filename);
-    texture.id = tmp.id;
-    texture.image = tmp.image;
-    texture.filename = tmp.filename;
-  }
+  meshes.push_back(entity);
 }
 
-QVector<quint32> Parser::LoadIndices(aiMesh *mesh, const aiScene *scene) {
-  QVector<quint32> indices;
+void processNode(ECS_Controller *ecs_scene, aiNode *node,
+                 const aiScene *ai_scene) {
+  for (quint32 i = 0; i < node->mNumMeshes; i++)
+    processMesh(ecs_scene, ai_scene->mMeshes[node->mMeshes[i]], ai_scene);
 
-  for (quint32 i = 0; i < mesh->mNumFaces; i++)
-    indices << QVector<quint32>(
-        mesh->mFaces[i].mIndices,
-        mesh->mFaces[i].mIndices + mesh->mFaces[i].mNumIndices);
+  for (quint32 i = 0; i < node->mNumChildren; i++)
+    processNode(ecs_scene, node->mChildren[i], ai_scene);
+}
 
-  return indices;
+void Parser::loadModel(ECS_Controller *ecs_scene, std::string const &filename) {
+  Assimp::Importer importer;
+  uint32_t flags = aiProcess_Triangulate |       //
+                   aiProcess_GenSmoothNormals |  //
+                   aiProcess_FlipUVs |           //
+                   aiProcess_CalcTangentSpace;
+  const aiScene *scene = importer.ReadFile(filename, flags);
+
+  meshes.clear();
+
+  if (!scene ||                                     //
+      scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||  //
+      !scene->mRootNode) {
+    qDebug() << "ERROR::ASSIMP:: " << importer.GetErrorString();
+    return;
+  }
+
+  directory_ = filename.substr(0, filename.find_last_of('/'));
+
+  processNode(ecs_scene, scene->mRootNode, scene);
+
+  EntityID entity = ecs_scene->NewEntity();
+  ecs_scene->AddComponent<Transform>(entity);
+  ecs_scene->AddComponent<HierarchyComponent>(entity, {0, meshes});
+  ecs_scene->AddComponent<Model>(entity, {filename});
 }
 
 }  // namespace s21

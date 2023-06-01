@@ -10,7 +10,6 @@
 #include "Components.h"
 #include "Observable.h"
 #include "Parser.h"
-#include "TextureStorage.h"
 #include "core/ECS_Controller.h"
 #include "systems/CameraSystem.h"
 #include "systems/CubemapSystem.h"
@@ -101,7 +100,7 @@ class Scene : public Observable, protected QOpenGLExtraFunctions {
   QOpenGLWidget *opengl_widget_ = nullptr;
   std::shared_ptr<Parser> parser_;
   std::shared_ptr<TechniqueStrategy> technique_;
-  std::shared_ptr<TextureStorage> texture_storage_;
+  // std::shared_ptr<TextureStorage> texture_storage_;
 
   std::shared_ptr<IFramebuffer> g_buffer_;
   std::shared_ptr<IFramebuffer> framebuffer3D_;

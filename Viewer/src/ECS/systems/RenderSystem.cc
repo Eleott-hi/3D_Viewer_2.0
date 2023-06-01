@@ -19,7 +19,7 @@ void RenderSystem::Update() {
   for (auto entity : entities_) {
     if (!scene_->EntityHasComponent<Shader>(entity)) continue;
 
-    auto &model = scene_->GetComponent<Model>(entity);
+    auto &model = scene_->GetComponent<Mesh>(entity);
     auto const &transform = scene_->GetComponent<Transform>(entity);
     auto const &material = scene_->GetComponent<Material>(entity);
 
@@ -30,8 +30,6 @@ void RenderSystem::Update() {
                        transform.GetModelMatrix());
 
     // technique_->SetTexture(enviroment.light);
-
-    for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
 
     model.Draw(this, GL_TRIANGLES);
   }

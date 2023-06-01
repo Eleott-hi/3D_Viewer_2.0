@@ -19,7 +19,7 @@ void RenderPickedSystem::Update() {
 
   for (auto &entity : entities_) {
     auto const &transform = scene_->GetComponent<Transform>(entity);
-    auto &model = scene_->GetComponent<Model>(entity);
+    auto &model = scene_->GetComponent<Mesh>(entity);
 
     auto const &modelMatrix = transform.GetModelMatrix();
 
@@ -35,7 +35,7 @@ void RenderPickedSystem::Update() {
     technique_->Enable(TechniqueType::SIMPLE_COLOR);
     technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
                        modelMatrix);
-    for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
+    model.Draw(this, GL_TRIANGLES);
 
     // Enable writing to color buffer
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -46,7 +46,7 @@ void RenderPickedSystem::Update() {
     technique_->Enable(TechniqueType::STENCIL_OUTLINE);
     technique_->SetMVP(camera.projection_matrix, camera.view_matrix,
                        modelMatrix);
-    for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
+    model.Draw(this, GL_TRIANGLES);
   }
 
   glDisable(GL_STENCIL_TEST);  // Disable stancil buffer

@@ -1,5 +1,6 @@
 #include "Scene.h"
 
+#include "TextureStorage.h"
 #include "Utils.h"
 
 float skyboxVertices[] = {
@@ -29,8 +30,8 @@ void Scene::Init(QOpenGLWidget* widget) {
 
   opengl_widget_ = widget;
   technique_ = std::make_shared<TechniqueStrategy>();
-  texture_storage_ = std::make_shared<TextureStorage>();
-  parser_ = std::make_shared<Parser>(texture_storage_.get());
+  // texture_storage_ = std::make_shared<TextureStorage>();
+  parser_ = std::make_shared<Parser>();
 
   SetFramebuffers();
   RegisterComponents();
@@ -139,32 +140,36 @@ void Scene::Render() {
 
 void Scene::AddModel(QString path) {
   opengl_widget_->makeCurrent();
-  auto data = parser_->loadModel(path.toStdString());
 
-  if (!data.model) return;
+  // auto data =
+  parser_->loadModel(&scene_, path.toStdString());
 
-  for (auto& mesh : data.model->meshes) mesh.bufferize(this);
+  // if (data.empty()) return;
 
-  data.material->roughness =
-      texture_storage_->LoadTexture(dir + "objects/backpack/roughness.jpg");
-  data.material->ao =
-      texture_storage_->LoadTexture(dir + "objects/backpack/ao.jpg");
+  // for (auto& [mesh, material] : data) {
+  //   mesh->bufferize(this);
 
-  EntityID entity = scene_.NewEntity();
-  scene_.AddComponent<Shader>(entity,
-                              {TechniqueType::PHYSICAL_BASED_RENDERING});
-  scene_.AddComponent<Transform>(entity);
-  scene_.AddComponent<RenderTag>(entity);
-  scene_.AddComponent<ShadowTag>(entity);
-  scene_.AddComponent<Material>(entity, *data.material);
-  scene_.AddComponent<Model>(entity, std::move(*data.model));
+  //   material->roughness =
+  //       TextureStorage::LoadTexture(dir + "objects/backpack/roughness.jpg");
+  //   material->ao = TextureStorage::LoadTexture(dir +
+  //   "objects/backpack/ao.jpg");
+
+  //   EntityID entity = scene_.NewEntity();
+  //   scene_.AddComponent<Shader>(entity,
+  //                               {TechniqueType::PHYSICAL_BASED_RENDERING});
+  //   scene_.AddComponent<Transform>(entity);
+  //   scene_.AddComponent<RenderTag>(entity);
+  //   scene_.AddComponent<ShadowTag>(entity);
+  //   scene_.AddComponent<Material>(entity, *material);
+  //   scene_.AddComponent<Mesh>(entity, std::move(*mesh));
+  // }
 
   opengl_widget_->doneCurrent();
 }
 
 void Scene::LoadTexture(QString filename, Texture& texture) {
   opengl_widget_->makeCurrent();
-  texture = texture_storage_->LoadTexture(filename.toStdString());
+  texture = TextureStorage::LoadTexture(filename.toStdString());
   opengl_widget_->doneCurrent();
 }
 
@@ -185,7 +190,7 @@ void Scene::RegisterComponents() {
   scene_.RegisterComponent<Enviroment>();
   scene_.RegisterComponent<PickingTag>();
   scene_.RegisterComponent<Attenuation>();
-  //  scene_.RegisterComponent<InputCompomemt>();
+  scene_.RegisterComponent<HierarchyComponent>();
 }
 
 void Scene::RegisterSystems() {
@@ -200,7 +205,7 @@ void Scene::RegisterSystems() {
   mousePickingSystem_ = scene_.RegisterSystem<MousePickingSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<Mesh>());
     mask.set(GetComponentID<Transform>());
     scene_.ChangeSystemMask<MousePickingSystem>(mask);
     mousePickingSystem_->Init(&scene_, technique_.get());
@@ -209,7 +214,7 @@ void Scene::RegisterSystems() {
   renderSystem_ = scene_.RegisterSystem<RenderSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<Mesh>());
     mask.set(GetComponentID<Transform>());
     mask.set(GetComponentID<Material>());
     mask.set(GetComponentID<RenderTag>());
@@ -229,7 +234,7 @@ void Scene::RegisterSystems() {
   shadowSystem_ = scene_.RegisterSystem<ShadowSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<Mesh>());
     mask.set(GetComponentID<Transform>());
     mask.set(GetComponentID<ShadowTag>());
     mask.set(GetComponentID<RenderTag>());
@@ -240,7 +245,7 @@ void Scene::RegisterSystems() {
   pointShadowSystem_ = scene_.RegisterSystem<PointShadowSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<Mesh>());
     mask.set(GetComponentID<Transform>());
     mask.set(GetComponentID<ShadowTag>());
     mask.set(GetComponentID<RenderTag>());
@@ -251,7 +256,7 @@ void Scene::RegisterSystems() {
   pointShadowRenderSystem_ = scene_.RegisterSystem<PointShadowRenderSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<Mesh>());
     mask.set(GetComponentID<Transform>());
     mask.set(GetComponentID<Material>());
     // mask.set(GetComponentID<ShadowTag>());
@@ -263,7 +268,7 @@ void Scene::RegisterSystems() {
   shadowRenderSystem_ = scene_.RegisterSystem<ShadowRenderSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<Mesh>());
     mask.set(GetComponentID<Transform>());
     mask.set(GetComponentID<Material>());
     // mask.set(GetComponentID<ShadowTag>());
@@ -275,7 +280,7 @@ void Scene::RegisterSystems() {
   defferedShadingSystem_ = scene_.RegisterSystem<DefferedShadingSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<Mesh>());
     mask.set(GetComponentID<Transform>());
     scene_.ChangeSystemMask<DefferedShadingSystem>(mask);
     defferedShadingSystem_->Init(&scene_, technique_.get());
@@ -293,7 +298,7 @@ void Scene::RegisterSystems() {
   renderPickedSystem_ = scene_.RegisterSystem<RenderPickedSystem>();
   {
     ComponentMask mask;
-    mask.set(GetComponentID<Model>());
+    mask.set(GetComponentID<Mesh>());
     mask.set(GetComponentID<Transform>());
     mask.set(GetComponentID<PickingTag>());
     scene_.ChangeSystemMask<RenderPickedSystem>(mask);
@@ -377,15 +382,16 @@ void Scene::DebugLights(bool directional, bool point_1, bool point_2,
     Material material;
     material.color = Qt::white;
 
-    auto model = *parser_->loadModel(dir + "objects/cube.obj").model;
-    for (auto& mesh : model.meshes) mesh.bufferize(this);
+    // auto model =
+    // *parser_->loadModel(&scene_, dir + "objects/cube.obj").at(0).model;
+    // model.bufferize(this);
 
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<RenderTag>(entity);
     scene_.AddComponent<Light>(entity, light);
     scene_.AddComponent<Material>(entity, material);
     scene_.AddComponent<Transform>(entity, transform);
-    scene_.AddComponent<Model>(entity, std::move(model));
+    // scene_.AddComponent<Mesh>(entity, std::move(model));
     scene_.AddComponent<Attenuation>(entity, attenuation);
     scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_COLOR});
   }
@@ -410,15 +416,16 @@ void Scene::DebugLights(bool directional, bool point_1, bool point_2,
     Material material;
     material.color = Qt::white;
 
-    auto model = *parser_->loadModel(dir + "objects/cube.obj").model;
-    for (auto& mesh : model.meshes) mesh.bufferize(this);
+    // auto model =
+    // *parser_->loadModel(&scene_, dir + "objects/cube.obj").at(0).model;
+    // model.bufferize(this);
 
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<RenderTag>(entity);
     scene_.AddComponent<Light>(entity, light);
     scene_.AddComponent<Material>(entity, material);
     scene_.AddComponent<Transform>(entity, transform);
-    scene_.AddComponent<Model>(entity, std::move(model));
+    // scene_.AddComponent<Mesh>(entity, std::move(model));
     scene_.AddComponent<Attenuation>(entity, attenuation);
     scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_COLOR});
   }
@@ -443,14 +450,15 @@ void Scene::DebugLights(bool directional, bool point_1, bool point_2,
     Material material;
     material.color = Qt::white;
 
-    auto model = *parser_->loadModel(dir + "objects/cube.obj").model;
-    for (auto& mesh : model.meshes) mesh.bufferize(this);
+    // auto model =
+    // *parser_->loadModel(&scene_, dir + "objects/cube.obj").at(0).model;
+    // model.bufferize(this);
 
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<Light>(entity, light);
     scene_.AddComponent<Material>(entity, material);
     scene_.AddComponent<Transform>(entity, transform);
-    scene_.AddComponent<Model>(entity, std::move(model));
+    // scene_.AddComponent<Mesh>(entity, std::move(model));
     scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_COLOR});
     scene_.AddComponent<RenderTag>(entity);
     // scene_.AddComponent<Attenuation>(entity, attenuation);
@@ -554,7 +562,7 @@ void Scene::InitEntities() {
 
     Texture texture;
     texture.type = "cubemap";
-    texture.id = texture_storage_->LoadCubemap(faces);
+    texture.id = TextureStorage::LoadCubemap(faces);
 
     EntityID entity = scene_.NewEntity();
     scene_.AddComponent<Mesh>(entity, mesh);
@@ -590,7 +598,7 @@ void Scene::InitEntities() {
   //   EntityID entity = scene_.NewEntity();
   //   scene_.AddComponent<Material>(entity);
   //   scene_.AddComponent<Transform>(entity, transform);
-  //   scene_.AddComponent<Model>(entity, std::move(model));
+  //   scene_.AddComponent<Mesh>(entity, std::move(model));
   //   scene_.AddComponent<Shader>(entity, {TechniqueType::SIMPLE_COLOR});
   //   scene_.AddComponent<RenderTag>(entity);
   //   scene_.AddComponent<ShadowTag>(entity);

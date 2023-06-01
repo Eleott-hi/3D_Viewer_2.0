@@ -7,16 +7,17 @@
 #include "Components.h"
 
 namespace s21 {
-class TextureStorage : public QOpenGLExtraFunctions {
+class TextureStorage : protected QOpenGLExtraFunctions {
  public:
-  TextureStorage() { initializeOpenGLFunctions(); }
-  ~TextureStorage();
-
-  Texture LoadTexture(std::string const& filename);
-  uint32_t LoadCubemap(std::vector<std::string> faces);
+  static Texture LoadTexture(std::string const& filename);
+  static uint32_t LoadCubemap(std::vector<std::string> faces);
 
  private:
   std::unordered_map<std::string, Texture> textures_;
+
+  ~TextureStorage();
+  static TextureStorage& Instance();
+  TextureStorage() { initializeOpenGLFunctions(); }
 };
 
 }  // namespace s21

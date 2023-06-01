@@ -31,12 +31,19 @@ GLenum GetFormat(int channels) {
   Q_ASSERT(false);
 }
 
+TextureStorage& TextureStorage::Instance() {
+  static TextureStorage instance;
+  return instance;
+}
+
 TextureStorage::~TextureStorage() {
   for (auto [_, texture] : textures_) glDeleteTextures(1, &texture.id);
 }
 
 Texture TextureStorage::LoadTexture(std::string const& filename) {
-  if (textures_[filename].id) return textures_[filename];
+  auto& textures = TextureStorage::Instance().textures_;
+
+  if (textures[filename].id) return textures[filename];
 
   ImageInfo info = {filename, 0, 0, 0};
 
@@ -61,13 +68,13 @@ Texture TextureStorage::LoadTexture(std::string const& filename) {
 
   stbi_image_free(data);
 
-  textures_[filename].id = texture.ID();
-  textures_[filename].filename = filename.c_str();
-  textures_[filename].image = QImage(filename.c_str());
+  textures[filename].id = texture.ID();
+  textures[filename].filename = filename.c_str();
+  textures[filename].image = QImage(filename.c_str());
 
   qDebug() << filename.c_str();
 
-  return textures_[filename];
+  return textures[filename];
 }
 
 uint32_t TextureStorage::LoadCubemap(std::vector<std::string> faces) {

@@ -1,41 +1,27 @@
 #pragma once
 
-#include <assimp/postprocess.h>
-#include <assimp/scene.h>
-
-#include <QString>
-#include <assimp/Importer.hpp>
-#include <map>
-#include <optional>
-#include <vector>
-
-// #include "TextureStorage.h"
-#include "Components.h"
-#include "TextureStorage.h"
+#include "core/ECS_Controller.h"
 
 namespace s21 {
 
-struct ParsingData {
-  std::optional<Model> model = std::nullopt;
-  std::optional<Material> material = std::nullopt;
-};
-
 class Parser {
  public:
-  Parser(TextureStorage *textureStorage) : textureStorage_(textureStorage) {}
+  Parser() = default;
   ~Parser() = default;
-  ParsingData loadModel(std::string const &filename);
 
- private:
-  ParsingData data_;
-  std::string directory_;
-  TextureStorage *textureStorage_ = nullptr;
+  void loadModel(ECS_Controller *scene, std::string const &filename);
 
-  void processNode(aiNode *node, const aiScene *scene);
-  Mesh processMesh(aiMesh *mesh, const aiScene *scene);
-  QVector<Vertex> loadVertices(aiMesh *mesh, const aiScene *scene);
-  QVector<quint32> LoadIndices(aiMesh *mesh, const aiScene *scene);
-  void LoadTexture(aiMaterial *material, aiTextureType type, Texture &texture);
+  //  private:
+  // std::vector<ParsingData> data_;
+  // std::string directory_;
+
+  // void processNode(aiNode *node, const aiScene *scene);
+  // Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+  // QVector<Vertex> loadVertices(aiMesh *mesh, const aiScene *scene);
+  // Material LoadMaterial(aiMesh *mesh, const aiScene *scene);
+  // QVector<quint32> LoadIndices(aiMesh *mesh, const aiScene *scene);
+  // void LoadTexture(aiMaterial *material, aiTextureType type, Texture
+  // &texture);
 };
 
 }  // namespace s21

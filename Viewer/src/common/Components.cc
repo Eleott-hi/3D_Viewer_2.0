@@ -45,13 +45,15 @@ void Mesh::bufferize(QOpenGLExtraFunctions *f) {
 }
 
 void Mesh::Draw(QOpenGLExtraFunctions *f, GLenum form) {
+  if (VAO == 0) bufferize(f);
+
   f->glBindVertexArray(VAO);
   f->glDrawElements(form, index_count, GL_UNSIGNED_INT, 0);
   f->glBindVertexArray(0);
 }
 
 void Model::Draw(QOpenGLExtraFunctions *f, GLenum form) {
-  for (auto &mesh : meshes) mesh.Draw(f, form);
+  //  for (auto &mesh : meshes) mesh.Draw(f, form);
 }
 
 QMatrix4x4 Transform::GetModelMatrix() const {

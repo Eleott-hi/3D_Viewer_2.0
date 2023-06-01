@@ -64,12 +64,12 @@ void PointShadowSystem::Update() {
   technique_->setCustomValue("lightPos", lightPos);
 
   for (auto entity : entities_) {
-    auto &model = scene_->GetComponent<Model>(entity);
+    auto &model = scene_->GetComponent<Mesh>(entity);
     auto const &transform = scene_->GetComponent<Transform>(entity);
 
     technique_->setCustomValue("model", transform.GetModelMatrix());
 
-    for (auto &mesh : model.meshes) mesh.Draw(this, GL_TRIANGLES);
+    model.Draw(this, GL_TRIANGLES);
   }
 }
 

@@ -64,13 +64,14 @@ void RenderGizmo(QOpenGLExtraFunctions *f,
 tinygizmo::rigid_transform ToRigidTransform(const Transform &transform) {
   tinygizmo::rigid_transform xform;
 
-  xform.position = {transform.translation.x(), transform.translation.y(),
-                    transform.translation.z()};
+  auto const &[tx, ty, tz] = transform.translation;
+  xform.position = {tx, ty, tz};
 
-  xform.orientation = {transform.rotation.x(), transform.rotation.y(),
-                       transform.rotation.z(), transform.rotation.scalar()};
+  auto const &r = transform.rotation;
+  xform.orientation = {r.x(), r.y(), r.z(), r.scalar()};
 
-  xform.scale = {transform.scale.x(), transform.scale.y(), transform.scale.z()};
+  auto const &[sx, sy, sz] = transform.scale;
+  xform.scale = {sx, sy, sz};
 
   return xform;
 }
@@ -78,11 +79,14 @@ tinygizmo::rigid_transform ToRigidTransform(const Transform &transform) {
 Transform FromRigidTransform(tinygizmo::rigid_transform const &xform) {
   Transform transform;
 
-  transform.translation = {xform.position.x, xform.position.y,
-                           xform.position.z};
-  transform.rotation = {xform.orientation.w, xform.orientation.x,
-                        xform.orientation.y, xform.orientation.z};
-  transform.scale = {xform.scale.x, xform.scale.y, xform.scale.z};
+  auto const &[tx, ty, tz] = xform.position;
+  transform.translation = {tx, ty, tz};
+
+  auto const &[rx, ry, rz, rw] = xform.orientation;
+  transform.rotation = {rw, rx, ry, rz};
+
+  auto const &[sx, sy, sz] = xform.scale;
+  transform.scale = {sx, sy, sz};
 
   return transform;
 }
