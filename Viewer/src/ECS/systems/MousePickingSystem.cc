@@ -34,7 +34,6 @@ void MousePickingSystem::OnWindowResize(Event &e) {
 void MousePickingSystem::Update() {
   if (Input::MouseDoubleClick() == false) return;
 
-  auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
   technique_->Enable(TechniqueType::MOUSE_PICKING);
   framebuffer_->Bind();
   framebuffer_->PrepereBuffer();
@@ -44,8 +43,7 @@ void MousePickingSystem::Update() {
     auto &model = scene_->GetComponent<Mesh>(entity);
     // auto &heirarchy = scene_->GetComponent<HierarchyComponent>(entity);
 
-    technique_->SetMVP(camera.projection_, camera.view_,
-                       transform.GetModelMatrix());
+    technique_->SetModelMatrix(transform.GetModelMatrix());
     technique_->SetObjectID((int)entity);
     model.Draw(this, GL_TRIANGLES);
   }

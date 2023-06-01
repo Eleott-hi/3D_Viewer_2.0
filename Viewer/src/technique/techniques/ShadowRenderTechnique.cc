@@ -16,12 +16,10 @@ void ShadowRenderTechnique::SetTexture(Texture const &texture) {
   index_++;
 }
 
-void ShadowRenderTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                                   QMatrix4x4 model) {
-  shader_.setUniformValue("Model", model);
+void ShadowRenderTechnique::OnMVPLoaded() {
   shader_.setUniformValue("View", view_);
+  shader_.setUniformValue("Model", model_);
   shader_.setUniformValue("Projection", projection_);
-
   shader_.setUniformValue("lightSpaceMatrix", Proj() * View());
   shader_.setUniformValue("camPos", QVector3D{view_.inverted().column(3)});
 }

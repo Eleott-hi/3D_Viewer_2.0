@@ -23,7 +23,7 @@ class TechniqueStrategy {
   void SetTexture(Texture const &texture);
   void SetMaterial(Material const &material);
   void SetProjectionViewMatrix(QMatrix4x4 proj, QMatrix4x4 view);
-  void SetMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model);
+  void OnMVPLoaded();
   void SetLight(QVector<Light> lights,
                 QVector<std::optional<Attenuation>> attenuations);
   void Clear() { technique_->Clear(); }

@@ -131,8 +131,6 @@ void CubemapSystem::Init(ECS_Controller *scene, TechniqueStrategy *technique) {
 }
 
 void CubemapSystem::Update() {
-  auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
-
   glDepthFunc(GL_LEQUAL);
 
   for (auto entity : entities_) {
@@ -140,7 +138,7 @@ void CubemapSystem::Update() {
     auto &mesh = scene_->GetComponent<Mesh>(entity);
 
     technique_->Enable(TechniqueType::CUBEMAP);
-    technique_->SetMVP(camera.projection_, camera.view_, {});
+    technique_->SetModelMatrix({});
     technique_->SetTexture(texture);
 
     glBindVertexArray(mesh.VAO);

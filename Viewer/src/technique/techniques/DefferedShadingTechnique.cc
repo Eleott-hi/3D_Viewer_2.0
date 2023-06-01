@@ -21,10 +21,9 @@ void DefferedShadingTechnique::SetMaterial(Material const &material) {
   SetTexture({material.specular.id, "specular"});
 }
 
-void DefferedShadingTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                                      QMatrix4x4 model) {
+void DefferedShadingTechnique::OnMVPLoaded() {
   shader_.setUniformValue("view", view_);
-  shader_.setUniformValue("model", model);
+  shader_.setUniformValue("model", model_);
   shader_.setUniformValue("projection", projection_);
 }
 

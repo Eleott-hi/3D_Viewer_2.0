@@ -15,10 +15,7 @@ void CubemapTechnique::SetTexture(Texture const &texture) {
   glBindTexture(GL_TEXTURE_CUBE_MAP, texture.id);
 }
 
-void CubemapTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                              QMatrix4x4 model) {
-  Q_UNUSED(model);
-
+void CubemapTechnique::OnMVPLoaded() {
   auto tmp = view_;
   tmp.setColumn(3, {0, 0, 0, 1});
   shader_.setUniformValue("view", tmp);

@@ -29,8 +29,6 @@ void RenderSystem::Update() {
     return matricies[entity];
   };
 
-  auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
-
   for (auto entity : entities_) {
     if (!scene_->EntityHasComponent<Shader>(entity)) continue;
 
@@ -41,8 +39,7 @@ void RenderSystem::Update() {
     technique_->Enable(scene_->GetComponent<Shader>(entity).type);
     technique_->Clear();
     technique_->SetMaterial(material);
-    technique_->SetMVP(camera.projection_, camera.view_,
-                       get_model_matrix(entity));
+    technique_->SetModelMatrix(get_model_matrix(entity));
 
     // technique_->SetTexture(enviroment.light);
 

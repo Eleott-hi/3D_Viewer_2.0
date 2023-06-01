@@ -6,11 +6,10 @@ void StencilOutlineTechnique::Init() {
   GenerateShaders(":/shaders/stencil_shader.vs", ":/shaders/stencil_shader.fs");
 }
 
-void StencilOutlineTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                                     QMatrix4x4 model) {
-  shader_.setUniformValue("proj", projection_);
+void StencilOutlineTechnique::OnMVPLoaded() {
   shader_.setUniformValue("view", view_);
-  shader_.setUniformValue("model", model);
+  shader_.setUniformValue("model", model_);
+  shader_.setUniformValue("proj", projection_);
 }
 
 }  // namespace s21

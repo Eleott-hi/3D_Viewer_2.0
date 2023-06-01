@@ -7,12 +7,6 @@ class PointShadowTechnique : public ITechnique {
   PointShadowTechnique() { Init(); }
   ~PointShadowTechnique() = default;
 
-  void Init() final {
-    GenerateShaders(":/shaders/point_shadows_depth.vs",
-                    ":/shaders/point_shadows_depth.fs",
-                    ":/shaders/point_shadows_depth.gs");
-  }
-  void SetTexture(Texture const &texture) final {}
-  void SetMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final {}
+  void Init() final;
 };
 }  // namespace s21

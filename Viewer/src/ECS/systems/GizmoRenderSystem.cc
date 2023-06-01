@@ -148,7 +148,7 @@ void GizmoRenderSystem::Update() {
   auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
 
   technique_->Enable(TechniqueType::GIZMO);
-  technique_->SetMVP(camera.projection_, camera.view_, {});
+  technique_->SetModelMatrix({});
 
   UpdateState(gizmo_state, camera);
   gizmo_ctx.update(gizmo_state);
@@ -164,7 +164,7 @@ void GizmoRenderSystem::Update() {
     xform = xform_last = ToRigidTransform(transform);
 
     auto name =
-        QString::fromStdString("gizmo of entity" + std::to_string(entity));
+        QString::fromStdString("gizmo of entity " + std::to_string(entity));
 
     if (transform_gizmo(name.toStdString(), gizmo_ctx, xform)) {
       qDebug() << name << "Hovered...";

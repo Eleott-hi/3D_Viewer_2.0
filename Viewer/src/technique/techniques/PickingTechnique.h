@@ -14,7 +14,7 @@ class PickingTechnique : public ITechnique {
 
   void Init() final;
   void SetObjectID(int ObjectID) final;
-  void SetMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
+  void OnMVPLoaded() final;
 };
 
 }  // namespace s21

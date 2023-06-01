@@ -11,8 +11,6 @@ void ShadowRenderSystem::Init(ECS_Controller *scene,
 }
 
 void ShadowRenderSystem::Update(uint32_t shadowMap) {
-  auto &camera = scene_->GetComponent<Camera>(Utils::GetCamera(scene_));
-
   for (auto entity : entities_) {
     if (!scene_->EntityHasComponent<Shader>(entity)) continue;
 
@@ -24,8 +22,7 @@ void ShadowRenderSystem::Update(uint32_t shadowMap) {
     technique_->Clear();
     technique_->SetMaterial(material);
     technique_->SetTexture({shadowMap, "shadowMap"});
-    technique_->SetMVP(camera.projection_, camera.view_,
-                       transform.GetModelMatrix());
+    technique_->SetModelMatrix(transform.GetModelMatrix());
 
     model.Draw(this, GL_TRIANGLES);
   }

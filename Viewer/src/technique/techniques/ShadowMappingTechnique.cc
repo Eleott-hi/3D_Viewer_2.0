@@ -15,11 +15,10 @@ void ShadowMappingTechnique::SetTexture(Texture const &texture) {
   index_++;
 }
 
-void ShadowMappingTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                                    QMatrix4x4 model) {
-  shader_.setUniformValue("Projection", projection_);
+void ShadowMappingTechnique::OnMVPLoaded() {
   shader_.setUniformValue("View", view_);
-  shader_.setUniformValue("Model", model);
+  shader_.setUniformValue("Model", model_);
+  shader_.setUniformValue("Projection", projection_);
 }
 
 }  // namespace s21

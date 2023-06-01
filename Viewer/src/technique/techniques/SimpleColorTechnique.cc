@@ -9,9 +9,8 @@ void SimpleColorTechnique::Init() {
                   ":/shaders/simple_color_shader.fs");
 }
 
-void SimpleColorTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                                  QMatrix4x4 model) {
-  shader_.setUniformValue("u_MVP", projection_ * view_ * model);
+void SimpleColorTechnique::OnMVPLoaded() {
+  shader_.setUniformValue("u_MVP", projection_ * view_ * model_);
 }
 
 void SimpleColorTechnique::SetMaterial(Material const& material) {

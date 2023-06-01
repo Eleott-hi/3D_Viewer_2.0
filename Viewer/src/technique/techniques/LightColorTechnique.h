@@ -11,7 +11,7 @@ class LightColorTechnique : public ITechnique {
 
   void Init() final;
   void SetMaterial(Material const &material) final;
-  void SetMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
+  void OnMVPLoaded() final;
 
   void SetLight(QVector<Light> lights,
                 QVector<std::optional<Attenuation>> attenuations) final;

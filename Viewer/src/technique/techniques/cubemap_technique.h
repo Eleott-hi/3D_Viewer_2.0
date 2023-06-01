@@ -11,7 +11,7 @@ class CubemapTechnique : public ITechnique {
 
   void Init() final;
   void SetTexture(Texture const &texture) final;
-  void SetMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model) final;
+  void OnMVPLoaded() final;
 };
 
 }  // namespace s21

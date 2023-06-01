@@ -7,7 +7,7 @@ namespace s21 {
 class QuadTechnique : public ITechnique {
  public:
   QuadTechnique() { Init(); }
-  ~QuadTechnique() {}
+  ~QuadTechnique() = default;
 
   void Init() final;
   void SetTexture(Texture const &texture) final;

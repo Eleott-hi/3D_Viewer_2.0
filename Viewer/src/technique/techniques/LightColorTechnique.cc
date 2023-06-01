@@ -16,12 +16,10 @@ void LightColorTechnique::SetMaterial(Material const &material) {
   shader_.setUniformValue("material.shininess", material.shininess);
 }
 
-void LightColorTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                                 QMatrix4x4 model) {
-  shader_.setUniformValue("Model", model);
+void LightColorTechnique::OnMVPLoaded() {
   shader_.setUniformValue("View", view_);
+  shader_.setUniformValue("Model", model_);
   shader_.setUniformValue("Projection", projection_);
-
   shader_.setUniformValue("viewPos", QVector3D{view_.inverted().column(3)});
 }
 

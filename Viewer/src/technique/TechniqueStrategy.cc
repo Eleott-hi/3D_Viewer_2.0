@@ -51,11 +51,6 @@ void TechniqueStrategy::SetMaterial(Material const &material) {
   technique_->SetMaterial(material);
 }
 
-void TechniqueStrategy::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                               QMatrix4x4 model) {
-  technique_->SetMVP(proj, view, model);
-}
-
 void TechniqueStrategy::SetProjectionViewMatrix(QMatrix4x4 proj,
                                                 QMatrix4x4 view) {
   technique_->SetProjectionViewMatrix(proj, view);

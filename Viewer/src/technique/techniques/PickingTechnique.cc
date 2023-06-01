@@ -6,9 +6,8 @@ void PickingTechnique::Init() {
   GenerateShaders(":/shaders/picking_shader.vs", ":/shaders/picking_shader.fs");
 }
 
-void PickingTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                              QMatrix4x4 model) {
-  shader_.setUniformValue("u_MVP", projection_ * view_ * model);
+void PickingTechnique::OnMVPLoaded() {
+  shader_.setUniformValue("u_MVP", projection_ * view_ * model_);
 }
 
 void PickingTechnique::SetObjectID(int ObjectID) {

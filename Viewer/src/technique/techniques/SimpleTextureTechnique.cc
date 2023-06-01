@@ -18,9 +18,8 @@ void SimpleTextureTechnique::SetMaterial(Material const &material) {
   shader_.setUniformValue("u_material.shininess", material.shininess);
 }
 
-void SimpleTextureTechnique::SetMVP(QMatrix4x4 proj, QMatrix4x4 view,
-                                    QMatrix4x4 model) {
-  shader_.setUniformValue("u_MVP", projection_ * view_ * model);
+void SimpleTextureTechnique::OnMVPLoaded() {
+  shader_.setUniformValue("u_MVP", projection_ * view_ * model_);
 }
 
 }  // namespace s21
