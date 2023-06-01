@@ -17,18 +17,16 @@ class TechniqueStrategy {
     technique_->setCustomValue(name, value);
   }
 
-  void Clear() { technique_->Clear(); }
-  //  void setColor(QColor c);
   void SetObjectID(int ObjectID);
   void Enable(TechniqueType type);
   void SetModelMatrix(QMatrix4x4 model);
   void SetTexture(Texture const &texture);
   void SetMaterial(Material const &material);
-  void SetMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model);
   void SetProjectionViewMatrix(QMatrix4x4 proj, QMatrix4x4 view);
-  ITechnique *getTechnique() { return technique_.get(); }
+  void SetMVP(QMatrix4x4 proj, QMatrix4x4 view, QMatrix4x4 model);
   void SetLight(QVector<Light> lights,
                 QVector<std::optional<Attenuation>> attenuations);
+  void Clear() { technique_->Clear(); }
 
  private:
   std::shared_ptr<ITechnique> technique_;
