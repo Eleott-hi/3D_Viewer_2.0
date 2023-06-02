@@ -1,4 +1,4 @@
-#include "cubemap_technique.h"
+#include "CubemapTechnique.h"
 
 #include <QDir>
 #include <QMatrix3x3>

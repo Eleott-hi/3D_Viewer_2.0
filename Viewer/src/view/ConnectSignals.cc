@@ -66,34 +66,34 @@ QString Trim(QString path) {
 }
 
 void MainWindow::SetMaterialUi(Material const &component) {
-  ui_->l_MaterialColor->setAutoFillBackground(true);
-  ui_->l_MaterialColor->setPalette({component.color});
+  // ui_->l_MaterialColor->setAutoFillBackground(true);
+  // ui_->l_MaterialColor->setPalette({component.color});
 
-  ui_->l_MaterialDiffuseFilename->setText(Trim(component.diffuse.filename));
-  ui_->l_MaterialDiffuseImage->setPixmap(QPixmap::fromImage(
-      component.diffuse.image.scaled(ui_->l_MaterialDiffuseImage->size())));
+  // ui_->l_MaterialDiffuseFilename->setText(Trim(component.diffuse.filename));
+  // ui_->l_MaterialDiffuseImage->setPixmap(QPixmap::fromImage(
+  //     component.diffuse.image.scaled(ui_->l_MaterialDiffuseImage->size())));
 
-  ui_->l_MaterialSpecularFilename->setText(Trim(component.specular.filename));
-  ui_->l_MaterialSpecularImage->setPixmap(QPixmap::fromImage(
-      component.specular.image.scaled(ui_->l_MaterialSpecularImage->size())));
+  // ui_->l_MaterialSpecularFilename->setText(Trim(component.specular.filename));
+  // ui_->l_MaterialSpecularImage->setPixmap(QPixmap::fromImage(
+  //     component.specular.image.scaled(ui_->l_MaterialSpecularImage->size())));
 
-  ui_->l_MaterialNormalFilename->setText(Trim(component.normal.filename));
-  ui_->l_MaterialNormalImage->setPixmap(QPixmap::fromImage(
-      component.normal.image.scaled(ui_->l_MaterialNormalImage->size())));
+  // ui_->l_MaterialNormalFilename->setText(Trim(component.normal.filename));
+  // ui_->l_MaterialNormalImage->setPixmap(QPixmap::fromImage(
+  //     component.normal.image.scaled(ui_->l_MaterialNormalImage->size())));
 
-  ui_->l_MaterialRoughnessFilename->setText(Trim(component.roughness.filename));
-  ui_->l_MaterialRoughnessImage->setPixmap(QPixmap::fromImage(
-      component.roughness.image.scaled(ui_->l_MaterialRoughnessImage->size())));
+  // ui_->l_MaterialRoughnessFilename->setText(Trim(component.roughness.filename));
+  // ui_->l_MaterialRoughnessImage->setPixmap(QPixmap::fromImage(
+  //     component.roughness.image.scaled(ui_->l_MaterialRoughnessImage->size())));
 
-  ui_->l_MaterialMetallicFilename->setText(Trim(component.metallic.filename));
-  ui_->l_MaterialMetallicImage->setPixmap(QPixmap::fromImage(
-      component.metallic.image.scaled(ui_->l_MaterialMetallicImage->size())));
+  // ui_->l_MaterialMetallicFilename->setText(Trim(component.metallic.filename));
+  // ui_->l_MaterialMetallicImage->setPixmap(QPixmap::fromImage(
+  //     component.metallic.image.scaled(ui_->l_MaterialMetallicImage->size())));
 
-  ui_->l_MaterialAoFilename->setText(Trim(component.ao.filename));
-  ui_->l_MaterialAoImage->setPixmap(QPixmap::fromImage(
-      component.ao.image.scaled(ui_->l_MaterialAoImage->size())));
+  // ui_->l_MaterialAoFilename->setText(Trim(component.ao.filename));
+  // ui_->l_MaterialAoImage->setPixmap(QPixmap::fromImage(
+  //     component.ao.image.scaled(ui_->l_MaterialAoImage->size())));
 
-  ui_->materialShininess->setValue(component.shininess);
+  // ui_->materialShininess->setValue(component.shininess);
 }
 
 void MainWindow::SetTransformUi(Transform const &component) {

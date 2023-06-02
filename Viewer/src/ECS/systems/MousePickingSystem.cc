@@ -34,24 +34,34 @@ void MousePickingSystem::OnWindowResize(Event &e) {
 void MousePickingSystem::Update() {
   if (Input::MouseDoubleClick() == false) return;
 
-  technique_->Enable(TechniqueType::MOUSE_PICKING);
+  std::unordered_map<int, QMatrix4x4> matricies;
+  std::function<QMatrix4x4(EntityID)> get_model_matrix = [&](EntityID entity) {
+    if (matricies.find(entity) == matricies.end() &&
+        scene_->EntityHasComponent<Transform>(entity)) {
+      auto &transform = scene_->GetComponent<Transform>(entity);
+      auto &hierarchy = scene_->GetComponent<HierarchyComponent>(entity);
+
+      matricies[entity] =
+          get_model_matrix(hierarchy.parent) * transform.GetModelMatrix();
+    }
+
+    return matricies[entity];
+  };
+
   framebuffer_->Bind();
   framebuffer_->PrepereBuffer();
+  technique_->Enable(TechniqueType::MOUSE_PICKING);
 
   for (auto &entity : entities_) {
-    auto const &transform = scene_->GetComponent<Transform>(entity);
     auto &model = scene_->GetComponent<Mesh>(entity);
-    // auto &heirarchy = scene_->GetComponent<HierarchyComponent>(entity);
 
-    technique_->SetModelMatrix(transform.GetModelMatrix());
+    technique_->SetModelMatrix(get_model_matrix(entity));
     technique_->SetObjectID((int)entity);
     model.Draw(this, GL_TRIANGLES);
   }
 
   framebuffer_->Unbind();
-
   PickEntity(Input::MousePosition());
-
   Input::MouseDoubleClick(false);
 }
 

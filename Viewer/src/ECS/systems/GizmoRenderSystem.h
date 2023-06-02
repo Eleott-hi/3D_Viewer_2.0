@@ -22,7 +22,6 @@ class GizmoRenderSystem : public System, protected QOpenGLExtraFunctions {
   ECS_Controller *scene_ = nullptr;
   TechniqueStrategy *technique_ = nullptr;
 
-  tinygizmo::gizmo_application_state gizmo_state;
   tinygizmo::gizmo_context gizmo_ctx;
 };
 }  // namespace s21

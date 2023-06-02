@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 
+#include "techniques/CubemapTechnique.h"
 #include "techniques/DefferedShadingTechnique.h"
 #include "techniques/GizmoTechnique.h"
 #include "techniques/LightColorTechnique.h"
@@ -18,7 +19,6 @@
 #include "techniques/SimpleColorTechnique.h"
 #include "techniques/SimpleTextureTechnique.h"
 #include "techniques/StencilOutlineTechnique.h"
-#include "techniques/cubemap_technique.h"
 
 namespace s21 {
 

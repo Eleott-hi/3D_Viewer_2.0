@@ -12,6 +12,7 @@ endif()
 project(Viewer3D VERSION 2.0 LANGUAGES CXX)
 
 add_compile_options(-O3)
+
 # add_compile_options(-fsanitize=address)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOUIC ON)
@@ -22,11 +23,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS forms)
 
 set(QT_LIBS
-    Widgets
-    OpenGL
-    OpenGLWidgets
     Gui
     Core
+    OpenGL
+    Widgets
+    OpenGLWidgets
 )
 set(EXCLUDE_DIRS tests)
 
@@ -81,9 +82,6 @@ foreach(i ${PROJECT_SOURCES})
     message("Project file: " ${i})
 endforeach()
 
-
-
-
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
 else()
@@ -98,19 +96,16 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(${PROJECT_NAME})
 endif()
 
-
-
 file(GLOB_RECURSE SHADERS_FILES shaders/*.fs shaders/*.vs shaders/*.gs shaders/*.glsl)
 
 foreach(i ${SHADERS_FILES})
     message("Shader file: " ${i})
 endforeach()
 
-
-qt_add_resources(${PROJECT_NAME}  "shader"
-  PREFIX "/shaders/"
-  BASE "${CMAKE_SOURCE_DIR}/shaders"
-  FILES ${SHADERS_FILES}
+qt_add_resources(${PROJECT_NAME} "shader"
+    PREFIX "/shaders/"
+    BASE "${CMAKE_SOURCE_DIR}/shaders"
+    FILES ${SHADERS_FILES}
 )
 
 file(GLOB_RECURSE ICON_FILES resources/icons/*.svg)
@@ -119,12 +114,11 @@ foreach(i ${ICON_FILES})
     message("Icons file: " ${i})
 endforeach()
 
-qt_add_resources(${PROJECT_NAME}  "resources"
-  PREFIX "/icons/"
-  BASE "${CMAKE_SOURCE_DIR}/resources/icons"
-  FILES ${ICON_FILES}
+qt_add_resources(${PROJECT_NAME} "resources"
+    PREFIX "/icons/"
+    BASE "${CMAKE_SOURCE_DIR}/resources/icons"
+    FILES ${ICON_FILES}
 )
-
 
 foreach(i ${QT_LIBS})
     target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::${i})
@@ -143,23 +137,3 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
-
-
-
-
-
-
-# add_custom_target(copy_resources ALL
-#     COMMAND ${CMAKE_COMMAND} -E copy_directory
-#     ${PROJECT_SOURCE_DIR}/others/resources
-#     ${PROJECT_BINARY_DIR}/resources
-#     COMMENT "Copying resources into binary directory"
-# )
-
-# add_custom_target(copy_shaders ALL
-#     COMMAND ${CMAKE_COMMAND} -E copy_directory
-#     ${PROJECT_SOURCE_DIR}/others/shaders
-#     ${PROJECT_BINARY_DIR}/shaders
-#     COMMENT "Copying shaders into binary directory"
-# )
-

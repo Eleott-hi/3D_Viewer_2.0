@@ -21,7 +21,7 @@ void GLWidget::initializeGL() {
 
   //  for (size_t i = 0; i < 10; i++)
   scene_->AddModel(dir + "objects/backpack/backpack.obj");
-  scene_->AddModel(dir + "objects/cat.obj");
+  // scene_->AddModel(dir + "objects/cat.obj");
 }
 
 void GLWidget::resizeGL(int w, int h) { scene_->WindowResize(w, h); }

@@ -60,14 +60,10 @@ QMatrix4x4 Transform::GetModelMatrix() const {
   QMatrix4x4 m_scale, m_translate, m_rotate, m_start;
 
   m_scale.scale(scale);
+  m_rotate.rotate(rotation);
   m_translate.translate(translation);
 
-  m_rotate.rotate(rotation);
-  // m_rotate.rotate(rotation.x(), 1, 0, 0);
-  // m_rotate.rotate(rotation.y(), 0, 1, 0);
-  // m_rotate.rotate(rotation.z(), 0, 0, 1);
-
-  return m_translate * m_scale * m_rotate * m_start;
+  return m_translate * m_rotate * m_scale;
 }
 
 }  // namespace s21

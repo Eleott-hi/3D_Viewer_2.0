@@ -56,6 +56,15 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 
   if (event->key() == Qt::Key_Escape) qApp->closeAllWindows();
 
+  if (event->key() == Qt::Key_Space) {
+    auto scene = scene_->GetScene();
+
+    if (scene->EntityHasComponent<PickingTag>(85))
+      scene->RemoveComponent<PickingTag>(85);
+    else
+      scene->AddComponent<PickingTag>(85);
+  }
+
   Input::KeyPressed((Qt::Key)event->key());
 }
 

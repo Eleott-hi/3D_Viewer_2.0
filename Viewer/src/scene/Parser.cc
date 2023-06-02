@@ -4,8 +4,10 @@
 #include <assimp/scene.h>
 
 #include <QString>
+#include <algorithm>
 #include <assimp/Importer.hpp>
 #include <map>
+#include <numeric>
 #include <optional>
 #include <vector>
 
@@ -16,8 +18,15 @@
 
 namespace s21 {
 
+std::string
+    dir =  //
+           // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
+    "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
+
 std::string directory_;
 QVector<EntityID> meshes;
+
+QVector3D translation_ = {0.0f, 0.0f, 0.0f};
 
 void LoadTexture(aiMaterial *material, aiTextureType type, Texture &texture) {
   for (uint32_t i = 0; i < material->GetTextureCount(type); i++) {
@@ -45,6 +54,9 @@ Material LoadMaterial(aiMesh *mesh, const aiScene *scene) {
   LoadTexture(ai_material, aiTextureType_HEIGHT, material.normal);
   LoadTexture(ai_material, aiTextureType_DIFFUSE, material.diffuse);
   LoadTexture(ai_material, aiTextureType_SPECULAR, material.specular);
+  material.ao = TextureStorage::LoadTexture(dir + "objects/backpack/ao.jpg");
+  material.roughness =
+      TextureStorage::LoadTexture(dir + "objects/backpack/roughness.jpg");
 
   // aiColor3D color(0.0f, 0.0f, 0.0f);
   // float d = 0;
@@ -74,7 +86,26 @@ QVector<Vertex> loadVertices(aiMesh *mesh, const aiScene *scene) {
   QVector<Vertex> vertices;
   vertices.reserve(mesh->mNumVertices);
 
+  aiVector3D minBound(std::numeric_limits<float>::infinity());
+  aiVector3D maxBound(-std::numeric_limits<float>::infinity());
+
   for (uint32_t i = 0; i < mesh->mNumVertices; i++) {
+    auto const &[px, py, pz] = mesh->mVertices[i];
+
+    minBound.x = std::min(minBound.x, px);
+    minBound.y = std::min(minBound.y, py);
+    minBound.z = std::min(minBound.z, pz);
+    maxBound.x = std::max(maxBound.x, px);
+    maxBound.y = std::max(maxBound.y, py);
+    maxBound.z = std::max(maxBound.z, pz);
+  }
+
+  aiVector3D center = (minBound + maxBound) * 0.5f;
+  translation_ = {center.x, center.y, center.z};
+
+  for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+    mesh->mVertices[i] -= center;
+
     Vertex vertex;
 
     if (mesh->HasNormals()) {
@@ -83,7 +114,7 @@ QVector<Vertex> loadVertices(aiMesh *mesh, const aiScene *scene) {
     }
 
     if (mesh->mTextureCoords[0]) {
-      auto const &[cx, cy, cz] = mesh->mTextureCoords[0][i];
+      auto const &[cx, cy, _] = mesh->mTextureCoords[0][i];
       vertex.tex_coords = {cx, cy};
       auto const &[tx, ty, tz] = mesh->mTangents[i];
       vertex.tangent = {tx, ty, tz};
@@ -108,7 +139,7 @@ void processMesh(ECS_Controller *ecs_scene, aiMesh *ai_mesh,
   EntityID entity = ecs_scene->NewEntity();
   ecs_scene->AddComponent<Shader>(entity,
                                   {TechniqueType::PHYSICAL_BASED_RENDERING});
-  ecs_scene->AddComponent<Transform>(entity);
+  ecs_scene->AddComponent<Transform>(entity, {translation_});
   ecs_scene->AddComponent<RenderTag>(entity);
   ecs_scene->AddComponent<ShadowTag>(entity);
   ecs_scene->AddComponent<Material>(entity, material);
@@ -153,9 +184,6 @@ void Parser::loadModel(ECS_Controller *ecs_scene, std::string const &filename) {
   ecs_scene->AddComponent<Transform>(entity);
   ecs_scene->AddComponent<HierarchyComponent>(entity);
   // ecs_scene->AddComponent<Model>(entity, {filename});
-  static int tmp = 0;
-  if (tmp == 0) ecs_scene->AddComponent<PickingTag>(entity);
-  tmp++;
 
   Hierarchy::AddChildren(ecs_scene, entity, meshes);
 }
