@@ -74,7 +74,7 @@ Transform FromMatrixToTransform(QMatrix4x4 const &matrix) {
   QQuaternion rotation =
       QQuaternion::fromRotationMatrix(m_rotate.toGenericMatrix<3, 3>());
 
-  return {translation, rotation, scale};
+  return {translation, rotation.normalized(), scale};
 }
 
 tinygizmo::rigid_transform ToRigidTransform(Transform const &transform) {
@@ -90,7 +90,10 @@ Transform FromRigidTransform(tinygizmo::rigid_transform const &transform) {
   auto const [tx, ty, tz] = transform.position;
   auto const [rx, ry, rz, rw] = transform.orientation;
 
-  return {{tx, ty, tz}, {rw, rx, ry, rz}, {sx, sy, sz}};
+  QQuaternion q(rw, rx, ry, rz);
+  q.normalize();
+
+  return {{tx, ty, tz}, q, {sx, sy, sz}};
 }
 
 QVector3D GetRayFromPixel(Camera const &camera) {
@@ -110,9 +113,9 @@ QVector3D GetRayFromPixel(Camera const &camera) {
 
 tinygizmo::gizmo_application_state GetTinygizmoState(const Camera &camera) {
   auto q = QQuaternion::fromEulerAngles(camera.pitch, -(camera.yaw + 90), 0.0f);
-  auto [rx, ry, rz] = GetRayFromPixel(camera);
   auto [px, py, pz] = camera.position;
   auto [ox, oy, oz, ow] = q.toVector4D();
+  auto [rx, ry, rz] = GetRayFromPixel(camera);
 
   tinygizmo::gizmo_application_state gizmo_state;
   tinygizmo::camera_parameters cam = {
@@ -181,30 +184,29 @@ void GizmoRenderSystem::Update() {
   for (auto entity : entities_) {
     auto &transform = scene_->GetComponent<Transform>(entity);
     auto &hierarchy = scene_->GetComponent<HierarchyComponent>(entity);
-    auto parent_matrix = get_model_matrix(hierarchy.parent);
 
-    gizmo_ctx.parent_matrix = {
-        {parent_matrix(0, 0), parent_matrix(1, 0), parent_matrix(2, 0),
-         parent_matrix(3, 0)},
-        {parent_matrix(0, 1), parent_matrix(1, 1), parent_matrix(2, 1),
-         parent_matrix(3, 1)},
-        {parent_matrix(0, 2), parent_matrix(1, 2), parent_matrix(2, 2),
-         parent_matrix(3, 2)},
-        {parent_matrix(0, 3), parent_matrix(1, 3), parent_matrix(2, 3),
-         parent_matrix(3, 3)},
-    };
+    auto parent_matrix = get_model_matrix(hierarchy.parent);
+    auto global_matrix = get_model_matrix(entity);
 
     tinygizmo::rigid_transform xform, xform_last;
-    xform = xform_last = ToRigidTransform(transform);
+    auto tmp = FromMatrixToTransform(global_matrix);
+    qDebug() << tmp.rotation;
+    xform = xform_last = ToRigidTransform(tmp);
 
-    auto name = QString::fromStdString(  //
-        "gizmo of entity " + std::to_string(entity));
+    auto name = "gizmo of entity " + QString::number(entity);
 
     if (transform_gizmo(name.toStdString(), gizmo_ctx, xform)) {
-      qDebug() << name << "Hovered...";
+      // qDebug() << name << "Hovered...";
       if (xform != xform_last) {
         qDebug() << name << "Changed...";
-        transform = FromRigidTransform(xform);
+        qDebug() << transform.GetModelMatrix();
+
+        auto m = parent_matrix.transposed() *
+                 FromRigidTransform(xform).GetModelMatrix();
+        transform = FromMatrixToTransform(m);
+
+        qDebug() << m;
+        qDebug() << transform.GetModelMatrix();
       }
     }
 

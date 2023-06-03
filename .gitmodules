@@ -1,0 +1,3 @@
+[submodule "Viewer/src/shared/ImGuizmo"]
+	path = Viewer/src/shared/ImGuizmo
+	url = git@github.com:CedricGuillemet/ImGuizmo.git

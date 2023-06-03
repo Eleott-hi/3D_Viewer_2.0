@@ -180,8 +180,11 @@ void Parser::loadModel(ECS_Controller *ecs_scene, std::string const &filename) {
 
   if (meshes.empty()) return;
 
+  Transform t;
+  t.rotation = {0, 0, 0, 1};
+
   EntityID entity = ecs_scene->NewEntity();
-  ecs_scene->AddComponent<Transform>(entity);
+  ecs_scene->AddComponent<Transform>(entity, t);
   ecs_scene->AddComponent<HierarchyComponent>(entity);
   // ecs_scene->AddComponent<Model>(entity, {filename});
 
