@@ -453,8 +453,8 @@ void Scene::SetFramebuffers() {
   framebuffer3D_->Create({Format::RGB, Format::DEFAULT_DEPTH});
   // mousePickingFramebuffer_->Create(
   // {Format::RED_INTEGER, Format::DEFAULT_DEPTH});
-  g_buffer_->Create({Format::RGBA16F, Format::RGBA16F,  //
-                     Format::RGBA, Format::DEFAULT_DEPTH});
+  g_buffer_->Create(
+      {Format::RGBA16F, Format::RGBA16F, Format::RGBA, Format::DEFAULT_DEPTH});
 
   pointShadowFramebuffer_->Resize(1024, 1024);
 

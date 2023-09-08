@@ -18,6 +18,7 @@ class Model {
   }
 
   void SetController(ECS_Controller *controller) { scene_ = controller; }
+
   void Draw(TechniqueStrategy *technique) {
     for (auto entity : meshes_) {
       auto &mesh = scene_->GetComponent<Mesh>(entity);

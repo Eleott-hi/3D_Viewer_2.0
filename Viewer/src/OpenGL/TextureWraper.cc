@@ -38,9 +38,9 @@ void TextureWraper::SetBorderColor(std::vector<float> const& borderColor) {
 
 void TextureWraper::SetFormats(GLenum internal_format, GLenum format,
                                GLenum type) {
-  m_InternalFormat = internal_format;
-  m_Format = format;
   m_Type = type;
+  m_Format = format;
+  m_InternalFormat = internal_format;
 }
 
 void TextureWraper::SetFilters(GLenum min, GLenum mag) {
@@ -55,8 +55,10 @@ void TextureWraper::SetWraps(GLenum wrapS, GLenum wrapT, GLenum wrapR) {
 }
 
 void TextureWraper::Clear() {
-  if (m_TextureID) OPENGL_DEBUG(glDeleteTextures(1, &m_TextureID));
-  m_TextureID = 0;
+  if (m_TextureID) {
+    OPENGL_DEBUG(glDeleteTextures(1, &m_TextureID));
+    m_TextureID = 0;
+  }
 }
 
 void TextureWraper::Allocate(GLenum sub_target, uint32_t width, uint32_t height,
@@ -83,16 +85,13 @@ void TextureWraper::ProcessWrapsAndFilters() {
   if (m_WrapR != GL_NONE)
     OPENGL_DEBUG(glTexParameteri(m_Target, GL_TEXTURE_WRAP_R, m_WrapR));
 
-  if (m_MinFilter != GL_NONE || m_MagFilter != GL_NONE) {
-    OPENGL_DEBUG(glGenerateMipmap(m_Target));
+  if (m_MinFilter == GL_NONE && m_MagFilter == GL_NONE) return;
 
-    if (m_MinFilter != GL_NONE)
-      OPENGL_DEBUG(
-          glTexParameteri(m_Target, GL_TEXTURE_MIN_FILTER, m_MinFilter));
-    if (m_MagFilter != GL_NONE)
-      OPENGL_DEBUG(
-          glTexParameteri(m_Target, GL_TEXTURE_MAG_FILTER, m_MagFilter));
-  }
+  OPENGL_DEBUG(glGenerateMipmap(m_Target));
+  if (m_MinFilter != GL_NONE)
+    OPENGL_DEBUG(glTexParameteri(m_Target, GL_TEXTURE_MIN_FILTER, m_MinFilter));
+  if (m_MagFilter != GL_NONE)
+    OPENGL_DEBUG(glTexParameteri(m_Target, GL_TEXTURE_MAG_FILTER, m_MagFilter));
 }
 
 }  // namespace s21
