@@ -7,7 +7,7 @@ namespace s21 {
 
 QString dir =  //
                // "/opt/goinfre/pintoved/3D_Viewer_2.0/Tutorials/resources/";
-    "C:/Users/lapte/Desktop/Portfolio/3D_Viewer_2.0/Tutorials/resources/";
+    "C:/Users/lapte/Desktop/Tasks/Viewer_2.2/3D_Viewer_2.0/Tutorials/resources/";
 
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
   connect(&timer_, &QTimer::timeout, [&] { update(); });

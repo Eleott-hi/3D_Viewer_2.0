@@ -52,7 +52,7 @@ file(GLOB_RECURSE PROJECT_SOURCES *.cc *.cpp *.h *.ui)
 include(FetchContent)
 FetchContent_Declare(
     assimp
-    URL https://github.com/assimp/assimp/archive/master.zip
+    URL https://github.com/assimp/assimp/archive/refs/tags/master.zip
 )
 
 FetchContent_GetProperties(assimp)
